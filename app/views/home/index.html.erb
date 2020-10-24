@@ -1,0 +1,435 @@
+<h4 class="text-primary text-center">Calcular Envio</h4>
+
+<div class="row mt-3">
+
+    <button class="badge badge-primary text-primary m-auto" type="button" data-toggle="modal" data-target="#exampleModal">Ver Tasas de otros Paises</button>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" id="exampleModalLabel">Tasas de <%=current_user.country%> para envios a:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
+
+                        <div class="card-header text-success text-center">
+                            <% @rates.each do |rate| %>
+
+                            <%if current_user.country === rate.country%>
+
+                            <%@rate = rate%>
+                            <%= render "partials/tasas", collection: @rate %>
+
+                            <%end%>
+                            <%end%>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-6 field text-right">
+        <label class="mt-2" for="pais">Enviar a: </label>
+
+    </div>
+    <div class="col-6 was-validated">
+        <div class="px-2">
+            <select class="custom-select" id="pais" required>
+                <option selected disabled value="">Eligir...</option>
+                <%@rates.each do |rate|%>
+                <%if rate.country === current_user.country%>
+
+                <%if current_user.country != "Brasil" && rate.rate_brasil != "0,00"%><option value="Brasil">Brasil</option><%end%>
+                <%if current_user.country != "Chile" && rate.rate_chile != "0,00"%><option value="Chile">Chile</option><%end%>
+                <%if current_user.country != "Ecuador" && rate.rate_ecuador != "0,00"%><option value="Ecuador">Ecuador</option><%end%>
+                <%if current_user.country != "España" && rate.rate_españa != "0,00"%><option value="España">España</option><%end%>
+                <%if current_user.country != "Panama" && rate.rate_panama != "0,00"%><option value="Panama">Panama</option><%end%>
+                <%if current_user.country != "Peru" && rate.rate_peru != "0,00"%><option value="Peru">Peru</option><%end%>
+                <%if current_user.country != "Portugal" && rate.rate_portugal != "0,00"%><option value="Portugal">Portugal</option><%end%>
+                <%if current_user.country != "USA" && rate.rate_usa != "0,00"%><option value="USA">USA</option><%end%>
+                <%if current_user.country != "Venezuela" && rate.rate_venezuela != "0,00"%><option value="Venezuela">Venezuela</option><%end%>
+                <%end%>
+                <%end%>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="accordion mt-4" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h6 class="mb-0 text-center">
+        <a class="text-primary" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Calcular monto a recibir
+        </a>
+      </h6>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <div class="mt-5">
+            <div class="row field m-auto text-center">
+                <div class="col-12 col-sm-6 mb-3">
+                    <label>Monto a enviar</label>
+                    <input type="text" class="text-center" id="montoEnvio" value="0,00" oninput="return inputNumber(event)">
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label>Monto a recibir</label>
+                    <input type="text" class="text-center" id="montoRecibir" value="" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="field mt-5 text-center">
+            <button class="btn btn-success mb-3" id="botonC">Calcular</button>
+            <button class="btn btn-danger mb-3 ml-3" id="boton">Borrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-5">
+    <div class="card-header" id="headingTwo">
+      <h6 class="mb-0 text-center">
+        <a class="text-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Calcular monto a enviar
+        </a>
+      </h6>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+        <div class="mt-5">
+            <div class="row field m-auto text-center">
+                <div class="col-12 col-sm-6 mb-3">
+                    <label>Monto a recibir</label>
+                    <input type="text" class="text-center" id="montoRecibir2" value="0,00" oninput="return inputNumber(event)">
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label>Monto a enviar</label>
+                    <input type="text" class="text-center" id="montoEnvio2" value="" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="field mt-5 text-center">
+            <button class="btn btn-success mb-3" id="botonC2">Calcular</button>
+            <button class="btn btn-danger mb-3 ml-3" id="botonB2">Borrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+
+    
+<script src="/js/vistas/campos-numericos-format.js"></script>
+<script>
+    var pais = document.querySelector('#pais'),
+        botonB = document.querySelector('#boton'),
+        botonB2 = document.querySelector('#botonB2'),
+        botonC = document.querySelector('#botonC'),
+        botonC2 = document.querySelector('#botonC2'),
+        montoEnvio = document.querySelector('#montoEnvio'),
+        montoEnvio2 = document.querySelector('#montoEnvio2'),
+        montoRecibir = document.querySelector('#montoRecibir'),
+        montoRecibir2 = document.querySelector('#montoRecibir2');
+
+    //Funciones
+    var convertAmount = function (montoOferta,tasa,tasaOferta,monedaE,monedaR, objetivo) {
+        
+                    
+        //Formatear Monto de Oferta
+        montoOf = montoOferta.replace(/\D/g, "");                
+        montoOf = montoOf.replace(/([0-9])([0-9]{2})$/, '$1.$2');
+        montoOf = parseFloat(montoOf);
+
+        //Formatear Tasa
+        tasa = tasa.replace(/\D/g, "");                
+        tasa = tasa.replace(/([0-9])([0-9]{2})$/, '$1.$2');
+        tasa = parseFloat(tasa);
+
+        //Formatear Tasa Oferta
+        tasaO = tasaOferta.replace(/\D/g, "");                
+        tasaO = tasaO.replace(/([0-9])([0-9]{2})$/, '$1.$2');
+        tasaO = parseFloat(tasaO);
+
+        monedaE = " ".concat(monedaE);
+        monedaR = " ".concat(monedaR);
+
+        if (objetivo == "enviar"){
+            //Formatear Monto de Envio
+            valor = montoEnvio.value.replace(/\D/g, "");                
+            valor = valor.replace(/([0-9])([0-9]{2})$/, '$1.$2');
+            montoE = parseFloat(valor);
+
+            if(montoE < montoOf){
+                var  monto_tasa = tasa;
+            }else{
+                var  monto_tasa = tasaO;
+            }
+            
+            var resultado = montoE * monto_tasa;
+            resultado = resultado.toFixed(2);
+            resultado = resultado.replace(/\D/g, "");
+            resultado = resultado.replace(/([0-9])([0-9]{2})$/, '$1,$2');
+            resultado = resultado.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+
+            montoEnvio.value = montoEnvio.value.concat(monedaE);
+            montoRecibir.value = resultado.concat(monedaR);
+            botonC.setAttribute("disabled","disabled");
+
+            if (montoRecibir.value == "NaN"){
+                montoRecibir.value = "Monto a enviar invalido";
+            }
+
+        } else if(objetivo == "recibir"){
+            valor = montoRecibir2.value.replace(/\D/g, "");                
+            valor = valor.replace(/([0-9])([0-9]{2})$/, '$1.$2');
+            montoR = parseFloat(valor);
+
+            var montoE = montoR / tasa;
+    
+            if(montoE < montoOf){
+                var  monto_tasa = tasa;
+            }else{
+                var  monto_tasa = tasaO;
+            }
+            
+            var resultado = montoR / monto_tasa;
+            resultado = resultado.toFixed(2);
+            resultado = resultado.replace(/\D/g, "");
+            resultado = resultado.replace(/([0-9])([0-9]{2})$/, '$1,$2');
+            resultado = resultado.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+
+            montoEnvio2.value = resultado.concat(monedaE);
+            montoRecibir2.value = montoRecibir2.value.concat(monedaR);
+            botonC2.setAttribute("disabled","disabled");
+
+            if (montoEnvio2.value == "NaN"){
+                montoEnvio2.value = "Monto a enviar invalido";
+            }
+        }        
+    }
+
+    var setCalculateMontoEnviar = function () {
+        
+        <% @rates.each do |rate| %>
+
+        <%if current_user.country === rate.country%>
+        var paisV = pais.value
+        switch (paisV) {
+            
+            <%if current_user.country != "Brasil"%>
+            case "Brasil":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_brasil%>","<%=rate.rate_brasil_min%>","<%=rate.moneda%>","R$","enviar");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Chile"%>
+            case "Chile":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_chile%>","<%=rate.rate_chile_min%>","<%=rate.moneda%>","CLP","enviar");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Ecuador"%>
+            case "Ecuador":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_ecuador%>","<%=rate.rate_ecuador_min%>","<%=rate.moneda%>","$","enviar");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "España"%>
+            case "España":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_españa%>","<%=rate.rate_españa_min%>","<%=rate.moneda%>","€","enviar");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Panama"%>
+            case "Panama":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_panama%>","<%=rate.rate_panama_min%>","<%=rate.moneda%>","$","enviar");
+                              
+                break;
+            <%end%>
+            
+            <%if current_user.country != "Peru"%>
+            case "Peru":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_peru%>","<%=rate.rate_peru_min%>","<%=rate.moneda%>","S/","enviar");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Portugal"%>
+            case "Portugal":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_portugal%>","<%=rate.rate_portugal_min%>","<%=rate.moneda%>","€","enviar");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "USA"%>
+            case "USA":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_usa%>","<%=rate.rate_usa_min%>","<%=rate.moneda%>","$","enviar");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Venezuela"%>
+            case "Venezuela":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_venezuela%>","<%=rate.rate_venezuela_min%>","<%=rate.moneda%>","Bs","enviar");
+                              
+                break;
+            <%end%>
+
+            default:
+                
+                montoRecibir.value = "";                
+                break;
+            
+        }
+        <%end%>
+        <%end%>
+    };
+
+    //Adaptar
+    var setCalculateMontoRecibir = function () {
+        
+        <% @rates.each do |rate| %>
+
+        <%if current_user.country === rate.country%>
+        var paisV = pais.value
+        switch (paisV) {
+            
+            <%if current_user.country != "Brasil"%>
+            case "Brasil":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_brasil%>","<%=rate.rate_brasil_min%>","<%=rate.moneda%>","R$","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Chile"%>
+            case "Chile":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_chile%>","<%=rate.rate_chile_min%>","<%=rate.moneda%>","CLP","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Ecuador"%>
+            case "Ecuador":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_ecuador%>","<%=rate.rate_ecuador_min%>","<%=rate.moneda%>","$","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "España"%>
+            case "España":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_españa%>","<%=rate.rate_españa_min%>","<%=rate.moneda%>","€","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Panama"%>
+            case "Panama":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_panama%>","<%=rate.rate_panama_min%>","<%=rate.moneda%>","$","recibir");
+                              
+                break;
+            <%end%>
+            
+            <%if current_user.country != "Peru"%>
+            case "Peru":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_peru%>","<%=rate.rate_peru_min%>","<%=rate.moneda%>","S/","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Portugal"%>
+            case "Portugal":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_portugal%>","<%=rate.rate_portugal_min%>","<%=rate.moneda%>","€","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "USA"%>
+            case "USA":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_usa%>","<%=rate.rate_usa_min%>","<%=rate.moneda%>","$","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Venezuela"%>
+            case "Venezuela":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_venezuela%>","<%=rate.rate_venezuela_min%>","<%=rate.moneda%>","Bs","recibir");
+                              
+                break;
+            <%end%>
+
+            default:
+                
+                montoRecibir.value = "";                
+                break;
+            
+        }
+        <%end%>
+        <%end%>
+    };  
+
+    montoEnvio.addEventListener("focus", function () {
+         montoRecibir.value = "";
+         montoEnvio.value = "0,00";
+         botonC.removeAttribute("disabled");
+    });
+
+    montoRecibir2.addEventListener("focus", function () {
+         montoRecibir2.value = "0,00";
+         montoEnvio2.value = "";
+         botonC2.removeAttribute("disabled");
+    });
+    
+    botonC.addEventListener('click', setCalculateMontoEnviar);
+    botonC2.addEventListener('click', setCalculateMontoRecibir);
+    botonB.addEventListener('click', function() {
+        pais.value = "";
+        montoEnvio.value = "0,00";
+        montoRecibir.value = "";
+        botonC.removeAttribute("disabled");
+
+    });
+    botonB2.addEventListener('click', function() {
+        pais.value = "";
+        montoEnvio2.value = "";
+        montoRecibir2.value = "0,00";
+        botonC2.removeAttribute("disabled");
+    });
+
+    function format(input) {
+        input.value = "";
+    }
+</script>

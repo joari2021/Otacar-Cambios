@@ -1,0 +1,98 @@
+<div class="mt-5">
+    <%= form_with(model: bank, local: true) do |form| %>
+    <% if bank.errors.any? %>
+    <div id="error_explanation">
+        <h2><%= pluralize(bank.errors.count, "error") %> impide(n) que esta cuenta sea guardada:</h2>
+
+        <ul>
+            <% bank.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+            <% end %>
+        </ul>
+    </div>
+    <% end %>
+    <div class="field">
+        <h6>* : Campos Obligatorios</h6>
+    </div>
+
+    <!--Nombre y Apellido-->
+    <div class="form-row field my-3">
+        <div class="col-6 col-md-4 mb-2">
+            <label>Pais *</label>
+            <input class="form-control text-capitalize" value="<%=params[:country]%>" name="bank[country]" readonly>
+        </div>
+
+        <div class="col-4 mb-2">
+            <label for="validationName">Primer Nombre *</label>
+
+            <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="bank[name]" oninput="return soloLetras(this)" autofocus="autofocus" maxlength="12" value="<%=params[:name]%>" required>
+            <div class="invalid-feedback">
+                Ingrese solo letras
+            </div>
+        </div>
+
+        <div class="col-4 mb-2">
+            <label for="validationLastName">Primer Apellido *</label>
+
+            <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="bank[last_name]" maxlength="12" oninput="return soloLetras(this)" required>
+            <div class="invalid-feedback">
+                Ingrese solo letras
+            </div>
+        </div>
+    </div>
+
+    <!--DNI y Banco-->
+    <div class="form-row field mb-3">
+        <div class="col-12 col-md-6 mb-2">
+            <label for="validationDNI">Nro DNI *</label>
+            <input class="form-control is-invalid" id="validationDNI" type="text" maxlength="12" oninput="return soloNumeros(this)" name="bank[identidy]" required></input>
+            <div class="invalid-feedback">
+                Ingrese solo numeros
+            </div>
+        </div>
+
+        <div class="col-6 mb-2">
+            <label>Banco *</label>
+
+            <select class="custom-select is-invalid" name="bank[bank]" onChange="validarSelect(this)" required>
+                <option selected disabled value="">Elegir...</option>
+                <%if params[:country] === "Argentina"%>
+                <option value="Brubank">Brubank</option>
+                <option value="Galicia">Galicia</option>
+                <%end%>
+            </select>
+            <div class="invalid-feedback">Elige una opcion</div>
+        </div>
+    </div>
+
+    <!--Banco-->
+    <div class="form-row field mb-3">        
+
+        <div class="col-4 mb-2">
+            <label>Tipo de cuenta *</label>
+
+            <select class="custom-select is-invalid" name="bank[type_account]" onChange="validarSelect(this)" required>
+                <option selected disabled value="">Elegir...</option>
+                <option value="Ahorro">Ahorro</option>
+                <option value="Corriente">Corriente</option>
+            </select>
+            <div class="invalid-feedback">Elige una opcion</div>
+        </div>
+
+        <div class="col-12 col-md-8 mb-2">
+            <label for="validationNumberAccount">Nro Cuenta *</label>
+            <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="return soloNumeros(this)" name="bank[number_account]" required></input>
+            <div class="invalid-feedback">
+                Ingrese solo numeros
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5" %>
+        <%= link_to 'Volver', banks_path, class:"btn btn-success mt-3 mb-5 float-right" %>
+    </div>
+    <% end %>
+</div>
+
+<script src="/js/vistas/script-form-for-campos.js"></script>

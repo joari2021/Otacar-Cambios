@@ -1,0 +1,24 @@
+<div class="container margin-top bg-nav">
+    <h2 class="py-2">Estatus de mis transacciones</h2>
+    <div class="row text-success mt-5">
+        <div class="col-sm-6">
+            <h4>Id Transaccion</h4>
+        </div>
+        <div class="col-sm-6">
+            <h4>Status</h4>
+        </div>
+    </div>
+    <%@transaction.each do |trans|%>
+    <%if current_user.id === trans.user_id%>
+    <div class="row text-primary">
+        <div class="col-sm-6">
+            <span><%=trans.id%></span>
+        </div>
+        <div class="col-sm-6">
+            <span><%=trans.status%></span>
+        </div>
+
+    </div>
+    <%end%>
+    <%end%>
+</div>

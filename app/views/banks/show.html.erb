@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @bank.name %>
+</p>
+
+<p>
+  <strong>Identidy:</strong>
+  <%= @bank.identidy %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @bank.country %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @bank.state %>
+</p>
+
+<p>
+  <strong>Bank:</strong>
+  <%= @bank.bank %>
+</p>
+
+<p>
+  <strong>Number account:</strong>
+  <%= @bank.number_account %>
+</p>
+
+<p>
+  <strong>Type account:</strong>
+  <%= @bank.type_account %>
+</p>
+
+<p>
+  <strong>Cod bank:</strong>
+  <%= @bank.cod_bank %>
+</p>
+
+<p>
+  <strong>Phone:</strong>
+  <%= @bank.phone %>
+</p>
+
+<%= link_to 'Edit', edit_bank_path(@bank) %> |
+<%= link_to 'Back', banks_path %>

@@ -1,0 +1,224 @@
+<%= form_with(model: rate, local: true, :html => {:class => "was-validated"}) do |form| %>
+<% if rate.errors.any? %>
+<div id="error_explanation">
+    <h2><%= pluralize(rate.errors.count, "error") %> prohibited this rate from being saved:</h2>
+
+    <ul>
+        <% rate.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+    </ul>
+</div>
+<% end %>
+
+<div class="row field">
+    <%if @vista === "new"%>
+    <div class="col-12 col-md-4 mt-2">
+        <%= form.label :country, "Pais" %>
+        
+        <select class="custom-select" name="rate[country]" id="rate_country" required>
+            <option selected disabled value="">Elegir...</option>
+            <option value="Brasil">Brasil</option>
+            <option value="Chile">Chile</option>
+            <option value="Ecuador">Ecuador</option>
+            <option value="España">España</option>
+            <option value="Panama">Panama</option>
+            <option value="Peru">Peru</option>
+            <option value="Portugal">Portugal</option>
+            <option value="USA">USA</option>
+            <option value="Venezuela">Venezuela</option>
+        </select>
+        <div class="invalid-feedback">Elige una opcion</div>
+    </div>
+
+    <%else%>
+    <div class="col-12 col-md-4 mt-2">
+        <%= form.label :country, "Pais" %>
+        <input class="text-capitalize" id="rate_country" value="<%if rate.country.capitalize === "Usa"%><%=rate.country.upcase%><%else%><%=rate.country.capitalize%><%end%> " readonly>
+    </div>
+    <%end%>
+
+    <div class="col-12 col-md-4 mt-2">
+        <%= form.label :monto_oferta, "Monto Oferta" %>
+        <%= form.text_field :monto_oferta, id:"montoOferta"%>
+    </div>
+
+    <div class="col-12 col-md-4 mt-2">
+        <%= form.label :moneda, "Moneda" %>
+        <%= form.text_field :moneda, id:"moneda", readonly: :readonly %>
+    </div>
+</div>
+
+<%if @vista === "new" || rate.country.capitalize != "Brasil"%>
+<div class="" id="Brasil">
+    <h3 class="mt-3 text-success">Brasil</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_brasil, "Sin tasa minima" %>
+            <%= form.text_field :rate_brasil, required: :required, oninput:"return inputNumber(event)"%>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_brasil_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_brasil_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.capitalize != "Chile"%>
+<div class="" id="Chile">
+    <h3 class="mt-3 text-success">Chile</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_chile, "Sin tasa minima" %>
+            <%= form.text_field :rate_chile, required: :required, oninput:"return inputNumber(event)"%>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_chile_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_chile_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.capitalize != "Ecuador"%>
+<div class="" id="Ecuador">
+    <h3 class="mt-3 text-success">Ecuador</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_ecuador, "Sin tasa minima" %>
+            <%= form.text_field :rate_ecuador, required: :required, oninput:"return inputNumber(event)"%>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_ecuador_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_ecuador_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.capitalize != "España"%>
+<div class="" id="España">
+    <h3 class="mt-3 text-success">España</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_españa, "Sin tasa minima" %>
+            <%= form.text_field :rate_españa, required: :required, oninput:"return inputNumber(event)"%>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_españa_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_españa_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.capitalize != "Panama"%>
+<div class="" id="Peru">
+    <h3 class="mt-3 text-success">Panama</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_panama, "Sin tasa minima" %>
+            <%= form.text_field :rate_panama, required: :required, oninput:"return inputNumber(event)"%>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_panama_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_panama_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.capitalize != "Peru"%>
+<div class="" id="Peru">
+    <h3 class="mt-3 text-success">Peru</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_peru, "Sin tasa minima" %>
+            <%= form.text_field :rate_peru, required: :required, oninput:"return inputNumber(event)"%>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_peru_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_peru_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.capitalize != "Portugal"%>
+<div class="" id="Portugal">
+    <h3 class="mt-3 text-success">Portugal</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_portugal, "Sin tasa minima" %>
+            <%= form.text_field :rate_portugal, required: :required, oninput:"return inputNumber(event)"%>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_portugal_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_portugal_min, oninput:"return inputNumber(event)" %>
+            
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.upcase != "USA"%>
+<div class="" id="USA">
+    <h3 class="mt-3 text-success">USA</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_usa, "Sin tasa minima" %>
+            <%= form.text_field :rate_usa, required: :required, oninput:"return inputNumber(event)"%>
+            
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_usa_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_usa_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+<%if @vista === "new" || rate.country.capitalize != "Venezuela"%>
+<div class="" id="Venezuela">
+    <h3 class="mt-3 text-success">Venezuela</h3>
+    <div class="row field">
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_venezuela, "Sin tasa minima" %>
+            <%= form.text_field :rate_venezuela, required: :required, oninput:"return inputNumber(event)"%>
+            
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+            <%= form.label :rate_venezuela_min, "A partir de" %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
+            <%= form.text_field :rate_venezuela_min, oninput:"return inputNumber(event)" %>
+        </div>
+    </div>
+</div>
+<%end%>
+
+
+<div class="actions mt-3">
+    <%= form.submit "Guardar", class:"btn btn-success mb-5" %>
+    <%= link_to 'Volver', :back, class:"btn btn-success mb-5 float-right"%>
+</div>
+<% end %>
+
+<script src="/js/vistas/campos-numericos-format.js"></script>

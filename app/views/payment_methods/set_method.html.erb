@@ -1,0 +1,80 @@
+<div class="row justify-content-center mt-5">
+    <div class="col-5 was-validated text-center">
+        <label for="validationCountry" class="">Elije el pais donde te gustaria enviar remesas</label>
+        <select class="custom-select" id="validationCountry" onChange="validarSelectPais(this)" required>
+            <option selected disabled value="">Elegir...</option>
+            <option value="Argentina">Argentina</option>
+            <option value="Brasil">Brasil</option>
+            <option value="Chile">Chile</option>
+            <option value="Colombia">Colombia</option>
+            <option value="Ecuador">Ecuador</option>
+            <option value="España">España</option>
+            <option value="Panama">Panama</option>
+            <option value="Peru">Peru</option>
+            <!--<option value="Portugal">Portugal</option>-->
+            <option value="USA">USA</option>
+            <option value="Venezuela">Venezuela</option>
+        </select>
+        <div class="invalid-feedback">Elige una opcion</div>
+    </div>
+</div>
+
+<!--Metodos de Pago de Argentina-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsArgentina">
+    <div class="col-5 was-validated text-center">
+        <label for="validationMethodsArgentina" class="">Elije un metodo de pago</label>
+        <select class="custom-select" id="validationMethosArgentina" onChange="modifyEnlace(this)" required>
+            <option selected disabled value="">Elegir...</option>
+            <option value="banks">Cuenta Bancaria</option>
+        </select>
+        <div class="invalid-feedback">Elige una opcion</div>
+    </div>
+</div>
+
+<!--Metodos de Pago de Brasil-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsBrasil">
+    <div class="col-5 was-validated text-center">
+        <label for="validationMethodsBrasil" class="">Elije un metodo de pago</label>
+        <select class="custom-select" id="validationMethosBrasil" required>
+            <option selected disabled value="">Elegir...</option>
+            <option value="/banks/new">Brubank</option>
+            <option value="banks">Galicia</option>
+        </select>
+        <div class="invalid-feedback">Elige una opcion</div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-3 d-none" id="cajaEnlace">
+    <div class="col-5 was-validated text-center">
+        <a class="btn btn-success" href="" id="enlace">Continuar</a>
+    </div>
+</div>
+
+<script>
+    function validarSelectPais(select) {
+        switch (select.value) {
+            case "Argentina":
+                argentinaMethods = document.getElementById("MethodsArgentina");
+                argentinaMethods.classList.remove("d-none");
+                break;
+
+            default:
+                break;
+        }
+    }
+    function modifyEnlace(select) {
+        switch (select.value) {
+            case "banks":
+                enlace = document.getElementById("enlace");
+                enlaceCaja = document.getElementById("cajaEnlace");
+                country = document.getElementById("validationCountry");
+
+                enlaceCaja.classList.remove("d-none");
+                enlace.href = "/banks/new?country=".concat(country.value);
+                break;
+        
+            default:
+                break;
+        }
+    }
+</script>

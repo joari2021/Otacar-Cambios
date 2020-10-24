@@ -1,0 +1,209 @@
+<script>
+    /* Funcion para mostrar un numero formateado con puntos como separador de miles y comas como separador de decimales*/
+
+    /* 
+    function ems(input,num) {
+        em = document.getElementsByTagName("em")[num-4];
+        importe = input.valueAsNumber.toFixed(2);
+        regresar = importe.toString().replace(/\./g,',');
+        var num = regresar.replace(/\./g,'');
+
+        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g,'$1.');
+        num = num.split('').reverse().join('').replace(/^[\.]/,'');
+        em.innerHTML = num;
+    }
+    function it(input){
+        it = document.getElementsByTagName("em")[0];
+        
+        importe = input.valueAsNumber.toFixed(2);
+        regresar = importe.toString().replace(/\./g,',');
+        var num = regresar.replace(/\./g,'');
+
+        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g,'$1.');
+        num = num.split('').reverse().join('').replace(/^[\.]/,'');
+        it.innerHTML = num;
+    }
+    */
+
+    var caja = function() {
+        var elementosDiv = document.getElementsByTagName("div");
+
+        for (i = 0; i < elementosDiv.length; i++) {
+            if (elementosDiv[i].className == "d-none") {
+                elementosDiv[i].className = "";
+            }
+            if (elementosDiv[i].id.toUpperCase() == country.value.toUpperCase() && country.value != "") {
+                elementosDiv[i].className = "d-none";
+            }
+        }
+        switch (country.value) {
+            
+            case "Brasil":
+                moneda.value = "R$";
+                break;
+
+            case "Chile":
+                moneda.value = "CLP";
+                break;
+            
+            case "Ecuador":
+                moneda.value = "$";
+                break;
+            
+            case "España":
+                moneda.value = "€";
+                break;
+
+            case "Panama":
+                moneda.value = "$";
+                break;
+
+            case "Peru":
+                moneda.value = "S/";
+                break;
+            
+            case "Portugal":
+                moneda.value = "€";
+                break;
+
+            case "USA":
+                moneda.value = "$";
+                break;
+
+            case "Venezuela":
+                moneda.value = "Bs";
+                break;
+            
+            default:
+                moneda.value = "";
+                break;
+            
+        }
+        elementosSpan = document.getElementsByTagName("span")
+
+        for (i = 2; i < elementosSpan.length; i += 2) {
+
+            if (monto.value != "0,00") {
+                elementosSpan[i].innerHTML = " " + moneda.value;
+            } else {
+                elementosSpan[i].innerHTML = "";
+            }
+        }    
+
+    }
+
+    var modificarSpanAndReturn = function (span,resultado,monedaV) {
+        var inputs = document.getElementsByTagName("input");
+        for (i = 1; i < span.length; i += 2){
+            span[i].innerHTML = " " + resultado;
+            span[i + 1].innerHTML = " " + monedaV
+            inputs[i + <%=@digit%>].removeAttribute("disabled");
+        }   
+    }
+
+    var añadirMonto = function() {
+       
+        var elementosSpan = document.getElementsByTagName("span");
+        var inputs = document.getElementsByTagName("input");
+        var moneda = document.getElementById('moneda');
+
+            
+            if (monto.value != "0,00" && monto.value != "0,0") {
+                if (monto.value[0] === ","){
+                    let letr = "0";
+                    monto.value = letr.concat(monto.value);
+                    modificarSpanAndReturn(elementosSpan, letr.concat(monto.value), moneda.value);
+                    return letr.concat(monto.value);
+                }
+                $(event.target).val(function(index, value) {
+                    
+                    if (value.length === 0) {
+                        
+                        return "0,00";
+                    }
+                    if (value.length === 5) {
+                        let num = "0123456789";
+                        
+                        if (num.indexOf(value[4]) == -1 && value[3] == "0") {
+                            return valor = "0,00";
+                        } else if (num.indexOf(value[4]) == -1 && value[3] != "0" && value[0] == "0") {
+                           
+                            let str1 = "0";
+                            let str2 = value.slice(1, 4);
+                            modificarSpanAndReturn(elementosSpan, str1.concat(str2), moneda.value);
+                            return str1.concat(str2);
+                            
+                        }
+                    }
+                    if (value == "0,0") {
+                        return valor = "0,00";
+                    } else if (value.length === 3 && value[0] === "0") {
+                        let complemento1 = value[2];
+                        valor = "0,0";
+                        modificarSpanAndReturn(elementosSpan, valor.concat(complemento1), moneda.value);
+                        return valor.concat(complemento1);
+                    } else if (value.length === 3 && value[0] != "0" && value[2] != "0") {
+                        let str11 = "0,"
+                        let str12 = value.replace(",", "");
+                        modificarSpanAndReturn(elementosSpan, str11.concat(str12), moneda.value);
+                        return str11.concat(str12);
+                    } else if (value.length === 3 && value[0] != "0" && value[2] == "0") {
+                        let string1 = "0,"
+                        let string2 = value.replace(",", "");
+                        modificarSpanAndReturn(elementosSpan, string1.concat(string2), moneda.value);
+                        return string1.concat(string2);
+                    }
+                    valor = value.replace(/\D/g, "")
+                    valor = valor.replace(/([0-9])([0-9]{2})$/, '$1,$2')
+                    valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+
+                    if (valor[0] == "0" && valor[1] == "0") {
+                        let str22 = valor.slice(1);
+                        modificarSpanAndReturn(elementosSpan, str22, moneda.value);
+                        return str22;
+                    } else if (valor[0] == "0" && valor[1] != "0") {
+                        let str23 = valor.slice(1);
+                        modificarSpanAndReturn(elementosSpan, str23, moneda.value);
+                        return str23;
+                    }
+
+                    modificarSpanAndReturn(elementosSpan, valor, moneda.value);
+                    return valor;
+
+                });
+                
+            } else {
+                for (i = 1; i < elementosSpan.length; i += 2){
+                    elementosSpan[i].innerHTML = "";
+                    elementosSpan[i + 1].innerHTML = "";
+                    inputs[i + <%=@digit%>].setAttribute("disabled", "disabled");
+                }
+                monto.value = "0,00";
+            }
+        
+    }
+
+    var country = document.getElementById('rate_country');
+    var moneda = document.getElementById('moneda');
+    var monto = document.getElementById('montoOferta');
+
+    <%if @vista === "new"%>
+    country.addEventListener("change", caja);
+    <%end%>
+    monto.addEventListener("input", añadirMonto);
+
+    function disabledCamposPriceMin() {
+        var elementosSpan = document.getElementsByTagName("span");
+        var inputs = document.getElementsByTagName("input");
+
+        for (i = 1; i < elementosSpan.length; i += 2) {
+            if (monto.value == "0,00"){
+                elementosSpan[i].innerHTML = "";
+                elementosSpan[i + 1].innerHTML = "";
+                inputs[i + <%=@digit%>].setAttribute("disabled", "disabled");
+            }
+        }        
+    }
+    disabledCamposPriceMin();
+    
+</script>

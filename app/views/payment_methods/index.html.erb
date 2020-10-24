@@ -1,0 +1,79 @@
+<h4>Mis metodos para recibir pagos</h4>
+<div class="row mb-3">
+    <%if current_user.banks.count <= 0%>
+    <div class="container">
+        <div class="alert alert-primary alert-dismissible fade show mt-3" role="alert">
+            <strong>Hola!</strong> No tienes ningun metodo de pago registrado.
+        </div>
+    </div>
+    <%else%>
+    <!-- Tabla cuentas -->
+    <div class="col-xl-10 col-lg-12">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><small class="font-weight-bold">Titular<small></th>
+                        <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Nro DNI<small></th>
+                        <th scope="col"><small class="font-weight-bold">Banco<small></th>
+                        <th scope="col"><small class="font-weight-bold">Nro Cuenta<small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% current_user.banks.each do |account_bank| %>
+                    <tr class="shadow-sm">
+                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
+                        <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country.capitalize%>" title="<%=account_bank.country.capitalize%>"/></td>
+
+                        <%part1 = account_bank.identidy[0, 2]%>
+                        <%part2 = account_bank.identidy[-3,3]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "***" << part2%></span>
+                        </td>
+                        <td class="align-middle"><span class=""><%=account_bank.bank%></span>
+                        </td>
+                        <%part1 = account_bank.number_account[0, 4]%>
+                        <%part2 = account_bank.number_account[-4,4]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
+                        </td>
+                        <!--Boton Modal-->
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#exampleModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.name%></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Pais: <%=account_bank.country %><br>
+                                        Identidad: <%=account_bank.identidy%><br>
+                                        Banco: <%=account_bank.bank %><br>
+                                        N° Cuenta: <%=account_bank.number_account %><br>
+                                        Tipo de Cuenta: <%=account_bank.type_account %><br>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                    </tr>
+                    <%end%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <%end%>
+</div>
+<!-- Fin tabla cuentas -->
+
+<%= link_to 'Añadir Cuenta', set_method_path, class:"btn btn-success mb-5" %>

@@ -1,0 +1,25 @@
+<div class="container bg-nav margin-top">
+
+    <h2>Enviar Dinero</h2>
+
+    <h5>Cuentas Registradas</h5>
+    <%current_user.banks.each do |bank|%>
+
+    <div class="col-xl-6">
+        <b><span><%=bank.name%></span></b>
+        <span><%=bank.number_account%></span>
+    </div>
+    <%end%>
+
+    <h5>Cuentas de Otacar Cambios</h5>
+    <%@admin_banks.each do |admin_banks|%>
+    <div class="col-xl-6">
+        <b><span><%=admin_banks.name%></span></b>
+        <span><%=admin_banks.number_account%></span>
+    </div>
+    <%end%>
+
+    <%= render 'form', {transaction: @transaction, admin_banks: @admin_banks} %>
+
+
+</div>

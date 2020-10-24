@@ -1,0 +1,34 @@
+<div class="container margin-top bg-nav">
+    <h2 class="text-success">Transacciones Realizadas</h2>
+    <table class="table table-hover mt-5">
+        <thead>
+            <tr>
+                <th scope="col">Fecha y Hora</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Resumen de Cuenta</th>
+                <th scope="col">Pais</th>
+                <th scope="col">Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @transactions.each do |transaction| %>
+            <tr>
+
+                <th scope="row"><%=transaction.created_at%></th>
+                <%current_user.banks.each do |bank|%>
+                <%if bank.id === transaction.account_destinity%>
+                <td><%=bank.name%></td>
+                <td><%=bank.number_account%></td>
+                <td><%=bank.country%></td>
+                <%end%>
+                <%end%>
+                <td><%=transaction.monto%></td>
+        
+            </tr>
+            <%end%>
+        </tbody>
+    </table>
+    <div class="my-5">
+    <button class="btn btn-primary mb-5">Yess</button>
+    </div>
+</div>

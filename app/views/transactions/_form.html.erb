@@ -1,0 +1,72 @@
+<%= form_with(model: transaction, local: true) do |form| %>
+<% if transaction.errors.any? %>
+<div id="error_explanation">
+    <h2><%= pluralize(transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
+
+    <ul>
+        <% transaction.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+    </ul>
+</div>
+<% end %>
+
+
+<h3 class="text-success mt-3">Formulario de Envio</h3>
+
+<div class="form-row field">
+    <div class="col-sm-6 col-md-4">
+        <label for="validationDefault1">Cuenta donde realizaste el pago</label>
+        <select class="custom-select" id="validationDefault1" name="transaction[payment_bank]" required>
+            <option selected disabled value="">Elige una opcion...</option>
+            <%admin_banks.each do |admin_bank|%>
+            <%if admin_bank.country === current_user.country%>
+            <option value="<%=admin_bank.id%>"><%=admin_bank.bank%></option>
+            <%end%>
+            <%end%>
+
+        </select>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+
+    </div>
+    <div class="col-sm-6 col-md-4">
+
+        <%= form.label :monto %>
+        <%= form.number_field :monto, step: 0.001 %>
+
+    </div>
+
+
+</div>
+
+<div class="form-row field">
+    <div class="col-sm-6 col-md-4">
+        <label for="validationDefault2">Metodo de Pago</label>
+        <select class="custom-select" id="validationDefault2" name="transaction[metodo]" required>
+            <option selected disabled value="">Elige una opcion...</option>
+            <option value="Transferencia">Transferencia</option>
+            <option value="Deposito Directo">Deposito Directo</option>
+            <option value="Deposito Cajero Automatico">Deposito Cajero Automatico</option>
+            <option value="Deposito Por Loterica">Deposito Por Loterica</option>
+        </select>
+    </div>
+    <div class="col-sm-6 col-md-4">
+
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <label for="validationDefault3">Cuenta Destino</label>
+        <select class="custom-select" id="validationDefault3" name="transaction[account_destinity]" required>
+            <option selected disabled value="">Elige una opcion...</option>
+            <%current_user.banks.each do |bank_user|%>
+            <option value="<%=bank_user.id%>"><%=bank_user.bank%></option>
+            <%end%>
+        </select>
+    </div>
+</div>
+
+<div class="actions">
+    <%= form.submit "Enviar Dinero", class:"btn btn-primary mt-3"%>
+</div>
+<% end %>

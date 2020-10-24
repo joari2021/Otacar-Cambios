@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rate_brasil: 1
+  rate_colombia: 1
+  rate_ecuador: 1
+  rate_españa: 1
+  rate_peru: 1
+  rate_portugal: 1
+  rate_usa: 1
+  rate_venezuela: 1
+
+two:
+  rate_brasil: 1
+  rate_colombia: 1
+  rate_ecuador: 1
+  rate_españa: 1
+  rate_peru: 1
+  rate_portugal: 1
+  rate_usa: 1
+  rate_venezuela: 1
