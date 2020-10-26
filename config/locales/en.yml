@@ -35,3 +35,8 @@ en:
       user:
         one: Usuario
         other: Usuarios
+    attributes:
+      wallet:
+        name: "Nombre:"
+        last_name: "Apellido:"
+        email: "Correo Electronico:"

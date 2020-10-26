@@ -1,7 +1,7 @@
-<div class="alert alert-primary" role="alert">
-    <strong class="text-capitalize">Hola <%=current_user.name%>!</strong> Registra los datos solicitados de la cuenta bancaria que deseas registrar. Debes llenar los campos obligatorios correctamente, los demas son opcionales.
-</div>
+<h4 class="mb-3">Registrar Cuenta Bancaria</h4>
 
-<h3 class="">Registrar Nueva Cuenta</h3>
+<div class="alert alert-primary" role="alert">
+    <strong class="text-capitalize">Hola <%=current_user.name%>!</strong> Registra los datos solicitados de la cuenta bancaria que deseas registrar. Debes llenar los campos obligatorios correctamente.
+</div>
 
 <%= render 'form', bank: @bank %>

@@ -4,7 +4,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :confirmable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  
   has_many :banks
   has_many :transactions
   include PermissionsConcern

@@ -106,9 +106,8 @@ function validarCurrentPassword(e, input) {
 
 function soloLetras(input) {
   var letras = "áéíóúabcdefghijklmnñopqrstuvwxyz";
-
-  var newValor = "";
-
+  newValor = "";
+  console.log(input.value);
   for (i = 0; i < input.value.length; i++) {
     if (letras.indexOf(input.value[i].toLowerCase()) != -1) {
       newValor = newValor.concat(input.value[i].toLowerCase());
@@ -127,23 +126,23 @@ function soloLetras(input) {
   }
 }
 
-function soloNumeros(input) {
+function soloNumeros(input,limit) {
   valor = input.value.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
 
-  if (valor != "") {
-    input.value = valor;
+  input.value = valor;
+  if (valor.length === limit) {
+    
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
 
-    return true;
   } else {
-    input.value = "";
     input.classList.remove("is-valid");
     input.classList.add("is-invalid");
   }
 }
+
 
 function validarSelect(x) {
   select = x;
@@ -175,26 +174,24 @@ function validarSelect(x) {
     */
 }
 
-/*
-document.getElementById('email').addEventListener('input', function() {
-    campo = event.target;
+
+function validarEmail(input) {
+    campo = input.value;
     //valido = document.getElementById('emailOK');
 
     emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
     //Se muestra un texto a modo de ejemplo, luego va a ser un icono
-    if (emailRegex.test(campo.value)) {
-        campo.classList.remove("is-invalid");
-        campo.classList.add("is-valid");
+    if (emailRegex.test(campo)) {
+        input.classList.remove("is-invalid");
+        input.classList.add("is-valid");
         //valido.innerText = "válido";
     } else {
-        campo.classList.remove("is-valid");
-        campo.classList.add("is-invalid");
+        input.classList.remove("is-valid");
+        input.classList.add("is-invalid");
         //valido.innerText = "incorrecto";
     }
-});
-
+};
 
 //VALIDACIONES
 
 
-*/

@@ -1,0 +1,64 @@
+<%= form_with(model: wallet, local: true) do |form| %>
+  <% if wallet.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h5 class="text-danger"><%= pluralize(wallet.errors.count, "error")%><%if wallet.errors.count > 1%> han sido detectados en los siguientes campos:<%else%> ha sido detectado en el siguiente campo:<%end%></h5>
+      <ul class="list-style-squarre">
+        <% wallet.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+        <h6>* : Campos Obligatorios</h6>
+    </div>
+  <div class="form-row field my-2">
+    <div class="col-12 col-sm-4 mb-2">
+      <label>Pais *</label>
+      <input class="form-control text-capitalize" value="<%=params[:country] || wallet.country%>" name="wallet[country]" readonly>
+    </div>
+    <div class="col-12 col-sm-4 mb-2">
+      <label for="validationName">Primer Nombre *</label>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="wallet[name]" oninput="soloLetras(this)" autofocus="autofocus" maxlength="12" value="<%=wallet.name%>" required>
+      <div class="invalid-feedback">
+        Ingresa solo letras
+      </div>
+    </div>
+    <div class="col-12 col-sm-4 mb-2">
+      <label for="validationLastName">Primer Apellido *</label>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="wallet[last_name]" value="<%=wallet.last_name%>" maxlength="12" oninput="soloLetras(this)" required>
+      <div class="invalid-feedback">
+        Ingresa solo letras
+      </div>
+    </div>
+  </div>
+  <div class="form-row field mb-2">
+  
+   <div class="col-12">
+      <label for="wallet_email">Correo Electronico *</label>
+      <input class="is-invalid" oninput="validarEmail(this)" type="text" value="<%=wallet.email%>" name="wallet[email]" id="wallet_email">
+      <div class="invalid-feedback">
+        Ingresa un correo valido
+      </div>
+   </div>
+  </div>
+  <div class="actions">
+    <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5" %>
+    <%= link_to 'Volver', set_method_url, class:"btn btn-success mt-3 mb-5 float-right" %>
+  </div>
+<% end %>
+<script src="/js/vistas/script-form-for-campos.js"></script>
+
+<script>
+  
+  div = document.getElementsByTagName("div")[11];
+
+  if (div.id === "error_explanation"){
+    var input = document.getElementsByTagName("input");
+    
+    soloLetras(input[2]);
+    soloLetras(input[3]);
+    validarEmail(input[4]);
+  } 
+
+</script>

@@ -28,15 +28,22 @@ class BanksController < ApplicationController
   def create
     @bank = current_user.banks.create(bank_params)
     
-    respond_to do |format|
-      if @bank.save
-        format.html { redirect_to banks_path, notice: 'Cuenta registrada con exito.' }
-        format.json { render :show, status: :created, location: @bank }
-      else
-        format.html { render :new }
-        format.json { render json: @bank.errors, status: :unprocessable_entity }
+    if @bank.country != "Argentina" && @bank.country != "Brasil"
+      respond_to do |format|
+        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
       end
-    end  
+    else
+      @bank.verify_type_account
+      respond_to do |format|
+        if @bank.save
+          format.html { redirect_to payment_methods_path, notice: 'Cuenta registrada con exito.' }
+          format.json { render :show, status: :created, location: @bank }
+        else
+          format.html { render :new }
+          format.json { render json: @bank.errors, status: :unprocessable_entity }
+        end
+      end 
+    end 
   end
 
   # PATCH/PUT /banks/1

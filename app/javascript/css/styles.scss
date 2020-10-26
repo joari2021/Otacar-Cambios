@@ -29,6 +29,10 @@ li {
   margin-top: 170px;
 }
 */
+.field_with_errors .form-control {
+  border: 1px solid $red;
+}
+
 .field {
   
   label {
