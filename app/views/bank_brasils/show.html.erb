@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @bank_brasil.name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @bank_brasil.last_name %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @bank_brasil.country %>
+</p>
+
+<p>
+  <strong>Cpf:</strong>
+  <%= @bank_brasil.cpf %>
+</p>
+
+<p>
+  <strong>Number agency:</strong>
+  <%= @bank_brasil.number_agency %>
+</p>
+
+<p>
+  <strong>Number account:</strong>
+  <%= @bank_brasil.number_account %>
+</p>
+
+<%= link_to 'Edit', edit_bank_brasil_path(@bank_brasil) %> |
+<%= link_to 'Back', bank_brasils_path %>

@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Digital Payments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Last name</th>
+      <th>Number phone</th>
+      <th>Payment method</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @digital_payments.each do |digital_payment| %>
+      <tr>
+        <td><%= digital_payment.name %></td>
+        <td><%= digital_payment.last_name %></td>
+        <td><%= digital_payment.number_phone %></td>
+        <td><%= digital_payment.payment_method %></td>
+        <td><%= link_to 'Show', digital_payment %></td>
+        <td><%= link_to 'Edit', edit_digital_payment_path(digital_payment) %></td>
+        <td><%= link_to 'Destroy', digital_payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Digital Payment', new_digital_payment_path %>

@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :digital_payments, only: [ :new, :create]
+  resources :wallet_with_users, only: [ :new, :create]
+  resources :bank_brasils, only: [ :new, :create]
   resources :wallets, only: [ :new, :create]
 
   get 'payment_methods' => "payment_methods#index"

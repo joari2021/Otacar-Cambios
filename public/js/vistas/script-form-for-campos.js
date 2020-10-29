@@ -1,11 +1,9 @@
 function address(input) {
-  
   valor = input.value.toLowerCase();
 
   if (valor.trim() != "") {
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
-
   } else if (valor.trim() != " ") {
     input.value = "";
     input.classList.remove("is-valid");
@@ -107,7 +105,6 @@ function validarCurrentPassword(e, input) {
 function soloLetras(input) {
   var letras = "áéíóúabcdefghijklmnñopqrstuvwxyz";
   newValor = "";
-  console.log(input.value);
   for (i = 0; i < input.value.length; i++) {
     if (letras.indexOf(input.value[i].toLowerCase()) != -1) {
       newValor = newValor.concat(input.value[i].toLowerCase());
@@ -118,7 +115,6 @@ function soloLetras(input) {
     input.value = newValor;
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
-
   } else {
     input.value = "";
     input.classList.remove("is-valid");
@@ -126,72 +122,177 @@ function soloLetras(input) {
   }
 }
 
-function soloNumeros(input,limit) {
+function soloNumeros(input, limit) {
   valor = input.value.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
 
   input.value = valor;
   if (valor.length === limit) {
-    
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
-
   } else {
     input.classList.remove("is-valid");
     input.classList.add("is-invalid");
   }
 }
 
-
 function validarSelect(x) {
   select = x;
-  //num = y;
-  coincidencia = false;
 
-  if (select.value != "") {
+  if (select.value != "" && select.value != undefined) {
     select.classList.remove("is-invalid");
     select.classList.add("is-valid");
+  }else {
+    select.classList.remove("is-valid");
+    select.classList.add("is-invalid");
   }
-  /*
-    if (num == 1) {
-        valores_permit = ["soltero", "casado", "divorciado"];
-    } else {
-        valores_permit = ["informatica", "derecho", "administracion", "telecomunicaciones"];
-    }
-
-    for (j = 0; j < valores_permit.length; j++) {
-        if (valor.value == valores_permit[j]) {
-            coincicendia = true;
-            values = valores_permit[j]
-        }
-    }
-    if (coincidencia == false) {
-        valor.value = values;
-    } else {
-        valor.value = " ";
-    }
-    */
 }
 
-
 function validarEmail(input) {
-    campo = input.value;
-    //valido = document.getElementById('emailOK');
+  campo = input.value;
+  //valido = document.getElementById('emailOK');
 
-    emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-    //Se muestra un texto a modo de ejemplo, luego va a ser un icono
-    if (emailRegex.test(campo)) {
-        input.classList.remove("is-invalid");
-        input.classList.add("is-valid");
-        //valido.innerText = "válido";
-    } else {
-        input.classList.remove("is-valid");
-        input.classList.add("is-invalid");
-        //valido.innerText = "incorrecto";
+  emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+  //Se muestra un texto a modo de ejemplo, luego va a ser un icono
+  if (emailRegex.test(campo)) {
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
+    //valido.innerText = "válido";
+  } else {
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
+    //valido.innerText = "incorrecto";
+  }
+}
+
+function inputNumber(event) {
+  $(event.target).val(function (index, value) {
+    if (value.length === 0) {
+      return "0,00";
     }
-};
+    if (value.length === 5) {
+      let num = "0123456789";
 
+      if (num.indexOf(value[4]) == -1 && value[3] == "0") {
+        return (valor = "0,00");
+      } else if (
+        num.indexOf(value[4]) == -1 &&
+        value[3] != "0" &&
+        value[0] == "0"
+      ) {
+        let str1 = "0";
+        let str2 = value.slice(1, 4);
+        return str1.concat(str2);
+      }
+    }
+    if (value == "0,0") {
+      return (valor = "0,00");
+    } else if (value.length === 3 && value[0] === "0") {
+      let complemento1 = value[2];
+      valor = "0,0";
+      return valor.concat(complemento1);
+    } else if (value.length === 3 && value[0] != "0" && value[2] != "0") {
+      let str11 = "0,";
+      let str12 = value.replace(",", "");
+      return str11.concat(str12);
+    } else if (value.length === 3 && value[0] != "0" && value[2] == "0") {
+      let string1 = "0,";
+      let string2 = value.replace(",", "");
+      return string1.concat(string2);
+    }
+    valor = value.replace(/\D/g, "");
+    valor = valor.replace(/([0-9])([0-9]{2})$/, "$1,$2");
+    valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+
+    if (valor[0] == "0" && valor[1] == "0") {
+      let str22 = valor.slice(1);
+      return str22;
+    } else if (valor[0] == "0" && valor[1] != "0") {
+      let str23 = valor.slice(1);
+      return str23;
+    }
+
+    return valor;
+  });
+}
+
+function inputCPF(input) {
+  valor = input.value.replace(/\D/g, "");
+  valor = valor.replace(/([0-9])([0-9]{2})$/, "$1-$2");
+  valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+
+  input.value = valor;
+  if (valor.length === 14) {
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
+  } else {
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
+  }
+  /*
+  $(event.target).val(function(index, value) {
+      
+      if (value.length === 0) {
+          return "0-00";
+      }
+      if (value.length === 5) {
+          let num = "0123456789";
+
+          if (num.indexOf(value[4]) == -1 && value[3] == "0") {
+              return valor = "0-00";
+          } else if (num.indexOf(value[4]) == -1 && value[3] != "0" && value[0] == "0") {
+              let str1 = "0"
+              let str2 = value.slice(1, 4);
+              return str1.concat(str2);
+          }
+      }
+      if (value == "0-0") {
+          return valor = "0-00";
+      } else if (value.length === 3 && value[0] === "0") {
+          let complemento1 = value[2];
+          valor = "0-0";
+          return valor.concat(complemento1);
+      } else if (value.length === 3 && value[0] != "0" && value[2] != "0") {
+          let str11 = "0-"
+          let str12 = value.replace("-", "");
+          return str11.concat(str12);
+      } else if (value.length === 3 && value[0] != "0" && value[2] == "0") {
+          let string1 = "0-"
+          let string2 = value.replace("-", "");
+          return string1.concat(string2);
+      }
+      valor = value.replace(/\D/g, "")
+      valor = valor.replace(/([0-9])([0-9]{2})$/, '$1-$2')
+      valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+
+      if (valor[0] == "0" && valor[1] == "0") {
+          let str22 = valor.slice(1);
+          return str22;
+      } else if (valor[0] == "0" && valor[1] != "0") {
+          let str23 = valor.slice(1);
+          return str23;
+      }
+
+      return valor;
+      
+  });*/
+}
+
+function validarUsuario(input) {
+
+  var re = / /g;
+  var resultado = input.value.replace(re, "");
+  console.log(resultado);
+
+  if (resultado != "") {
+    input.value = resultado
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
+  } else {
+    input.value = "";
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
+  }
+}
 //VALIDACIONES
-
-

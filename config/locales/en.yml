@@ -36,7 +36,37 @@ en:
         one: Usuario
         other: Usuarios
     attributes:
+      bank:
+        name: "Primer Nombre:"
+        last_name: "Primer Apellido:"
+        country: "Pais:"
+        bank: "Banco:"
+        identidy: "Nro Documento:"
+        type_account: "Tipo de cuenta:"
+        number_account: "Nro de cuenta:"
+      bank_brasil:
+        name: "Primer Nombre:"
+        last_name: "Primer Apellido:"
+        country: "Pais:"
+        bank: "Banco:"
+        cpf: "Nro CPF:"
+        number_agency: "Tipo de cuenta:"
+        number_account: "Nro de cuenta:"
+      digital_payment:
+        name: "Primer Nombre:"
+        last_name: "Primer Apellido:"
+        country: "Pais:"
+        number_phone: "Nro Telefono:"
+        payment_method: "Pago Digital:"
+      wallet_with_user:
+        name: "Primer Nombre:"
+        last_name: "Primer Apellido:"
+        country: "Pais:"
+        wallet_name: "Monedero Digital:"
+        usuario: "Usuario:"
       wallet:
-        name: "Nombre:"
-        last_name: "Apellido:"
+        name: "Primer Nombre:"
+        last_name: "Primer Apellido:"
+        country: "Pais:"
         email: "Correo Electronico:"
+        wallet_name: "Monedero Digital:"

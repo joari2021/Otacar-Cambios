@@ -2,7 +2,7 @@
     <%= form_with(model: bank, local: true) do |form| %>
     <% if bank.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
-      <h5 class="text-danger"><%= pluralize(bank.errors.count, "error")%><%if bank.errors.count > 1%> han sido detectados en los siguientes campos:<%else%> ha sido detectado en el siguiente campo:<%end%></h5>
+      <h5 class="text-danger"><%if bank.errors.count > 1%><%=bank.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=bank.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
       <ul class="list-style-square">
         <% bank.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -24,7 +24,7 @@
         <div class="col-12 col-sm-4 mb-2">
             <label for="validationName">Primer Nombre *</label>
 
-            <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="bank[name]" oninput="return soloLetras(this)" autofocus="autofocus" maxlength="12" value="<%=bank.name%>" required>
+            <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="bank[name]" oninput="soloLetras(this)" onkeyup="habilitarSave()" autofocus="autofocus" maxlength="12" value="<%=bank.name%>" required>
             <div class="invalid-feedback">
                 Ingrese solo letras
             </div>
@@ -33,7 +33,7 @@
         <div class="col-12 col-sm-4 mb-2">
             <label for="validationLastName">Primer Apellido *</label>
 
-            <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="bank[last_name]" value="<%=bank.last_name%>" maxlength="12" oninput="return soloLetras(this)" required>
+            <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="bank[last_name]" value="<%=bank.last_name%>" maxlength="12" oninput="soloLetras(this)" onkeyup="habilitarSave()" required>
             <div class="invalid-feedback">
                 Ingrese solo letras
             </div>
@@ -43,8 +43,8 @@
     <!--DNI y Banco-->
     <div class="form-row field mb-3">
         <div class="col-12 col-sm-6 mb-2">
-            <label for="validationDNI">Nro DNI *</label>
-            <input class="form-control is-invalid" id="validationDNI" type="text" maxlength="12" oninput="return soloNumeros(this,12)" name="bank[identidy]" value="<%=bank.identidy%>"></input>
+            <label for="validationDNI">Nro Documento *</label>
+            <input class="form-control is-invalid" id="validationDNI" type="text" maxlength="12" oninput="soloNumeros(this,12)" onkeyup="habilitarSave()" name="bank[identidy]" value="<%=bank.identidy%>"></input>
             <div class="invalid-feedback">
                 Ingrese un DNI valido
             </div>
@@ -53,11 +53,22 @@
         <div class="col-12 col-sm-6 mb-2">
             <label>Banco *</label>
 
-            <select class="custom-select is-invalid" name="bank[bank]" onChange="validarSelect(this)" required>
+            <select class="custom-select is-invalid" name="bank[bank]" onchange="validarSelect(this),habilitarSave()" required>
                 <option selected disabled value="">Elegir...</option>
-                <%if params[:country] || bank.country === "Argentina"%>
+                <%country= params[:country] || bank.country%>
+                <%case country.capitalize%>
+                <%when "Argentina"%>
                 <option value="Brubank" <%if bank.bank === "Brubank"%>selected<%end%>>Brubank</option>
                 <option value="Galicia" <%if bank.bank === "Galicia"%>selected<%end%>>Galicia</option>
+                <%when "Chile"%>
+                <option value="Banco Estado" <%if bank.bank === "Banco Estado"%>selected<%end%>>Banco Estado</option>
+                <%when "Ecuador"%>
+                <option value="Banco Pichincha" <%if bank.bank === "Banco Pichincha"%>selected<%end%>>Banco Pichincha</option>
+                <%when "Panama"%>
+                <option value="Banco Mercantil Panama" <%if bank.bank === "Banco Mercantil Panama"%>selected<%end%>>Banco Mercantil Panama</option>
+                <%when "Peru"%>
+                <option value="Banco BCP" <%if bank.bank === "Banco BCP"%>selected<%end%>>Banco BCP</option>
+                <option value="Escotia Bank" <%if bank.bank === "Escotia Bank"%>selected<%end%>>Escotia Bank</option>
                 <%end%>
             </select>
             <div class="invalid-feedback">Elige una opcion</div>
@@ -70,7 +81,7 @@
         <div class="col-12 col-sm-4 mb-2">
             <label>Tipo de cuenta *</label>
 
-            <select class="custom-select is-invalid" name="bank[type_account]" onChange="validarSelect(this)" required>
+            <select class="custom-select is-invalid" name="bank[type_account]" onchange="validarSelect(this), habilitarSave()" required>
                 <option selected disabled value="">Elegir...</option>
                 <option value="Ahorro" <%if bank.type_account === "Ahorro"%>selected<%end%>>Ahorro</option>
                 <option value="Corriente" <%if bank.type_account === "Corriente"%>selected<%end%>>Corriente</option>
@@ -79,8 +90,8 @@
         </div>
 
         <div class="col-12 col-sm-8 mb-2">
-            <label for="validationNumberAccount">Nro Cuenta *</label>
-            <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20)" name="bank[number_account]" value="<%=bank.number_account%>" required></input>
+            <label for="validationNumberAccount">Nro de Cuenta *</label>
+            <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20)" onkeyup="habilitarSave()" name="bank[number_account]" value="<%=bank.number_account%>" required></input>
             <div class="invalid-feedback">
                 Ingrese un número de cuenta válido
             </div>
@@ -88,8 +99,8 @@
     </div>
 
     <div class="actions">
-        <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5" %>
-        <%= link_to 'Volver', payment_methods_path, class:"btn btn-success mt-3 mb-5 float-right" %>
+        <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5", id:"btn", disabled:"disabled" %>
+        <%= link_to 'Volver', set_method_path, class:"btn btn-success mt-3 mb-5 float-right" %>
     </div>
     <% end %>
 </div>
@@ -100,17 +111,30 @@
   
   div = document.getElementsByTagName("div")[12];
 
-  if (div.id === "error_explanation"){
     var input = document.getElementsByTagName("input");
     var select1 = document.getElementsByTagName("select")[0];
     var select2 = document.getElementsByTagName("select")[1];
-
-    soloLetras(input[2]);
-    soloLetras(input[3]);
-    soloNumeros(input[4],12);
-    validarSelect(select1);
-    validarSelect(select2);
-    soloNumeros(input[5],20);
-  } 
+    if (div.id === "error_explanation"){
+        
+        soloLetras(input[2]);
+        soloLetras(input[3]);
+        soloNumeros(input[4],12);
+        validarSelect(select1);
+        validarSelect(select2);
+        soloNumeros(input[5],20);
+    }
+  
+    function habilitarSave() {
+        botonSave = document.getElementById("btn");
+        formulario = false
+        if (input[2].className.indexOf("is-valid") != -1 && input[3].className.indexOf("is-valid") != -1 && input[4].className.indexOf("is-valid") != -1 && input[5].className.indexOf("is-valid") != -1 && select1.className.indexOf("is-valid") != -1 && select2.className.indexOf("is-valid") != -1){
+            formulario = true;
+        }
+        if (formulario == true){
+            botonSave.removeAttribute("disabled");
+        }else{
+            botonSave.setAttribute("disabled","disabled");
+        }
+    }
 
 </script>

@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Wallet With Users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Country</th>
+      <th>Name</th>
+      <th>Last name</th>
+      <th>User</th>
+      <th>Wallet name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @wallet_with_users.each do |wallet_with_user| %>
+      <tr>
+        <td><%= wallet_with_user.country %></td>
+        <td><%= wallet_with_user.name %></td>
+        <td><%= wallet_with_user.last_name %></td>
+        <td><%= wallet_with_user.user %></td>
+        <td><%= wallet_with_user.wallet_name %></td>
+        <td><%= link_to 'Show', wallet_with_user %></td>
+        <td><%= link_to 'Edit', edit_wallet_with_user_path(wallet_with_user) %></td>
+        <td><%= link_to 'Destroy', wallet_with_user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Wallet With User', new_wallet_with_user_path %>

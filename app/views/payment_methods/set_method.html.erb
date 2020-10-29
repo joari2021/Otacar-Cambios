@@ -33,11 +33,84 @@
 <div class="row justify-content-center mt-3 d-none" id="MethodsBrasil">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsBrasil" class="">Elije un metodo de pago</label>
-    <select class="custom-select" id="validationMethosBrasil" onChange="modifyEnlace(this)"  required>
+    <select class="custom-select" id="validationMethodsBrasil" onchange="modifyEnlace(this)"  required>
+      <option selected disabled value="">Elegir...</option>
+      <option value="banks_brasil">Cuenta Bancaria</option>
+      <option value="wallets">Monedero Digital</option>
+      <option value="pago_movil">Pago Movil</option>
+    </select>
+    <div class="invalid-feedback">Elige una opcion</div>
+  </div>
+</div>
+<!--Metodos de Pago de Chile-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsChile">
+  <div class="col-12 col-sm-5 was-validated text-center">
+    <label for="validationMethodsChile" class="">Elije un metodo de pago</label>
+    <select class="custom-select" id="validationMethodsChile" onchange="modifyEnlace(this)"  required>
       <option selected disabled value="">Elegir...</option>
       <option value="banks">Cuenta Bancaria</option>
-      <option value="wallets">Monedero Digital</option>
-      <option value="pagoE">Pago Electronico</option>
+      
+    </select>
+    <div class="invalid-feedback">Elige una opcion</div>
+  </div>
+</div>
+
+<!--Metodos de Pago de Colombia-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsColombia">
+  <div class="col-12 col-sm-5 was-validated text-center">
+    <label for="validationMethodsColombia" class="">Elije un metodo de pago</label>
+    <select class="custom-select" id="validationMethodsColombia" onchange="modifyEnlace(this)" required>
+      <option selected disabled value="">Elegir...</option>
+      <option value="banks">Cuenta Bancaria</option>
+      <option value="digital_payments">Pago Digital</option>       
+    </select>
+    <div class="invalid-feedback">Elige una opcion</div>
+  </div>
+</div>
+
+<!--Metodos de Pago de Ecuador-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsEcuador">
+  <div class="col-12 col-sm-5 was-validated text-center">
+    <label for="validationMethodsEcuador" class="">Elije un metodo de pago</label>
+    <select class="custom-select" id="validationMethodsEcuador" onchange="modifyEnlace(this)" required>
+      <option selected disabled value="">Elegir...</option>
+      <option value="banks">Cuenta Bancaria</option>     
+    </select>
+    <div class="invalid-feedback">Elige una opcion</div>
+  </div>
+</div>
+
+<!--Metodos de Pago de Panama-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsPanama">
+  <div class="col-12 col-sm-5 was-validated text-center">
+    <label for="validationMethodsPanama" class="">Elije un metodo de pago</label>
+    <select class="custom-select" id="validationMethodsPanama" onchange="modifyEnlace(this)" required>
+      <option selected disabled value="">Elegir...</option>
+      <option value="banks">Cuenta Bancaria</option>     
+    </select>
+    <div class="invalid-feedback">Elige una opcion</div>
+  </div>
+</div>
+
+<!--Metodos de Pago de Peru-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsPeru">
+  <div class="col-12 col-sm-5 was-validated text-center">
+    <label for="validationMethodsPeru" class="">Elije un metodo de pago</label>
+    <select class="custom-select" id="validationMethodsPeru" onchange="modifyEnlace(this)" required>
+      <option selected disabled value="">Elegir...</option>
+      <option value="banks">Cuenta Bancaria</option>     
+    </select>
+    <div class="invalid-feedback">Elige una opcion</div>
+  </div>
+</div>
+
+<!--Metodos de Pago de USA-->
+<div class="row justify-content-center mt-3 d-none" id="MethodsUSA">
+  <div class="col-12 col-sm-5 was-validated text-center">
+    <label for="validationMethodsUSA" class="">Elije un metodo de pago</label>
+    <select class="custom-select" id="validationMethodsUsa" onchange="modifyEnlace(this)" required>
+      <option selected disabled value="">Elegir...</option>
+      <option value="wallets">Monedero Digital</option>     
     </select>
     <div class="invalid-feedback">Elige una opcion</div>
   </div>
@@ -49,16 +122,28 @@
   </div>
 </div>
 <script>
-    function eliminarCajas(select){
+    function eliminarCajas(){
         //VARIABLES
         enlaceCaja = document.getElementById("cajaEnlace");
         selects = document.getElementsByTagName("select");
         listaMethodsArgentina = document.getElementById("MethodsArgentina");
         listaMethodsBrasil = document.getElementById("MethodsBrasil");
+        listaMethodsChile = document.getElementById("MethodsChile");
+        listaMethodsColombia = document.getElementById("MethodsColombia");
+        listaMethodsEcuador = document.getElementById("MethodsEcuador");
+        listaMethodsPanama = document.getElementById("MethodsPanama");
+        listaMethodsPeru = document.getElementById("MethodsPeru");
+        listaMethodsUSA = document.getElementById("MethodsUSA");
 
         //OCULTAR CAJAS
         listaMethodsArgentina.classList.add("d-none");
         listaMethodsBrasil.classList.add("d-none");
+        listaMethodsChile.classList.add("d-none");
+        listaMethodsColombia.classList.add("d-none");
+        listaMethodsEcuador.classList.add("d-none");
+        listaMethodsPanama.classList.add("d-none");
+        listaMethodsPeru.classList.add("d-none");
+        listaMethodsUSA.classList.add("d-none");
 
         //RESETEAR VALORES DE LOS SELECTS
         for (let i = 1; i < selects.length; i++) {
@@ -84,6 +169,48 @@
                 brasilMethods.classList.remove("d-none");
                 break;
 
+            case "Chile":
+
+                eliminarCajas();
+                chileMethods = document.getElementById("MethodsChile");
+                chileMethods.classList.remove("d-none");
+                break;
+
+            case "Colombia":
+
+                eliminarCajas();
+                colombiaMethods = document.getElementById("MethodsColombia");
+                colombiaMethods.classList.remove("d-none");
+                break;
+
+            case "Ecuador":
+
+                eliminarCajas();
+                ecuadorMethods = document.getElementById("MethodsEcuador");
+                ecuadorMethods.classList.remove("d-none");
+                break;
+
+            case "Panama":
+
+                eliminarCajas();
+                panamaMethods = document.getElementById("MethodsPanama");
+                panamaMethods.classList.remove("d-none");
+                break;
+
+            case "Peru":
+
+                eliminarCajas();
+                peruMethods = document.getElementById("MethodsPeru");
+                peruMethods.classList.remove("d-none");
+                break;
+
+            case "USA":
+
+                eliminarCajas();
+                usaMethods = document.getElementById("MethodsUSA");
+                usaMethods.classList.remove("d-none");
+                break;
+
             default:
                 break;
         }
@@ -99,9 +226,24 @@
                 enlace.href = "/banks/new?country=".concat(country.value);
                 break;
             
+            case "banks_brasil":
+                enlaceCaja.classList.remove("d-none");
+                enlace.href = "/bank_brasils/new?country=".concat(country.value);
+                break;
+
             case "wallets":
                 enlaceCaja.classList.remove("d-none");
                 enlace.href = "/wallets/new?country=".concat(country.value);
+                break;
+            
+            case "pago_movil":
+                enlaceCaja.classList.remove("d-none");
+                enlace.href = "/wallet_with_users/new?country=".concat(country.value);
+                break;
+            
+            case "digital_payments":
+                enlaceCaja.classList.remove("d-none");
+                enlace.href = "/digital_payments/new?country=".concat(country.value);
                 break;
 
             default:

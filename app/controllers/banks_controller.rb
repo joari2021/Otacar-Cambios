@@ -1,6 +1,6 @@
 class BanksController < ApplicationController
-  before_action :set_bank, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:edit, :update]
+  before_action :set_bank, only: [:destroy]
+  #before_action :authenticate_admin!, only: [:edit, :update]
 
   # GET /banks
   # GET /banks.json
@@ -16,7 +16,6 @@ class BanksController < ApplicationController
   # GET /banks/new
   def new
     @bank = Bank.new
-    @name = params[:name]
   end
 
   # GET /banks/1/edit
@@ -28,15 +27,15 @@ class BanksController < ApplicationController
   def create
     @bank = current_user.banks.create(bank_params)
     
-    if @bank.country != "Argentina" && @bank.country != "Brasil"
+    if @bank.country != "Argentina" && @bank.country != "Chile" && @bank.country != "Ecuador" && @bank.country != "Panama" && @bank.country != "Peru"  
       respond_to do |format|
         format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
       end
     else
-      @bank.verify_type_account
+      @bank.verify_data_save
       respond_to do |format|
         if @bank.save
-          format.html { redirect_to payment_methods_path, notice: 'Cuenta registrada con exito.' }
+          format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
           format.json { render :show, status: :created, location: @bank }
         else
           format.html { render :new }
@@ -65,7 +64,7 @@ class BanksController < ApplicationController
   def destroy
     @bank.destroy
     respond_to do |format|
-      format.html { redirect_to payment_methods_url, notice: 'Cuenta eliminada con exito.' }
+      format.html { redirect_to payment_methods_url, notice: 'Cuenta bancaria eliminada con exito.' }
       format.json { head :no_content }
     end
   end

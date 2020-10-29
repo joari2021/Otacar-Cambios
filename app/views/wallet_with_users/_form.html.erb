@@ -1,9 +1,9 @@
-<%= form_with(model: wallet, local: true) do |form| %>
-  <% if wallet.errors.any? %>
+<%= form_with(model: wallet_with_user, local: true) do |form| %>
+  <% if wallet_with_user.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
-      <h5 class="text-danger"><%= pluralize(wallet.errors.count, "error")%><%if wallet.errors.count > 1%> han sido detectados en los siguientes campos:<%else%> ha sido detectado en el siguiente campo:<%end%></h5>
+      <h5 class="text-danger"><%= pluralize(wallet_with_user.errors.count, "error")%><%if wallet_with_user.errors.count > 1%> han sido detectados en los siguientes campos:<%else%> ha sido detectado en el siguiente campo:<%end%></h5>
       <ul class="list-style-squarre">
-        <% wallet.errors.full_messages.each do |message| %>
+        <% wallet_with_user.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>
@@ -15,18 +15,18 @@
   <div class="form-row field my-2">
     <div class="col-12 col-sm-4 mb-2">
       <label>Pais *</label>
-      <input class="form-control text-capitalize" value="<%=params[:country] || wallet.country%>" name="wallet[country]" readonly>
+      <input class="form-control text-capitalize" value="<%=params[:country] || wallet_with_user.country%>" name="wallet_with_user[country]" readonly>
     </div>
     <div class="col-12 col-sm-4 mb-2">
       <label for="validationName">Primer Nombre *</label>
-      <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="wallet[name]" oninput="soloLetras(this)" onkeyup="habilitarSave()" autofocus="autofocus" maxlength="12" value="<%=wallet.name%>" required>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="wallet_with_user[name]" oninput="soloLetras(this)" onkeyup="habilitarSave()" autofocus="autofocus" maxlength="12" value="<%=wallet_with_user.name%>" required>
       <div class="invalid-feedback">
         Ingresa solo letras
       </div>
     </div>
     <div class="col-12 col-sm-4 mb-2">
       <label for="validationLastName">Primer Apellido *</label>
-      <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="wallet[last_name]" value="<%=wallet.last_name%>" maxlength="12" oninput="soloLetras(this)" onkeyup="habilitarSave()" required>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="wallet_with_user[last_name]" value="<%=wallet_with_user.last_name%>" maxlength="12" oninput="soloLetras(this)" onkeyup="habilitarSave()" required>
       <div class="invalid-feedback">
         Ingresa solo letras
       </div>
@@ -34,30 +34,28 @@
   </div>
   <div class="form-row field mb-2">
     <div class="col-12 col-sm-5 mb-2">
-      <label>Monedero Digital *</label>
+      <label>Pago Movil *</label>
 
-      <select class="custom-select is-invalid" name="wallet[wallet_name]" onchange="validarSelect(this),habilitarSave()" required>
+      <select class="custom-select is-invalid" name="wallet_with_user[wallet_name]" onchange="validarSelect(this),habilitarSave()" required>
           <option selected disabled value="">Elegir...</option>
-          <%country = params[:country] || wallet.country%>
+          <%country = params[:country] || wallet_with_user.country%>
           <%case country.capitalize%>
           <%when "Brasil"%>
-          <option value="Pix" <%if wallet.wallet_name === "Pix"%>selected<%end%>>Pix</option>
-          <%when "Usa"%>
-          <option value="Zelle" <%if wallet.wallet_name === "Zelle"%>selected<%end%>>Zelle</option>
+          <option value="Pic Pay" <%if wallet_with_user.wallet_name === "Pic Pay"%>selected<%end%>>Pic Pay</option>
           <%end%>
       </select>
       <div class="invalid-feedback">Elige una opcion</div>
     </div>
     <div class="col-12 col-sm-7">
-        <label for="wallet_email">Correo Electronico *</label>
-        <input class="is-invalid" oninput="validarEmail(this)" onkeyup="habilitarSave()" type="text" value="<%=wallet.email%>" name="wallet[email]" id="wallet_email">
+        <label for="wallet_user">Usuario *</label>
+        <input class="is-invalid" oninput="validarUsuario(this)" onkeyup="habilitarSave()" type="text" value="<%=wallet_with_user.usuario%>" name="wallet_with_user[usuario]" id="wallet_user">
         <div class="invalid-feedback">
-          Ingresa un correo valido
+          Ingresa un usuario valido
         </div>
     </div>
   </div>
   <div class="actions">
-    <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5", id:"btn", disabled:"disabled" %>
+    <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5", id:"btn", disabled:"disabled"%>
     <%= link_to 'Volver', set_method_url, class:"btn btn-success mt-3 mb-5 float-right" %>
   </div>
 <% end %>
@@ -66,17 +64,14 @@
 <script>
   
   div = document.getElementsByTagName("div")[11];
-
   var input = document.getElementsByTagName("input");
   var select = document.getElementsByTagName("select")[0];
-
-  if (div.id === "error_explanation"){
-        
+  if (div.id === "error_explanation"){    
     soloLetras(input[2]);
     soloLetras(input[3]);
-    validarEmail(input[4]);
+    validarUsuario(input[4]);
     validarSelect(select);
-  } 
+  }
 
   function habilitarSave() {
     botonSave = document.getElementById("btn");
@@ -87,7 +82,7 @@
     if (formulario == true){
       botonSave.removeAttribute("disabled");
     }else{
-      botonSave.setAttribute("disabled", "disabled");
+      botonSave.setAttribute("disabled","disabled");
     }
   }
 

@@ -1,0 +1,90 @@
+<%= form_with(model: digital_payment, local: true) do |form| %>
+    <% if digital_payment.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <h5 class="text-danger"><%if digital_payment.errors.count > 1%><%=digital_payment.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=digital_payment.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
+        <ul>
+          <% digital_payment.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <div class="field">
+        <h6>* : Campos Obligatorios</h6>
+    </div>
+  <div class="form-row field my-2">
+    <div class="col-12 col-sm-4 mb-2">
+      <label>Pais *</label>
+      <input class="form-control text-capitalize" value="<%=params[:country] || digital_payment.country%>" name="digital_payment[country]" readonly>
+    </div>
+    <div class="col-12 col-sm-4 mb-2">
+      <label for="validationName">Primer Nombre *</label>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="digital_payment[name]" oninput="soloLetras(this),habilitarSave()" autofocus="autofocus" maxlength="12" value="<%=digital_payment.name%>" required>
+      <div class="invalid-feedback">
+        Ingresa solo letras
+      </div>
+    </div>
+    <div class="col-12 col-sm-4 mb-2">
+      <label for="validationLastName">Primer Apellido *</label>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="digital_payment[last_name]" value="<%=digital_payment.last_name%>" maxlength="12" oninput="soloLetras(this),habilitarSave()" required>
+      <div class="invalid-feedback">
+        Ingresa solo letras
+      </div>
+    </div>
+  </div>
+  <div class="form-row field mb-2">
+    <div class="col-12 col-sm-5 mb-2">
+      <label>Pago Digital *</label>
+
+      <select class="custom-select is-invalid" name="digital_payment[payment_method]" onchange="validarSelect(this),habilitarSave()" required>
+          <option selected disabled value="">Elegir...</option>
+          <%country = params[:country] || digital_payment.country%>
+          <%case country.capitalize%>
+          <%when "Colombia"%>
+          <option value="Nequi" <%if digital_payment.payment_method === "Nequi"%>selected<%end%>>Nequi</option>
+          <%end%>
+      </select>
+      <div class="invalid-feedback">Elige una opcion</div>
+    </div>
+    <div class="col-12 col-sm-7">
+        <label for="number_phone">Nro Telefono *</label>
+        <input class="is-invalid" oninput="soloNumeros(this,10),habilitarSave()" type="text" value="<%=digital_payment.number_phone%>" name="digital_payment[number_phone]" maxlength="10" id="number_phone">
+        <div class="invalid-feedback">
+          Ingresa un usuario valido
+        </div>
+    </div>
+  </div>
+  <div class="actions">
+    <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5", id:"btn", disabled:"disabled"%>
+    <%= link_to 'Volver', set_method_url, class:"btn btn-success mt-3 mb-5 float-right" %>
+  </div>
+<% end %>
+<script src="/js/vistas/script-form-for-campos.js"></script>
+
+<script>
+  
+  div = document.getElementsByTagName("div")[11];
+  var input = document.getElementsByTagName("input");
+  var select = document.getElementsByTagName("select")[0];
+  if (div.id === "error_explanation"){    
+    soloLetras(input[2]);
+    soloLetras(input[3]);
+    soloNumeros(input[4],10);
+    validarSelect(select);
+  }
+
+  function habilitarSave() {
+    botonSave = document.getElementById("btn");
+    formulario = false
+    if (input[2].className.indexOf("is-valid") != -1 && input[3].className.indexOf("is-valid") != -1 && input[4].className.indexOf("is-valid") != -1 && select.className.indexOf("is-valid") != -1){
+      formulario = true;
+    }
+    if (formulario == true){
+      botonSave.removeAttribute("disabled");
+    }else{
+      botonSave.setAttribute("disabled","disabled");
+    }
+  }
+
+</script>
+

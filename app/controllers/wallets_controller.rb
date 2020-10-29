@@ -26,13 +26,14 @@ class WalletsController < ApplicationController
   # POST /wallets
   # POST /wallets.json
   def create
-    @wallet = Wallet.new(wallet_params)
+    @wallet = current_user.wallets.create(wallet_params)
     
-    if @wallet.country != "Brasil"
+    if @wallet.country != "Brasil" && @wallet.country != "USA"
       respond_to do |format|
         format.html { redirect_to set_method_url, notice: 'Pais Invalido.' }
       end
     else
+      @wallet.verify_data_saved
       respond_to do |format|
         if @wallet.save
           format.html { redirect_to payment_methods_url, notice: 'El monedero digital ha sido guardado con exito.' }
@@ -78,6 +79,6 @@ class WalletsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def wallet_params
-      params.require(:wallet).permit(:name, :last_name, :email, :country)
+      params.require(:wallet).permit(:name, :last_name, :wallet_name, :email, :country)
     end
 end

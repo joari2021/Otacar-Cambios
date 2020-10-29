@@ -5,6 +5,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :banks
+  has_many :bank_brasils
+  has_many :wallets
+  has_many :wallet_with_users
+  has_many :digital_payments
   has_many :transactions
   include PermissionsConcern
   

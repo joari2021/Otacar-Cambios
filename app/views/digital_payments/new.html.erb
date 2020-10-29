@@ -1,0 +1,7 @@
+<h4 class="mb-3">Registrar Pago Digital</h4>
+
+<div class="alert alert-primary" role="alert">
+    <strong class="text-capitalize">Hola <%=current_user.name%>!</strong> Registra los datos solicitados del pago digital que deseas registrar. Debes llenar los campos obligatorios correctamente.
+</div>
+
+<%= render 'form', digital_payment: @digital_payment %>

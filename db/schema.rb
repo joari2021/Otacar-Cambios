@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_222850) do
+ActiveRecord::Schema.define(version: 2020_10_28_234717) do
+
+  create_table "bank_brasils", force: :cascade do |t|
+    t.string "name"
+    t.string "last_name"
+    t.string "country"
+    t.string "cpf"
+    t.string "bank"
+    t.string "number_agency"
+    t.string "number_account"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_bank_brasils_on_user_id"
+  end
 
   create_table "banks", force: :cascade do |t|
     t.string "name"
@@ -24,6 +38,18 @@ ActiveRecord::Schema.define(version: 2020_10_24_222850) do
     t.integer "user_id", default: 1, null: false
     t.string "last_name", default: ""
     t.index ["user_id"], name: "index_banks_on_user_id"
+  end
+
+  create_table "digital_payments", force: :cascade do |t|
+    t.string "country"
+    t.string "name"
+    t.string "last_name"
+    t.string "number_phone"
+    t.string "payment_method"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_digital_payments_on_user_id"
   end
 
   create_table "rates", force: :cascade do |t|
@@ -96,6 +122,18 @@ ActiveRecord::Schema.define(version: 2020_10_24_222850) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "wallet_with_users", force: :cascade do |t|
+    t.string "country"
+    t.string "name"
+    t.string "last_name"
+    t.string "wallet_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id", null: false
+    t.string "usuario"
+    t.index ["user_id"], name: "index_wallet_with_users_on_user_id"
+  end
+
   create_table "wallets", force: :cascade do |t|
     t.string "name"
     t.string "last_name"
@@ -103,8 +141,15 @@ ActiveRecord::Schema.define(version: 2020_10_24_222850) do
     t.string "country"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "wallet_name"
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_wallets_on_user_id"
   end
 
+  add_foreign_key "bank_brasils", "users"
   add_foreign_key "banks", "users"
+  add_foreign_key "digital_payments", "users"
   add_foreign_key "transactions", "users"
+  add_foreign_key "wallet_with_users", "users"
+  add_foreign_key "wallets", "users"
 end

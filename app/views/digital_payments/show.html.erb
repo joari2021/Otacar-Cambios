@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @digital_payment.name %>
+</p>
+
+<p>
+  <strong>Last name:</strong>
+  <%= @digital_payment.last_name %>
+</p>
+
+<p>
+  <strong>Number phone:</strong>
+  <%= @digital_payment.number_phone %>
+</p>
+
+<p>
+  <strong>Payment method:</strong>
+  <%= @digital_payment.payment_method %>
+</p>
+
+<%= link_to 'Edit', edit_digital_payment_path(@digital_payment) %> |
+<%= link_to 'Back', digital_payments_path %>
