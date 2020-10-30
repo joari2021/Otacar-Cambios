@@ -53,7 +53,7 @@
         <div class="col-12 col-sm-6 mb-2">
             <label>Banco *</label>
 
-            <select class="custom-select is-invalid" name="bank[banco]" onchange="validarSelect(this),habilitarSave()" required>
+            <select class="custom-select is-invalid" name="bank[banco]" value="<%=bank.banco%>" onchange="validarSelect(this),habilitarSave()" required>
                 <option selected disabled value="">Elegir...</option>
                 <%country= params[:country] || bank.country%>
                 <%case country.capitalize%>

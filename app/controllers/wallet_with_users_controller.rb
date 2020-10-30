@@ -24,30 +24,37 @@ class WalletWithUsersController < ApplicationController
   # POST /wallet_with_users
   # POST /wallet_with_users.json
   def create
-    @wallet_with_user = current_user.wallet_with_users.create(wallet_with_user_params)
+    @method = WalletWithUser.new(wallet_with_user_params)
+    @method.verify_data_saved
 
-    if @wallet_with_user.country.capitalize === current_user.country.capitalize 
-      respond_to do |format|
-        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
-      end
-    else 
-      if @wallet_with_user.country != "Brasil"
+    if @method.wallet_name != ""
+      if @method.country.capitalize === current_user.country.capitalize 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
-      else
-        @wallet_with_user.verify_data_saved
-        respond_to do |format|
-          if @wallet_with_user.save
-            format.html { redirect_to payment_methods_path, notice: 'El monedero digital fue guardado con exito.' }
-            format.json { render :show, status: :created, location: @wallet_with_user }
-          else
-            format.html { render :new }
-            format.json { render json: @wallet_with_user.errors, status: :unprocessable_entity }
+      else    
+        if @method.country != "Brasil"
+          respond_to do |format|
+            format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
           end
+        else
+          @wallet_with_user = current_user.wallet_with_users.create(wallet_with_user_params)
+          respond_to do |format|
+            if @wallet_with_user.save
+              format.html { redirect_to payment_methods_path, notice: 'Monedero Digital guardado con exito.' }
+              format.json { render :show, status: :created, location: @wallet_with_user }
+            else
+              format.html { render :new }
+              format.json { render json: @wallet_with_user.errors, status: :unprocessable_entity }
+            end
+          end 
         end
       end
-    end
+    else
+      respond_to do |format|
+        format.html { redirect_to set_method_path, notice: 'Ha seleccionado opciones invalidas.' }
+      end
+    end 
   end
 
   # PATCH/PUT /wallet_with_users/1

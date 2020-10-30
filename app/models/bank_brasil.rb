@@ -1,7 +1,7 @@
 class BankBrasil < ApplicationRecord
     belongs_to :user
 
-    def verify_data_save
+    def verify_data_saved
         #VALIDAR EL CAMPO BANCO#
         bancos = %w{ Bradesco Caixa Itaú Ití Nubank Santander }
 
@@ -19,12 +19,13 @@ class BankBrasil < ApplicationRecord
         if encontrado === false
             self.bank = ""
         end
-
+    end
+     
+    def modify_cpf
         #VALIDAR CPF#
         self.cpf.gsub!('.','')
         self.cpf.gsub!('-','')
-     end
-  
+    end
      validates :name, :last_name, length: { maximum: 12, message: " El contenido es muy largo (caracteres maximos 12)" }
       
      validates :bank, presence: { message:" La opción seleccionada es invalida" }

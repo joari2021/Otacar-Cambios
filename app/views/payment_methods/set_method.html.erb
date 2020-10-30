@@ -352,6 +352,11 @@
                 enlace.href = "/digital_payments/new?country=".concat(country.value);
                 break;
 
+            case "mobile_payment":
+                enlaceCaja.classList.remove("d-none");
+                enlace.href = "/mobile_payments/new?country=".concat(country.value);
+                break;
+
             default:
                 break;
         }

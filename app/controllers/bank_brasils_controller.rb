@@ -25,30 +25,38 @@ class BankBrasilsController < ApplicationController
   # POST /bank_brasils.json
   def create
     #@bank_brasil = BankBrasil.new(bank_brasil_params)
-    @bank_brasil = current_user.bank_brasils.create(bank_brasil_params)
-    
-    if @bank_brasil.country.capitalize === current_user.country.capitalize 
-      respond_to do |format|
-        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
-      end
-    else 
-      if @bank_brasil.country != "Brasil"
+    @banco = BankBrasil.new(bank_brasil_params)
+    @banco.verify_data_saved
+
+    if @banco.bank != ""
+      if @banco.country.capitalize === current_user.country.capitalize 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
-      else
-        @bank_brasil.verify_data_save
-        respond_to do |format|
-          if @bank_brasil.save
-            format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
-            format.json { render :show, status: :created, location: @bank_brasil }
-          else
-            format.html { render :new }
-            format.json { render json: @bank_brasil.errors, status: :unprocessable_entity }
+      else    
+        if @banco.country != "Brasil" 
+          respond_to do |format|
+            format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
           end
-        end 
+        else
+          @bank_brasil = current_user.bank_brasils.create(bank_brasil_params)
+          @bank_brasil.modify_cpf
+          respond_to do |format|
+            if @bank_brasil.save
+              format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
+              format.json { render :show, status: :created, location: @bank_brasil }
+            else
+              format.html { render :new }
+              format.json { render json: @bank_brasil.errors, status: :unprocessable_entity }
+            end
+          end 
+        end
       end
-    end
+    else
+      respond_to do |format|
+        format.html { redirect_to set_method_path, notice: 'Ha seleccionado opciones invalidas.' }
+      end
+    end  
   end
 
   # PATCH/PUT /bank_brasils/1

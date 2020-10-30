@@ -58,6 +58,11 @@ en:
         country: "Pais:"
         number_phone: "Nro Telefono:"
         payment_method: "Pago Digital:"
+      mobile_payment:
+        country: "Pais:"
+        number_phone: "Nro Telefono:"
+        bank: "Banco:"
+        document: "Nro Documento:"
       wallet_with_user:
         name: "Primer Nombre:"
         last_name: "Primer Apellido:"

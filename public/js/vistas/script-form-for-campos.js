@@ -137,6 +137,51 @@ function soloNumeros(input, limit) {
   }
 }
 
+function formatDocumentoVzla(input) {
+  valor = input.value.replace(/\D/g, "");
+  valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
+  valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
+
+  var numericaInt = parseInt(valor);
+
+  if (numericaInt <= 80000000){
+    type_document = "V-"
+    input.value = type_document.concat(valor);
+  }else if(numericaInt > 80000000){
+    type_document = "E-"
+    input.value = type_document.concat(valor);
+  }else{
+    input.value = "";
+  }
+
+  if (valor.length > 5 && valor.length < 9 ) {
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
+  } else {
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
+  }
+}
+
+function formatNumberPhoneVzla(input) {
+  valor = input.value.replace(/\D/g, "");
+  valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
+  valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
+  codArea = "0414 0424 0416 0426 0412";
+  num = valor.slice(0,4);
+  codigo = false;
+  if (codArea.indexOf(num) != -1){
+    codigo = true;
+  }
+  if (valor.length === 11 && codigo === true ) {
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
+  } else {
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
+  }
+}
+
 function validarSelect(x) {
   select = x;
 

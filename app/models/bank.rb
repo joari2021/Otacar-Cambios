@@ -1,7 +1,7 @@
 class Bank < ApplicationRecord
    belongs_to :user
 
-   def verify_data_save
+   def verify_data_saved
       if self.type_account != "Ahorro" && self.type_account != "Corriente"
          self.type_account = ""
       end
@@ -9,7 +9,8 @@ class Bank < ApplicationRecord
       case self.country
       when "Argentina"
          if self.banco != "Brubank" && self.banco != "Galicia"
-            self.bank = ""
+            self.banco = ""
+            self.name = ""
          end
       when "Chile"
          if self.banco != "Banco Estado"
@@ -31,8 +32,6 @@ class Bank < ApplicationRecord
          if self.banco != "Banco Mercantil" && self.banco != "B.O.D" && self.banco != "Banco De Venezuela" && self.banco != "Banco Banesco"
             self.banco = ""
          end
-      else
-        "You gave me -- I have no idea what to do with that."
       end
    end
 

@@ -24,43 +24,39 @@ class MobilePaymentsController < ApplicationController
   # POST /mobile_payments
   # POST /mobile_payments.json
   def create
-    @mobile_payment = MobilePayment.new(mobile_payment_params)
+    @method = MobilePayment.new(mobile_payment_params)
+    @method.verify_data_saved
 
-    respond_to do |format|
-      if @mobile_payment.save
-        format.html { redirect_to @mobile_payment, notice: 'Mobile payment was successfully created.' }
-        format.json { render :show, status: :created, location: @mobile_payment }
-      else
-        format.html { render :new }
-        format.json { render json: @mobile_payment.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  @mobile_payment = current_user.banks.create(bank_params)
-
-    if @mobile_payment.country.capitalize === current_user.country.capitalize 
-      respond_to do |format|
-        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
-      end
-    else    
-      if @mobile_payment.country != "Venezuela" 
+    if @method.bank != ""
+      if @method.country.capitalize === current_user.country.capitalize 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
-      else
-        @mobile_payment.verify_data_saved
-        respond_to do |format|
-          if @mobile_payment.save
-            format.html { redirect_to payment_methods_path, notice: 'Pago Movil guardado con exito.' }
-            format.json { render :show, status: :created, location: @mobile_payment }
-          else
-            format.html { render :new }
-            format.json { render json: @mobile_payment.errors, status: :unprocessable_entity }
+      else    
+        if @method.country != "Venezuela"
+          respond_to do |format|
+            format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
           end
-        end 
+        else
+          @mobile_payment = current_user.mobile_payments.create(mobile_payment_params)
+          @mobile_payment.modifyDocument
+          respond_to do |format|
+            if @mobile_payment.save
+              format.html { redirect_to payment_methods_path, notice: 'Pago Movil guardado con exito.' }
+              format.json { render :show, status: :created, location: @mobile_payment }
+            else
+              format.html { render :new }
+              format.json { render json: @mobile_payment.errors, status: :unprocessable_entity }
+            end
+          end 
+        end
       end
-    end 
+    else
+      respond_to do |format|
+        format.html { redirect_to set_method_path, notice: 'Ha seleccionado opciones invalidas.' }
+      end
+    end
+  end  
 
   # PATCH/PUT /mobile_payments/1
   # PATCH/PUT /mobile_payments/1.json

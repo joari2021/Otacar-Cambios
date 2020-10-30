@@ -25,30 +25,37 @@ class BanksController < ApplicationController
   # POST /banks
   # POST /banks.json
   def create
-    @bank = current_user.banks.create(bank_params)
+    @banco = Bank.new(bank_params)
+    @banco.verify_data_saved
 
-    if @bank.country.capitalize === current_user.country.capitalize 
-      respond_to do |format|
-        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
-      end
-    else    
-      if @bank.country != "Argentina" && @bank.country != "Chile" && @bank.country != "Ecuador" && @bank.country != "Panama" && @bank.country != "Peru" && @bank.country != "Venezuela" 
+    if @banco.banco != "" && @banco.type_account != ""
+      if @banco.country.capitalize === current_user.country.capitalize 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
-      else
-        @bank.verify_data_save
-        respond_to do |format|
-          if @bank.save
-            format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
-            format.json { render :show, status: :created, location: @bank }
-          else
-            format.html { render :new }
-            format.json { render json: @bank.errors, status: :unprocessable_entity }
+      else    
+        if @banco.country != "Argentina" && @banco.country != "Chile" && @banco.country != "Ecuador" && @banco.country != "Panama" && @banco.country != "Peru" && @banco.country != "Venezuela" 
+          respond_to do |format|
+            format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
           end
-        end 
+        else
+          @bank = current_user.banks.create(bank_params)
+          respond_to do |format|
+            if @bank.save
+              format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
+              format.json { render :show, status: :created, location: @bank }
+            else
+              format.html { render :new }
+              format.json { render json: @bank.errors, status: :unprocessable_entity }
+            end
+          end 
+        end
       end
-    end 
+    else
+      respond_to do |format|
+        format.html { redirect_to set_method_path, notice: 'Ha seleccionado opciones invalidas.' }
+      end
+    end     
   end
 
   # PATCH/PUT /banks/1

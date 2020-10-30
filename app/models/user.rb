@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :wallets
   has_many :wallet_with_users
   has_many :digital_payments
+  has_many :mobile_payments
   has_many :transactions
   include PermissionsConcern
   

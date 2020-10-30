@@ -1,5 +1,7 @@
-<h1>New Mobile Payment</h1>
+<h4 class="mb-3">Registrar Pago Movil</h4>
+
+<div class="alert alert-primary" role="alert">
+    <strong class="text-capitalize">Hola <%=current_user.name%>!</strong> Registra los datos solicitados del pago movil que deseas registrar. Debes llenar los campos obligatorios correctamente.
+</div>
 
 <%= render 'form', mobile_payment: @mobile_payment %>
-
-<%= link_to 'Back', mobile_payments_path %>

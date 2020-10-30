@@ -26,28 +26,35 @@ class WalletsController < ApplicationController
   # POST /wallets
   # POST /wallets.json
   def create
-    @wallet = current_user.wallets.create(wallet_params)
-    
-    if @wallet.country.capitalize === current_user.country.capitalize 
-      respond_to do |format|
-        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
-      end
-    else 
-      if @wallet.country != "Brasil" && @wallet.country != "USA"
+    @method = Wallet.new(wallet_params)
+    @method.verify_data_saved
+
+    if @method.wallet_name != ""
+      if @method.country.capitalize === current_user.country.capitalize 
         respond_to do |format|
-          format.html { redirect_to set_method_url, notice: 'Pais Invalido.' }
+          format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
-      else
-        @wallet.verify_data_saved
-        respond_to do |format|
-          if @wallet.save
-            format.html { redirect_to payment_methods_url, notice: 'El monedero digital ha sido guardado con exito.' }
-            format.json { render :show, status: :created, location: @wallet }
-          else
-            format.html { render :new }
-            format.json { render json: @wallet.errors, status: :unprocessable_entity }
+      else    
+        if @method.country != "Brasil" && @method.country != "USA"
+          respond_to do |format|
+            format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
           end
+        else
+          @wallet = current_user.wallets.create(wallet_params)
+          respond_to do |format|
+            if @wallet.save
+              format.html { redirect_to payment_methods_path, notice: 'Monedero Digital guardado con exito.' }
+              format.json { render :show, status: :created, location: @wallet }
+            else
+              format.html { render :new }
+              format.json { render json: @wallet.errors, status: :unprocessable_entity }
+            end
+          end 
         end
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to set_method_path, notice: 'Ha seleccionado opciones invalidas.' }
       end
     end
   end

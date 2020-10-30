@@ -24,31 +24,37 @@ class DigitalPaymentsController < ApplicationController
   # POST /digital_payments
   # POST /digital_payments.json
   def create
-    @digital_payment = current_user.digital_payments.create(digital_payment_params)
-    
-    if @digital_payment.country.capitalize === current_user.country.capitalize 
-      respond_to do |format|
-        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
-      end
-    else 
-      if @digital_payment.country != "Colombia"
+    @method = DigitalPayment.new(digital_payment_params)
+    @method.verify_data_saved
+
+    if @method.payment_method != ""
+      if @method.country.capitalize === current_user.country.capitalize 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
-      else
-        @digital_payment.verify_data_saved
-        
-        respond_to do |format|
-          if @digital_payment.save
-            format.html { redirect_to payment_methods_path, notice: 'El Pago Digital ha sido guardado con exito.' }
-            format.json { render :show, status: :created, location: @digital_payment }
-          else
-            format.html { render :new }
-            format.json { render json: @digital_payment.errors, status: :unprocessable_entity }
+      else    
+        if @method.country != "Colombia"
+          respond_to do |format|
+            format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
           end
+        else
+          @digital_payment = current_user.digital_payments.create(digital_payment_params)
+          respond_to do |format|
+            if @digital_payment.save
+              format.html { redirect_to payment_methods_path, notice: 'Pago Digital guardado con exito.' }
+              format.json { render :show, status: :created, location: @digital_payment }
+            else
+              format.html { render :new }
+              format.json { render json: @digital_payment.errors, status: :unprocessable_entity }
+            end
+          end 
         end
       end
-    end
+    else
+      respond_to do |format|
+        format.html { redirect_to set_method_path, notice: 'Ha seleccionado opciones invalidas.' }
+      end
+    end 
   end
 
   # PATCH/PUT /digital_payments/1
