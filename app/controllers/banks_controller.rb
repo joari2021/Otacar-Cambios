@@ -26,22 +26,28 @@ class BanksController < ApplicationController
   # POST /banks.json
   def create
     @bank = current_user.banks.create(bank_params)
-    
-    if @bank.country != "Argentina" && @bank.country != "Chile" && @bank.country != "Ecuador" && @bank.country != "Panama" && @bank.country != "Peru"  
+
+    if @bank.country.capitalize === current_user.country.capitalize 
       respond_to do |format|
         format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
       end
-    else
-      @bank.verify_data_save
-      respond_to do |format|
-        if @bank.save
-          format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
-          format.json { render :show, status: :created, location: @bank }
-        else
-          format.html { render :new }
-          format.json { render json: @bank.errors, status: :unprocessable_entity }
+    else    
+      if @bank.country != "Argentina" && @bank.country != "Chile" && @bank.country != "Ecuador" && @bank.country != "Panama" && @bank.country != "Peru" && @bank.country != "Venezuela" 
+        respond_to do |format|
+          format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
-      end 
+      else
+        @bank.verify_data_save
+        respond_to do |format|
+          if @bank.save
+            format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
+            format.json { render :show, status: :created, location: @bank }
+          else
+            format.html { render :new }
+            format.json { render json: @bank.errors, status: :unprocessable_entity }
+          end
+        end 
+      end
     end 
   end
 
@@ -77,6 +83,6 @@ class BanksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bank_params
-      params.require(:bank).permit(:name, :last_name, :identidy, :country, :state, :bank, :number_account, :type_account, :cod_bank, :phone)
+      params.require(:bank).permit(:name, :last_name, :identidy, :country, :state, :banco, :number_account, :type_account, :cod_bank, :phone)
     end
 end

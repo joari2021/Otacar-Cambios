@@ -8,24 +8,28 @@ class Bank < ApplicationRecord
 
       case self.country
       when "Argentina"
-         if self.bank != "Brubank" && self.bank != "Galicia"
+         if self.banco != "Brubank" && self.banco != "Galicia"
             self.bank = ""
          end
       when "Chile"
-         if self.bank != "Banco Estado"
-            self.bank = ""
+         if self.banco != "Banco Estado"
+            self.banco = ""
          end
       when "Ecuador"
-         if self.bank != "Banco Pichincha"
-            self.bank = ""
+         if self.banco != "Banco Pichincha"
+            self.banco = ""
          end
       when "Panama"
-         if self.bank != "Banco Mercantil Panama"
-            self.bank = ""
+         if self.banco != "Banco Mercantil Panama"
+            self.banco = ""
          end
       when "Peru"
-         if self.bank != "Banco BCP" && self.bank != "Escotia Bank"
-            self.bank = ""
+         if self.banco != "Banco BCP" && self.banco != "Escotia Bank"
+            self.banco = ""
+         end
+      when "Venezuela"
+         if self.banco != "Banco Mercantil" && self.banco != "B.O.D" && self.banco != "Banco De Venezuela" && self.banco != "Banco Banesco"
+            self.banco = ""
          end
       else
         "You gave me -- I have no idea what to do with that."
@@ -34,7 +38,7 @@ class Bank < ApplicationRecord
 
    validates :name, :last_name, length: { maximum: 12, message: " El contenido es muy largo (caracteres maximos 12)" }
     
-   validates :type_account, :bank, presence: { message:" La opción seleccionada es invalida" }
+   validates :type_account, :banco, presence: { message:" La opción seleccionada es invalida" }
 
    validates :name, :last_name, format: { with: /\A[a-zA-Z]+\z/,
    message: " Este campo no puede estar vacio y solo acepta letras" }

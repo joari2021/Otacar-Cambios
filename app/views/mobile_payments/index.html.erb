@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Mobile Payments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Country</th>
+      <th>Bank</th>
+      <th>Number phone</th>
+      <th>Document</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @mobile_payments.each do |mobile_payment| %>
+      <tr>
+        <td><%= mobile_payment.country %></td>
+        <td><%= mobile_payment.bank %></td>
+        <td><%= mobile_payment.number_phone %></td>
+        <td><%= mobile_payment.document %></td>
+        <td><%= link_to 'Show', mobile_payment %></td>
+        <td><%= link_to 'Edit', edit_mobile_payment_path(mobile_payment) %></td>
+        <td><%= link_to 'Destroy', mobile_payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Mobile Payment', new_mobile_payment_path %>

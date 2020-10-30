@@ -1,0 +1,37 @@
+<%= form_with(model: mobile_payment, local: true) do |form| %>
+  <% if mobile_payment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(mobile_payment.errors.count, "error") %> prohibited this mobile_payment from being saved:</h2>
+
+      <ul>
+        <% mobile_payment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :country %>
+    <%= form.text_field :country %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bank %>
+    <%= form.text_field :bank %>
+  </div>
+
+  <div class="field">
+    <%= form.label :number_phone %>
+    <%= form.text_field :number_phone %>
+  </div>
+
+  <div class="field">
+    <%= form.label :document %>
+    <%= form.text_field :document %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -53,22 +53,27 @@
         <div class="col-12 col-sm-6 mb-2">
             <label>Banco *</label>
 
-            <select class="custom-select is-invalid" name="bank[bank]" onchange="validarSelect(this),habilitarSave()" required>
+            <select class="custom-select is-invalid" name="bank[banco]" onchange="validarSelect(this),habilitarSave()" required>
                 <option selected disabled value="">Elegir...</option>
                 <%country= params[:country] || bank.country%>
                 <%case country.capitalize%>
                 <%when "Argentina"%>
-                <option value="Brubank" <%if bank.bank === "Brubank"%>selected<%end%>>Brubank</option>
-                <option value="Galicia" <%if bank.bank === "Galicia"%>selected<%end%>>Galicia</option>
+                <option value="Brubank" <%if bank.banco === "Brubank"%>selected<%end%>>Brubank</option>
+                <option value="Galicia" <%if bank.banco === "Galicia"%>selected<%end%>>Galicia</option>
                 <%when "Chile"%>
-                <option value="Banco Estado" <%if bank.bank === "Banco Estado"%>selected<%end%>>Banco Estado</option>
+                <option value="Banco Estado" <%if bank.banco === "Banco Estado"%>selected<%end%>>Banco Estado</option>
                 <%when "Ecuador"%>
-                <option value="Banco Pichincha" <%if bank.bank === "Banco Pichincha"%>selected<%end%>>Banco Pichincha</option>
+                <option value="Banco Pichincha" <%if bank.banco === "Banco Pichincha"%>selected<%end%>>Banco Pichincha</option>
                 <%when "Panama"%>
-                <option value="Banco Mercantil Panama" <%if bank.bank === "Banco Mercantil Panama"%>selected<%end%>>Banco Mercantil Panama</option>
+                <option value="Banco Mercantil Panama" <%if bank.banco === "Banco Mercantil Panama"%>selected<%end%>>Banco Mercantil Panama</option>
                 <%when "Peru"%>
-                <option value="Banco BCP" <%if bank.bank === "Banco BCP"%>selected<%end%>>Banco BCP</option>
-                <option value="Escotia Bank" <%if bank.bank === "Escotia Bank"%>selected<%end%>>Escotia Bank</option>
+                <option value="Banco BCP" <%if bank.banco === "Banco BCP"%>selected<%end%>>Banco BCP</option>
+                <option value="Escotia Bank" <%if bank.banco === "Escotia Bank"%>selected<%end%>>Escotia Bank</option>
+                <%when "Venezuela"%>
+                <option value="Banco Banesco" <%if bank.banco === "Banco Banesco"%>selected<%end%>>Banco Banesco</option>
+                <option value="B.O.D" <%if bank.banco === "B.O.D"%>selected<%end%>>B.O.D</option>
+                <option value="Banco Mercantil" <%if bank.banco === "Banco Mercantil"%>selected<%end%>>Banco Mercantil</option>
+                <option value="Banco De Venezuela" <%if bank.banco === "Banco De Venezuela"%>selected<%end%>>Banco De Venezuela</option>
                 <%end%>
             </select>
             <div class="invalid-feedback">Elige una opcion</div>

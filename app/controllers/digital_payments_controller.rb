@@ -25,21 +25,27 @@ class DigitalPaymentsController < ApplicationController
   # POST /digital_payments.json
   def create
     @digital_payment = current_user.digital_payments.create(digital_payment_params)
-
-    if @digital_payment.country != "Colombia"
+    
+    if @digital_payment.country.capitalize === current_user.country.capitalize 
       respond_to do |format|
         format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
       end
-    else
-      @digital_payment.verify_data_saved
-      
-      respond_to do |format|
-        if @digital_payment.save
-          format.html { redirect_to payment_methods_path, notice: 'El Pago Digital ha sido guardado con exito.' }
-          format.json { render :show, status: :created, location: @digital_payment }
-        else
-          format.html { render :new }
-          format.json { render json: @digital_payment.errors, status: :unprocessable_entity }
+    else 
+      if @digital_payment.country != "Colombia"
+        respond_to do |format|
+          format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
+        end
+      else
+        @digital_payment.verify_data_saved
+        
+        respond_to do |format|
+          if @digital_payment.save
+            format.html { redirect_to payment_methods_path, notice: 'El Pago Digital ha sido guardado con exito.' }
+            format.json { render :show, status: :created, location: @digital_payment }
+          else
+            format.html { render :new }
+            format.json { render json: @digital_payment.errors, status: :unprocessable_entity }
+          end
         end
       end
     end

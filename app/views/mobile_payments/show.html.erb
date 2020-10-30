@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @mobile_payment.country %>
+</p>
+
+<p>
+  <strong>Bank:</strong>
+  <%= @mobile_payment.bank %>
+</p>
+
+<p>
+  <strong>Number phone:</strong>
+  <%= @mobile_payment.number_phone %>
+</p>
+
+<p>
+  <strong>Document:</strong>
+  <%= @mobile_payment.document %>
+</p>
+
+<%= link_to 'Edit', edit_mobile_payment_path(@mobile_payment) %> |
+<%= link_to 'Back', mobile_payments_path %>

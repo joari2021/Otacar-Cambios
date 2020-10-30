@@ -28,19 +28,25 @@ class WalletsController < ApplicationController
   def create
     @wallet = current_user.wallets.create(wallet_params)
     
-    if @wallet.country != "Brasil" && @wallet.country != "USA"
+    if @wallet.country.capitalize === current_user.country.capitalize 
       respond_to do |format|
-        format.html { redirect_to set_method_url, notice: 'Pais Invalido.' }
+        format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
       end
-    else
-      @wallet.verify_data_saved
-      respond_to do |format|
-        if @wallet.save
-          format.html { redirect_to payment_methods_url, notice: 'El monedero digital ha sido guardado con exito.' }
-          format.json { render :show, status: :created, location: @wallet }
-        else
-          format.html { render :new }
-          format.json { render json: @wallet.errors, status: :unprocessable_entity }
+    else 
+      if @wallet.country != "Brasil" && @wallet.country != "USA"
+        respond_to do |format|
+          format.html { redirect_to set_method_url, notice: 'Pais Invalido.' }
+        end
+      else
+        @wallet.verify_data_saved
+        respond_to do |format|
+          if @wallet.save
+            format.html { redirect_to payment_methods_url, notice: 'El monedero digital ha sido guardado con exito.' }
+            format.json { render :show, status: :created, location: @wallet }
+          else
+            format.html { render :new }
+            format.json { render json: @wallet.errors, status: :unprocessable_entity }
+          end
         end
       end
     end
