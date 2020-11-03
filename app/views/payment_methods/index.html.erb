@@ -1,14 +1,18 @@
 <h4>Mis metodos para recibir pagos</h4>
+
 <div class="row mb-3">
-    <%if current_user.banks.count <= 0%>
+    <%if current_user.banks.count <= 0 && current_user.bank_brasils.count <= 0 && current_user.wallets.count <= 0 && current_user.wallet_with_users.count <= 0 && current_user.digital_payments.count <= 0 && current_user.mobile_payments.count <= 0%>
     <div class="container">
         <div class="alert alert-primary alert-dismissible fade show mt-3" role="alert">
             <strong>Hola!</strong> No tienes ningun metodo de pago registrado.
         </div>
     </div>
     <%else%>
+
     <!-- Tabla cuentas -->
+    
     <div class="col-xl-10 col-lg-12">
+    <h5 class="mt-5">Cuentas Bancarias</h5>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -37,35 +41,408 @@
                         <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
                         </td>
                         <!--Boton Modal-->
-                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#exampleModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#banksModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
+                        <div class="modal fade" id="banksModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.name%></h5>
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.banco%></h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        Pais: <%=account_bank.country %><br>
-                                        Identidad: <%=account_bank.identidy%><br>
-                                        Banco: <%=account_bank.banco %><br>
-                                        N° Cuenta: <%=account_bank.number_account %><br>
-                                        Tipo de Cuenta: <%=account_bank.type_account %><br>
-
+                                        <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
+                                            <div class="card-header text-success">
+                                                <div class="row">
+                                                    <div  class="col-5 text-right">Pais</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.country%>
+                                                    </div>
+                                                    <div class="col-5 text-right">Titular</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.name%> <%=account_bank.last_name%>      
+                                                    </div>
+                                                    <div class="col-5 text-right">Identidad</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.identidy%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Tipo de Cuenta</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.type_account%>   
+                                                    </div>
+                                                    <div class="col-5 text-right">Nro Cuenta</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.number_account%>   
+                                                    </div>
+                                                </div>                   
+                                            </div>
+                                        </div>                                 
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                    </tr>
+                    <%end%>
+
+                    <!--Bancos de Brasil-->
+                    <% current_user.bank_brasils.each do |account_bank| %>
+                    <tr class="shadow-sm">
+                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
+                        <td class="align-middle"><img src="/img/paises/Brasil.svg" class="img-fluid rounded-circle avatar" alt="Brasil" title="Brasil"/></td>
+
+                        <%part1 = account_bank.cpf[0, 3]%>
+                        <%part2 = account_bank.cpf[-2,2]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "***" << part2%></span>
+                        </td>
+                        <td class="align-middle"><span class=""><%=account_bank.bank%></span>
+                        </td>
+                        <%part1 = account_bank.number_account[0, 4]%>
+                        <%part2 = account_bank.number_account[-4,4]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
+                        </td>
+                        <!--Boton Modal-->
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#bankBrasilModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="bankBrasilModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.bank%></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                            <div class="card-header text-success">
+                                                <div class="row">
+                                                    <div class="col-5 text-right">Pais</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.country%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Titular</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.name%> <%=account_bank.last_name%>   
+                                                    </div>
+                                                    <div class="col-5 text-right">CPF</div>
+                                                    <div class="col-7 text-left">
+                                                        <%part1 = account_bank.cpf[0, 9]%>
+                                                        <%part2 = account_bank.cpf[-2,2]%> 
+                                                        <%=number_with_precision(part1,delimiter: ".",precision: 0)%>-<%=part2%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Nro Agencia</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.number_agency%>   
+                                                    </div>    
+                                                    <div class="col-5 text-right">Nro Cuenta</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=account_bank.number_account%>   
+                                                    </div>
+                                                </div>                   
+                                            </div>
+                                        </div>                                 
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                    </tr>
+                    <%end%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabla de Monederos Digitales -->
+    
+    <div class="col-xl-10 col-lg-12">
+    <h5 class="mt-4">Monederos Digitales</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><small class="font-weight-bold">Nombre<small></th>
+                        <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Monedero<small></th>
+                        <th scope="col"><small class="font-weight-bold">Usuario / Correo<small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% current_user.wallets.each do |wallet| %>
+                    <tr class="shadow-sm">
+                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                        <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
+                        
+                        <td class="align-middle"><span class=""><%=wallet.wallet_name%></span>
+                        </td>
+                        <%part1 = wallet.email[0, 4]%>
+                        <%part2 = wallet.email[-10,10]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
+                        </td>
+                        
+                        <!--Boton Modal-->
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#walletWithEmailModal<%=wallet.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="walletWithEmailModal<%=wallet.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=wallet.wallet_name%></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                            <div class="card-header text-success">
+                                                <div class="row">
+                                                    <div class="col-5 text-right">Pais</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.country%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Nombres</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.name%> <%=wallet.last_name%>   
+                                                    </div>
+                                                    <div class="col-5 text-right">Correo Electrónico</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.email%> 
+                                                    </div>                                  
+                                                </div>                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallets/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                    </tr>
+                    <%end%>
+
+                    <% current_user.wallet_with_users.each do |wallet| %>
+                    <tr class="shadow-sm">
+                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                        <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
+                        
+                        <td class="align-middle"><span class=""><%=wallet.wallet_name%></span>
+                        </td>
+                        <%part1 = wallet.usuario[0, 4]%>
+                        <%part2 = wallet.usuario[-2,2]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
+                        </td>
+                        
+                        <!--Boton Modal-->
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#walletWithUserModal<%=wallet.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="walletWithUserModal<%=wallet.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=wallet.wallet_name%></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                            <div class="card-header text-success">
+                                                <div class="row">
+                                                    <div class="col-5 text-right">Pais</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.country%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Nombres</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.name%> <%=wallet.last_name%>   
+                                                    </div>
+                                                    <div class="col-5 text-right">Correo Electrónico</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.usuario%> 
+                                                    </div>                                  
+                                                </div>                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallet_with_users/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                    </tr>
+                    <%end%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabla de Pagos Digitales -->
+    
+    <div class="col-xl-10 col-lg-12">
+    <h5 class="mt-4">Pagos Digitales</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><small class="font-weight-bold">Nombre<small></th>
+                        <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Plataforma<small></th>
+                        <th scope="col"><small class="font-weight-bold">Telefono<small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% current_user.digital_payments.each do |payment| %>
+                    <tr class="shadow-sm">
+                        <td class="align-middle"><span><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
+                        <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
+                        
+                        <td class="align-middle"><span class=""><%=payment.payment_method%></span>
+                        </td>
+                        <%part1 = payment.number_phone[0, 4]%>
+                        <%part2 = payment.number_phone[-3,3]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
+                        </td>
+                        
+                        <!--Boton Modal-->
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#digitalPaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="digitalPaymentModal<%=payment.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=payment.payment_method%></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                            <div class="card-header text-success">
+                                                <div class="row">
+                                                    <div class="col-5 text-right">Pais</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=payment.country%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Nombres</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=payment.name%> <%=payment.last_name%>   
+                                                    </div>
+                                                    <div class="col-5 text-right">Nro Telefono</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=payment.number_phone%> 
+                                                    </div>                                  
+                                                </div>                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/digital_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                    </tr>
+                    <%end%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabla de Pagos Moviles -->
+    
+    <div class="col-xl-10 col-lg-12">
+    <h5 class="mt-4">Pagos Moviles</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><small class="font-weight-bold">Banco<small></th>
+                        <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Plataforma<small></th>
+                        <th scope="col"><small class="font-weight-bold">Telefono<small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% current_user.mobile_payments.each do |payment| %>
+                    <tr class="shadow-sm">
+                        <td class="align-middle"><span><%=payment.bank.capitalize%></span></td>
+                        <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
+                        
+                        <%part1 = payment.number_phone[0, 3]%>
+                        <%part2 = payment.number_phone[-4,4]%>
+                        <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
+                        </td>
+                        
+                        <%part1 = payment.document[0, 2]%>
+                        <%part2 = payment.document[-3,3]%> 
+                        <td class="align-middle"><span class=""><%="V-" << part1 << "****" << part2%></span>
+                        </td>
+                        
+                        <!--Boton Modal-->
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#mobilePaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="mobilePaymentModal<%=payment.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=payment.bank%></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                            <div class="card-header text-success">
+                                                <div class="row">
+                                                    <div class="col-5 text-right">Pais</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=payment.country%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Banco</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=payment.bank%>   
+                                                    </div>
+                                                    <div class="col-5 text-right">Nro Telefono</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=payment.number_phone%> 
+                                                    </div>                                  
+                                                </div>                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/mobile_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                     </tr>
                     <%end%>
                 </tbody>

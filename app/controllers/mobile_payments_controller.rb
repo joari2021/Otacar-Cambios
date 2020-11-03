@@ -42,7 +42,7 @@ class MobilePaymentsController < ApplicationController
           @mobile_payment.modifyDocument
           respond_to do |format|
             if @mobile_payment.save
-              format.html { redirect_to payment_methods_path, notice: 'Pago Movil guardado con exito.' }
+              format.html { redirect_to payment_methods_path, notice: 'Pago Movil registrado con exito.' }
               format.json { render :show, status: :created, location: @mobile_payment }
             else
               format.html { render :new }

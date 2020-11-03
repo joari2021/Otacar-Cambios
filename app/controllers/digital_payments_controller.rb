@@ -76,7 +76,7 @@ class DigitalPaymentsController < ApplicationController
   def destroy
     @digital_payment.destroy
     respond_to do |format|
-      format.html { redirect_to digital_payments_url, notice: 'El Pago Digital ha sido registrado con exito.' }
+      format.html { redirect_to payment_methods_path, notice: 'El Pago Digital ha sido eliminado con exito.' }
       format.json { head :no_content }
     end
   end
