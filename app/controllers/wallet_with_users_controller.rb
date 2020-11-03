@@ -76,7 +76,7 @@ class WalletWithUsersController < ApplicationController
   def destroy
     @wallet_with_user.destroy
     respond_to do |format|
-      format.html { redirect_to wallet_with_users_url, notice: 'El monedero digital fue eliminado con exito.' }
+      format.html { redirect_to payment_methods_path, notice: 'El monedero digital fue eliminado con exito.' }
       format.json { head :no_content }
     end
   end

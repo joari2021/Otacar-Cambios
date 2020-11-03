@@ -1,6 +1,6 @@
 <h4>Mis metodos para recibir pagos</h4>
-
-<div class="row mb-3">
+<a class="btn btn-success mt-2" href="/set_method">Añadir <i class="fas fa-plus"></i></a>
+<div class="row mb-5">
     <%if current_user.banks.count <= 0 && current_user.bank_brasils.count <= 0 && current_user.wallets.count <= 0 && current_user.wallet_with_users.count <= 0 && current_user.digital_payments.count <= 0 && current_user.mobile_payments.count <= 0%>
     <div class="container">
         <div class="alert alert-primary alert-dismissible fade show mt-3" role="alert">
@@ -10,7 +10,7 @@
     <%else%>
 
     <!-- Tabla cuentas -->
-    
+    <%if current_user.banks.count > 0 || current_user.bank_brasils.count > 0%>
     <div class="col-xl-10 col-lg-12">
     <h5 class="mt-5">Cuentas Bancarias</h5>
         <div class="table-responsive">
@@ -165,9 +165,10 @@
             </table>
         </div>
     </div>
+    <%end%>
 
     <!-- Tabla de Monederos Digitales -->
-    
+    <%if current_user.wallets.count > 0 || current_user.wallet_with_users.count > 0%>
     <div class="col-xl-10 col-lg-12">
     <h5 class="mt-4">Monederos Digitales</h5>
         <div class="table-responsive">
@@ -296,9 +297,10 @@
             </table>
         </div>
     </div>
+    <%end%>
 
     <!-- Tabla de Pagos Digitales -->
-    
+    <%if current_user.digital_payments.count > 0%>
     <div class="col-xl-10 col-lg-12">
     <h5 class="mt-4">Pagos Digitales</h5>
         <div class="table-responsive">
@@ -371,10 +373,11 @@
             </table>
         </div>
     </div>
+    <%end%>
 
     <!-- Tabla de Pagos Moviles -->
-    
-    <div class="col-xl-10 col-lg-12">
+    <%if current_user.mobile_payments.count > 0%>
+    <div class="col-12">
     <h5 class="mt-4">Pagos Moviles</h5>
         <div class="table-responsive">
             <table class="table">
@@ -382,25 +385,56 @@
                     <tr>
                         <th scope="col"><small class="font-weight-bold">Banco<small></th>
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
-                        <th scope="col"><small class="font-weight-bold">Plataforma<small></th>
-                        <th scope="col"><small class="font-weight-bold">Telefono<small></th>
+                        <th scope="col"><small class="font-weight-bold">Nro Telefono<small></th>
+                        <th scope="col"><small class="font-weight-bold">Nro Doc.<small></th>
                     </tr>
                 </thead>
                 <tbody>
                     <% current_user.mobile_payments.each do |payment| %>
                     <tr class="shadow-sm">
-                        <td class="align-middle"><span><%=payment.bank.capitalize%></span></td>
+                        
+                        <%bancos = {
+                            "0156" => "100%BANCO",
+                            "0172" => "BANCAMIGA BANCO MICROFINANCIERO, C.A.",
+                            "0171" => "BANCO ACTIVO BANCO COMERCIAL, C.A.",
+                            "0166" => "BANCO AGRICOLA",
+                            "0175" => "BANCO BICENTENARIO",
+                            "0128" => "BANCO CARONI, C.A. BANCO UNIVERSAL",       
+                            "0102" => "BANCO DE VENEZUELA S.A.I.C.A.",
+                            "0114" => "BANCO DEL CARIBE C.A.",                  
+                            "0163" => "BANCO DEL TESORO",                       
+                            "0115" => "BANCO EXTERIOR C.A.",                     
+                            "0105" => "BANCO MERCANTIL C.A.",
+                            "0191" => "BANCO NACIONAL DE CREDITO",
+                            "0116" => "BANCO OCCIDENTAL DE DESCUENTO.",
+                            "0138" => "BANCO PLAZA",
+                            "0108" => "BANCO PROVINCIAL BBVA",
+                            "0104" => "BANCO VENEZOLANO DE CREDITO S.A.",
+                            "0168" => "BANCRECER S.A. BANCO DE DESARROLLO",
+                            "0134" => "BANESCO BANCO UNIVERSAL", 
+                            "0177" => "BANFANB",                       
+                            "0174" => "BANPLUS BANCO COMERCIAL C.A",                         
+                            "0157" => "DELSUR BANCO UNIVERSAL",
+                            "0151" => "FONDO COMUN",                         
+                            "0169" => "MIBANCO BANCO DE DESARROLLO, C.A.",
+                            "0137" => "SOFITASA",
+                        }
+                        %>
+                        <td class="align-middle"><span><%=bancos[payment.bank]%></span></td>
                         <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
                         
                         <%part1 = payment.number_phone[0, 3]%>
                         <%part2 = payment.number_phone[-4,4]%>
-                        <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
-                        </td>
+                        <td class="align-middle"><span><%=part1 << "****" << part2%></span></td>
                         
                         <%part1 = payment.document[0, 2]%>
                         <%part2 = payment.document[-3,3]%> 
-                        <td class="align-middle"><span class=""><%="V-" << part1 << "****" << part2%></span>
-                        </td>
+                        <%if payment.document.to_i <= 80000000
+                            type_document = "V-"
+                        elsif payment.document.to_i > 80000000 && payment.document < 100000000
+                            type_document = "E-"
+                        end%>
+                        <td class="align-middle"><span><%=type_document << part1 << "***" << part2%></span></td>
                         
                         <!--Boton Modal-->
                         <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#mobilePaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
@@ -410,7 +444,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"><%=payment.bank%></h5>
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=bancos[payment.bank]%></h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -419,16 +453,16 @@
                                         <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
                                             <div class="card-header text-success">
                                                 <div class="row">
-                                                    <div class="col-5 text-right">Pais</div>
-                                                    <div class="col-7 text-left">
+                                                    <div class="col-6 text-right">Pais</div>
+                                                    <div class="col-6 text-left">
                                                         <%=payment.country%>    
                                                     </div>
-                                                    <div class="col-5 text-right">Banco</div>
-                                                    <div class="col-7 text-left">
+                                                    <div class="col-6 text-right">Cod. Banco</div>
+                                                    <div class="col-6 text-left">
                                                         <%=payment.bank%>   
                                                     </div>
-                                                    <div class="col-5 text-right">Nro Telefono</div>
-                                                    <div class="col-7 text-left">
+                                                    <div class="col-6 text-right">Nro Telefono</div>
+                                                    <div class="col-6 text-left">
                                                         <%=payment.number_phone%> 
                                                     </div>                                  
                                                 </div>                   
@@ -450,8 +484,10 @@
         </div>
     </div>
     <%end%>
+
+    <%end%>
 </div>
 <!-- Fin tabla cuentas -->
 
-<%= link_to 'Añadir Cuenta', set_method_path, class:"btn btn-success mb-5" %>
+
 

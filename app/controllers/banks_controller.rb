@@ -77,7 +77,7 @@ class BanksController < ApplicationController
   def destroy
     @bank.destroy
     respond_to do |format|
-      format.html { redirect_to payment_methods_url, notice: 'Cuenta bancaria eliminada con exito.' }
+      format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria eliminada con exito.' }
       format.json { head :no_content }
     end
   end

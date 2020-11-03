@@ -77,7 +77,7 @@ class MobilePaymentsController < ApplicationController
   def destroy
     @mobile_payment.destroy
     respond_to do |format|
-      format.html { redirect_to mobile_payments_url, notice: 'Mobile payment was successfully destroyed.' }
+      format.html { redirect_to payment_methods_path, notice: 'Mobile payment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
