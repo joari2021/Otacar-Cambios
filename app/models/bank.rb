@@ -33,6 +33,29 @@ class Bank < ApplicationRecord
             self.banco = ""
          end
       end
+
+      if self.type_document != "V" && self.type_document != "E" && self.type_document != "P" && self.type_document != "J"
+         self.type_document = ""
+      else
+         case self.type_document
+         when "V"
+            unless self.identidy.length >= 6 && self.identidy.length <= 8
+               self.identidy = ""
+            end
+         when "E"
+            unless self.identidy.to_i > 80000000 && self.identidy.to_i < 100000000
+               self.identidy = ""
+            end
+         when "P"
+            unless self.identidy.length === 9
+               self.identidy = ""
+            end
+         when "J"
+            unless self.identidy.length === 9
+               self.identidy = ""
+            end
+         end
+      end
    end
 
    validates :name, :last_name, length: { maximum: 12, message: " El contenido es muy largo (caracteres maximos 12)" }
@@ -42,7 +65,7 @@ class Bank < ApplicationRecord
    validates :name, :last_name, format: { with: /\A[a-zA-Z]+\z/,
    message: " Este campo no puede estar vacio y solo acepta letras" }
    
-   validates :identidy, :number_account, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
+   validates :number_account, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
 
    validates :number_account, length: { is: 20, message: " Este campo debe contener 20 numeros" }
 

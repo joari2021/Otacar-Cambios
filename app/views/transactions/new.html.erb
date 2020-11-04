@@ -12,14 +12,14 @@
     <%end%>
 
     <h5>Cuentas de Otacar Cambios</h5>
-    <%@admin_banks.each do |admin_banks|%>
+    <%@user_admin.banks.each do |admin_banks|%>
     <div class="col-xl-6">
         <b><span><%=admin_banks.name%></span></b>
         <span><%=admin_banks.number_account%></span>
     </div>
     <%end%>
 
-    <%= render 'form', {transaction: @transaction, admin_banks: @admin_banks} %>
+    <%= render 'form', {transaction: @transaction, admin_banks: @user_admin.banks} %>
 
 
 </div>

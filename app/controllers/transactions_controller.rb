@@ -19,8 +19,11 @@ class TransactionsController < ApplicationController
   # GET /transactions/new
   def new
     @transaction = Transaction.new
-    if User.find(1).is_admin?
-      @admin_banks = User.find(1).banks
+    users = User.all
+    users.each do |user|
+      if user.is_admin?
+        @user_admin = user
+      end
     end
   end
 

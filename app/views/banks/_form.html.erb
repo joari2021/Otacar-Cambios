@@ -42,18 +42,28 @@
 
     <!--DNI y Banco-->
     <div class="form-row field mb-3">
-        <div class="col-12 col-sm-6 mb-2">
+        <div class="col-3 col-md-3 col-lg-2 mb-2">
+            <label>Tipo *</label>
+            <select class="custom-select is-invalid" name="bank[type_document]" onchange="validarSelectDNI(this)" onkeyup="habilitarSave()" required>
+                <option selected disabled value="">...</option>
+                <option value="V">V</option>
+                <option value="E">E</option>
+                <option value="P">P</option>
+                <option value="J">J</option>
+            </select>
+        </div>
+        <div class="col-9 col-md-4 col-lg-4 mb-2">
             <label for="validationDNI">Nro Documento *</label>
-            <input class="form-control is-invalid" id="validationDNI" type="text" maxlength="12" oninput="soloNumeros(this,12)" onkeyup="habilitarSave()" name="bank[identidy]" value="<%=bank.identidy%>"></input>
+            <input class="form-control is-invalid" id="validationDNI" type="text" name="bank[identidy]" value="<%=bank.identidy%>" disabled="disabled">
             <div class="invalid-feedback">
                 Ingrese un DNI valido
             </div>
         </div>
 
-        <div class="col-12 col-sm-6 mb-2">
+        <div class="col-12 col-md-5 col-lg-6 mb-2">
             <label>Banco *</label>
 
-            <select class="custom-select is-invalid" name="bank[banco]" value="<%=bank.banco%>" onchange="validarSelect(this),habilitarSave()" required>
+            <select class="custom-select is-invalid" name="bank[banco]" value="<%=bank.banco%>" onchange="validarSelect(this)" onkeyup="habilitarSave()" required>
                 <option selected disabled value="">Elegir...</option>
                 <%country= params[:country] || bank.country%>
                 <%case country.capitalize%>
@@ -86,7 +96,7 @@
         <div class="col-12 col-sm-4 mb-2">
             <label>Tipo de cuenta *</label>
 
-            <select class="custom-select is-invalid" name="bank[type_account]" onchange="validarSelect(this), habilitarSave()" required>
+            <select class="custom-select is-invalid" name="bank[type_account]" onchange="validarSelect(this)" onkeyup="habilitarSave()" required>
                 <option selected disabled value="">Elegir...</option>
                 <option value="Ahorro" <%if bank.type_account === "Ahorro"%>selected<%end%>>Ahorro</option>
                 <option value="Corriente" <%if bank.type_account === "Corriente"%>selected<%end%>>Corriente</option>
@@ -96,7 +106,7 @@
 
         <div class="col-12 col-sm-8 mb-2">
             <label for="validationNumberAccount">Nro de Cuenta *</label>
-            <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20)" onkeyup="habilitarSave()" name="bank[number_account]" value="<%=bank.number_account%>" required></input>
+            <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20,20)" onkeyup="habilitarSave()" name="bank[number_account]" value="<%=bank.number_account%>" required></input>
             <div class="invalid-feedback">
                 Ingrese un número de cuenta válido
             </div>
@@ -114,11 +124,12 @@
 
 <script>
   
-  div = document.getElementsByTagName("div")[12];
+    div = document.getElementsByTagName("div")[12];
 
-    var input = document.getElementsByTagName("input");
-    var select1 = document.getElementsByTagName("select")[0];
-    var select2 = document.getElementsByTagName("select")[1];
+    var inputs = document.getElementsByTagName("input");
+    var select0 = document.getElementsByTagName("select")[0];
+    var select1 = document.getElementsByTagName("select")[1];
+    var select2 = document.getElementsByTagName("select")[2];
     if (div.id === "error_explanation"){
         
         soloLetras(input[2]);
@@ -128,17 +139,54 @@
         validarSelect(select2);
         soloNumeros(input[5],20);
     }
-  
+
     function habilitarSave() {
         botonSave = document.getElementById("btn");
         formulario = false
-        if (input[2].className.indexOf("is-valid") != -1 && input[3].className.indexOf("is-valid") != -1 && input[4].className.indexOf("is-valid") != -1 && input[5].className.indexOf("is-valid") != -1 && select1.className.indexOf("is-valid") != -1 && select2.className.indexOf("is-valid") != -1){
+        if (inputs[2].className.indexOf("is-valid") != -1 && inputs[3].className.indexOf("is-valid") != -1 && inputs[4].className.indexOf("is-valid") != -1 && inputs[5].className.indexOf("is-valid") != -1 && select0.className.indexOf("is-valid") != -1 && select1.className.indexOf("is-valid") != -1 && select2.className.indexOf("is-valid") != -1){
             formulario = true;
         }
         if (formulario == true){
             botonSave.removeAttribute("disabled");
         }else{
             botonSave.setAttribute("disabled","disabled");
+        }
+    }
+
+    function validarSelectDNI(x) {
+        select = x;
+
+        if (select.value != "" && select.value != undefined) {
+            select.classList.remove("is-invalid");
+            select.classList.add("is-valid");
+        }else {
+            select.classList.remove("is-valid");
+            select.classList.add("is-invalid");
+        }
+
+        input = document.getElementById("validationDNI");
+        if (select.value === "V"){
+            input.removeAttribute("disabled");
+            input.setAttribute("minlength","6");
+            input.setAttribute("maxlength","8");
+            input.setAttribute("oninput","soloNumeros(this,6,8)");
+            input.setAttribute("onkeyup","habilitarSave()");
+            soloNumeros(input,6,8);
+        }else if(select.value === "E"){
+            input.removeAttribute("disabled");
+            input.setAttribute("minlength","8");
+            input.setAttribute("maxlength","8");
+            input.setAttribute("oninput","soloNumeros(this,8,8)");
+            input.setAttribute("onkeyup","habilitarSave()");
+            soloNumeros(input,8,8);
+        }else if(select.value === "P" || select.value === "J"){
+            input.removeAttribute("disabled");
+            input.setAttribute("minlength","9");
+            input.setAttribute("maxlength","9");
+            input.setAttribute("oninput","soloNumeros(this,9,9)");
+            input.setAttribute("onkeyup","habilitarSave()");
+
+            soloNumeros(input,9,9);
         }
     }
 

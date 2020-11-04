@@ -11,7 +11,7 @@
 
     <!-- Tabla cuentas -->
     <%if current_user.banks.count > 0 || current_user.bank_brasils.count > 0%>
-    <div class="col-xl-10 col-lg-12">
+    <div class="col-12">
     <h5 class="mt-5">Cuentas Bancarias</h5>
         <div class="table-responsive">
             <table class="table">
@@ -29,13 +29,21 @@
                     <tr class="shadow-sm">
                         <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
                         <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country.capitalize%>" title="<%=account_bank.country.capitalize%>"/></td>
-
-                        <%part1 = account_bank.identidy[0, 2]%>
-                        <%part2 = account_bank.identidy[-3,3]%> 
-                        <td class="align-middle"><span class=""><%=part1 << "***" << part2%></span>
+                        
+                        <%part2 = account_bank.identidy[0, 2]%>
+                        <%part3 = account_bank.identidy[-3,3]%> 
+                        
+                        <td class="align-middle"><span class=""><%=account_bank.type_document%><%="-" << part2 << "***" << part3%></span>
                         </td>
-                        <td class="align-middle"><span class=""><%=account_bank.banco%></span>
-                        </td>
+                        <%
+                            bancos = {
+                                "Banco De Venezuela" => "0102",
+                                "Banco Mercantil" => "0105",
+                                "Banco Banesco" => "0134",
+                                "B.O.D" => "0116"
+                            }
+                        %>
+                        <td class="align-middle"><img src="/img/bancos/<%=bancos[account_bank.banco]%>.png" class="img-fluid rounded-circle avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
                         <%part1 = account_bank.number_account[0, 4]%>
                         <%part2 = account_bank.number_account[-4,4]%> 
                         <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
@@ -67,7 +75,7 @@
                                                     </div>
                                                     <div class="col-5 text-right">Identidad</div>
                                                     <div class="col-7 text-left">
-                                                        <%=account_bank.identidy%>    
+                                                        <%=account_bank.type_document%>-<%=account_bank.identidy%>  
                                                     </div>
                                                     <div class="col-5 text-right">Tipo de Cuenta</div>
                                                     <div class="col-7 text-left">
@@ -175,8 +183,8 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"><small class="font-weight-bold">Nombre<small></th>
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Nombre<small></th>
                         <th scope="col"><small class="font-weight-bold">Monedero<small></th>
                         <th scope="col"><small class="font-weight-bold">Usuario / Correo<small></th>
                     </tr>
@@ -184,11 +192,10 @@
                 <tbody>
                     <% current_user.wallets.each do |wallet| %>
                     <tr class="shadow-sm">
-                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
-                        <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
                         
-                        <td class="align-middle"><span class=""><%=wallet.wallet_name%></span>
-                        </td>
+                        <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
+                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name.capitalize%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>                        
                         <%part1 = wallet.email[0, 4]%>
                         <%part2 = wallet.email[-10,10]%> 
                         <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
@@ -240,12 +247,12 @@
 
                     <% current_user.wallet_with_users.each do |wallet| %>
                     <tr class="shadow-sm">
-                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
                         <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
+                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
                         
-                        <td class="align-middle"><span class=""><%=wallet.wallet_name%></span>
-                        </td>
-                        <%part1 = wallet.usuario[0, 4]%>
+                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                        
+                        <%part1 = wallet.usuario[0, 3]%>
                         <%part2 = wallet.usuario[-2,2]%> 
                         <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
                         </td>
@@ -275,7 +282,7 @@
                                                     <div class="col-7 text-left">
                                                         <%=wallet.name%> <%=wallet.last_name%>   
                                                     </div>
-                                                    <div class="col-5 text-right">Correo Electrónico</div>
+                                                    <div class="col-5 text-right">Usuario</div>
                                                     <div class="col-7 text-left">
                                                         <%=wallet.usuario%> 
                                                     </div>                                  
@@ -307,8 +314,8 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"><small class="font-weight-bold">Nombre<small></th>
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Nombre<small></th>    
                         <th scope="col"><small class="font-weight-bold">Plataforma<small></th>
                         <th scope="col"><small class="font-weight-bold">Telefono<small></th>
                     </tr>
@@ -316,11 +323,11 @@
                 <tbody>
                     <% current_user.digital_payments.each do |payment| %>
                     <tr class="shadow-sm">
-                        <td class="align-middle"><span><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
                         <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
+                        <td class="align-middle"><span><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
                         
-                        <td class="align-middle"><span class=""><%=payment.payment_method%></span>
-                        </td>
+                        <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid rounded-circle avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
+                        
                         <%part1 = payment.number_phone[0, 4]%>
                         <%part2 = payment.number_phone[-3,3]%> 
                         <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>

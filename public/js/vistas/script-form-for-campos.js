@@ -122,13 +122,13 @@ function soloLetras(input) {
   }
 }
 
-function soloNumeros(input, limit) {
+function soloNumeros(input, min, max) {
   valor = input.value.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
 
   input.value = valor;
-  if (valor.length === limit) {
+  if (valor.length >= min && valor.length <= max) {
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
   } else {
@@ -193,6 +193,7 @@ function validarSelect(x) {
     select.classList.add("is-invalid");
   }
 }
+
 
 function validarEmail(input) {
   campo = input.value;

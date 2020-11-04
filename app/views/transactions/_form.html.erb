@@ -21,7 +21,7 @@
             <option selected disabled value="">Elige una opcion...</option>
             <%admin_banks.each do |admin_bank|%>
             <%if admin_bank.country === current_user.country%>
-            <option value="<%=admin_bank.id%>"><%=admin_bank.bank%></option>
+            <option value="<%=admin_bank.id%>"><%=admin_bank.banco%></option>
             <%end%>
             <%end%>
 
@@ -60,7 +60,7 @@
         <select class="custom-select" id="validationDefault3" name="transaction[account_destinity]" required>
             <option selected disabled value="">Elige una opcion...</option>
             <%current_user.banks.each do |bank_user|%>
-            <option value="<%=bank_user.id%>"><%=bank_user.bank%></option>
+            <option value="<%=bank_user.id%>"><%=bank_user.banco%></option>
             <%end%>
         </select>
     </div>

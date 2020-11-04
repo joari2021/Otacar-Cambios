@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_205345) do
+ActiveRecord::Schema.define(version: 2020_11_04_172442) do
 
   create_table "bank_brasils", force: :cascade do |t|
     t.string "name"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_205345) do
     t.integer "user_id", default: 1, null: false
     t.string "last_name", default: ""
     t.string "banco"
+    t.string "type_document"
     t.index ["user_id"], name: "index_banks_on_user_id"
   end
 
