@@ -1,3 +1,46 @@
+<%if vista === "edit" && current_user.is_admin?%>
+    <div class="form-row justify-content-center">
+    <%= form_with(model: wallet, local: true, :html => {:class => "was-validated"}) do |form| %>
+    <% if wallet.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h5 class="text-danger"><%if wallet.errors.count > 1%><%=wallet.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=wallet.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
+      <ul class="list-style-square">
+        <% wallet.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+        <div class="text-center">
+            <div class="card bg-light my-3" style="max-width: 18rem;">
+                <div class="card-header text-capitalize"><%=wallet.name%> <%=wallet.last_name%></div>
+                <div class="card-body">
+                    
+                    <%part1 = wallet.email[0, 4]%>
+                    <%part2 = wallet.email[-9,9]%> 
+                    <p class="card-text"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/> <span class=""><%=part1 << "****" << part2%></span></p>
+
+                </div>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="customControlValidation2" name="wallet[status]" value="activo" <%if wallet.status === "activo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation2">Activo</label>
+            </div>
+        
+            <div class="custom-control custom-radio mb-3">
+                <input type="radio" class="custom-control-input" id="customControlValidation3" name="wallet[status]" value="inactivo" <%if wallet.status === "inactivo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation3">Inactivo</label>
+                <div class="invalid-feedback">Elige una opcion</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5 mr-1", id:"btn" %>
+            <%= link_to 'Volver', payment_methods_path, class:"btn btn-success mt-3 mb-5 ml-1 float-right" %>
+        </div>
+    <%end%>
+     </div>
+<%else%>
 <%= form_with(model: wallet, local: true) do |form| %>
   <% if wallet.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
@@ -60,7 +103,8 @@
     <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5", id:"btn", disabled:"disabled" %>
     <%= link_to 'Volver', set_method_url, class:"btn btn-success mt-3 mb-5 float-right" %>
   </div>
-<% end %>
+<%end%>
+<%end%>
 <script src="/js/vistas/script-form-for-campos.js"></script>
 
 <script>

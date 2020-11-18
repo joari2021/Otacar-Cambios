@@ -16,8 +16,16 @@ class Bank < ApplicationRecord
          if self.banco != "Banco Estado"
             self.banco = ""
          end
+      when "Colombia"
+         if self.banco != "Bancolombia"
+            self.banco = ""
+         end
       when "Ecuador"
          if self.banco != "Banco Pichincha"
+            self.banco = ""
+         end
+      when "España"
+         if self.banco != "Bankia" && self.banco != "Santander"
             self.banco = ""
          end
       when "Panama"

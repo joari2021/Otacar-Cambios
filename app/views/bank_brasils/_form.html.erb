@@ -1,3 +1,53 @@
+<%if vista === "edit" && current_user.is_admin?%>
+    <div class="form-row justify-content-center">
+    <%= form_with(model: bank_brasil, local: true, :html => {:class => "was-validated"}) do |form| %>
+    <% if bank_brasil.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h5 class="text-danger"><%if bank_brasil.errors.count > 1%><%=bank_brasil.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=bank_brasil.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
+      <ul class="list-style-square">
+        <% bank_brasil.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+        <div class="text-center">
+            <div class="card bg-light my-3" style="max-width: 18rem;">
+                <div class="card-header text-capitalize"><%=bank_brasil.name%> <%=bank_brasil.last_name%></div>
+                <div class="card-body">
+                    <%
+                        bancos = {
+                            "Banco De Venezuela" => "0102",
+                            "Banco Mercantil" => "0105",
+                            "Banco Banesco" => "0134",
+                            "B.O.D" => "0116"
+                        }
+                    %>
+                    <%part1 = bank_brasil.number_account[0, 4]%>
+                    <%part2 = bank_brasil.number_account[-4,4]%> 
+                    <p class="card-text"><img src="/img/bancos/<%=bancos[bank_brasil.bank]%>.png" class="img-fluid rounded-circle avatar" alt="<%=bank_brasil.bank%>" title="<%=bank_brasil.bank%>"/> <span class=""><%=part1 << "****" << part2%></span></p>
+
+                </div>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="customControlValidation2" name="bank_brasil[status]" value="activo" <%if bank_brasil.status === "activo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation2">Activo</label>
+            </div>
+        
+            <div class="custom-control custom-radio mb-3">
+                <input type="radio" class="custom-control-input" id="customControlValidation3" name="bank_brasil[status]" value="inactivo" <%if bank_brasil.status === "inactivo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation3">Inactivo</label>
+                <div class="invalid-feedback">Elige una opcion</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5 mr-1", id:"btn" %>
+            <%= link_to 'Volver', payment_methods_path, class:"btn btn-success mt-3 mb-5 ml-1 float-right" %>
+        </div>
+    <%end%>
+     </div>
+<%else%>
 <div class="mt-3">
   <%= form_with(model: bank_brasil, local: true) do |form| %>
     <% if bank_brasil.errors.any? %>
@@ -38,38 +88,38 @@
     <div class="form-row field mb-3">
       <div class="col-12 col-sm-6 mb-2">
         <label for="validationCPF">Nro CPF *</label>
-        <input class="form-control is-invalid" id="validationCPF" type="text" maxlength="14" oninput="inputCPF(this),habilitarSave()" name="bank_brasil[cpf]" value="<%=bank_brasil.cpf%>"></input>
-      <div class="invalid-feedback">
-        Ingrese un CPF valido
+        <input class="form-control is-invalid" id="validationCPF" type="text" maxlength="14" oninput="inputCPF(this),habilitarSave()" name="bank_brasil[cpf]" value="<%=bank_brasil.cpf%>">
+        <div class="invalid-feedback">
+          Ingrese un CPF valido
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 mb-2">
+        <label>Banco *</label>
+        <select class="custom-select is-invalid" name="bank_brasil[bank]" onchange="validarSelect(this),habilitarSave()" required>
+          <option selected disabled value="">Elegir...</option>
+          <option value="Banco Do Brasil" <%if bank_brasil.bank === "Banco Do Brasil"%>selected<%end%>>Banco Do Brasil</option>
+          <option value="Bradesco" <%if bank_brasil.bank === "Bradesco"%>selected<%end%>>Bradesco</option>
+          <option value="Caixa" <%if bank_brasil.bank === "Caixa"%>selected<%end%>>Caixa</option>
+          <option value="Itaú" <%if bank_brasil.bank === "Itaú"%>selected<%end%>>Itaú</option>
+          <option value="Ití" <%if bank_brasil.bank === "Ití"%>selected<%end%>>Ití</option>
+          <option value="Nubank" <%if bank_brasil.bank === "Nubank"%>selected<%end%>>Nubank</option>
+          <option value="Santander" <%if bank_brasil.bank === "Santander"%>selected<%end%>>Santander</option>
+        </select>
+        <div class="invalid-feedback">Elige una opcion</div>
       </div>
     </div>
-    <div class="col-12 col-sm-6 mb-2">
-      <label>Banco *</label>
-      <select class="custom-select is-invalid" name="bank_brasil[bank]" onchange="validarSelect(this),habilitarSave()" required>
-        <option selected disabled value="">Elegir...</option>
-        <option value="Banco Do Brasil" <%if bank_brasil.bank === "Banco Do Brasil"%>selected<%end%>>Banco Do Brasil</option>
-        <option value="Bradesco" <%if bank_brasil.bank === "Bradesco"%>selected<%end%>>Bradesco</option>
-        <option value="Caixa" <%if bank_brasil.bank === "Caixa"%>selected<%end%>>Caixa</option>
-        <option value="Itaú" <%if bank_brasil.bank === "Itaú"%>selected<%end%>>Itaú</option>
-        <option value="Ití" <%if bank_brasil.bank === "Ití"%>selected<%end%>>Ití</option>
-        <option value="Nubank" <%if bank_brasil.bank === "Nubank"%>selected<%end%>>Nubank</option>
-        <option value="Santander" <%if bank_brasil.bank === "Santander"%>selected<%end%>>Santander</option>
-      </select>
-      <div class="invalid-feedback">Elige una opcion</div>
-    </div>
-  </div>
   <!--Banco-->
   <div class="form-row field mb-3">
     <div class="col-12 col-sm-4 mb-2">
       <label for="validationAgencia">Nro Agencia *</label>
-      <input class="form-control is-invalid" id="validationAgencia" type="text" maxlength="4" oninput="soloNumeros(this,4),habilitarSave()" name="bank_brasil[number_agency]" value="<%=bank_brasil.number_agency%>"></input>
+      <input class="form-control is-invalid" id="validationAgencia" type="text" maxlength="4" oninput="soloNumeros(this,4,4),habilitarSave()" name="bank_brasil[number_agency]" value="<%=bank_brasil.number_agency%>">
     <div class="invalid-feedback">
       Ingrese un número valido
     </div>
   </div>
   <div class="col-12 col-sm-8 mb-2">
     <label for="validationNumberAccount">Nro de Cuenta *</label>
-    <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20),habilitarSave()" name="bank_brasil[number_account]" value="<%=bank_brasil.number_account%>" required></input>
+    <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20,20),habilitarSave()" name="bank_brasil[number_account]" value="<%=bank_brasil.number_account%>" required>
   <div class="invalid-feedback">
     Ingrese un número de cuenta válido
   </div>
@@ -81,6 +131,7 @@
 </div>
 <% end %>
 </div>
+<%end%>
 <script src="/js/vistas/script-form-for-campos.js"></script>
 <script>
   div = document.getElementsByTagName("div")[12];

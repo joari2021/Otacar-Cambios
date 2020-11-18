@@ -1,6 +1,5 @@
-<h1>Editing Bank</h1>
 
-<%= render 'form', bank: @bank %>
+<h4 class="text-center mt-5">Modificar Status</h4>
+<%@vista = "edit"%>
+<%= render 'form', bank: @bank, vista: @vista %>
 
-<%= link_to 'Show', @bank %> |
-<%= link_to 'Back', banks_path %>

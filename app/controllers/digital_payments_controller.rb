@@ -1,5 +1,6 @@
 class DigitalPaymentsController < ApplicationController
-  before_action :set_digital_payment, only: [:destroy]
+  before_action :set_digital_payment, only: [:edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:edit, :update]
 
   # GET /digital_payments
   # GET /digital_payments.json
@@ -28,7 +29,7 @@ class DigitalPaymentsController < ApplicationController
     @method.verify_data_saved
 
     if @method.payment_method != ""
-      if @method.country.capitalize === current_user.country.capitalize 
+      unless @method.country.capitalize != current_user.country.capitalize || current_user.is_admin?  
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
@@ -61,8 +62,13 @@ class DigitalPaymentsController < ApplicationController
   # PATCH/PUT /digital_payments/1.json
   def update
     respond_to do |format|
-      if @digital_payment.update(digital_payment_params)
-        format.html { redirect_to @digital_payment, notice: 'Digital payment was successfully updated.' }
+      if @digital_payment.update(digital_payment_edit_params)
+        if @digital_payment.status === "activo"
+          mensaje = 'Pago Digital activado con exito.'
+        else
+          mensaje = 'Pago Digital inactivado con exito.'
+        end
+        format.html { redirect_to payment_methods_path, notice: mensaje }
         format.json { render :show, status: :ok, location: @digital_payment }
       else
         format.html { render :edit }
@@ -90,5 +96,9 @@ class DigitalPaymentsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def digital_payment_params
       params.require(:digital_payment).permit(:country, :name, :last_name, :number_phone, :payment_method)
+    end
+
+    def digital_payment_edit_params
+      params.require(:digital_payment).permit(:status)
     end
 end

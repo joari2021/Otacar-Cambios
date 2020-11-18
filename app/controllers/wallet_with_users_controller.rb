@@ -1,5 +1,6 @@
 class WalletWithUsersController < ApplicationController
-  before_action :set_wallet_with_user, only: [:destroy]
+  before_action :set_wallet_with_user, only: [:edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:edit, :update]
 
   # GET /wallet_with_users
   # GET /wallet_with_users.json
@@ -28,7 +29,7 @@ class WalletWithUsersController < ApplicationController
     @method.verify_data_saved
 
     if @method.wallet_name != ""
-      if @method.country.capitalize === current_user.country.capitalize 
+      unless @method.country.capitalize != current_user.country.capitalize || current_user.is_admin? 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
@@ -61,8 +62,13 @@ class WalletWithUsersController < ApplicationController
   # PATCH/PUT /wallet_with_users/1.json
   def update
     respond_to do |format|
-      if @wallet_with_user.update(wallet_with_user_params)
-        format.html { redirect_to @wallet_with_user, notice: 'Wallet with user was successfully updated.' }
+      if @wallet_with_user.update(wallet_with_user_edit_params)
+        if @wallet_with_user.status === "activo"
+          mensaje = 'Monedero Digital activado con exito.'
+        else
+          mensaje = 'Monedero Digital inactivado con exito.'
+        end
+        format.html { redirect_to payment_methods_path, notice: mensaje }
         format.json { render :show, status: :ok, location: @wallet_with_user }
       else
         format.html { render :edit }
@@ -90,5 +96,9 @@ class WalletWithUsersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def wallet_with_user_params
       params.require(:wallet_with_user).permit(:country, :name, :last_name, :usuario, :wallet_name)
+    end
+
+    def wallet_with_user_edit_params
+      params.require(:wallet_with_user).permit(:status)
     end
 end

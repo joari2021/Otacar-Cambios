@@ -1,5 +1,6 @@
 class MobilePaymentsController < ApplicationController
-  before_action :set_mobile_payment, only: [:destroy]
+  before_action :set_mobile_payment, only: [:edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:edit, :update]
 
   # GET /mobile_payments
   # GET /mobile_payments.json
@@ -28,7 +29,7 @@ class MobilePaymentsController < ApplicationController
     @method.verify_data_saved
 
     if @method.bank != ""
-      if @method.country.capitalize === current_user.country.capitalize 
+      unless @method.country.capitalize != current_user.country.capitalize || current_user.is_admin? 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
@@ -62,8 +63,13 @@ class MobilePaymentsController < ApplicationController
   # PATCH/PUT /mobile_payments/1.json
   def update
     respond_to do |format|
-      if @mobile_payment.update(mobile_payment_params)
-        format.html { redirect_to @mobile_payment, notice: 'Mobile payment was successfully updated.' }
+      if @mobile_payment.update(mobile_payment_edit_params)
+        if @mobile_payment.status === "activo"
+          mensaje = 'Pago movil activado con exito.'
+        else
+          mensaje = 'Pago movil inactivado con exito.'
+        end
+        format.html { redirect_to payment_methods_path, notice: mensaje }
         format.json { render :show, status: :ok, location: @mobile_payment }
       else
         format.html { render :edit }
@@ -77,7 +83,7 @@ class MobilePaymentsController < ApplicationController
   def destroy
     @mobile_payment.destroy
     respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'Mobile payment was successfully destroyed.' }
+      format.html { redirect_to payment_methods_path, notice: 'Pago Movil eliminado con exito.' }
       format.json { head :no_content }
     end
   end
@@ -91,5 +97,9 @@ class MobilePaymentsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def mobile_payment_params
       params.require(:mobile_payment).permit(:country, :bank, :number_phone, :document)
+    end
+
+    def mobile_payment_edit_params
+      params.require(:mobile_payment).permit(:status)
     end
 end

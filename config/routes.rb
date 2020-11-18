@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :mobile_payments, only: [ :new, :create, :destroy]
-  resources :digital_payments, only: [ :new, :create, :destroy]
-  resources :wallet_with_users, only: [ :new, :create, :destroy]
-  resources :bank_brasils, only: [ :new, :create, :destroy]
-  resources :wallets, only: [ :new, :create, :destroy]
-  resources :banks, only: [ :new, :create, :destroy]
+  resources :mobile_payments
+  resources :digital_payments
+  resources :wallet_with_users
+  resources :bank_brasils
+  resources :wallets
+  resources :banks
 
   get 'payment_methods' => "payment_methods#index"
   get 'set_method' => "payment_methods#set_method"

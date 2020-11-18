@@ -1,3 +1,73 @@
+<%if vista === "edit" && current_user.is_admin?%>
+    <div class="form-row justify-content-center">
+    <%= form_with(model: mobile_payment, local: true, :html => {:class => "was-validated"}) do |form| %>
+    <% if mobile_payment.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h5 class="text-danger"><%if mobile_payment.errors.count > 1%><%=mobile_payment.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=mobile_payment.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
+      <ul class="list-style-square">
+        <% mobile_payment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+        <div class="text-center">
+            <div class="card bg-light my-3" style="max-width: 18rem;">
+                <div class="card-header text-capitalize"><%=mobile_payment.document%></div>
+                <div class="card-body">
+                    
+                    <%part1 = mobile_payment.number_phone[0, 3]%>
+                    <%part2 = mobile_payment.number_phone[-4,4]%>
+                    <%bancos = {
+                            "0156" => "100%BANCO",
+                            "0172" => "BANCAMIGA BANCO MICROFINANCIERO, C.A.",
+                            "0171" => "BANCO ACTIVO BANCO COMERCIAL, C.A.",
+                            "0166" => "BANCO AGRICOLA",
+                            "0175" => "BANCO BICENTENARIO",
+                            "0128" => "BANCO CARONI, C.A. BANCO UNIVERSAL",       
+                            "0102" => "BANCO DE VENEZUELA S.A.I.C.A.",
+                            "0114" => "BANCO DEL CARIBE C.A.",                  
+                            "0163" => "BANCO DEL TESORO",                       
+                            "0115" => "BANCO EXTERIOR C.A.",                     
+                            "0105" => "BANCO MERCANTIL C.A.",
+                            "0191" => "BANCO NACIONAL DE CREDITO",
+                            "0116" => "BANCO OCCIDENTAL DE DESCUENTO.",
+                            "0138" => "BANCO PLAZA",
+                            "0108" => "BANCO PROVINCIAL BBVA",
+                            "0104" => "BANCO VENEZOLANO DE CREDITO S.A.",
+                            "0168" => "BANCRECER S.A. BANCO DE DESARROLLO",
+                            "0134" => "BANESCO BANCO UNIVERSAL", 
+                            "0177" => "BANFANB",                       
+                            "0174" => "BANPLUS BANCO COMERCIAL C.A",                         
+                            "0157" => "DELSUR BANCO UNIVERSAL",
+                            "0151" => "FONDO COMUN",                         
+                            "0169" => "MIBANCO BANCO DE DESARROLLO, C.A.",
+                            "0137" => "SOFITASA",
+                        }
+                    %> 
+                    <p class="card-text"><img src="/img/bancos/<%=mobile_payment.bank%>.png" class="img-fluid rounded-circle avatar" alt="<%=bancos[mobile_payment.bank]%>" title="<%=bancos[mobile_payment.bank]%>"/> <span class=""><%=part1 << "****" << part2%></span></p>
+
+                </div>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="customControlValidation2" name="mobile_payment[status]" value="activo" <%if mobile_payment.status === "activo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation2">Activo</label>
+            </div>
+        
+            <div class="custom-control custom-radio mb-3">
+                <input type="radio" class="custom-control-input" id="customControlValidation3" name="mobile_payment[status]" value="inactivo" <%if mobile_payment.status === "inactivo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation3">Inactivo</label>
+                <div class="invalid-feedback">Elige una opcion</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5 mr-1", id:"btn" %>
+            <%= link_to 'Volver', payment_methods_path, class:"btn btn-success mt-3 mb-5 ml-1 float-right" %>
+        </div>
+    <%end%>
+     </div>
+<%else%>
 <%= form_with(model: mobile_payment, local: true) do |form| %>
     <% if mobile_payment.errors.any? %>
       <div id="error_explanation" class="alert alert-danger">
@@ -86,6 +156,7 @@
     <%= link_to 'Volver', set_method_url, class:"btn btn-success mt-3 mb-5 float-right" %>
   </div>
 <% end %>
+<%end%>
 <script src="/js/vistas/script-form-for-campos.js"></script>
 
 <script>

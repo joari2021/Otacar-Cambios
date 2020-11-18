@@ -1,37 +1,37 @@
 <div class="row justify-content-center mt-5">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationCountry" class="">Elige el pais donde te gustaria enviar remesas</label>
-    <select class="custom-select" id="validationCountry" onChange="validarSelectPais(this)" required>
+    <select class="custom-select" id="validationCountry" onchange="validarSelectPais(this)" required>
       <option selected disabled value="">Elegir...</option>
-      <%if current_user.country.capitalize != "Argentina"%>
+      <%if current_user.country != "Argentina" || current_user.is_admin?%>
       <option value="Argentina">Argentina</option>
       <%end%>
-      <%if current_user.country.capitalize != "Brasil"%>
+      <%if current_user.country != "Brasil" || current_user.is_admin?%>
       <option value="Brasil">Brasil</option>
       <%end%>
-      <%if current_user.country.capitalize != "Chile"%>
+      <%if current_user.country != "Chile" || current_user.is_admin?%>
       <option value="Chile">Chile</option>
       <%end%>
-      <%if current_user.country.capitalize != "Colombia"%>
+      <%if current_user.country != "Colombia" || current_user.is_admin?%>
       <option value="Colombia">Colombia</option>
       <%end%>
-      <%if current_user.country.capitalize != "Ecuador"%>
+      <%if current_user.country != "Ecuador" || current_user.is_admin?%>
       <option value="Ecuador">Ecuador</option>
       <% end %>
-      <%if current_user.country.capitalize != "España"%>
+      <%if current_user.country != "España" || current_user.is_admin?%>
       <option value="España">España</option>
       <%end%>
-      <%if current_user.country.capitalize != "Panama"%>
+      <%if current_user.country != "Panama" || current_user.is_admin?%>
       <option value="Panama">Panama</option>
       <%end%>
-      <%if current_user.country.capitalize != "Peru"%>
+      <%if current_user.country != "Peru" || current_user.is_admin?%>
       <option value="Peru">Peru</option>
       <%end%>
       <!--<option value="Portugal">Portugal</option>-->
-      <%if current_user.country.capitalize != "Usa"%>
+      <%if current_user.country != "Usa" || current_user.is_admin?%>
       <option value="USA">USA</option>
       <%end%>
-      <%if current_user.country.capitalize != "Venezuela"%>
+      <%if current_user.country != "Venezuela" || current_user.is_admin?%>
       <option value="Venezuela">Venezuela</option>
       <%end%>
     </select>
@@ -39,7 +39,7 @@
   </div>
 </div>
 <!--Metodos de Pago de Argentina-->
-<%if current_user.country.capitalize != "Argentina"%>
+<%if current_user.country != "Argentina" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsArgentina">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsArgentina" class="">Elije un metodo de pago para recibir</label>
@@ -53,7 +53,7 @@
 <%end%>
 
 <!--Metodos de Pago de Brasil-->
-<%if current_user.country.capitalize != "Brasil"%>
+<%if current_user.country != "Brasil" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsBrasil">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsBrasil" class="">Elije un metodo de pago</label>
@@ -61,7 +61,7 @@
       <option selected disabled value="">Elegir...</option>
       <option value="banks_brasil">Cuenta Bancaria</option>
       <option value="wallets">Monedero Digital</option>
-      <option value="pago_movil">Pago Movil</option>
+      <option value="pago_movil">Pago Digital</option>
     </select>
     <div class="invalid-feedback">Elige una opcion</div>
   </div>
@@ -69,7 +69,7 @@
 <%end%>
 
 <!--Metodos de Pago de Chile-->
-<%if current_user.country.capitalize != "Chile"%>
+<%if current_user.country != "Chile" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsChile">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsChile" class="">Elije un metodo de pago</label>
@@ -84,7 +84,7 @@
 <%end%>
 
 <!--Metodos de Pago de Colombia-->
-<%if current_user.country.capitalize != "Colombia"%>
+<%if current_user.country != "Colombia" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsColombia">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsColombia" class="">Elije un metodo de pago</label>
@@ -99,7 +99,7 @@
 <%end%>
 
 <!--Metodos de Pago de Ecuador-->
-<%if current_user.country.capitalize != "Ecuador"%>
+<%if current_user.country != "Ecuador" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsEcuador">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsEcuador" class="">Elije un metodo de pago</label>
@@ -112,8 +112,22 @@
 </div>
 <%end%>
 
+<!--Metodos de Pago de España-->
+<%if current_user.country != "España" || current_user.is_admin?%>
+<div class="row justify-content-center mt-3 d-none" id="MethodsEspaña">
+  <div class="col-12 col-sm-5 was-validated text-center">
+    <label for="validationMethodsEspaña" class="">Elije un metodo de pago</label>
+    <select class="custom-select" id="validationMethodsEspaña" onchange="modifyEnlace(this)" required>
+      <option selected disabled value="">Elegir...</option>
+      <option value="banks">Cuenta Bancaria</option>     
+    </select>
+    <div class="invalid-feedback">Elige una opcion</div>
+  </div>
+</div>
+<%end%>
+
 <!--Metodos de Pago de Panama-->
-<%if current_user.country.capitalize != "Panama"%>
+<%if current_user.country != "Panama" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsPanama">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsPanama" class="">Elije un metodo de pago</label>
@@ -127,7 +141,7 @@
 <%end%>
 
 <!--Metodos de Pago de Peru-->
-<%if current_user.country.capitalize != "Peru"%>
+<%if current_user.country != "Peru" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsPeru">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsPeru" class="">Elije un metodo de pago</label>
@@ -141,7 +155,7 @@
 <%end%>
 
 <!--Metodos de Pago de USA-->
-<%if current_user.country.capitalize != "Usa"%>
+<%if current_user.country != "Usa" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsUSA">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsUSA" class="">Elije un metodo de pago</label>
@@ -155,7 +169,7 @@
 <%end%>
 
 <!--Metodos de Pago de Venezuela-->
-<%if current_user.country.capitalize != "Venezuela"%>
+<%if current_user.country != "Venezuela" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsVenezuela">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsVenezuela" class="">Elije un metodo de pago</label>
@@ -181,47 +195,52 @@
         selects = document.getElementsByTagName("select");
 
         //OCULTAR CAJAS
-        <%if current_user.country.capitalize != "Argentina"%>
+        <%if current_user.country != "Argentina" || current_user.is_admin?%>
         listaMethodsArgentina = document.getElementById("MethodsArgentina");
         listaMethodsArgentina.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Brasil"%>
+        <%if current_user.country != "Brasil" || current_user.is_admin?%>
         listaMethodsBrasil = document.getElementById("MethodsBrasil");
         listaMethodsBrasil.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Chile"%>
+        <%if current_user.country != "Chile" || current_user.is_admin?%>
         listaMethodsChile = document.getElementById("MethodsChile");
         listaMethodsChile.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Colombia"%>
+        <%if current_user.country != "Colombia" || current_user.is_admin?%>
         listaMethodsColombia = document.getElementById("MethodsColombia");
         listaMethodsColombia.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Ecuador"%>
+        <%if current_user.country != "Ecuador" || current_user.is_admin?%>
         listaMethodsEcuador = document.getElementById("MethodsEcuador");
         listaMethodsEcuador.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Panama"%>
+        <%if current_user.country != "España" || current_user.is_admin?%>
+        listaMethodsEcuador = document.getElementById("MethodsEspaña");
+        listaMethodsEcuador.classList.add("d-none");
+        <%end%>
+
+        <%if current_user.country != "Panama" || current_user.is_admin?%>
         listaMethodsPanama = document.getElementById("MethodsPanama");
         listaMethodsPanama.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Peru"%>
+        <%if current_user.country != "Peru" || current_user.is_admin?%>
         listaMethodsPeru = document.getElementById("MethodsPeru");
         listaMethodsPeru.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Usa"%>
+        <%if current_user.country != "Usa" || current_user.is_admin?%>
         listaMethodsUSA = document.getElementById("MethodsUSA");
         listaMethodsUSA.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country.capitalize != "Venezuela"%>
+        <%if current_user.country != "Venezuela" || current_user.is_admin?%>
         listaMethodsVenezuela = document.getElementById("MethodsVenezuela");
         listaMethodsVenezuela.classList.add("d-none");
         <%end%>
@@ -237,7 +256,7 @@
         cajas = document.getElementsByTagName("div");
   
         switch (select.value) {
-            <%if current_user.country.capitalize != "Argentina"%>
+            <%if current_user.country != "Argentina" || current_user.is_admin?%>
             case "Argentina":
                 eliminarCajas();
                 argentinaMethods = document.getElementById("MethodsArgentina");
@@ -245,7 +264,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Brasil"%>
+            <%if current_user.country != "Brasil" || current_user.is_admin?%>
             case "Brasil":
 
                 eliminarCajas();
@@ -254,7 +273,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Chile"%>
+            <%if current_user.country != "Chile" || current_user.is_admin?%>
             case "Chile":
 
                 eliminarCajas();
@@ -263,7 +282,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Colombia"%>
+            <%if current_user.country != "Colombia" || current_user.is_admin?%>
             case "Colombia":
 
                 eliminarCajas();
@@ -272,7 +291,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Ecuador"%>
+            <%if current_user.country != "Ecuador" || current_user.is_admin?%>
             case "Ecuador":
 
                 eliminarCajas();
@@ -281,7 +300,16 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Panama"%>
+            <%if current_user.country != "España" || current_user.is_admin?%>
+            case "España":
+
+                eliminarCajas();
+                ecuadorMethods = document.getElementById("MethodsEspaña");
+                ecuadorMethods.classList.remove("d-none");
+                break;
+            <%end%>
+
+            <%if current_user.country != "Panama" || current_user.is_admin?%>
             case "Panama":
 
                 eliminarCajas();
@@ -290,7 +318,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Peru"%>
+            <%if current_user.country != "Peru" || current_user.is_admin?%>
             case "Peru":
 
                 eliminarCajas();
@@ -299,7 +327,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Usa"%>
+            <%if current_user.country != "Usa" || current_user.is_admin?%>
             case "USA":
 
                 eliminarCajas();
@@ -308,7 +336,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country.capitalize != "Venezuela"%>
+            <%if current_user.country != "Venezuela" || current_user.is_admin?%>
             case "Venezuela":
 
                 eliminarCajas();

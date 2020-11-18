@@ -1,3 +1,46 @@
+<%if vista === "edit" && current_user.is_admin?%>
+    <div class="form-row justify-content-center">
+    <%= form_with(model: digital_payment, local: true, :html => {:class => "was-validated"}) do |form| %>
+    <% if digital_payment.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h5 class="text-danger"><%if digital_payment.errors.count > 1%><%=digital_payment.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=digital_payment.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
+      <ul class="list-style-square">
+        <% digital_payment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+        <div class="text-center">
+            <div class="card bg-light my-3" style="max-width: 18rem;">
+                <div class="card-header text-capitalize"><%=digital_payment.name%> <%=digital_payment.last_name%></div>
+                <div class="card-body">
+                    
+                    <%part1 = digital_payment.number_phone[0, 3]%>
+                    <%part2 = digital_payment.number_phone[-4,4]%> 
+                    <p class="card-text"><img src="/img/wallets/<%=digital_payment.payment_method%>.png" class="img-fluid rounded-circle avatar" alt="<%=digital_payment.payment_method%>" title="<%=digital_payment.payment_method%>"/> <span class=""><%=part1 << "****" << part2%></span></p>
+
+                </div>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="customControlValidation2" name="digital_payment[status]" value="activo" <%if digital_payment.status === "activo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation2">Activo</label>
+            </div>
+        
+            <div class="custom-control custom-radio mb-3">
+                <input type="radio" class="custom-control-input" id="customControlValidation3" name="digital_payment[status]" value="inactivo" <%if digital_payment.status === "inactivo"%>checked="checked"<%end%> required>
+                <label class="custom-control-label" for="customControlValidation3">Inactivo</label>
+                <div class="invalid-feedback">Elige una opcion</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5 mr-1", id:"btn" %>
+            <%= link_to 'Volver', payment_methods_path, class:"btn btn-success mt-3 mb-5 ml-1 float-right" %>
+        </div>
+    <%end%>
+     </div>
+<%else%>
 <%= form_with(model: digital_payment, local: true) do |form| %>
     <% if digital_payment.errors.any? %>
       <div id="error_explanation" class="alert alert-danger">
@@ -48,9 +91,9 @@
     </div>
     <div class="col-12 col-sm-7">
         <label for="number_phone">Nro Telefono *</label>
-        <input class="is-invalid" oninput="soloNumeros(this,10),habilitarSave()" type="text" value="<%=digital_payment.number_phone%>" name="digital_payment[number_phone]" maxlength="10" id="number_phone">
+        <input class="is-invalid" oninput="soloNumeros(this,10,10),habilitarSave()" type="text" value="<%=digital_payment.number_phone%>" name="digital_payment[number_phone]" maxlength="10" id="number_phone">
         <div class="invalid-feedback">
-          Ingresa un usuario valido
+          Ingresa un numero válido
         </div>
     </div>
   </div>
@@ -59,6 +102,7 @@
     <%= link_to 'Volver', set_method_url, class:"btn btn-success mt-3 mb-5 float-right" %>
   </div>
 <% end %>
+<%end%>
 <script src="/js/vistas/script-form-for-campos.js"></script>
 
 <script>

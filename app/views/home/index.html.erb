@@ -70,19 +70,19 @@
   <div class="card">
     <div class="card-header" id="headingOne">
       <h6 class="mb-0 text-center">
-        <a class="text-primary" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <a class="text-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
           Calcular monto a recibir
         </a>
       </h6>
     </div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
         <div class="mt-5">
             <div class="row field m-auto text-center">
                 <div class="col-12 col-sm-6 mb-3">
                     <label>Monto a enviar</label>
-                    <input type="text" class="text-center" id="montoEnvio" value="0,00" oninput="return inputNumber(event)">
+                    <input type="text" class="text-center" id="montoEnvio" value="0,00" oninput="monto(this)">
                 </div>
                 <div class="col-12 col-sm-6">
                     <label>Monto a recibir</label>
@@ -112,7 +112,7 @@
             <div class="row field m-auto text-center">
                 <div class="col-12 col-sm-6 mb-3">
                     <label>Monto a recibir</label>
-                    <input type="text" class="text-center" id="montoRecibir2" value="0,00" oninput="return inputNumber(event)">
+                    <input type="text" class="text-center" id="montoRecibir2" value="0,00" oninput="monto(this)">
                 </div>
                 <div class="col-12 col-sm-6">
                     <label>Monto a enviar</label>
@@ -131,7 +131,7 @@
 </div>  
 
     
-<script src="/js/vistas/campos-numericos-format.js"></script>
+<script src="/js/vistas/script-form-for-campos.js"></script>
 <script>
     var pais = document.querySelector('#pais'),
         botonB = document.querySelector('#boton'),
@@ -170,11 +170,21 @@
             valor = montoEnvio.value.replace(/\D/g, "");                
             valor = valor.replace(/([0-9])([0-9]{2})$/, '$1.$2');
             montoE = parseFloat(valor);
-
-            if(montoE < montoOf){
-                var  monto_tasa = tasa;
+            
+            if(montoOf === 0){
+                monto_tasa = tasa;
+                
             }else{
-                var  monto_tasa = tasaO;
+                if (tasaO === 0){
+                    monto_tasa = tasa;
+                }else{
+                    if (montoE < montoOf){
+                        monto_tasa = tasa;
+                    }else{
+                        monto_tasa = tasaO;
+                    }
+                    
+                }    
             }
             
             var resultado = montoE * monto_tasa;
@@ -197,11 +207,20 @@
             montoR = parseFloat(valor);
 
             var montoE = montoR / tasa;
-    
-            if(montoE < montoOf){
-                var  monto_tasa = tasa;
+
+            if(montoOf === 0){
+                monto_tasa = tasa;
+                
             }else{
-                var  monto_tasa = tasaO;
+                if (tasaO === 0){
+                    monto_tasa = tasa;
+                }else{
+                    if (montoE < montoOf){
+                        monto_tasa = tasa;
+                    }else{
+                        monto_tasa = tasaO;
+                    } 
+                }    
             }
             
             var resultado = montoR / monto_tasa;

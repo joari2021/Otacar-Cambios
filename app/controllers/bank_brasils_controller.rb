@@ -1,5 +1,6 @@
 class BankBrasilsController < ApplicationController
-  before_action :set_bank_brasil, only: [:destroy]
+  before_action :set_bank_brasil, only: [:edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:edit, :update]
 
   # GET /bank_brasils
   # GET /bank_brasils.json
@@ -29,7 +30,8 @@ class BankBrasilsController < ApplicationController
     @banco.verify_data_saved
 
     if @banco.bank != ""
-      if @banco.country.capitalize === current_user.country.capitalize 
+      unless @banco.country.capitalize != current_user.country.capitalize || current_user.is_admin? 
+         
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
@@ -63,8 +65,13 @@ class BankBrasilsController < ApplicationController
   # PATCH/PUT /bank_brasils/1.json
   def update
     respond_to do |format|
-      if @bank_brasil.update(bank_brasil_params)
-        format.html { redirect_to @bank_brasil, notice: 'Bank brasil was successfully updated.' }
+      if @bank_brasil.update(bank_brasil_edit_params)
+        if @bank_brasil.status === "activo"
+          mensaje = 'Cuenta Bancaria activada con exito.'
+        else
+          mensaje = 'Cuenta Bancaria inactivada con exito.'
+        end
+        format.html { redirect_to payment_methods_path, notice: mensaje}
         format.json { render :show, status: :ok, location: @bank_brasil }
       else
         format.html { render :edit }
@@ -78,7 +85,7 @@ class BankBrasilsController < ApplicationController
   def destroy
     @bank_brasil.destroy
     respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria eliminada con exito.' }
+      format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
       format.json { head :no_content }
     end
   end
@@ -92,5 +99,9 @@ class BankBrasilsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def bank_brasil_params
       params.require(:bank_brasil).permit(:name, :last_name, :country, :cpf, :bank, :number_agency, :number_account)
+    end
+
+    def bank_brasil_edit_params
+      params.require(:bank_brasil).permit(:status)
     end
 end

@@ -1,6 +1,6 @@
 class BanksController < ApplicationController
-  before_action :set_bank, only: [:destroy]
-  #before_action :authenticate_admin!, only: [:edit, :update]
+  before_action :set_bank, only: [:destroy, :edit, :update]
+  before_action :authenticate_admin!, only: [:edit, :update]
 
   # GET /banks
   # GET /banks.json
@@ -19,8 +19,8 @@ class BanksController < ApplicationController
   end
 
   # GET /banks/1/edit
-  #def edit
-  #end
+  def edit
+  end
 
   # POST /banks
   # POST /banks.json
@@ -29,12 +29,12 @@ class BanksController < ApplicationController
     @banco.verify_data_saved
 
     if @banco.banco != "" && @banco.type_account != ""
-      if @banco.country.capitalize === current_user.country.capitalize 
+      unless @banco.country.capitalize != current_user.country.capitalize || current_user.is_admin? 
         respond_to do |format|
           format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
         end
       else    
-        if @banco.country != "Argentina" && @banco.country != "Chile" && @banco.country != "Ecuador" && @banco.country != "Panama" && @banco.country != "Peru" && @banco.country != "Venezuela" 
+        if @banco.country != "Argentina" && @banco.country != "Chile" && @banco.country != "Colombia" && @banco.country != "Ecuador" && @banco.country != "España" && @banco.country != "Panama" && @banco.country != "Peru" && @banco.country != "Venezuela" 
           respond_to do |format|
             format.html { redirect_to set_method_path, notice: 'Pais Invalido.' }
           end
@@ -60,24 +60,29 @@ class BanksController < ApplicationController
 
   # PATCH/PUT /banks/1
   # PATCH/PUT /banks/1.json
-  #def update
-  #  respond_to do |format|
-  #    if @bank.update(bank_params)
-  #      format.html { redirect_to @bank, notice: 'Bank was successfully updated.' }
-  #      format.json { render :show, status: :ok, location: @bank }
-  #    else
-  #      format.html { render :edit }
-  #      format.json { render json: @bank.errors, status: :unprocessable_entity }
-  #    end
-  #  end
-  #end
+  def update
+    respond_to do |format|
+      if @bank.update(bank_params2)
+        if @bank.status === "activo"
+          mensaje = 'Cuenta Bancaria activada con exito.'
+        else
+          mensaje = 'Cuenta Bancaria inactivada con exito.'
+        end
+        format.html { redirect_to payment_methods_path, notice: mensaje }
+        format.json { render :show, status: :ok, location: @bank }
+      else
+        format.html { render :edit }
+        format.json { render json: @bank.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # DELETE /banks/1
   # DELETE /banks/1.json
   def destroy
     @bank.destroy
     respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria eliminada con exito.' }
+      format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
       format.json { head :no_content }
     end
   end
@@ -91,5 +96,9 @@ class BanksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def bank_params
       params.require(:bank).permit(:name, :last_name, :identidy, :country, :banco, :number_account, :type_account, :type_document)
+    end
+
+    def bank_params2
+      params.require(:bank).permit(:status)
     end
 end

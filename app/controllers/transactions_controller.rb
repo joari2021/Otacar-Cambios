@@ -25,6 +25,12 @@ class TransactionsController < ApplicationController
         @user_admin = user
       end
     end
+    rates = Rate.all
+    rates.each do |rate|
+      if rate.country === current_user.country
+        @rate = rate
+      end
+    end
   end
 
   # GET /transactions/1/edit

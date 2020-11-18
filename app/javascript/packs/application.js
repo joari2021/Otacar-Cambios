@@ -12,6 +12,7 @@ require('jquery')
 import 'bootstrap'
 import 'css/styles'
 
+
 import "@fortawesome/fontawesome-free/js/all";
 
 

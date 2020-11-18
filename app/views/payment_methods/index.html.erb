@@ -22,6 +22,7 @@
                         <th scope="col"><small class="font-weight-bold">Nro DNI<small></th>
                         <th scope="col"><small class="font-weight-bold">Banco<small></th>
                         <th scope="col"><small class="font-weight-bold">Nro Cuenta<small></th>
+                        <th scope="col"><small class="font-weight-bold">Status<small></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,19 +36,23 @@
                         
                         <td class="align-middle"><span class=""><%=account_bank.type_document%><%="-" << part2 << "***" << part3%></span>
                         </td>
-                        <%
-                            bancos = {
-                                "Banco De Venezuela" => "0102",
-                                "Banco Mercantil" => "0105",
-                                "Banco Banesco" => "0134",
-                                "B.O.D" => "0116"
-                            }
-                        %>
-                        <td class="align-middle"><img src="/img/bancos/<%=bancos[account_bank.banco]%>.png" class="img-fluid rounded-circle avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
+                
+                        <td class="align-middle"><img src="/img/bancos/<%=account_bank.banco%>.png" class="img-fluid rounded-circle avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
                         <%part1 = account_bank.number_account[0, 4]%>
                         <%part2 = account_bank.number_account[-4,4]%> 
                         <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
                         </td>
+
+                        <%if current_user.is_admin?%>
+                            <%if account_bank.status === "activo"%>
+                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                            <%else%>
+                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%end%>
+                            <td class="align-middle">|</td>
+                            <td class="align-middle"><a href="/banks/<%=account_bank.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                        <%end%>
+
                         <!--Boton Modal-->
                         <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#banksModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
@@ -95,7 +100,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                     </tr>
                     <%end%>
@@ -116,6 +121,16 @@
                         <%part2 = account_bank.number_account[-4,4]%> 
                         <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
                         </td>
+
+                        <%if current_user.is_admin?%>
+                            <%if account_bank.status === "activo"%>
+                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                            <%else%>
+                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%end%>
+                            <td class="align-middle">|</td>
+                            <td class="align-middle"><a href="/bank_brasils/<%=account_bank.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                        <%end%>
                         <!--Boton Modal-->
                         <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#bankBrasilModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
@@ -165,7 +180,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                     </tr>
                     <%end%>
@@ -177,7 +192,7 @@
 
     <!-- Tabla de Monederos Digitales -->
     <%if current_user.wallets.count > 0 || current_user.wallet_with_users.count > 0%>
-    <div class="col-xl-10 col-lg-12">
+    <div class="col-12">
     <h5 class="mt-4">Monederos Digitales</h5>
         <div class="table-responsive">
             <table class="table">
@@ -186,7 +201,7 @@
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
                         <th scope="col"><small class="font-weight-bold">Nombre<small></th>
                         <th scope="col"><small class="font-weight-bold">Monedero<small></th>
-                        <th scope="col"><small class="font-weight-bold">Usuario / Correo<small></th>
+                        <th scope="col"><small class="font-weight-bold">Correo<small></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -201,6 +216,15 @@
                         <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
                         </td>
                         
+                        <%if current_user.is_admin?%>
+                            <%if wallet.status === "activo"%>
+                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                            <%else%>
+                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%end%>
+                            <td class="align-middle">|</td>
+                            <td class="align-middle"><a href="/wallets/<%=wallet.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                        <%end%>
                         <!--Boton Modal-->
                         <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#walletWithEmailModal<%=wallet.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
@@ -244,62 +268,6 @@
                         <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallets/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                     </tr>
                     <%end%>
-
-                    <% current_user.wallet_with_users.each do |wallet| %>
-                    <tr class="shadow-sm">
-                        <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
-                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
-                        
-                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                        
-                        <%part1 = wallet.usuario[0, 3]%>
-                        <%part2 = wallet.usuario[-2,2]%> 
-                        <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
-                        </td>
-                        
-                        <!--Boton Modal-->
-                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#walletWithUserModal<%=wallet.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="walletWithUserModal<%=wallet.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"><%=wallet.wallet_name%></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
-                                            <div class="card-header text-success">
-                                                <div class="row">
-                                                    <div class="col-5 text-right">Pais</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=wallet.country%>    
-                                                    </div>
-                                                    <div class="col-5 text-right">Nombres</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=wallet.name%> <%=wallet.last_name%>   
-                                                    </div>
-                                                    <div class="col-5 text-right">Usuario</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=wallet.usuario%> 
-                                                    </div>                                  
-                                                </div>                   
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallet_with_users/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
-                    </tr>
-                    <%end%>
                 </tbody>
             </table>
         </div>
@@ -308,7 +276,7 @@
 
     <!-- Tabla de Pagos Digitales -->
     <%if current_user.digital_payments.count > 0%>
-    <div class="col-xl-10 col-lg-12">
+    <div class="col-12">
     <h5 class="mt-4">Pagos Digitales</h5>
         <div class="table-responsive">
             <table class="table">
@@ -317,7 +285,7 @@
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
                         <th scope="col"><small class="font-weight-bold">Nombre<small></th>    
                         <th scope="col"><small class="font-weight-bold">Plataforma<small></th>
-                        <th scope="col"><small class="font-weight-bold">Telefono<small></th>
+                        <th scope="col"><small class="font-weight-bold">Telefono / Usuario<small></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -333,6 +301,15 @@
                         <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
                         </td>
                         
+                        <%if current_user.is_admin?%>
+                            <%if payment.status === "activo"%>
+                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                            <%else%>
+                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%end%>
+                            <td class="align-middle">|</td>
+                            <td class="align-middle"><a href="/digital_payments/<%=payment.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                        <%end%>
                         <!--Boton Modal-->
                         <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#digitalPaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
@@ -374,6 +351,71 @@
                         </div>
 
                         <td class="align-middle"><a rel="nofollow" data-method="delete" href="/digital_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                    </tr>
+                    <%end%>
+
+                    <% current_user.wallet_with_users.each do |wallet| %>
+                    <tr class="shadow-sm">
+                        <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
+                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                        
+                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                        
+                        <%part1 = wallet.usuario[0, 3]%>
+                        <%part2 = wallet.usuario[-2,2]%> 
+                        <td class="align-middle"><span class=""><%=part1 << "******" << part2%></span>
+                        </td>
+                        
+                        <%if current_user.is_admin?%>
+                            <%if wallet.status === "activo"%>
+                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                            <%else%>
+                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%end%>
+                            <td class="align-middle">|</td>
+                            <td class="align-middle"><a href="/wallet_with_users/<%=wallet.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                        <%end%>
+                        <!--Boton Modal-->
+                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#walletWithUserModal<%=wallet.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="walletWithUserModal<%=wallet.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=wallet.wallet_name%></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                            <div class="card-header text-success">
+                                                <div class="row">
+                                                    <div class="col-5 text-right">Pais</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.country%>    
+                                                    </div>
+                                                    <div class="col-5 text-right">Nombres</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.name%> <%=wallet.last_name%>   
+                                                    </div>
+                                                    <div class="col-5 text-right">Usuario</div>
+                                                    <div class="col-7 text-left">
+                                                        <%=wallet.usuario%> 
+                                                    </div>                                  
+                                                </div>                   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallet_with_users/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                     </tr>
                     <%end%>
                 </tbody>
@@ -443,6 +485,15 @@
                         end%>
                         <td class="align-middle"><span><%=type_document << part1 << "***" << part2%></span></td>
                         
+                        <%if current_user.is_admin?%>
+                            <%if payment.status === "activo"%>
+                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                            <%else%>
+                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%end%>
+                            <td class="align-middle">|</td>
+                            <td class="align-middle"><a href="/mobile_payments/<%=payment.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                        <%end%>
                         <!--Boton Modal-->
                         <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#mobilePaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 

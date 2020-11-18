@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_04_172442) do
+ActiveRecord::Schema.define(version: 2020_11_13_172949) do
 
   create_table "bank_brasils", force: :cascade do |t|
     t.string "name"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2020_11_04_172442) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
+    t.string "status", default: "activo"
     t.index ["user_id"], name: "index_bank_brasils_on_user_id"
   end
 
@@ -38,6 +39,7 @@ ActiveRecord::Schema.define(version: 2020_11_04_172442) do
     t.string "last_name", default: ""
     t.string "banco"
     t.string "type_document"
+    t.string "status", default: "activo"
     t.index ["user_id"], name: "index_banks_on_user_id"
   end
 
@@ -50,6 +52,7 @@ ActiveRecord::Schema.define(version: 2020_11_04_172442) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
+    t.string "status", default: "activo"
     t.index ["user_id"], name: "index_digital_payments_on_user_id"
   end
 
@@ -61,6 +64,7 @@ ActiveRecord::Schema.define(version: 2020_11_04_172442) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
+    t.string "status", default: "activo"
     t.index ["user_id"], name: "index_mobile_payments_on_user_id"
   end
 
@@ -88,17 +92,33 @@ ActiveRecord::Schema.define(version: 2020_11_04_172442) do
     t.string "rate_venezuela_min", default: "0,00"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "rate_argentina", default: "0,00"
+    t.string "rate_argentina_min", default: "0,00"
+    t.string "rate_colombia", default: "0,00"
+    t.string "rate_colombia_min", default: "0,00"
+    t.string "monto_min_argentina", default: "0,00"
+    t.string "monto_min_brasil", default: "0,00"
+    t.string "monto_min_chile", default: "0,00"
+    t.string "monto_min_colombia", default: "0,00"
+    t.string "monto_min_ecuador", default: "0,00"
+    t.string "monto_min_españa", default: "0,00"
+    t.string "monto_min_panama", default: "0,00"
+    t.string "monto_min_peru", default: "0,00"
+    t.string "monto_min_portugal", default: "0,00"
+    t.string "monto_min_usa", default: "0,00"
+    t.string "monto_min_venezuela", default: "0,00"
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.decimal "monto", precision: 18, scale: 3
     t.string "metodo"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", default: 1, null: false
     t.integer "account_destinity", default: 1
-    t.integer "payment_bank", default: 1
-    t.string "status", default: "enviada"
+    t.string "monto_a_recibir"
+    t.integer "account_origin"
+    t.string "status", default: "en proceso"
+    t.string "monto_envio"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -143,6 +163,7 @@ ActiveRecord::Schema.define(version: 2020_11_04_172442) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
     t.string "usuario"
+    t.string "status", default: "activo"
     t.index ["user_id"], name: "index_wallet_with_users_on_user_id"
   end
 
@@ -155,6 +176,7 @@ ActiveRecord::Schema.define(version: 2020_11_04_172442) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "wallet_name"
     t.integer "user_id", null: false
+    t.string "status", default: "activo"
     t.index ["user_id"], name: "index_wallets_on_user_id"
   end
 

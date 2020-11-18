@@ -1,25 +1,13 @@
-<div class="container bg-nav margin-top">
+<h4 class="text-center">Enviar Dinero</h4>
 
-    <h2>Enviar Dinero</h2>
-
-    <h5>Cuentas Registradas</h5>
-    <%current_user.banks.each do |bank|%>
-
-    <div class="col-xl-6">
-        <b><span><%=bank.name%></span></b>
-        <span><%=bank.number_account%></span>
+<%if @rate.nil?%>
+    <div class="row justify-content-center mt-5">
+        <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+            <div class="alert alert-info text-justify" role="alert">
+                Upsss!, lo sentimos, no esta disponible la opcion de enviar remesas desde <%=current_user.country%> hacia otros paises. Solo tenemos disponible la opcion de recibir dinero de los paises con los que trabajamos hacia <%=current_user.country%>. Si deseas recibir remesas de algun familiar, amigo, etc.. sugierele que se registre en nuestra pagina desde su pais y realice el envio desde allá.
+            </div>
+        </div>
     </div>
-    <%end%>
-
-    <h5>Cuentas de Otacar Cambios</h5>
-    <%@user_admin.banks.each do |admin_banks|%>
-    <div class="col-xl-6">
-        <b><span><%=admin_banks.name%></span></b>
-        <span><%=admin_banks.number_account%></span>
-    </div>
-    <%end%>
-
-    <%= render 'form', {transaction: @transaction, admin_banks: @user_admin.banks} %>
-
-
-</div>
+<%else%>
+    <%= render 'form', {transaction: @transaction, admin: @user_admin, rate: @rate} %>
+<%end%>
