@@ -34,7 +34,7 @@
                         <%part2 = account_bank.identidy[0, 2]%>
                         <%part3 = account_bank.identidy[-3,3]%> 
                         
-                        <td class="align-middle"><span class=""><%=account_bank.type_document%><%="-" << part2 << "***" << part3%></span>
+                        <td class="align-middle"><span class=""><%=account_bank.type_document%><%=part2 << "***" << part3%></span>
                         </td>
                 
                         <td class="align-middle"><img src="/img/bancos/<%=account_bank.banco%>.png" class="img-fluid rounded-circle avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>

@@ -806,7 +806,7 @@
         
             default:
                 break;
-        }
+        }//TERMINAR DE OCULTAR LAS OPCIONES SUBYACENTES //////////////////////////////////////////////////////////////
         if (existMetodosUser > 0){
             spanInfoPaisDestino = document.getElementById("spanPaisDestino");
             spanInfoPaisDestino.innerHTML = country;
@@ -1357,7 +1357,7 @@
         tasa.innerHTML = montoTasa + " " + monedaPaisD;
         tasaOf.innerHTML = "";
         tasaOf2.innerHTML = "";
-        if (<%=rate.monto_oferta%> != "0,00" && montoTasaOferta != "0,00"){
+        if ("<%=rate.monto_oferta%>" != "0,00" && montoTasaOferta != "0,00"){
             tasaOf.innerHTML = "<br><br>Más de <%=rate.monto_oferta%> <%=rate.moneda%><br>"
             tasaOf2.innerHTML = montoTasaOferta + " " + monedaPaisD;
         }
