@@ -1,24 +1,89 @@
-<div class="container margin-top bg-nav">
-    <h2 class="py-2">Estatus de mis transacciones</h2>
-    <div class="row text-success mt-5">
-        <div class="col-sm-6">
-            <h4>Id Transaccion</h4>
-        </div>
-        <div class="col-sm-6">
-            <h4>Status</h4>
-        </div>
-    </div>
-    <%@transaction.each do |trans|%>
-    <%if current_user.id === trans.user_id%>
-    <div class="row text-primary">
-        <div class="col-sm-6">
-            <span><%=trans.id%></span>
-        </div>
-        <div class="col-sm-6">
-            <span><%=trans.status%></span>
-        </div>
 
+<script>console.log("<%=moment = Time.now.utc%>  <%=moment.localtime%>");</script>
+
+<div class="col-12">
+    <h4>Estado de mis transacciones</h4>
+    <div class="table-responsive mt-5">
+        <h5 class="text-center">Pagos pendientes</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"><small class="font-weight-bold">Nombre Titular<small></th>
+                    <th colspan="2"><small class="font-weight-bold">Cuenta Otacar Cambios<small></th>
+                    <th scope="col"><small class="font-weight-bold">Metodo de pago<small></th>
+                    <th scope="col"><small class="font-weight-bold">Monto a pagar<small></th>
+                    <th scope="col"><small class="font-weight-bold">Tiempo<small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <%current_user.transactions.each do |transaction| %>
+                <tr class="shadow-sm">
+                    
+                    <%method = transaction.account_destinity_admin.split("-")%>
+                    
+                    <%case method[0]
+                        when "banks"
+                            @user_admin.banks.each do |bank|
+                                
+                                if bank.id.to_s === method[1]
+                                    part1 = bank.number_account[0, 4]
+                                    part2 = bank.number_account[-4,4]%>
+                                    <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                    <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
+                                    <td class="align-middle";"><%=part1 << "****" << part2%></td>
+                                <%end%>
+                            <%end%>
+                    <%end%>
+                    <td class="align-middle"><%=transaction.metodo%></td>
+                    <td class="align-middle"><%= number_with_precision(transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
+                    <%hora_utc = transaction.created_at%>
+                    <td class="align-middle"><%=hora_utc.localtime%></td>
+                    <td class="align-middle"><%=hora_utc.localtime.strftime("%d/%m/%Y %H:%M:%S")%></td>
+                    <td class="align-middle"><%= I18n.l(Date.today, format: '%A, %d de %B de %Y')%></td>
+                    <!--<td class="align-middle"><%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>-->
+                </tr>
+                <%end%>
+
+            </tbody>
+        </table>
     </div>
-    <%end%>
-    <%end%>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"><small class="font-weight-bold">Pais Destino<small></th>
+                    
+                    <th scope="col"><small class="font-weight-bold">Nombre Titular<small></th>
+                    <th colspan="2"><small class="font-weight-bold">Cuenta Credito<small></th>
+                    <th colspan="2"><small class="font-weight-bold">Cuenta Otacar Cambios<small></th>
+                    <th scope="col"><small class="font-weight-bold">Estado<small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <%current_user.transactions.each do |transaction| %>
+                <tr class="shadow-sm">
+                    <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid rounded-circle avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
+                    <%method = transaction.account_destinity_usuario.split("-")%>
+                    
+                    <%case method[0]
+                        when "banks"
+                            current_user.banks.each do |bank|
+                                
+                                if bank.id.to_s === method[1]
+                                    part1 = bank.number_account[0, 4]
+                                    part2 = bank.number_account[-4,4]%>
+                                    <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                    <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
+                                    <td class="align-middle";"><%=part1 << "****" << part2%></td>
+                                <%end%>
+
+                            <%end%>
+                    <%end%>
+                    
+                </tr>
+                <%end%>
+
+            </tbody>
+        </table>
+    </div>
 </div>

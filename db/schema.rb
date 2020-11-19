@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_13_172949) do
+ActiveRecord::Schema.define(version: 2020_11_18_132832) do
 
   create_table "bank_brasils", force: :cascade do |t|
     t.string "name"
@@ -114,11 +114,12 @@ ActiveRecord::Schema.define(version: 2020_11_13_172949) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", default: 1, null: false
-    t.integer "account_destinity", default: 1
-    t.string "monto_a_recibir"
-    t.integer "account_origin"
     t.string "status", default: "en proceso"
     t.string "monto_envio"
+    t.string "monto_a_recibir"
+    t.string "account_destinity_usuario"
+    t.string "account_destinity_admin"
+    t.string "country_destinity"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 

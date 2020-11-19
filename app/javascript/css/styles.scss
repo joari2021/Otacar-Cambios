@@ -402,7 +402,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 
 
-//ESTILOS DE SELECT BOX
+//ESTILOS DE SELECT BOX/////////////////////////////////////////////////////////////////////////////////////////
 *{
   box-sizing: border-box;
 }
@@ -492,7 +492,7 @@ a {
 
 .opciones.active {
 	display: block;
-	animation: fadeIn .3s forwards;
+  animation: fadeIn .3s forwards;
 }
 
 @keyframes fadeIn {
