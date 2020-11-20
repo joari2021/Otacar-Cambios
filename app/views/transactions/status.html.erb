@@ -91,13 +91,13 @@
     //spanTime = document.getElementById("time-restante");
    
     function restarHoras() {
-         <%fecha_actual = Time.now%>
+         
          <%current_user.transactions.each do |transaction| %>
             console.log("entre");
             a = new Date("<%=transaction.created_at.strftime("%B %d, %Y %H:%M:%S")%>");//fecha creacion de transaccion
+            <%fecha_actual = Time.now%>
+            b = "<%=fecha_actual.utc.strftime("%B %d, %Y %H:%M:%S")%>";//fecha actual
             
-            //b = new Date("<%=fecha_actual.utc.strftime("%B %d, %Y %H:%M:%S")%>");//fecha actual
-            b = new Date();
             console.log(b);
             //La diferencia se da en milisegundos así que debes dividir entre 1000
             //var b = new Date("February 12, 2014 03:29:01");
