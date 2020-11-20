@@ -155,7 +155,7 @@ class TransactionsController < ApplicationController
     
           respond_to do |format|
             if @transaction.save
-              format.html { redirect_to status_transactions_path, notice: resultado }
+              format.html { redirect_to status_transactions_path, notice: "Transacción iniciada con exito. Tiene 20 minutos para hacer el pago" }
               format.json { render :show, status: :created, location: @transaction }
             else
               format.html { render :new }
