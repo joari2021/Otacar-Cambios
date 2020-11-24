@@ -42,7 +42,7 @@ class WalletWithUsersController < ApplicationController
           @wallet_with_user = current_user.wallet_with_users.create(wallet_with_user_params)
           respond_to do |format|
             if @wallet_with_user.save
-              format.html { redirect_to payment_methods_path, notice: 'Monedero Digital guardado con exito.' }
+              format.html { redirect_to payment_methods_path, notice: 'Pago Digital guardado con exito.' }
               format.json { render :show, status: :created, location: @wallet_with_user }
             else
               format.html { render :new }
@@ -64,9 +64,9 @@ class WalletWithUsersController < ApplicationController
     respond_to do |format|
       if @wallet_with_user.update(wallet_with_user_edit_params)
         if @wallet_with_user.status === "activo"
-          mensaje = 'Monedero Digital activado con exito.'
+          mensaje = 'Pago Digital activado con exito.'
         else
-          mensaje = 'Monedero Digital inactivado con exito.'
+          mensaje = 'Pago Digital inactivado con exito.'
         end
         format.html { redirect_to payment_methods_path, notice: mensaje }
         format.json { render :show, status: :ok, location: @wallet_with_user }
@@ -82,7 +82,7 @@ class WalletWithUsersController < ApplicationController
   def destroy
     @wallet_with_user.destroy
     respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'El monedero digital fue eliminado con exito.' }
+      format.html { redirect_to payment_methods_path, notice: 'El pago digital fue eliminado con exito.' }
       format.json { head :no_content }
     end
   end

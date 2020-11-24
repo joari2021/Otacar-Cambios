@@ -1,6 +1,361 @@
-<h1>Editing Transaction</h1>
+<div id="copy" class="">
+    <span class="fas fa-check-circle"></span>
+    <p class="msg text-justify" id="msj"></p>
+</div>
+            
+<div class="row justify-content-center mt-3">
+    <div class="col-6 p-3 fondo" style="border-radius:12px;">
+        <nav>
+            <div class="nav nav-tabs text-center" id="nav-tab" role="tablist">
+                <a class="nav-link active d-inline-block w-50" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Origen</a>
+                <a class="nav-link d-inline-block w-50" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Destino</a>
+            </div>
+        </nav>
+        <div class="tab-content mt-3" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <h5>Detalles de la transaccion<span class="float-right h5 <%if @minutos < 5%>text-danger<%else%>text-success<%end%>" id="td-time2"><i class="fas fa-history mr-1"></i><span id="minuto2"><%=@minutos%></span>:<span id="segundo2"><%=@segundos.to_s.rjust(2, '0')%></span></h5>
+                
+                <div class="mt-5">
+                    <%#image_tag url_for(@transaction_pendiente.comprobante), style:"width:100%"%>
 
-<%= render 'form', transaction: @transaction %>
+                    <%method = @transaction_pendiente.account_destinity_admin.split("-")%>
+                    
+                    <%case method[0]
+                        when "banks"
+                            @user_admin.banks.each do |bank|
+                                
+                                if bank.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
 
-<%= link_to 'Show', @transaction %> |
-<%= link_to 'Back', transactions_path %>
+                                    <label class="text-primary">Nro Documento</label><br>
+                                    <%=bank.type_document%><span id="documento"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+
+                                    <label class="text-primary">Banco</label><br>
+                                    <span id="banco"><%=bank.banco%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                                    
+                                    <label class="text-primary">Tipo de cuenta</label><br>
+                                    <span id="type-account"><%=bank.type_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('type-account','Tipo de cuenta')"></i><br><hr>
+
+                                    <label class="text-primary">Numero de cuenta</label><br>
+                                    <span id="number-account"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account','Numero de cuenta')"></i><br><hr>
+
+                                <%end%>
+                            <%end%>
+                        <%when "bank_brasils"
+                            @user_admin.bank_brasils.each do |bank|
+                                
+                                if bank.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                                    <label class="text-primary">Nro Documento</label><br>
+                                    <span id="documento"><%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+
+                                    <label class="text-primary">Banco</label><br>
+                                    <span id="banco"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                                    
+                                    <label class="text-primary">Nro de agencia</label><br>
+                                    <span id="number-agency"><%=bank.number_agency%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-agency','Nro de agencia')"></i><br><hr>
+
+                                    <label class="text-primary">Numero de cuenta</label><br>
+                                    <span id="number-account"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account','Numero de cuenta')"></i><br><hr>
+                                <%end%>
+                            <%end%>
+                        <%when "digital_payments"
+                            @user_admin.digital_payments.each do |payment|
+                                
+                                if payment.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span id="titular"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                                    <label  class="text-primary">Pago digital</label><br>
+                                    <span id="payment-digital"><%=payment.payment_method%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('payment-digital','Pago digital')"></i><br><hr>
+
+                                    <label class="text-primary">Numero de telefono</label><br>
+                                    <span id="number-phone"><%=bank.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
+                                <%end%>
+                            <%end%>
+                        <%when "mobile_payments"
+                            @user_admin.mobile_payments.each do |payment|
+                                
+                                if payment.id.to_s === method[1]%>
+                                    <label class="text-primary">Nro Documento</label><br>
+                                    <span id="documento"><%=payment.document%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+
+                                    <label class="text-primary">Banco</label><br>
+                                    <span id="banco"><%=payment.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+
+                                    <label class="text-primary">Numero de telefono</label><br>
+                                    <span id="number-phone"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
+                                <%end%>
+                            <%end%>
+                        <%when "wallets"
+                            @user_admin.wallets.each do |wallet|
+                                
+                                if wallet.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span id="titular"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                                    <label class="text-primary">Monedero</label><br>
+                                    <span id="monedero"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero','Monedero')"></i><br><hr>
+
+                                    <label class="text-primary">Correo Electronico</label><br>
+                                    <span id="email"><%=wallet.email%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('email','Correo Electrónico')"></i><br><hr>
+                                <%end%>
+                            <%end%>
+                        <%when "wallet_with_users"
+                            @user_admin.wallet_with_users.each do |wallet|
+                                
+                                if wallet.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span id="titular"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                                    <label class="text-primary">Monedero</label><br>
+                                    <span id="monedero"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero','Monedero')"></i><br><hr>
+
+                                    <label class="text-primary">Correo Electronico</label><br>
+                                    <span id="usuario"><%=wallet.usuario%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('usuario','Usuario')"></i><br><hr>
+                                <%end%>
+                            <%end%>
+                    <%end%>
+                    <label class="text-primary">Monto a pagar</label><br>
+                    <%=@rate.moneda%> <span id="monto_pagar"><%= number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_pagar','Monto a pagar')"></i><br><hr>
+
+                    <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
+                        <% if @transaction.errors.any? %>
+                        <div id="error_explanation">
+                            <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
+                        
+                            <ul>
+                                <% @transaction.errors.full_messages.each do |message| %>
+                                <li><%= message %></li>
+                                <% end %>
+                            </ul>
+                        </div>
+                        <% end %>
+                    
+                        <div class="custom-file mb-3">
+                            <%=form.file_field :comprobante, class:"custom-file-input is-invalid", id:"validatedCustomFile"%>
+                            <label class="custom-file-label" for="validatedCustomFile">Comprobante de pago...</label>
+                            <div class="invalid-feedback">Solo puede subir un archivo en formato jpg, jpeg o png</div>
+                        </div>
+
+                        <div class="actions mt-4">
+                            <%= form.submit "Continuar", class:"btn btn-success m-auto"%>
+                            <a type="button" rel="nofollow" data-method="delete" href="/transactions/<%=@transaction.id%>" data-confirm="Esta segur@ de eliminar esta transacción?" class="btn btn-danger float-right">Cancelar transaccion</a>
+                        </div>
+                    <%end%>
+                    
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <h5>Detalles del envio</h5>
+                
+                <div class="mt-5">
+                    <%#image_tag url_for(@transaction_pendiente.comprobante), style:"width:100%"%>
+                    <%if @transaction_pendiente.country_destinity === "Argentina" || @transaction_pendiente.country_destinity === "Colombia" || @transaction_pendiente.country_destinity === "Ecuador" || @transaction_pendiente.country_destinity === "Panama" || @transaction_pendiente.country_destinity === "USA"    
+                        moneda_destinity = "$"
+                    elsif @transaction_pendiente.country_destinity === "Brasil"
+                        moneda_destinity = "R$"
+                    elsif @transaction_pendiente.country_destinity === "Chile"
+                        moneda_destinity = "CLP"
+                    elsif @transaction_pendiente.country_destinity === "España"
+                        moneda_destinity = "€"
+                    elsif @transaction_pendiente.country_destinity === "Peru"
+                        moneda_destinity = "S/"
+                    elsif @transaction_pendiente.country_destinity === "Venezuela"
+                        moneda_destinity = "Bs"  
+                    end%>
+                    <%method = @transaction_pendiente.account_destinity_usuario.split("-")%>
+                    
+                    <%case method[0]
+                        when "banks"
+                            current_user.banks.each do |bank|
+                                
+                                if bank.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
+
+                                    <label class="text-primary">Nro Documento</label><br>
+                                    <%=bank.type_document%><span id="document"><%=bank.identidy%></span><br><hr>
+
+                                    <label class="text-primary">Banco</label><br>
+                                    <span id="banco"><%=bank.banco%></span><br><hr>
+                                    
+                                    <label class="text-primary">Tipo de cuenta</label><br>
+                                    <span id="type-account"><%=bank.type_account%></span><br><hr>
+
+                                    <label class="text-primary">Numero de cuenta</label><br>
+                                    <span id="number-account"><%=bank.number_account%></span><br><hr>
+
+                                <%end%>
+                            <%end%>
+                        <%when "bank_brasils"
+                            current_user.bank_brasils.each do |bank|
+                                
+                                if bank.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
+
+                                    <label class="text-primary">Nro Documento</label><br>
+                                    <span id="document"><%=bank.cpf%></span><br><hr>
+
+                                    <label class="text-primary">Banco</label><br>
+                                    <span id="banco"><%=bank.bank%></span><br><hr>
+                                    
+                                    <label class="text-primary">Nro de Agencia</label><br>
+                                    <span id="type-account"><%=bank.number_agency%></span><br><hr>
+
+                                    <label class="text-primary">Numero de cuenta</label><br>
+                                    <span id="number-account"><%=bank.number_account%></span><br><hr>
+
+                                <%end%>
+                            <%end%>
+                        <%when "digital_payments"
+                            current_user.digital_payments.each do |payment|
+                                
+                                if payment.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><br><hr>
+
+                                    <label class="text-primary">Pago Digital</label><br>
+                                    <span><%=payment.payment_method%></span><br><hr>
+                              
+                                    <label class="text-primary">Numero de telefono</label><br>
+                                    <span><%=payment.number_phone%></span><br><hr>
+                                <%end%>
+                            <%end%>
+                        <%when "mobile_payments"
+                            current_user.mobile_payments.each do |payment|
+                                
+                                if payment.id.to_s === method[1]%>
+
+                                    <label class="text-primary">Banco</label><br>
+                                    <img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=payment.bank%>" title="<%=payment.bank%>"/><span><%=payment.bank%></span><br><hr>
+
+                                    <label class="text-primary">Nro Documento</label><br>
+                                    <span><%=payment.document%></span><br><hr>
+                              
+                                    <label class="text-primary">Numero de telefono</label><br>
+                                    <span><%=payment.number_phone%></span><br><hr>
+                                <%end%>
+                            <%end%>
+                        <%when "wallets"
+                            current_user.wallets.each do |wallet|
+                                
+                                if wallet.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><br><hr>
+
+                                    <label class="text-primary">Monedero</label><br>
+                                    <span><%=wallet.wallet_name%></span><br><hr>
+
+                                    <label class="text-primary">Correo Electronico</label><br>
+                                    <span><%=wallet.email%></span><br><hr>
+                                <%end%>
+                            <%end%>
+                        <%when "wallet_with_users"
+                            current_user.wallet_with_users.each do |wallet|
+                                
+                                if wallet.id.to_s === method[1]%>
+                                    <label  class="text-primary">Titular de la cuenta</label><br>
+                                    <span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><br><hr>
+
+                                    <label class="text-primary">Monedero</label><br>
+                                    <span><%=wallet.wallet_name%></span><br><hr>
+
+                                    <label class="text-primary">Usuario</label><br>
+                                    <span><%=wallet.usuario%></span><br><hr>
+                                <%end%>
+                            <%end%>
+                    <%end%>
+                    <label class="text-primary">Monto a recibir</label><br>
+                    <%=moneda_destinity%> <span><%= number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    spanMin2 = document.getElementById("minuto2");
+    spanSeg2 = document.getElementById("segundo2");
+    tdTime2 = document.getElementById("td-time2");
+    cajaMsj = document.getElementById("copy");
+    msjCopy = document.getElementById("msj");
+    iconoCopy = document.getElementsByTagName("i");
+
+    function refrescar(){
+        window.location.href = window.location.href;
+    }
+
+    function restarSegundos2() {
+        minutos = spanMin2.innerText;
+        segundos = spanSeg2.innerText;
+        
+        minutos = parseInt(minutos);
+        segundos = parseInt(segundos);
+
+        if (minutos <= 0 && segundos <= 0 ){
+
+            clearInterval(intervalo2);
+            refrescar();
+        }else{
+            if (segundos === 0){
+            minutos -= 1;
+            segundos = 59;
+            }else{
+                segundos -= 1;
+            }
+
+            if (minutos < 5){
+                tdTime2.classList.remove("text-success");
+                tdTime2.classList.add("text-danger");
+            }
+            spanMin2.innerHTML = minutos;
+
+            segundos = segundos.toString();
+            if (segundos.length === 1){
+                spanSeg2.innerHTML = "0" + segundos;
+            }else{
+                spanSeg2.innerHTML = segundos;
+            }
+        }
+        
+    }
+    
+    <%if @transaction_pendiente%>
+    if (typeof intervalo2 === "undefined"){
+        intervalo2 = setInterval(restarSegundos2, 1000);
+    }
+    <%end%>
+    
+    function copiarAlPortapapeles(id_elemento,dato) {
+        var aux = document.createElement("input");
+        aux.setAttribute("value", document.getElementById(id_elemento).innerHTML);
+        document.body.appendChild(aux);
+        aux.select();
+        document.execCommand("copy");
+        document.body.removeChild(aux);
+
+        cajaMsj.classList.remove("show","showAlert");
+        cajaMsj.classList.add("d-none");
+       
+
+        msjCopy.innerHTML = dato + " copiado";
+        cajaMsj.classList.remove("d-none");
+        cajaMsj.classList.add("show","showAlert");
+
+        var contador = setTimeout(() => {
+            cajaMsj.classList.add("hide");
+            cajaMsj.classList.remove("show");
+        }, 1000);
+        var contador2 = setTimeout(() => {
+            cajaMsj.classList.remove("showAlert");
+            cajaMsj.classList.remove("hide");
+            cajaMsj.classList.add("d-none");
+        }, 2000);
+    }
+
+</script>

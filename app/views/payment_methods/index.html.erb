@@ -17,19 +17,22 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"><small class="font-weight-bold">Titular<small></th>
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Titular<small></th>
                         <th scope="col"><small class="font-weight-bold">Nro DNI<small></th>
                         <th scope="col"><small class="font-weight-bold">Banco<small></th>
                         <th scope="col"><small class="font-weight-bold">Nro Cuenta<small></th>
-                        <th scope="col"><small class="font-weight-bold">Status<small></th>
+                        <%if current_user.is_admin?%>
+                            <th scope="col"><small class="font-weight-bold">Status<small></th>
+                        <%end%>
                     </tr>
                 </thead>
                 <tbody>
                     <% current_user.banks.each do |account_bank| %>
                     <tr class="shadow-sm">
-                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
                         <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country.capitalize%>" title="<%=account_bank.country.capitalize%>"/></td>
+
+                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
                         
                         <%part2 = account_bank.identidy[0, 2]%>
                         <%part3 = account_bank.identidy[-3,3]%> 
@@ -75,7 +78,7 @@
                                                         <%=account_bank.country%>
                                                     </div>
                                                     <div class="col-5 text-right">Titular</div>
-                                                    <div class="col-7 text-left">
+                                                    <div class="col-7 text-left text-capitalize">
                                                         <%=account_bank.name%> <%=account_bank.last_name%>      
                                                     </div>
                                                     <div class="col-5 text-right">Identidad</div>
@@ -108,8 +111,8 @@
                     <!--Bancos de Brasil-->
                     <% current_user.bank_brasils.each do |account_bank| %>
                     <tr class="shadow-sm">
-                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
                         <td class="align-middle"><img src="/img/paises/Brasil.svg" class="img-fluid rounded-circle avatar" alt="Brasil" title="Brasil"/></td>
+                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
 
                         <%part1 = account_bank.cpf[0, 3]%>
                         <%part2 = account_bank.cpf[-2,2]%> 
@@ -275,7 +278,7 @@
     <%end%>
 
     <!-- Tabla de Pagos Digitales -->
-    <%if current_user.digital_payments.count > 0%>
+    <%if current_user.digital_payments.count > 0 || current_user.wallet_with_users.count > 0%>
     <div class="col-12">
     <h5 class="mt-4">Pagos Digitales</h5>
         <div class="table-responsive">

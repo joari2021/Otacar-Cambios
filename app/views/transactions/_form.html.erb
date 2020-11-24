@@ -376,14 +376,14 @@
     </div>
 </div>
 
-
-
 <%end%>
 
 
 <script src="/js/vistas/script-form-for-campos.js"></script>
 <script>
     //VARIABLES GLOBALES ///////////////////////////////////////////////////////////////////////////////////
+    accountUserDestinity = document.getElementById("accountUserDestinity");
+
     selectPaisDestino = document.querySelector('#selectPaisDestino');
     opcionesPaisDestino = document.querySelector('#opcionesPaisDestino');
 
@@ -403,69 +403,72 @@
     }
 
     //FUNCIONES DEL SELECT PAIS
+    spanCountry = document.getElementById("country");
+    msjAñadirAccount = document.getElementById("añadirAccount");
     function sugerirAñadirAccount(country){
         
-        spanCountry = document.getElementById("country");
         spanCountry.innerHTML = country;
-
-        msjAñadirAccount = document.getElementById("añadirAccount");
         msjAñadirAccount.classList.remove("d-none");
     }
-
+    //TERMINAR ESTO
     function optionBanks(country){
-        var selectBox = document.getElementById("opcionesAccountUserDestino");
+        <%if current_user.banks.count > 0%>    
+            var selectBox = document.getElementById("opcionesAccountUserDestino"),
+                account = 0;
 
-        options = selectBox.childNodes;
+            options = selectBox.childNodes;
 
-        if (options.length > 0){
-            limit = options.length
-            for (i=0; i < limit; i++){
-                selectBox.removeChild(options[0]);   
+            if (options.length > 0){
+                limit = options.length
+                for (i=0; i < limit; i++){
+                    selectBox.removeChild(options[0]);   
+                }
             }
-        }
-        <%current_user.banks.each do |bank_user|%>
-            if ("<%=bank_user.country%>" === country){
-                <%admin.banks.each do |bank_admin| %>
-                    <%if bank_admin.status === "activo"%>
-                        <%if bank_admin.banco === bank_user.banco%>
-                            //ENLACE
-                            var enlace = document.createElement("a");
-                            enlace.setAttribute("href","#");
-                            enlace.setAttribute("id","banks-<%=bank_user.id%>");
-                            enlace.setAttribute("onclick","activarEnlace(event)");
-                            enlace.classList.add("opcion");
+            <%current_user.banks.each do |bank_user|%>
+                if ("<%=bank_user.country%>" === country){
+                    <%admin.banks.each do |bank_admin| %>
+                        <%if bank_admin.status === "activo"%>
+                            <%if bank_admin.banco === bank_user.banco%>
+                                //ENLACE
+                                var enlace = document.createElement("a");
+                                enlace.setAttribute("href","#");
+                                enlace.setAttribute("id","banks-<%=bank_user.id%>");
+                                enlace.setAttribute("onclick","activarEnlace(event)");
+                                enlace.classList.add("opcion");
 
-                            //DIV PADRE
-                            var divPadre = document.createElement("div");
-                            divPadre.classList.add("contenido-opcion");
-                            
-                            //IMAGEN
-                            var img = document.createElement("img");
-                            img.setAttribute("src","/img/bancos/<%=bank_user.banco%>.png");
+                                //DIV PADRE
+                                var divPadre = document.createElement("div");
+                                divPadre.classList.add("contenido-opcion");
+                                
+                                //IMAGEN
+                                var img = document.createElement("img");
+                                img.setAttribute("src","/img/bancos/<%=bank_user.banco%>.png");
 
-                            //DIV HIJO
-                            var divHijo = document.createElement("div");
-                            divHijo.classList.add("textos");
+                                //DIV HIJO
+                                var divHijo = document.createElement("div");
+                                divHijo.classList.add("textos");
 
-                            //H1
-                            var h2 = document.createElement("h2");
-                            h2.classList.add("titulo","tam-h2");
-                            <%part1 = bank_user.number_account[0, 4]%>
-                            <%part2 = bank_user.number_account[-4,4]%>
-                            var content = document.createTextNode("<%=part1%>********<%=part2%>");
-                            
-                            h2.appendChild(content);
-                            divHijo.appendChild(h2);
-                            divPadre.appendChild(img);
-                            divPadre.appendChild(divHijo);
-                            enlace.appendChild(divPadre);
-                            selectBox.appendChild(enlace);
+                                //H1
+                                var h2 = document.createElement("h2");
+                                h2.classList.add("titulo","tam-h2");
+                                <%part1 = bank_user.number_account[0, 4]%>
+                                <%part2 = bank_user.number_account[-4,4]%>
+                                var content = document.createTextNode("<%=part1%>********<%=part2%>");
+                                
+                                h2.appendChild(content);
+                                divHijo.appendChild(h2);
+                                divPadre.appendChild(img);
+                                divPadre.appendChild(divHijo);
+                                enlace.appendChild(divPadre);
+                                selectBox.appendChild(enlace);
+                                account += 1;
+                            <%end%>
                         <%end%>
                     <%end%>
-                <%end%>
-            }
+                }
+            <%end%>
         <%end%>
-       return 1;
+        return account;
     }
 
     function optionBanksBrasil(country){
@@ -759,9 +762,8 @@
 
         switch (country){
             case "Argentina":
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>    
+                     
+                bankStandar = optionBanks(country);
                 existMetodosUser = bankStandar;
                 break;
 
@@ -851,32 +853,33 @@
             default:
                 break;
         }
+        //RESETEAR CAMPO ELEGIR CUENTA DESTINO USER, CUENTA DESTINO ADMIN Y METODO DE PAGO 
+        campoAccountDestinity = document.getElementById("contenidoSelectAccountUserDestinity");
+        campoAccountDestinity.innerHTML = "<h2 class='titulo' id='tituloAccountUserDestino'>Elige una opcion</h2>"
+
+        campoAccountAdminDestinity = document.getElementById("contenidoSelectAccountAdminDestinity");
+        campoAccountAdminDestinity.innerHTML = "<h2 class='titulo' id='tituloAccountAdminDestino'>Elige una opcion</h2>"
+
+        campoMetodoPago = document.getElementById("contenidoSelectMetodoPago");
+        campoMetodoPago.innerHTML = "<h2 class='titulo' id='tituloMetodoPago'>Elige una opcion</h2>"
+
+        //OCULTAR CAJAS 3,4 Y 5
+        caja3 = document.getElementById("accountAdminDestinity")
+        caja4 = document.getElementById("metodosPago");
+        caja5 = document.getElementById("montoEnvio");
+
+        caja3.classList.add("d-none");
+        caja4.classList.add("d-none");
+        caja5.classList.add("d-none");
 
         if (existMetodosUser > 0){
             spanInfoPaisDestino = document.getElementById("spanPaisDestino");
             spanInfoPaisDestino.innerHTML = country;
-            accountUserDestinity = document.getElementById("accountUserDestinity");
+            msjAñadirAccount.classList.add("d-none");
             accountUserDestinity.classList.remove("d-none");
 
-            //RESETEAR CAMPO ELEGIR CUENTA DESTINO USER, CUENTA DESTINO ADMIN Y METODO DE PAGO 
-            campoAccountDestinity = document.getElementById("contenidoSelectAccountUserDestinity");
-            campoAccountDestinity.innerHTML = "<h2 class='titulo' id='tituloAccountUserDestino'>Elige una opcion</h2>"
-
-            campoAccountAdminDestinity = document.getElementById("contenidoSelectAccountAdminDestinity");
-            campoAccountAdminDestinity.innerHTML = "<h2 class='titulo' id='tituloAccountAdminDestino'>Elige una opcion</h2>"
-
-            campoMetodoPago = document.getElementById("contenidoSelectMetodoPago");
-            campoMetodoPago.innerHTML = "<h2 class='titulo' id='tituloMetodoPago'>Elige una opcion</h2>"
-
-            //OCULTAR CAJAS 3,4 Y 5
-            caja3 = document.getElementById("accountAdminDestinity")
-            caja4 = document.getElementById("metodosPago");
-            caja5 = document.getElementById("montoEnvio");
-
-            caja3.classList.add("d-none");
-            caja4.classList.add("d-none");
-            caja5.classList.add("d-none");
         }else{
+            accountUserDestinity.classList.add("d-none");
             sugerirAñadirAccount(country);
         }
         

@@ -1,6 +1,5 @@
 class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:destroy]
 
   # GET /transactions
   # GET /transactions.json
@@ -10,7 +9,27 @@ class TransactionsController < ApplicationController
   end
 
   def status
-    @transaction = Transaction.all
+
+    current_user.transactions.each do |transaction|
+      if transaction.status === "en proceso"
+        segundos = (Time.now.utc - transaction.created_at).to_i
+        if segundos < 1200
+          @transaction_pendiente = transaction
+          segundos = 1200 - segundos
+          @minutos = segundos / 60
+          @segundos = segundos - (@minutos * 60)
+          break
+        end
+      end
+    end
+    
+    rates = Rate.all
+    rates.each do |rate|
+      if rate.country === current_user.country
+        @rate = rate
+      end
+    end
+
     users = User.all
     users.each do |user|
       if user.is_admin?
@@ -25,7 +44,18 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/new
   def new
+    current_user.transactions.each do |transaction|
+      if transaction.status === "en proceso"
+        segundos = (Time.now.utc - transaction.created_at).to_i
+        if segundos < 1200
+          @transaction_pendiente = transaction
+          break
+        end
+      end
+    end
+
     @transaction = Transaction.new
+
     users = User.all
     users.each do |user|
       if user.is_admin?
@@ -42,11 +72,44 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/1/edit
   def edit
+    current_user.transactions.each do |transaction|
+      if transaction.status === "en proceso"
+        segundos = (Time.now.utc - transaction.created_at).to_i
+        if segundos < 1200
+          @transaction_pendiente = transaction
+          segundos = 1200 - segundos
+          @minutos = segundos / 60
+          @segundos = segundos - (@minutos * 60)
+          break
+        end
+      end
+    end
+
+    users = User.all
+    users.each do |user|
+      if user.is_admin?
+        @user_admin = user
+      end
+    end
+
+    rates = Rate.all
+    rates.each do |rate|
+      if rate.country === current_user.country
+        @rate = rate
+      end
+    end
+
+    unless @transaction_pendiente
+      respond_to do |format|
+        format.html { redirect_to status_transactions_path, alert: 'Su ultima transaccion creada ha vencido. Por favor cree una nueva.' }
+      end
+    end
   end
 
   # POST /transactions
   # POST /transactions.json
   def create
+    
     transaction_inicial = Transaction.new(transaction_params)
 
     rates = Rate.all
@@ -183,13 +246,27 @@ class TransactionsController < ApplicationController
   # PATCH/PUT /transactions/1
   # PATCH/PUT /transactions/1.json
   def update
-    respond_to do |format|
-      if @transaction.update(transaction_params)
-        format.html { redirect_to @transaction, notice: 'Transaction was successfully updated.' }
-        format.json { render :show, status: :ok, location: @transaction }
-      else
-        format.html { render :edit }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
+    unless  current_user.is_admin?
+      @transaction.update(transaction_params_user_edit)
+      @transaction.status = "por confirmar"
+    
+      respond_to do |format|
+        if @transaction.update(transaction_params_user_edit)
+          format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }
+        else
+          format.html { render :edit }
+          format.json { render json: @transaction.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        if @transaction.update(transaction_params)
+          format.html { redirect_to @transaction, notice: 'Transaccion cancelada con exito.' }
+          format.json { render :show, status: :ok, location: @transaction }
+        else
+          format.html { render :edit }
+          format.json { render json: @transaction.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -199,7 +276,7 @@ class TransactionsController < ApplicationController
   def destroy
     @transaction.destroy
     respond_to do |format|
-      format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
+      format.html { redirect_to status_transactions_path, notice: 'Transacción eliminada con exito.' }
       format.json { head :no_content }
     end
   end
@@ -211,7 +288,13 @@ class TransactionsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
+
     def transaction_params
       params.require(:transaction).permit(:country_destinity, :account_destinity_usuario, :account_destinity_admin, :metodo, :monto_envio, :monto_a_recibir)
     end
+
+    def transaction_params_user_edit
+      params.require(:transaction).permit(:status, :comprobante)
+    end
+
 end
