@@ -37,10 +37,9 @@
                                 if bank.id.to_s === method[1]
                                     part1 = bank.number_account[0, 4]
                                     part2 = bank.number_account[-4,4]
-                                    part3 = bank.cpf[0, 3]
-                                    part4 = bank.cpf[-2,2]%>
+                                   %>
                                     <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
-                                    <td class="align-middle"><span class=""><%=part3 << "***" << part4%></span></td>
+                                    
                                     <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
                                     <td class="align-middle"><%=part1 << "****" << part2%></td>
                                 <%end%>
@@ -251,7 +250,7 @@
 
                         <%if transaction.status === "en proceso"%>
                             <td class="align-middle"><span class="badge badge-pill badge-danger">vencida</span></td>
-                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td>
                         <%else%>
                             <td class="align-middle"><span class="badge badge-pill <%=badge%>"><%=transaction.status%></span></td>
                             <td class="align-middle"><span></span></td>

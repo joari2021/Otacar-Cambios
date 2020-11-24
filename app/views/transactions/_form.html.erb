@@ -13,14 +13,31 @@
 <%
     #BANCOS ESTANDARES
     bank_argentina = 0
+    bank_brubank = 0
+    bank_galicia = 0
+    
     bank_colombia = 0
+
     bank_chile = 0
+
     bank_ecuador = 0
+
     bank_españa = 0
+
     bank_panama = 0
+    bank_bankia = 0
+    bank_santander_pan = 0
+
     bank_peru = 0
-    bank_usa = 0
+    bank_bcp = 0
+    bank_escotia_bank = 0
+
     bank_venezuela = 0
+    bank_bod = 0
+    bank_mercantil = 0
+    bank_vzla = 0
+    bank_banesco = 0
+
     accounts_admin_from_country_user = 0
 
     if admin.banks.count > 0
@@ -30,6 +47,11 @@
             when "Argentina"
                 if bank.status === "activo"
                     bank_argentina += 1
+                    if bank.banco === "Brubank"
+                        bank_brubank += 1
+                    elsif bank.banco === "Galicia"
+                        bank_galicia += 1
+                    end
                 end
             when "Colombia"
                 if bank.status === "activo"
@@ -46,6 +68,11 @@
             when "España"
                 if bank.status === "activo"
                     bank_españa += 1
+                    if bank.banco === "Bankia"
+                        bank_bankia += 1
+                    elsif bank.banco === "Santander"
+                        bank_santander_pan += 1
+                    end
                 end
             when "Panama"
                 if bank.status === "activo"
@@ -54,14 +81,24 @@
             when "Peru"
                 if bank.status === "activo"
                     bank_peru += 1
-                end
-            when "Usa"
-                if bank.status === "activo"
-                    bank_usa += 1
+                    if bank.banco === "Banco BCP"
+                        bank_bcp += 1
+                    elsif bank.banco === "Escotia Bank"
+                        bank_escotia_bank += 1
+                    end
                 end
             when "Venezuela"
                 if bank.status === "activo"
                     bank_venezuela += 1
+                    if bank.banco === "B.O.D"
+                        bank_bod += 1
+                    elsif bank.banco === "Banco Mercantil"
+                        bank_mercantil += 1
+                    elsif bank.banco === "Banco De Venezuela"
+                        bank_vzla += 1
+                    elsif bank.banco === "Banco Banesco"
+                        bank_banesco += 1
+                    end
                 end                      
             end
             
@@ -76,10 +113,31 @@
 
     #BANCOS, MONEDEROS Y PAGO MOVIL DE BRASIL
     bank_brasil = 0
+    bank_do_brasil = 0
+    bank_bradesco = 0
+    bank_caixa = 0
+    bank_itau = 0
+    bank_iti = 0
+    bank_santander = 0
     if admin.bank_brasils.count > 0
         admin.bank_brasils.each do |bank|
             if bank.status === "activo"
                 bank_brasil += 1
+                if bank.bank === "Banco Do Brasil"
+                    bank_do_brasil += 1
+                elsif bank.bank === "Bradesco"
+                    bank_bradesco += 1
+                elsif bank.bank === "Caixa"
+                    bank_caixa += 1
+                elsif bank.bank === "Itau"
+                    bank_itau += 1
+                elsif bank.bank === "Iti"
+                    bank_iti += 1
+                elsif bank.bank === "Nubank"
+                    bank_nubank += 1
+                elsif bank.bank === "Santander"
+                    bank_santander += 1
+                end
             end
             
             if bank.country === current_user.country
@@ -263,6 +321,15 @@
         </div>
     </div>
 </div>
+<div class="row justify-content-center mt-2 d-none" id="listaMetodos">
+    <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+        <div class="alert alert-warning text-center" role="alert">
+            Metodos de pago disponibles en <span id="countryDest" class="font-weight-bold"></span> para recibir envio de remesas.<br>
+            <article id="metodosDisp" class="font-weight-bold"></article>
+        </div>
+    </div>
+</div>
+
 <div class="row justify-content-center mt-2 d-none" id="añadirAccount">
     <div class="col-12 col-sm-6 col-md-7 col-lg-6">
         <div class="alert alert-danger text-center" role="alert">
@@ -276,7 +343,7 @@
     <div class="col-12 col-sm-6 col-md-7 col-lg-6">
         <h5 class="text-primary text-center">2.- Cuenta Credito <i class="fas fa-info-circle" onclick="mostrarInfo('infoCuentaDestino')"></i></h5>    
         <div class="alert alert-info d-none" id="infoCuentaDestino" role="alert">
-                Elige la cuenta de <span id="spanPaisDestino"></span> donde deseas que sea acreditado el envio de tus remesas
+                Elige la cuenta de <span id="spanPaisDestino"></span> donde deseas que sea acreditado el envio de tus remesas. En esta lista solo apareceran los metodos de pago que hayas registrado y a los que la empresa puede hacer envios en ese pais, por ello, si en esta lista no aparece un metodo de pago que tienes registrado es porque no estan disponibles los envios a esa cuenta por el momento.
         </div>
         <div class="contenedor">     
             <div class="selectbox">
@@ -378,9 +445,230 @@
 
 <%end%>
 
-
 <script src="/js/vistas/script-form-for-campos.js"></script>
 <script>
+<%
+    #BANCOS ESTANDARES
+    bank_argentina = 0
+    bank_brubank = 0
+    bank_galicia = 0
+    
+    bank_colombia = 0
+
+    bank_chile = 0
+
+    bank_ecuador = 0
+
+    bank_españa = 0
+
+    bank_panama = 0
+    bank_bankia = 0
+    bank_santander_pan = 0
+
+    bank_peru = 0
+    bank_bcp = 0
+    bank_escotia_bank = 0
+
+    bank_venezuela = 0
+    bank_bod = 0
+    bank_mercantil = 0
+    bank_vzla = 0
+    bank_banesco = 0
+
+    accounts_admin_from_country_user = 0
+
+    if admin.banks.count > 0
+        admin.banks.each do |bank|
+            #BANCOS DEL PAIS DESTINO DEL USUARIO
+            case bank.country
+            when "Argentina"
+                if bank.status === "activo"
+                    bank_argentina += 1
+                    if bank.banco === "Brubank"
+                        bank_brubank += 1
+                    elsif bank.banco === "Galicia"
+                        bank_galicia += 1
+                    end
+                end
+            when "Colombia"
+                if bank.status === "activo"
+                    bank_colombia += 1
+                end
+            when "Chile"
+                if bank.status === "activo"
+                    bank_chile += 1
+                end 
+            when "Ecuador"
+                if bank.status === "activo"
+                    bank_ecuador += 1
+                end  
+            when "España"
+                if bank.status === "activo"
+                    bank_españa += 1
+                    if bank.banco === "Bankia"
+                        bank_bankia += 1
+                    elsif bank.banco === "Santander"
+                        bank_santander_pan += 1
+                    end
+                end
+            when "Panama"
+                if bank.status === "activo"
+                    bank_panama += 1
+                end 
+            when "Peru"
+                if bank.status === "activo"
+                    bank_peru += 1
+                    if bank.banco === "Banco BCP"
+                        bank_bcp += 1
+                    elsif bank.banco === "Escotia Bank"
+                        bank_escotia_bank += 1
+                    end
+                end
+            when "Venezuela"
+                if bank.status === "activo"
+                    bank_venezuela += 1
+                    if bank.banco === "B.O.D"
+                        bank_bod += 1
+                    elsif bank.banco === "Banco Mercantil"
+                        bank_mercantil += 1
+                    elsif bank.banco === "Banco De Venezuela"
+                        bank_vzla += 1
+                    elsif bank.banco === "Banco Banesco"
+                        bank_banesco += 1
+                    end
+                end                      
+            end
+            
+            #BANCOS DEL PAIS ORIGEN DEL USUARIO
+            if bank.country === current_user.country
+                if bank.status === "activo"
+                    accounts_admin_from_country_user += 1
+                end  
+            end
+        end
+    end
+
+    #BANCOS, MONEDEROS Y PAGO MOVIL DE BRASIL
+    bank_brasil = 0
+    bank_do_brasil = 0
+    bank_bradesco = 0
+    bank_caixa = 0
+    bank_itau = 0
+    bank_iti = 0
+    bank_nubank = 0
+    bank_santander = 0
+    if admin.bank_brasils.count > 0
+        admin.bank_brasils.each do |bank|
+            if bank.status === "activo"
+                bank_brasil += 1
+                if bank.bank === "Banco Do Brasil"
+                    bank_do_brasil += 1
+                elsif bank.bank === "Bradesco"
+                    bank_bradesco += 1
+                elsif bank.bank === "Caixa"
+                    bank_caixa += 1
+                elsif bank.bank === "Itau"
+                    bank_itau += 1
+                elsif bank.bank === "Iti"
+                    bank_iti += 1
+                elsif bank.bank === "Nubank"
+                    bank_nubank += 1
+                elsif bank.bank === "Santander"
+                    bank_santander += 1
+                end
+            end
+            
+            if bank.country === current_user.country
+                if bank.status === "activo"
+                    accounts_admin_from_country_user += 1
+                end  
+            end
+        end
+    end
+
+    wallet_brasil = 0
+    wallet_usa = 0
+    if admin.wallets.count > 0
+        admin.wallets.each do |wallet|
+            if wallet.wallet_name === "Pix"
+                if wallet.status === "activo"
+                    wallet_brasil += 1
+                end
+
+                if wallet.country === current_user.country
+                    if wallet.status === "activo"
+                        accounts_admin_from_country_user += 1
+                    end  
+                end
+            end
+            if wallet.wallet_name === "Zelle"
+                if wallet.status === "activo"
+                    wallet_usa += 1
+                end
+
+                if wallet.country === current_user.country
+                    if wallet.status === "activo"
+                        accounts_admin_from_country_user += 1
+                    end  
+                end
+            end
+        end
+    end
+
+    wallet_with_user_brasil = 0
+    if admin.wallet_with_users.count > 0
+        admin.wallet_with_users.each do |wallet|
+            if wallet.status === "activo"
+                wallet_with_user_brasil += 1
+            end
+
+            if wallet.country === current_user.country
+                if wallet.status === "activo"
+                    accounts_admin_from_country_user += 1
+                end  
+            end
+        end
+    end
+
+    digital_payments = 0
+    if admin.digital_payments.count > 0
+        admin.digital_payments.each do |payment|
+            if payment.status === "activo"
+                digital_payments += 1
+            end
+
+            if payment.country === current_user.country
+                if payment.status === "activo"
+                    accounts_admin_from_country_user += 1
+                end  
+            end
+        end
+    end
+
+    mobile_payments = 0
+    if admin.mobile_payments.count > 0
+        admin.mobile_payments.each do |payment|
+            if payment.status === "activo"
+                mobile_payments += 1
+            end
+
+            if payment.country === current_user.country
+                if payment.status === "activo"
+                    accounts_admin_from_country_user += 1
+                end  
+            end
+        end
+    end
+
+    #CUENTAS DEL ADMIN EN BRASIL
+    accounts_brasil = bank_brasil + wallet_brasil + wallet_with_user_brasil
+
+    #CUENTAS DEL ADMIN EN COLOMBIA
+    accounts_colombia = bank_colombia + digital_payments
+
+    #CUENTAS DEL ADMIN EN VENEZUELA
+    accounts_venezuela = bank_venezuela + mobile_payments
+%>  
     //VARIABLES GLOBALES ///////////////////////////////////////////////////////////////////////////////////
     accountUserDestinity = document.getElementById("accountUserDestinity");
 
@@ -402,31 +690,195 @@
         cajaInfo.classList.toggle("d-none");
     }
 
+    function metodosDisp(country){
+        listaMetodos = document.getElementById("listaMetodos");
+        countryDest = document.getElementById("countryDest");
+        article = document.getElementById("metodosDisp");
+
+        countryDest.innerHTML = country;
+
+        optionsSpans = article.childNodes;
+
+        if (optionsSpans.length > 0){
+            limit = optionsSpans.length
+            for (i=0; i < limit; i++){
+                article.removeChild(optionsSpans[0]);   
+            }
+        }
+        function mostrarMetodoDisp(metodo){
+            
+            var span = document.createElement("span");
+            var content = document.createTextNode("* "+metodo);
+            var br = document.createElement("br");
+
+            span.appendChild(content);
+            article.appendChild(span);
+            article.appendChild(br);
+        }
+        switch (country){
+            case "Argentina":
+                
+                <%if bank_brubank > 0%>
+                    mostrarMetodoDisp("Banco Brubank");
+                <%end%>
+
+                <%if bank_galicia > 0%>
+                    mostrarMetodoDisp("Banco Galicia");
+                <%end%>
+                break;
+
+            case "Brasil":
+                
+                <%if bank_do_brasil > 0%>
+                    mostrarMetodoDisp("Banco Do Brasil");
+                <%end%>
+
+                <%if bank_bradesco > 0%>
+                    mostrarMetodoDisp("Bradesco");
+                <%end%>
+
+                <%if bank_caixa > 0%>
+                    mostrarMetodoDisp("Caixa");
+                <%end%>
+
+                <%if bank_itau > 0%>
+                    mostrarMetodoDisp("Itau");
+                <%end%>
+
+                <%if bank_iti > 0%>
+                    mostrarMetodoDisp("Ití");
+                <%end%>
+
+                <%if bank_nubank > 0%>
+                    mostrarMetodoDisp("Nubank");
+                <%end%>
+
+                <%if bank_santander > 0%>
+                    mostrarMetodoDisp("Santander");
+                <%end%>
+
+                <%if bank_santander > 0%>
+                    mostrarMetodoDisp("Santander");
+                <%end%>
+
+                <%if wallet_brasil > 0%>
+                    mostrarMetodoDisp("Pix");
+                <%end%>
+
+                <%if wallet_with_user_brasil > 0%>
+                    mostrarMetodoDisp("Pic Pay");
+                <%end%>
+                break;
+
+            case "Chile":
+                
+                <%if bank_chile > 0%>
+                    mostrarMetodoDisp("Banco Estado");
+                <%end%>
+                break;
+
+            case "Colombia":
+                
+                <%if bank_colombia > 0%>
+                    mostrarMetodoDisp("Bancolombia");
+                <%end%>
+
+                <%if digital_payments > 0%>
+                    mostrarMetodoDisp("Nequi");
+                <%end%>
+                break;
+            
+            case "Ecuador":
+                
+                <%if bank_ecuador > 0%>
+                    mostrarMetodoDisp("Banco Pichincha");
+                <%end%>
+                break;
+            
+            case "Panama":
+                
+                <%if bank_bankia > 0%>
+                    mostrarMetodoDisp("Bankia");
+                <%end%>
+
+                <%if bank_santander_pan > 0%>
+                    mostrarMetodoDisp("Santander");
+                <%end%>
+                break;
+            
+            case "Peru":
+                
+                <%if bank_bcp > 0%>
+                    mostrarMetodoDisp("Banco BCP");
+                <%end%>
+
+                <%if bank_escotia_bank > 0%>
+                    mostrarMetodoDisp("Escotia Bank");
+                <%end%>
+                break;
+            
+            case "USA":
+                
+                <%if wallet_usa > 0%>
+                    mostrarMetodoDisp("Zelle");
+                <%end%>
+
+                break;
+            
+            case "Venezuela":
+
+                <%if bank_vzla > 0%>
+                    mostrarMetodoDisp("Banco De Venezuela");
+                <%end%>
+
+                <%if bank_mercantil > 0%>
+                    mostrarMetodoDisp("Banco Mercantil");
+                <%end%>
+
+                <%if bank_bod > 0%>
+                    mostrarMetodoDisp("Banco B.O.D");
+                <%end%>
+
+                <%if bank_banesco > 0%>
+                    mostrarMetodoDisp("Banco Banesco");
+                <%end%>
+
+                <%if mobile_payments > 0%>
+                    mostrarMetodoDisp("Pago Movil");
+                <%end%>
+                break;
+        }
+
+        listaMetodos.classList.remove("d-none");
+        
+    }
+
     //FUNCIONES DEL SELECT PAIS
     spanCountry = document.getElementById("country");
     msjAñadirAccount = document.getElementById("añadirAccount");
+
     function sugerirAñadirAccount(country){
         
         spanCountry.innerHTML = country;
         msjAñadirAccount.classList.remove("d-none");
     }
-    //TERMINAR ESTO
+    
     function optionBanks(country){
-        <%if current_user.banks.count > 0%>    
-            var selectBox = document.getElementById("opcionesAccountUserDestino"),
-                account = 0;
+        
+        account = 0;
+        var selectBox = document.getElementById("opcionesAccountUserDestino");
+        options = selectBox.childNodes;
 
-            options = selectBox.childNodes;
-
-            if (options.length > 0){
-                limit = options.length
-                for (i=0; i < limit; i++){
-                    selectBox.removeChild(options[0]);   
-                }
+        if (options.length > 0){
+            limit = options.length
+            for (i=0; i < limit; i++){
+                selectBox.removeChild(options[0]);   
             }
+        }
+        <%if current_user.banks.count > 0%>    
             <%current_user.banks.each do |bank_user|%>
                 if ("<%=bank_user.country%>" === country){
-                    <%admin.banks.each do |bank_admin| %>
+                    <%admin.banks.each do |bank_admin| %>  
                         <%if bank_admin.status === "activo"%>
                             <%if bank_admin.banco === bank_user.banco%>
                                 //ENLACE
@@ -435,7 +887,7 @@
                                 enlace.setAttribute("id","banks-<%=bank_user.id%>");
                                 enlace.setAttribute("onclick","activarEnlace(event)");
                                 enlace.classList.add("opcion");
-
+                                
                                 //DIV PADRE
                                 var divPadre = document.createElement("div");
                                 divPadre.classList.add("contenido-opcion");
@@ -461,8 +913,9 @@
                                 divPadre.appendChild(divHijo);
                                 enlace.appendChild(divPadre);
                                 selectBox.appendChild(enlace);
-                                account += 1;
+                                
                             <%end%>
+                            account += 1;
                         <%end%>
                     <%end%>
                 }
@@ -472,6 +925,8 @@
     }
 
     function optionBanksBrasil(country){
+        account = 0;
+        
         var selectBox = document.getElementById("opcionesAccountUserDestino");
 
         options = selectBox.childNodes;
@@ -482,52 +937,57 @@
                 selectBox.removeChild(options[0]);   
             }
         }
-        <%current_user.bank_brasils.each do |bank_user|%>
-            if ("<%=bank_user.country%>" === country){
-                <%admin.bank_brasils.each do |bank_admin| %>
-                    <%if bank_admin.status === "activo"%>
-                        <%if bank_admin.bank === bank_user.bank%>
-                            //ENLACE
-                            var enlace = document.createElement("a");
-                            enlace.setAttribute("href","#");
-                            enlace.setAttribute("id","bank_brasils-<%=bank_user.id%>");
-                            enlace.setAttribute("onclick","activarEnlace(event)");
-                            enlace.classList.add("opcion");
+        <%if current_user.bank_brasils.count > 0%>  
+            <%current_user.bank_brasils.each do |bank_user|%>
+                if ("<%=bank_user.country%>" === country){
+                    <%admin.bank_brasils.each do |bank_admin| %>
+                        <%if bank_admin.status === "activo"%>
+                            <%if bank_admin.bank === bank_user.bank%>
+                                //ENLACE
+                                var enlace = document.createElement("a");
+                                enlace.setAttribute("href","#");
+                                enlace.setAttribute("id","bank_brasils-<%=bank_user.id%>");
+                                enlace.setAttribute("onclick","activarEnlace(event)");
+                                enlace.classList.add("opcion");
 
-                            //DIV PADRE
-                            var divPadre = document.createElement("div");
-                            divPadre.classList.add("contenido-opcion");
-                            
-                            //IMAGEN
-                            var img = document.createElement("img");
-                            img.setAttribute("src","/img/bancos/<%=bank_user.bank%>.png");
+                                //DIV PADRE
+                                var divPadre = document.createElement("div");
+                                divPadre.classList.add("contenido-opcion");
+                                
+                                //IMAGEN
+                                var img = document.createElement("img");
+                                img.setAttribute("src","/img/bancos/<%=bank_user.bank%>.png");
 
-                            //DIV HIJO
-                            var divHijo = document.createElement("div");
-                            divHijo.classList.add("textos");
+                                //DIV HIJO
+                                var divHijo = document.createElement("div");
+                                divHijo.classList.add("textos");
 
-                            //H1
-                            var h2 = document.createElement("h2");
-                            h2.classList.add("titulo","tam-h2");
-                            <%part1 = bank_user.number_account[0, 4]%>
-                            <%part2 = bank_user.number_account[-4,4]%>
-                            var content = document.createTextNode("<%=part1%>****<%=part2%>");
-                            
-                            h2.appendChild(content);
-                            divHijo.appendChild(h2);
-                            divPadre.appendChild(img);
-                            divPadre.appendChild(divHijo);
-                            enlace.appendChild(divPadre);
-                            selectBox.appendChild(enlace);
+                                //H1
+                                var h2 = document.createElement("h2");
+                                h2.classList.add("titulo","tam-h2");
+                                <%part1 = bank_user.number_account[0, 4]%>
+                                <%part2 = bank_user.number_account[-4,4]%>
+                                var content = document.createTextNode("<%=part1%>****<%=part2%>");
+                                
+                                h2.appendChild(content);
+                                divHijo.appendChild(h2);
+                                divPadre.appendChild(img);
+                                divPadre.appendChild(divHijo);
+                                enlace.appendChild(divPadre);
+                                selectBox.appendChild(enlace);
+                                account += 1;
+                            <%end%>
                         <%end%>
                     <%end%>
-                <%end%>
-            }
+                }
+            <%end%>
         <%end%>
-       return 1;
+       return account;
     }
 
     function optionWallets(country){
+        account = 0;
+
         var selectBox = document.getElementById("opcionesAccountUserDestino");
 
         if (country === "USA"){
@@ -540,55 +1000,57 @@
                 }
             }
         }
-        
-        <%current_user.wallets.each do |wallet_user|%>
-            if ("<%=wallet_user.country%>" === country){
-                <%admin.wallets.each do |wallet_admin| %>
-                    <%if wallet_admin.status === "activo"%>
-                        <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
-                            //ENLACE
-                            var enlace = document.createElement("a");
-                            enlace.setAttribute("href","#");
-                            enlace.setAttribute("id","wallets-<%=wallet_user.id%>");
-                            enlace.setAttribute("onclick","activarEnlace(event)");
-                            enlace.classList.add("opcion");
+        <%if current_user.wallets.count > 0%>    
+            <%current_user.wallets.each do |wallet_user|%>
+                if ("<%=wallet_user.country%>" === country){
+                    <%admin.wallets.each do |wallet_admin| %>
+                        <%if wallet_admin.status === "activo"%>
+                            <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
+                                //ENLACE
+                                var enlace = document.createElement("a");
+                                enlace.setAttribute("href","#");
+                                enlace.setAttribute("id","wallets-<%=wallet_user.id%>");
+                                enlace.setAttribute("onclick","activarEnlace(event)");
+                                enlace.classList.add("opcion");
 
-                            //DIV PADRE
-                            var divPadre = document.createElement("div");
-                            divPadre.classList.add("contenido-opcion");
-                            
-                            //IMAGEN
-                            var img = document.createElement("img");
-                            img.setAttribute("src","/img/wallets/<%=wallet_user.wallet_name%>.png");
+                                //DIV PADRE
+                                var divPadre = document.createElement("div");
+                                divPadre.classList.add("contenido-opcion");
+                                
+                                //IMAGEN
+                                var img = document.createElement("img");
+                                img.setAttribute("src","/img/wallets/<%=wallet_user.wallet_name%>.png");
 
-                            //DIV HIJO
-                            var divHijo = document.createElement("div");
-                            divHijo.classList.add("textos");
+                                //DIV HIJO
+                                var divHijo = document.createElement("div");
+                                divHijo.classList.add("textos");
 
-                            //H1
-                            var h2 = document.createElement("h2");
-                            h2.classList.add("titulo","tam-h2");
-                            <%part1 = wallet_user.email[0, 4]%>
-                            <%part2 = wallet_user.email[-8,8]%>
-                            var content = document.createTextNode("<%=part1%>****<%=part2%>");
-                            
-                            h2.appendChild(content);
-                            divHijo.appendChild(h2);
-                            divPadre.appendChild(img);
-                            divPadre.appendChild(divHijo);
-                            enlace.appendChild(divPadre);
-                            selectBox.appendChild(enlace);
+                                //H1
+                                var h2 = document.createElement("h2");
+                                h2.classList.add("titulo","tam-h2");
+                                <%part1 = wallet_user.email[0, 4]%>
+                                <%part2 = wallet_user.email[-8,8]%>
+                                var content = document.createTextNode("<%=part1%>****<%=part2%>");
+                                
+                                h2.appendChild(content);
+                                divHijo.appendChild(h2);
+                                divPadre.appendChild(img);
+                                divPadre.appendChild(divHijo);
+                                enlace.appendChild(divPadre);
+                                selectBox.appendChild(enlace);
+                                account += 1;
+                            <%end%>
                         <%end%>
                     <%end%>
-                <%end%>
-            }
+                }
+            <%end%>
         <%end%>
-       return 1; 
+        return account; 
     }
 
     function optionWalletsWithUser(country){
         var selectBox = document.getElementById("opcionesAccountUserDestino");
-        
+        account = 0;
         if (country === "yumanyi"){
             options = selectBox.childNodes;
 
@@ -599,119 +1061,117 @@
                 }
             }
         }
-        
-        <%current_user.wallet_with_users.each do |wallet_user|%>
-            if ("<%=wallet_user.country%>" === country){
-                <%admin.wallet_with_users.each do |wallet_admin| %>
-                    <%if wallet_admin.status === "activo"%>
-                        <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
-                            //ENLACE
-                            var enlace = document.createElement("a");
-                            enlace.setAttribute("href","#");
-                            enlace.setAttribute("id","wallet_with_users-<%=wallet_user.id%>");
-                            enlace.setAttribute("onclick","activarEnlace(event)");
-                            enlace.classList.add("opcion");
+        <%if current_user.wallet_with_users.count > 0%>    
+            <%current_user.wallet_with_users.each do |wallet_user|%>
+                if ("<%=wallet_user.country%>" === country){
+                    <%admin.wallet_with_users.each do |wallet_admin| %>
+                        <%if wallet_admin.status === "activo"%>
+                            <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
+                                //ENLACE
+                                var enlace = document.createElement("a");
+                                enlace.setAttribute("href","#");
+                                enlace.setAttribute("id","wallet_with_users-<%=wallet_user.id%>");
+                                enlace.setAttribute("onclick","activarEnlace(event)");
+                                enlace.classList.add("opcion");
 
-                            //DIV PADRE
-                            var divPadre = document.createElement("div");
-                            divPadre.classList.add("contenido-opcion");
-                            
-                            //IMAGEN
-                            var img = document.createElement("img");
-                            img.setAttribute("src","/img/wallets/<%=wallet_user.wallet_name%>.png");
+                                //DIV PADRE
+                                var divPadre = document.createElement("div");
+                                divPadre.classList.add("contenido-opcion");
+                                
+                                //IMAGEN
+                                var img = document.createElement("img");
+                                img.setAttribute("src","/img/wallets/<%=wallet_user.wallet_name%>.png");
 
-                            //DIV HIJO
-                            var divHijo = document.createElement("div");
-                            divHijo.classList.add("textos");
+                                //DIV HIJO
+                                var divHijo = document.createElement("div");
+                                divHijo.classList.add("textos");
 
-                            //H1
-                            var h2 = document.createElement("h2");
-                            h2.classList.add("titulo","tam-h2");
-                            <%part1 = wallet_user.usuario[0, 3]%>
-                            <%part2 = wallet_user.usuario[-3,3]%>
-                            var content = document.createTextNode("<%=part1%>****<%=part2%>");
-                            
-                            h2.appendChild(content);
-                            divHijo.appendChild(h2);
-                            divPadre.appendChild(img);
-                            divPadre.appendChild(divHijo);
-                            enlace.appendChild(divPadre);
-                            selectBox.appendChild(enlace);
+                                //H1
+                                var h2 = document.createElement("h2");
+                                h2.classList.add("titulo","tam-h2");
+                                <%part1 = wallet_user.usuario[0, 3]%>
+                                <%part2 = wallet_user.usuario[-3,3]%>
+                                var content = document.createTextNode("<%=part1%>****<%=part2%>");
+                                
+                                h2.appendChild(content);
+                                divHijo.appendChild(h2);
+                                divPadre.appendChild(img);
+                                divPadre.appendChild(divHijo);
+                                enlace.appendChild(divPadre);
+                                selectBox.appendChild(enlace);
+                                account += 1;
+                            <%end%>
                         <%end%>
                     <%end%>
-                <%end%>
-            }
+                }
+            <%end%>
         <%end%>
-       return 1; 
+        return account; 
         
     }
 
     function optionDigitalPayments(country){
         var selectBox = document.getElementById("opcionesAccountUserDestino");
+        account = 0;
 
-        <%current_user.digital_payments.each do |payment_user|%>
-            if ("<%=payment_user.country%>" === country){
-                <%admin.digital_payments.each do |payment_admin| %>
-                    <%if payment_admin.status === "activo"%>
-                        <%if payment_admin.payment_method === payment_user.payment_method%>
-                            //ENLACE
-                            var enlace = document.createElement("a");
-                            enlace.setAttribute("href","#");
-                            enlace.setAttribute("id","digital_payments-<%=payment_user.id%>");
-                            enlace.setAttribute("onclick","activarEnlace(event)");
-                            enlace.classList.add("opcion");
+        <%if current_user.digital_payments.count > 0%>    
+            <%current_user.digital_payments.each do |payment_user|%>
+                if ("<%=payment_user.country%>" === country){
+                    <%admin.digital_payments.each do |payment_admin| %>
+                        <%if payment_admin.status === "activo"%>
+                            <%if payment_admin.payment_method === payment_user.payment_method%>
+                                //ENLACE
+                                var enlace = document.createElement("a");
+                                enlace.setAttribute("href","#");
+                                enlace.setAttribute("id","digital_payments-<%=payment_user.id%>");
+                                enlace.setAttribute("onclick","activarEnlace(event)");
+                                enlace.classList.add("opcion");
 
-                            //DIV PADRE
-                            var divPadre = document.createElement("div");
-                            divPadre.classList.add("contenido-opcion");
-                            
-                            //IMAGEN
-                            var img = document.createElement("img");
-                            img.setAttribute("src","/img/wallets/<%=payment_user.payment_method%>.png");
+                                //DIV PADRE
+                                var divPadre = document.createElement("div");
+                                divPadre.classList.add("contenido-opcion");
+                                
+                                //IMAGEN
+                                var img = document.createElement("img");
+                                img.setAttribute("src","/img/wallets/<%=payment_user.payment_method%>.png");
 
-                            //DIV HIJO
-                            var divHijo = document.createElement("div");
-                            divHijo.classList.add("textos");
+                                //DIV HIJO
+                                var divHijo = document.createElement("div");
+                                divHijo.classList.add("textos");
 
-                            //H1
-                            var h2 = document.createElement("h2");
-                            h2.classList.add("titulo","tam-h2");
-                            <%part1 = payment_user.number_phone[0, 3]%>
-                            <%part2 = payment_user.number_phone[-3,3]%>
-                            var content = document.createTextNode("<%=part1%>****<%=part2%>");
-                            
-                            h2.appendChild(content);
-                            divHijo.appendChild(h2);
-                            divPadre.appendChild(img);
-                            divPadre.appendChild(divHijo);
-                            enlace.appendChild(divPadre);
-                            selectBox.appendChild(enlace);
+                                //H1
+                                var h2 = document.createElement("h2");
+                                h2.classList.add("titulo","tam-h2");
+                                <%part1 = payment_user.number_phone[0, 3]%>
+                                <%part2 = payment_user.number_phone[-3,3]%>
+                                var content = document.createTextNode("<%=part1%>****<%=part2%>");
+                                
+                                h2.appendChild(content);
+                                divHijo.appendChild(h2);
+                                divPadre.appendChild(img);
+                                divPadre.appendChild(divHijo);
+                                enlace.appendChild(divPadre);
+                                selectBox.appendChild(enlace);
+                                account += 1;
+                            <%end%>
                         <%end%>
                     <%end%>
-                <%end%>
-            }
+                }
+            <%end%>
         <%end%>
-       return 1;
+        return account;
     }
     
     function optionMobilePayments(country){
         var selectBox = document.getElementById("opcionesAccountUserDestino");
-
-        /*
-        options = selectBox.childNodes;
-
-        if (options.length > 0){
-            limit = options.length
-            for (i=0; i < limit; i++){
-                selectBox.removeChild(options[0]);   
-            }
-        }*/
-
-        <%current_user.mobile_payments.each do |payment_user|%>
-            if ("<%=payment_user.country%>" === country){
-                <%admin.mobile_payments.each do |payment_admin| %>
-                    <%if payment_admin.status === "activo"%>
-                        <%if payment_admin.bank === payment_user.bank%>
+        account = 0;
+        
+        <%if current_user.mobile_payments.count > 0%>    
+            <%current_user.mobile_payments.each do |payment_user|%>
+                if ("<%=payment_user.country%>" === country){
+                    <%admin.mobile_payments.each do |payment_admin| %>
+                        <%if payment_admin.status === "activo"%>
+                            
                             //ENLACE
                             var enlace = document.createElement("a");
                             enlace.setAttribute("href","#");
@@ -744,12 +1204,14 @@
                             divPadre.appendChild(divHijo);
                             enlace.appendChild(divPadre);
                             selectBox.appendChild(enlace);
+                            account += 1;
+                            
                         <%end%>
                     <%end%>
-                <%end%>
-            }
+                }
+            <%end%>
         <%end%>
-       return 1;
+        return account;
     }
 
     function habilitarAccountDestinity(country) {
@@ -768,85 +1230,59 @@
                 break;
 
             case "Brasil":
-                <%if current_user.bank_brasils.count > 0%>         
-                    bankSpecialBrasil = optionBanksBrasil(country);
-                <%end%>
-
-                <%if current_user.wallets.count > 0%>
-                     wallet = optionWallets(country);
-                <%end%> 
-            
-                <%if current_user.wallet_with_users.count > 0%>
-                     wallet_with_user = optionWalletsWithUser(country);
-                <%end%> 
-
+                      
+                bankSpecialBrasil = optionBanksBrasil(country);   
+                wallet = optionWallets(country);
+                wallet_with_user = optionWalletsWithUser(country);
                 existMetodosUser = bankSpecialBrasil + wallet + wallet_with_user;
                 break;
 
             case "Chile":         
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>    
-                existMetodosUser = bankStandar;
-                
+                      
+                bankStandar = optionBanks(country); 
+                existMetodosUser = bankStandar;   
                 break;
             
             case "Colombia":         
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>    
-
-                <%if current_user.digital_payments.count > 0%>         
-                    paymentDigital = optionDigitalPayments(country);
-                <%end%>    
-            
+                       
+                bankStandar = optionBanks(country);   
+                paymentDigital = optionDigitalPayments(country);
                 existMetodosUser = bankStandar + paymentDigital;
                 break;
 
             case "Ecuador":         
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>    
+                     
+                bankStandar = optionBanks(country);
                 existMetodosUser = bankStandar;
                 break;
 
             case "España":         
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>    
+                      
+                bankStandar = optionBanks(country);
                 existMetodosUser = bankStandar;
                 break;
 
             case "Panama":         
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>    
+                bankStandar = optionBanks(country);
                 existMetodosUser = bankStandar;
                 break;
 
             case "Peru":         
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>    
+                       
+                bankStandar = optionBanks(country);   
                 existMetodosUser = bankStandar;
                 break;
 
             case "USA":         
-                <%if current_user.wallets.count > 0%>
-                     wallet = optionWallets(country);
-                <%end%>    
+                
+                wallet = optionWallets(country);
                 existMetodosUser = wallet;
                 break;
 
             case "Venezuela":
                 
-                <%if current_user.banks.count > 0%>         
-                    bankStandar = optionBanks(country);
-                <%end%>
-                
-                <%if current_user.mobile_payments.count > 0%>         
-                    mobilePayment = optionMobilePayments(country);
-                <%end%> 
+                bankStandar = optionBanks(country);   
+                mobilePayment = optionMobilePayments(country);
                 existMetodosUser = bankStandar + mobilePayment; 
                 break;
         
@@ -872,6 +1308,8 @@
         caja4.classList.add("d-none");
         caja5.classList.add("d-none");
 
+        metodosDisp(country);
+
         if (existMetodosUser > 0){
             spanInfoPaisDestino = document.getElementById("spanPaisDestino");
             spanInfoPaisDestino.innerHTML = country;
@@ -884,7 +1322,7 @@
         }
         
     }
-    //SELECT BOX PAIS/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //SELECT BOX PAIS//////////////////////////////////////////////////////////////////////////////////
     function activarFuncionSelectBoxPaisDestinity(){
         
         contenidoSelectPaisDestino = document.querySelector('#selectPaisDestino .contenido-select');

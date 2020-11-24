@@ -5,14 +5,16 @@
             
 <div class="row justify-content-center mt-3">
     <div class="col-6 p-3 fondo" style="border-radius:12px;">
-        <nav>
-            <div class="nav nav-tabs text-center" id="nav-tab" role="tablist">
-                <a class="nav-link active d-inline-block w-50" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Origen</a>
-                <a class="nav-link d-inline-block w-50" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Destino</a>
-            </div>
-        </nav>
-        <div class="tab-content mt-3" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
+            <li class="nav-item d-inline-block w-50" role="presentation">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Origen</a>
+            </li>
+            <li class="nav-item d-inline-block w-50" role="presentation">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Destino</a>
+            </li>
+        </ul>
+        <div class="tab-content mt-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <h5>Detalles de la transaccion<span class="float-right h5 <%if @minutos < 5%>text-danger<%else%>text-success<%end%>" id="td-time2"><i class="fas fa-history mr-1"></i><span id="minuto2"><%=@minutos%></span>:<span id="segundo2"><%=@segundos.to_s.rjust(2, '0')%></span></h5>
                 
                 <div class="mt-5">
@@ -149,7 +151,7 @@
                     
                 </div>
             </div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <h5>Detalles del envio</h5>
                 
                 <div class="mt-5">
