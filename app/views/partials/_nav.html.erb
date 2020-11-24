@@ -5,7 +5,10 @@
     </div>
     <div class="menu">
         <%if current_user.is_normal_user?%>
+
+        <%unless current_user.is_admin?%>
         <a href="/transactions/new" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"><i class="fas fa-comments-dollar lead mr-1"></i> Enviar Dinero</a>
+        <%end%>
 
         <a href="/dhasboard" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"><i class="fas fa-calculator lead mr-2"></i> Calcular Envio</a>
 
@@ -13,9 +16,12 @@
 
         <a href="/transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"><i class="fas fa-file-invoice lead mr-3"></i>Transacciones Realizadas</a>
 
-        <a href="/status_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0" rel="external"><i class="fas fa-tasks lead mr-2"></i> Estado de Transacciones</a>
+        <%unless current_user.is_admin?%>
+            <a href="/status_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0" rel="external"><i class="fas fa-tasks lead mr-2"></i> Estado de Transacciones</a>
+        <%else%>
+            <a href="/pending_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0" rel="external"><i class="fas fa-tasks lead mr-2"></i> Transacciones Pendientes</a>
+        <%end%>
         
-
         <!--
         <a href="#" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"> <i class="icon ion-md-settings lead mr-2"></i> Configuración</a>
         -->

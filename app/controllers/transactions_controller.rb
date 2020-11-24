@@ -1,5 +1,6 @@
 class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:pending]
 
   # GET /transactions
   # GET /transactions.json
@@ -39,6 +40,13 @@ class TransactionsController < ApplicationController
   end
   # GET /transactions/1
   # GET /transactions/1.json
+
+  def pending
+    @transactions = Transaction.all
+
+    rates = Rate.all
+  end
+
   def show
   end
 

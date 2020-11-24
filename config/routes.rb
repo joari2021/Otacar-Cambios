@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'register_succesfull' => "register#index"
   resources :transactions
   get "/status_transactions", to: "transactions#status"
+  get "/pending_transactions", to: "transactions#pending"
   resources :rates
   
   
