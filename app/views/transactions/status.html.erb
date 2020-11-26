@@ -1,6 +1,7 @@
-
+<%=render 'partials/name-and-cod-of-banks'%>
 <div class="col-12">
     <h4>Estado de mis transacciones</h4>
+    <!--TRANSACCION PENDIENTE-->
     <%if @transaction_pendiente%>
     <div class="table-responsive mt-5">
         <h5 class="text-center">Pagos pendientes</h5>
@@ -63,12 +64,9 @@
                                 if payment.id.to_s === method[1]
                                     part1 = payment.number_phone[0, 3]
                                     part2 = payment.number_phone[-4,4]
-                                    part3 = payment.document[0,2]
-                                    part4 = payment.document[-2,2]
                                     %>
                                     <td class="align-middle"><span class="">N/A</span></td>
-                                    <td class="align-middle"><span class=""><%=part3 << "***" << part4%></span></td>
-                                    <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=payment.bank%>" title="<%=payment.bank%>"/></td>
+                                    <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
                                     <td class="align-middle"><%=part1 << "****" << part2%></td>
                                 <%end%>
                             <%end%>
@@ -112,6 +110,8 @@
         </table>
     </div>
     <%end%>
+    
+    <!--TRANSACCIONES EN PROCESO-->
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -141,19 +141,8 @@
                         <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid rounded-circle avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
                         <%method = transaction.account_destinity_usuario.split("-")%>
 
-                        <%if transaction.country_destinity === "Argentina" || transaction.country_destinity === "Colombia" || transaction.country_destinity === "Ecuador" || transaction.country_destinity === "Panama" || transaction.country_destinity === "USA"    
-                            moneda_destinity = "$"
-                        elsif transaction.country_destinity === "Brasil"
-                            moneda_destinity = "R$"
-                        elsif transaction.country_destinity === "Chile"
-                            moneda_destinity = "CLP"
-                        elsif transaction.country_destinity === "España"
-                            moneda_destinity = "€"
-                        elsif transaction.country_destinity === "Peru"
-                            moneda_destinity = "S/"
-                        elsif transaction.country_destinity === "Venezuela"
-                            moneda_destinity = "Bs"  
-                        end%>
+                        <%=render 'detectar-moneda', {country: transaction.country_destinity}%>
+                        
                         <%case method[0]
                             when "banks"
                                 current_user.banks.each do |bank|
@@ -163,6 +152,7 @@
                                         part2 = bank.number_account[-4,4]
                                         part3 = bank.identidy[0, 3]
                                         part4 = bank.identidy[-2,2]%>
+                                        
                                         <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                         <td class="align-middle"><span class=""><%=bank.type_document%><%=part3 << "***" << part4%></span></td>
                                         <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
@@ -205,9 +195,10 @@
                                         part3 = payment.document[0,2]
                                         part4 = payment.document[-2,2]
                                         %>
+                                        
                                         <td class="align-middle"><span class="">N/A</span></td>
                                         <td class="align-middle"><span class=""><%=part3 << "***" << part4%></span></td>
-                                        <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=payment.bank%>" title="<%=payment.bank%>"/></td>
+                                        <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
                                         <td class="align-middle"><%=part1 << "****" << part2%></td>
                                     <%end%>
                                 <%end%>
@@ -225,12 +216,13 @@
                                     <%end%>
                                 <%end%>
                             <%when "wallet_with_users"
-                                current_user.wallets.each do |wallet|
+                                current_user.wallet_with_users.each do |wallet|
                                     
                                     if wallet.id.to_s === method[1]
                                         part1 = wallet.usuario[0, 3]
                                         part2 = wallet.usuario[-2,2]
                                         %>
+                                        <script>console.log("<%=method[0]%>")</script>
                                         <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
                                         <td class="align-middle"><span class="">N/A</span></td>
                                         <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
@@ -238,7 +230,7 @@
                                     <%end%>
                                 <%end%>
                         <%end%>
-                        <td class="align-middle"><%=moneda_destinity%> <%= number_with_precision(transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
+                        <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
 
                         <%if transaction.status === "por confirmar"
                             badge = "badge-secondary"
@@ -246,10 +238,15 @@
                             badge = "badge-info"
                         elsif transaction.status === "realizada"
                             badge = "badge-success"
+                        elsif transaction.status === "rechazada"
+                            badge = "badge-warning"
                         end%>
 
                         <%if transaction.status === "en proceso"%>
                             <td class="align-middle"><span class="badge badge-pill badge-danger">vencida</span></td>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td>
+                        <%elsif transaction.status === "rechazada"%>
+                            <td class="align-middle"><span class="badge badge-pill badge-warning"><%=transaction.status%></span></td>
                             <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td>
                         <%else%>
                             <td class="align-middle"><span class="badge badge-pill <%=badge%>"><%=transaction.status%></span></td>
@@ -258,7 +255,6 @@
                     </tr>
                     <%end%>
                 <%end%>
-
             </tbody>
         </table>
     </div>

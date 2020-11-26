@@ -53,6 +53,14 @@ li {
 input[type="checkbox"] {
   transform: scale(1.5);
 }
+
+.btn-copy-all{
+  background:  #069ef0;
+  color: white;
+  display: block;
+  margin: auto;
+}
+
 a.special-link {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);

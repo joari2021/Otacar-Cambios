@@ -1,0 +1,102 @@
+<%case method[0]
+    when "banks"
+        user_account.banks.each do |bank|
+            
+            if bank.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                <label class="text-primary">Nro Documento</label><br>
+                <%=bank.type_document%><span id="documento"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+
+                <label class="text-primary">Banco</label><br>
+                <span id="banco"><%=bank.banco%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                
+                <label class="text-primary">Tipo de cuenta</label><br>
+                <span id="type-account"><%=bank.type_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('type-account','Tipo de cuenta')"></i><br><hr>
+
+                <label class="text-primary">Numero de cuenta</label><br>
+                <span id="number-account"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account','Numero de cuenta')"></i><br><hr>
+
+            <%end%>
+        <%end%>
+    <%when "bank_brasils"
+        user_account.bank_brasils.each do |bank|
+            
+            if bank.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                <label class="text-primary">Nro Documento</label><br>
+                <span id="documento"><%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+
+                <label class="text-primary">Banco</label><br>
+                <span id="banco"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                
+                <label class="text-primary">Nro de agencia</label><br>
+                <span id="number-agency"><%=bank.number_agency%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-agency','Nro de agencia')"></i><br><hr>
+
+                <label class="text-primary">Numero de cuenta</label><br>
+                <span id="number-account"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account','Numero de cuenta')"></i><br><hr>
+            <%end%>
+        <%end%>
+    <%when "digital_payments"
+        user_account.digital_payments.each do |payment|
+            
+            if payment.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span id="titular"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                <label  class="text-primary">Pago digital</label><br>
+                <span id="payment-digital"><%=payment.payment_method%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('payment-digital','Pago digital')"></i><br><hr>
+
+                <label class="text-primary">Numero de telefono</label><br>
+                <span id="number-phone"><%=bank.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
+            <%end%>
+        <%end%>
+    <%when "mobile_payments"
+        user_account.mobile_payments.each do |payment|
+            
+            if payment.id.to_s === method[1]%>
+                <label class="text-primary">Nro Documento</label><br>
+                <span id="documento"><%=payment.document%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+
+                <label class="text-primary">Nombre del banco</label><br>
+                <span id="banco"><%=@bancos[payment.bank]%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+
+                <label class="text-primary">Codigo del banco</label><br>
+                <span id="banco"><%=payment.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+
+                <label class="text-primary">Numero de telefono</label><br>
+                <span id="number-phone"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
+            <%end%>
+        <%end%>
+    <%when "wallets"
+        user_account.wallets.each do |wallet|
+            
+            if wallet.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span id="titular"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                <label class="text-primary">Monedero</label><br>
+                <span id="monedero"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero','Monedero')"></i><br><hr>
+
+                <label class="text-primary">Correo Electronico</label><br>
+                <span id="email"><%=wallet.email%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('email','Correo Electrónico')"></i><br><hr>
+            <%end%>
+        <%end%>
+    <%when "wallet_with_users"
+        user_account.wallet_with_users.each do |wallet|
+            
+            if wallet.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span id="titular"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+
+                <label class="text-primary">Monedero</label><br>
+                <span id="monedero"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero','Monedero')"></i><br><hr>
+
+                <label class="text-primary">Correo Electronico</label><br>
+                <span id="usuario"><%=wallet.usuario%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('usuario','Usuario')"></i><br><hr>
+            <%end%>
+        <%end%>
+<%end%>

@@ -107,9 +107,11 @@ class TransactionsController < ApplicationController
       end
     end
 
-    unless @transaction_pendiente
-      respond_to do |format|
-        format.html { redirect_to status_transactions_path, alert: 'Su ultima transaccion creada ha vencido. Por favor cree una nueva.' }
+    unless current_user.is_admin?
+      unless @transaction_pendiente
+        respond_to do |format|
+          format.html { redirect_to status_transactions_path, alert: 'Su ultima transaccion creada ha vencido. Por favor cree una nueva.' }
+        end
       end
     end
   end
@@ -267,14 +269,34 @@ class TransactionsController < ApplicationController
         end
       end
     else
-      respond_to do |format|
-        if @transaction.update(transaction_params)
-          format.html { redirect_to @transaction, notice: 'Transaccion cancelada con exito.' }
-          format.json { render :show, status: :ok, location: @transaction }
+      if @transaction.status === "por confirmar"
+        @transaction.update(transaction_params_admin_edit)
+
+        if @transaction.motivo_rechazo === nil
+
+          respond_to do |format|
+            if @transaction.update(status:"envio en proceso")
+              format.html { redirect_to pending_transactions_path, notice: 'Transaccion confirmada con exito.' }
+              format.json { render :show, status: :ok, location: @transaction }
+            else
+              format.html { render :edit }
+              format.json { render json: @transaction.errors, status: :unprocessable_entity }
+            end
+          end
+
         else
-          format.html { render :edit }
-          format.json { render json: @transaction.errors, status: :unprocessable_entity }
+          respond_to do |format|
+            if @transaction.update(status:"rechazada")
+              format.html { redirect_to pending_transactions_path, notice: 'Transaccion rechazada con exito.' }
+              format.json { render :show, status: :ok, location: @transaction }
+            else
+              format.html { render :edit }
+              format.json { render json: @transaction.errors, status: :unprocessable_entity }
+            end
+          end
         end
+      else
+
       end
     end
   end
@@ -305,4 +327,7 @@ class TransactionsController < ApplicationController
       params.require(:transaction).permit(:status, :comprobante)
     end
 
+    def transaction_params_admin_edit
+      params.require(:transaction).permit(:motivo_rechazo)
+    end
 end

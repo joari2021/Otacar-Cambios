@@ -1,0 +1,105 @@
+<%#image_tag url_for(@transaction_pendiente.comprobante), style:"width:100%"%>
+<%case method[0]
+    when "banks"
+        user_account.banks.each do |bank|
+            
+            if bank.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
+
+                <label class="text-primary">Nro Documento</label><br>
+                <%=bank.type_document%><span id="document"><%=bank.identidy%></span><br><hr>
+
+                <label class="text-primary">Banco</label><br>
+                <span id="banco"><%=bank.banco%></span><br><hr>
+                
+                <label class="text-primary">Tipo de cuenta</label><br>
+                <span id="type-account"><%=bank.type_account%></span><br><hr>
+
+                <label class="text-primary">Numero de cuenta</label><br>
+                <span id="number-account"><%=bank.number_account%></span><br><hr>
+
+            <%end%>
+        <%end%>
+    <%when "bank_brasils"
+        user_account.bank_brasils.each do |bank|
+            
+            if bank.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
+
+                <label class="text-primary">Nro Documento</label><br>
+                <span id="document"><%=bank.cpf%></span><br><hr>
+
+                <label class="text-primary">Banco</label><br>
+                <span id="banco"><%=bank.bank%></span><br><hr>
+                
+                <label class="text-primary">Nro de Agencia</label><br>
+                <span id="type-account"><%=bank.number_agency%></span><br><hr>
+
+                <label class="text-primary">Numero de cuenta</label><br>
+                <span id="number-account"><%=bank.number_account%></span><br><hr>
+
+            <%end%>
+        <%end%>
+    <%when "digital_payments"
+        user_account.digital_payments.each do |payment|
+            
+            if payment.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><br><hr>
+
+                <label class="text-primary">Pago Digital</label><br>
+                <span><%=payment.payment_method%></span><br><hr>
+        
+                <label class="text-primary">Numero de telefono</label><br>
+                <span><%=payment.number_phone%></span><br><hr>
+            <%end%>
+        <%end%>
+    <%when "mobile_payments"
+        user_account.mobile_payments.each do |payment|
+            
+            if payment.id.to_s === method[1]%>
+
+                <label class="text-primary">Nombre del banco</label><br>
+                <span><%=@bancos[payment.bank]%></span><br><hr>
+
+                <label class="text-primary">Codigo del banco</label><br>
+                <span><%=payment.bank%></span><br><hr>
+
+                <label class="text-primary">Nro Documento</label><br>
+                <span><%=payment.document%></span><br><hr>
+        
+                <label class="text-primary">Numero de telefono</label><br>
+                <span><%=payment.number_phone%></span><br><hr>
+            <%end%>
+        <%end%>
+    <%when "wallets"
+        user_account.wallets.each do |wallet|
+            
+            if wallet.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><br><hr>
+
+                <label class="text-primary">Monedero</label><br>
+                <span><%=wallet.wallet_name%></span><br><hr>
+
+                <label class="text-primary">Correo Electronico</label><br>
+                <span><%=wallet.email%></span><br><hr>
+            <%end%>
+        <%end%>
+    <%when "wallet_with_users"
+        user_account.wallet_with_users.each do |wallet|
+            
+            if wallet.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><br><hr>
+
+                <label class="text-primary">Monedero</label><br>
+                <span><%=wallet.wallet_name%></span><br><hr>
+
+                <label class="text-primary">Usuario</label><br>
+                <span><%=wallet.usuario%></span><br><hr>
+            <%end%>
+        <%end%>
+<%end%>
