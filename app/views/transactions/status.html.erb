@@ -113,6 +113,7 @@
     
     <!--TRANSACCIONES EN PROCESO-->
     <div class="table-responsive">
+        <h5 class="text-center mt-4">Transacciones en proceso</h5>
         <table class="table">
             <thead>
                 <tr>
@@ -125,6 +126,7 @@
                 </tr>
             </thead>
             <tbody>
+                <%transaction_for_confirm = false%>
                 <%current_user.transactions.each do |transaction| %>
                     <%if  @transaction_pendiente%>
                         <%if  transaction.id != @transaction_pendiente.id%>
@@ -137,6 +139,7 @@
                     <%end%>
 
                     <%if view_transaction%>
+                    <%transaction_for_confirm = true%>
                     <tr class="shadow-sm">
                         <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid rounded-circle avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
                         <%method = transaction.account_destinity_usuario.split("-")%>
@@ -232,25 +235,40 @@
                         <%end%>
                         <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
 
+                        <%eliminar = false%>
                         <%if transaction.status === "por confirmar"
                             badge = "badge-secondary"
+                            text = "por confirmar"
+                            info = "Debes esperar que sea confirmado el pago que has realizado a la cuenta de Otacar Cambios."
+
                         elsif transaction.status === "envio en proceso"
                             badge = "badge-info"
+                            info = "Su pago fue confirmado con exito. En los proximos minutos le sera realizado el envio de sus remesas a la cuenta que eligio."
+
                         elsif transaction.status === "realizada"
                             badge = "badge-success"
+                            text = "realizada"
+                            info = "El envio de tus remesas ya fue procesado a la cuenta que elegiste. haz click en el icono de al lado para ver los detalles de la transacción junto con el comprobante del pago a dicha cuenta."
+
                         elsif transaction.status === "rechazada"
+                            text = "rechazada"
                             badge = "badge-warning"
+                            info = "La transacción fue rechazada por el siguiente motivo: #{transaction.motivo_rechazo}"
+                            eliminar = true; 
+                        elsif transaction.status === "en proceso"
+                            badge = "badge-danger"
+                            text = "vencida"
+                            info = "Ha vencido el tiempo para realizar el pago, si hiciste el pago pero no pudiste completar la transacción a tiempo, por favor, inicia una nueva transacción y envia el comprobante de pago a tiempo. Si al momento de iniciar la transacción encuentras que no tienes un metodo de pago que coincida con la lista de metodos de pago disponibles para recibir remesas en el pais al cual deseas enviarlas, por favor, comunicate con atencion al cliente de Otacar Cambios -cuyos datos de contacto y horarios de atención se muestran en Inicio- para la correspondiente solución del inconveniente."
+                            eliminar = true
                         end%>
 
-                        <%if transaction.status === "en proceso"%>
-                            <td class="align-middle"><span class="badge badge-pill badge-danger">vencida</span></td>
-                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td>
-                        <%elsif transaction.status === "rechazada"%>
-                            <td class="align-middle"><span class="badge badge-pill badge-warning"><%=transaction.status%></span></td>
-                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td>
+                        <td class="align-middle"><span role="button" class="badge badge-pill <%=badge%>" data-toggle="popover" data-placement="bottom" title="Información" data-content="<%=info%>"><%=text%></span></td>
+                        <%if eliminar%>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta transacción?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td>
+                        <%elsif transaction.status === "realizada"%>
+                            <td class="align-middle"><a href="/transactions/<%=transaction.id%>" class="badge badge-secondary" id="td-ver"><i class="far fa-eye"></i></a></td>
                         <%else%>
-                            <td class="align-middle"><span class="badge badge-pill <%=badge%>"><%=transaction.status%></span></td>
-                            <td class="align-middle"><span></span></td>
+                        <td class="align-middle"><span></span></td>
                         <%end%>
                     </tr>
                     <%end%>
@@ -258,9 +276,20 @@
             </tbody>
         </table>
     </div>
+    <%unless transaction_for_confirm%>
+        <div class="row justify-content-center mt-2">
+            <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+                <div class="alert alert-success text-center" role="alert">
+                    :) ... No tienes transacciones en proceso!!!<br>
+                </div>
+            </div>
+        </div>
+    <%end%>
 </div>
 <script>
-
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
     spanMin = document.getElementById("minuto");
     spanSeg = document.getElementById("segundo");
     tdTime = document.getElementById("td-time");

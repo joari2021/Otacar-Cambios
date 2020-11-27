@@ -1,6 +1,7 @@
 class Transaction < ApplicationRecord
     belongs_to :user
-    has_one_attached :comprobante
+    has_one_attached :comprobante_pago_otacar
+    has_one_attached :comprobante_pago_usuario
 
     def modify_monto_envio
         #VALIDAR CPF#

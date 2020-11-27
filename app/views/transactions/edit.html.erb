@@ -20,7 +20,7 @@
                     <h5>Detalles de la transaccion<span class="float-right h5 <%if @minutos < 5%>text-danger<%else%>text-success<%end%>" id="td-time2"><i class="fas fa-history mr-1"></i><span id="minuto2"><%=@minutos%></span>:<span id="segundo2"><%=@segundos.to_s.rjust(2, '0')%></span></h5>
                     
                     <div class="mt-5">
-                        <%#image_tag url_for(@transaction_pendiente.comprobante), style:"width:100%"%>
+                        
                         <%@method = @transaction_pendiente.account_destinity_admin.split("-")%>
                         <%= render 'detalle-account-for-copy', {transaction: @transaction_pendiente, user_account: @user_admin, method: @method} %>
                         
@@ -41,10 +41,10 @@
                             </div>
                             <% end %>
                         
-                            <div class="custom-file mb-3">
-                                <%=form.file_field :comprobante, class:"custom-file-input is-invalid", id:"validatedCustomFile"%>
-                                <label class="custom-file-label" for="validatedCustomFile">Comprobante de pago...</label>
-                                <div class="invalid-feedback">Solo puede subir un archivo en formato jpg, jpeg o png</div>
+                            <div class="custom-file mt-3">
+                                <%=form.file_field :comprobante_pago_otacar, class:"custom-file-input", id:"validatedComprobante", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                <label class="custom-file-label" id="name-archivo" for="validatedComprobante" data-browse="Elegir">Comprobante de pago...</label>
+                                <div class="invalid-feedback">Solo puedes subir un archivo en formato jpg, jpeg o png</div>
                             </div>
 
                             <div class="actions mt-4">
@@ -123,6 +123,12 @@
             intervalo2 = setInterval(restarSegundos2, 1000);
         }
         <%end%>
+
+        nameArchivo = document.getElementById("name-archivo");
+        $("#validatedComprobante").change(function(){
+            nameArchivo.innerHTML = this.files[0].name;
+            $("#button").prop("disabled", this.files.length == 0);
+        });
     </script>
 <%else%> <!--VISTA DE ADMINISTRADOR ----------------------------------------------------------------------------------------->
 
@@ -133,7 +139,7 @@
 
     <%if @transaction.status === "por confirmar"%> 
 
-        <div class="row justify-content-center mt-3">
+        <div class="row justify-content-center mt-3 mb-5">
             <div class="col-6 p-3 fondo" style="border-radius:12px;">
                 <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                     <li class="nav-item d-inline-block w-50" role="presentation">
@@ -157,7 +163,7 @@
                         <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
 
                         <label class="text-primary">Comprobante</label><br>
-                        <%=image_tag url_for(@transaction.comprobante), style:"width:100%"%>
+                        <%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%>
 
                         <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
                             <%if @transaction.errors.any?%>
@@ -173,7 +179,7 @@
                             <%end%>
             
                             <div class="actions mt-4">
-                                <%= form.submit "Confirmar", class:"btn btn-success"%>
+                                <%= form.submit "Confirmar", class:"btn btn-success", onclick:"borrarMotivo()"%>
 
                                 <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#staticBackdrop">
                                     Rechazar transacción
@@ -189,7 +195,7 @@
                                                 <div class="was-validated">
                                                     <div class="mt-3">
                                                         <label for="validationTextarea" class="text-primary">Motivo *</label>
-                                                        <textarea class="form-control is-invalid" id="validationTextarea" name="transaction[motivo_rechazo]"required></textarea>
+                                                        <textarea class="form-control" id="validationTextarea" name="transaction[motivo_rechazo]" required></textarea>
                                                         <div class="invalid-feedback">
                                                             Especifica el motivo.
                                                         </div>
@@ -197,7 +203,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="borrarMotivo()">Cerrar</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                 <%= form.submit "Continuar", class:"btn btn-danger"%>
                                             </div>
                                         </div>
@@ -216,6 +222,105 @@
                             <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
                             <label class="text-primary">Monto a Enviar</label><br>
                             <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+
+                            <button type="button" class="btn btn-copy-all" data-toggle="modal" data-target="#exampleModal">
+                                Ver perfil del usuario
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-primary" id="exampleModalLabel">Perfil del usuario</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body bg-light-blue">
+                                            <div class="card border-primary mb-3 m-auto" style="max-width: 36rem;">
+
+                                                <div class="card-header text-primary">
+                                                    <div class="row">
+                                                        <div class="col-6 text-right">ID Usuario</div>
+                                                        <%number = current_user.id.to_s.length %>
+                                                        <%num_vacio = "000000000"%>
+                                                        <%num_vacio = num_vacio[number...]%>
+                                                        <%num_comp = num_vacio << current_user.id.to_s%>
+                                                        <div class="col-6 text-left text-capitalize">
+                                                            <%=num_comp%>   
+                                                        </div>
+
+                                                        <div class="col-6 text-right">Nombre y Apellido</div>
+                                                        <div class="col-6 text-left text-capitalize">
+                                                            <%=@transaction.user.name%> <%=@transaction.user.last_name%>   
+                                                        </div>
+                                                       
+                                                        <div class="col-6 text-right">Nro DNI</div>
+                                                        <div class="col-6 text-left text-capitalize">
+                                                            <%=@transaction.user.document%>   
+                                                        </div>
+                                                        <div class="col-6 text-right">Sexo</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.gender%>   
+                                                        </div>
+                                                        <div class="col-6 text-right">Nro Telefono</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.phone%>  
+                                                        </div> 
+                                                        <div class="col-6 text-right">Fecha de nacimiento</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.day%>/<%=@transaction.user.month%>/<%=@transaction.user.year%>      
+                                                        </div> 
+                                                        <div class="col-6 text-right">Pais</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.country%>      
+                                                        </div>
+                                                        <div class="col-6 text-right">Estado</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.state%>      
+                                                        </div>
+                                                        <div class="col-6 text-right">Ciudad</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.city%>      
+                                                        </div>
+                                                        <div class="col-6 text-right">Dirección</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.address%>      
+                                                        </div>  
+                                                        <div class="col-6 text-right">Correo Electrónico</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.email%>      
+                                                        </div> 
+
+                                                        <%coincidencia = false%>
+                                                        <% @users.each do |usuario|%>
+                                                            <%number = usuario.id.to_s.length %>
+                                                            <%num_vacio = "000000000"%>
+                                                            <%num_vacio = num_vacio[number...]%>
+                                                            <%num_comp = num_vacio << usuario.id.to_s%>
+
+                                                            <%if num_comp === current_user.num_user%>
+                                                                <%referencia = usuario.email%>
+                                                                <%coincidencia = true%>
+                                                            <%end%>
+                                                        <%end%>
+                                                        <div class="col-6 text-right">Referido Por</div>
+                                                        <div class="col-6 text-left">
+                                                            <%if coincidencia === true%><%=referencia%><%else%>Ningun Usuario<%end%>      
+                                                        </div>                               
+                                                    </div> 
+                                                </div>
+
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                 </div> 
             </div>
@@ -225,7 +330,9 @@
 
             function borrarMotivo(){
                 textarea.value = "";
+                textarea.removeAttribute("required");
             }
+            
         </script>
 
     <%elsif @transaction.status === "envio en proceso"%>
@@ -266,10 +373,46 @@
                                 </ul>
                             </div>
                             <%end%>
-            
-                            <div class="actions mt-4">
-                                <%= form.submit "Confirmar", class:"btn btn-success"%>
-                            </div>
+                                <div class="custom-file mt-3">
+                                    <%=form.file_field :comprobante_pago_usuario, class:"custom-file-input", id:"validatedComprobante", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                    <label class="custom-file-label" id="name-archivo" for="validatedComprobante" data-browse="Elegir">Comprobante de pago...</label>
+                                    <div class="invalid-feedback">Solo puedes subir un archivo en formato jpg, jpeg o png</div>
+                                </div>
+
+                                <div class="actions mt-4">
+                                    <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
+                                    
+                                    <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#staticBackdrop">
+                                        Rechazar transacción
+                                    </button>
+
+                                    <!--MODAL-->
+                                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                    
+                                                <div class="modal-body text-center">
+                                                    Estas a punto de rechazar la transacción, especifica el motivo para que lo pueda ver el usuario.
+                                                    <div class="was-validated">
+                                                        <div class="mt-3">
+                                                            <label for="validationTextarea" class="text-primary">Motivo *</label>
+                                                            <textarea class="form-control" id="validationTextarea" name="transaction[motivo_rechazo]" required></textarea>
+                                                            <div class="invalid-feedback">
+                                                                Especifica el motivo.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="requerirComprobante">Cerrar</button>
+                                        
+                                                    <%= form.submit "Continuar", class:"btn btn-danger", id:"btnRechazar"%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                         <%end%>
                     </div>
                     <!--CUENTA DE OTACAR-->
@@ -284,14 +427,82 @@
                         <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
 
                         <label class="text-primary">Comprobante</label><br>
-                        <%=image_tag url_for(@transaction.comprobante), style:"width:100%"%>
+                        <%=image_tag url_for(@transaction.comprobante_pago_otacar), style:"width:100%"%>
                     </div>
-
-                    
                 </div> 
             </div>
         </div>
+    
     <%end%>
+    <script>
+        function copyAll(){
+            divP = document.getElementById("profile");
+            var textarea = document.createElement("textarea");
+            var lista = document.createElement("ul");
+        
+            var spans = document.getElementsByTagName("span");
+            var labels = document.getElementsByTagName("label");
+
+            for(i=0; i<spans.length; i++){
+                if (spans[i].id === "monto_a_enviar"){
+                    limit = i;
+                    break;
+                }
+            }
+
+            textarea.value = "Datos"
+            for(i=1; i<=limit; i++){ 
+                last_char = textarea.value.length;
+                textarea.value = textarea.value + "\\\n" + labels[i-1].innerText + ": " + spans[i].innerText;
+                textarea.value = textarea.value.slice(0,last_char) + textarea.value.slice(last_char+1);
+            }
+            
+            document.body.appendChild(textarea);
+        
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+
+            cajaMsj.classList.remove("show","showAlert");
+            cajaMsj.classList.add("d-none");
+
+            msjCopy.innerHTML = "Informacion copiada";
+            cajaMsj.classList.remove("d-none");
+            cajaMsj.classList.add("show","showAlert");
+
+            var contador = setTimeout(() => {
+                cajaMsj.classList.add("hide");
+                cajaMsj.classList.remove("show");
+            }, 1000);
+            var contador2 = setTimeout(() => {
+                cajaMsj.classList.remove("showAlert");
+                cajaMsj.classList.remove("hide");
+                cajaMsj.classList.add("d-none");
+            }, 2000);
+            
+        }
+        nameArchivo = document.getElementById("name-archivo");
+        comprobante = document.getElementById("validatedComprobante");
+        motivo = document.getElementById("validationTextarea");
+        
+        $("#validatedComprobante").change(function(){
+            nameArchivo.innerHTML = this.files[0].name;
+            $("#button").prop("disabled", this.files.length == 0);
+        });
+
+        $("#btnRechazar").click(function(){
+            nameArchivo.innerHTML = "Comprobante de pago...";
+            comprobante.value = "";
+            comprobante.removeAttribute("required");
+        });
+        $("#button").click(function(){
+            motivo.value = "";
+            //comprobante.removeAttribute("required");
+        });
+        $("#requerirComprobante").click(function(){
+            comprobante.setAttribute("required","required");
+        });
+    </script>
 <%end%>
 <script>
 
@@ -325,47 +536,5 @@
         }, 2000);
     }
 
-    function copyAll(){
-        divP = document.getElementById("profile");
-        var textarea = document.createElement("textarea");
-        var lista = document.createElement("ul");
-       
-        var spans = document.getElementsByTagName("span");
-
-        for(i=0; i<spans.length; i++){
-            if (spans[i].id === "monto_a_enviar"){
-                limit = i;
-                break;
-            }
-        }
-        for(i=1; i<=limit; i++){ 
-           textarea.value = textarea.value + "\\\n" + spans[0].innerText;
-        }
-
-        divP.appendChild(textarea);
-       
-        console.log(textarea.value.length);
-        console.log(textarea.value);
-        textarea.select();
-        //document.execCommand("copy");
-        
-
-        cajaMsj.classList.remove("show","showAlert");
-        cajaMsj.classList.add("d-none");
-
-        msjCopy.innerHTML = "Informacion copiada";
-        cajaMsj.classList.remove("d-none");
-        cajaMsj.classList.add("show","showAlert");
-
-        var contador = setTimeout(() => {
-            cajaMsj.classList.add("hide");
-            cajaMsj.classList.remove("show");
-        }, 1000);
-        var contador2 = setTimeout(() => {
-            cajaMsj.classList.remove("showAlert");
-            cajaMsj.classList.remove("hide");
-            cajaMsj.classList.add("d-none");
-        }, 2000);
-        
-    }
+    
 </script>

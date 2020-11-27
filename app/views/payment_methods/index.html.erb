@@ -1,3 +1,4 @@
+<%=render "partials/name-and-cod-of-banks"%>
 <h4>Mis metodos para recibir pagos</h4>
 <a class="btn btn-success mt-2" href="/set_method">Añadir <i class="fas fa-plus"></i></a>
 <div class="row mb-5">
@@ -445,36 +446,10 @@
                     <% current_user.mobile_payments.each do |payment| %>
                     <tr class="shadow-sm">
                         
-                        <%bancos = {
-                            "0156" => "100%BANCO",
-                            "0172" => "BANCAMIGA BANCO MICROFINANCIERO, C.A.",
-                            "0171" => "BANCO ACTIVO BANCO COMERCIAL, C.A.",
-                            "0166" => "BANCO AGRICOLA",
-                            "0175" => "BANCO BICENTENARIO",
-                            "0128" => "BANCO CARONI, C.A. BANCO UNIVERSAL",       
-                            "0102" => "BANCO DE VENEZUELA S.A.I.C.A.",
-                            "0114" => "BANCO DEL CARIBE C.A.",                  
-                            "0163" => "BANCO DEL TESORO",                       
-                            "0115" => "BANCO EXTERIOR C.A.",                     
-                            "0105" => "BANCO MERCANTIL C.A.",
-                            "0191" => "BANCO NACIONAL DE CREDITO",
-                            "0116" => "BANCO OCCIDENTAL DE DESCUENTO.",
-                            "0138" => "BANCO PLAZA",
-                            "0108" => "BANCO PROVINCIAL BBVA",
-                            "0104" => "BANCO VENEZOLANO DE CREDITO S.A.",
-                            "0168" => "BANCRECER S.A. BANCO DE DESARROLLO",
-                            "0134" => "BANESCO BANCO UNIVERSAL", 
-                            "0177" => "BANFANB",                       
-                            "0174" => "BANPLUS BANCO COMERCIAL C.A",                         
-                            "0157" => "DELSUR BANCO UNIVERSAL",
-                            "0151" => "FONDO COMUN",                         
-                            "0169" => "MIBANCO BANCO DE DESARROLLO, C.A.",
-                            "0137" => "SOFITASA",
-                        }
-                        %>
+                        
                         <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
 
-                        <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=bancos[payment.bank]%>" title="<%=bancos[payment.bank]%>"/></td>
+                        <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
 
                         <%part1 = payment.number_phone[0, 3]%>
                         <%part2 = payment.number_phone[-4,4]%>
@@ -506,7 +481,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"><%=bancos[payment.bank]%></h5>
+                                        <h5 class="modal-title" id="exampleModalLabel"><%=@bancos[payment.bank]%></h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>

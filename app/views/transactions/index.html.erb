@@ -1,34 +1,201 @@
-<div class="container margin-top bg-nav">
-    <h2 class="text-success">Transacciones Realizadas</h2>
-    <table class="table table-hover mt-5">
-        <thead>
-            <tr>
-                <th scope="col">Fecha y Hora</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Resumen de Cuenta</th>
-                <th scope="col">Pais</th>
-                <th scope="col">Monto</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @transactions.each do |transaction| %>
-            <tr>
+<h4>Transaciones realizadas</h4>
 
-                <th scope="row"><%=transaction.created_at%></th>
-                <%current_user.banks.each do |bank|%>
-                <%if bank.id === transaction.account_destinity%>
-                <td><%=bank.name%></td>
-                <td><%=bank.number_account%></td>
-                <td><%=bank.country%></td>
-                <%end%>
-                <%end%>
-                <td><%=transaction.monto%></td>
+<div class="col-12">
+    <div class="table-responsive mt-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"><small class="font-weight-bold">Fecha<small></th>
+                    <th scope="col"><small class="font-weight-bold">Nombre<small></th>
+                    <th colspan="2"><small class="font-weight-bold">Resumen de Cuenta<small></th>
+                    <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                    <th scope="col"><small class="font-weight-bold">Monto<small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <%unless current_user.is_admin?%>
+                    <%current_user.transactions.each do |transaction|%>
+                        <%if transaction.status === "realizada"%>
+                            <tr class="shadow-sm">
+                                <td><span class="d-block"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.localtime.strftime("%H:%M:%S")%></small>
+                                </td>
         
-            </tr>
-            <%end%>
-        </tbody>
-    </table>
-    <div class="my-5">
-    <button class="btn btn-primary mb-5">Yess</button>
+                                <%method = transaction.account_destinity_usuario.split("-")%>
+                                
+                                <%case method[0]
+                                    when "banks"
+                                        current_user.banks.each do |bank|
+                                            
+                                            if bank.id.to_s === method[1]
+                                                part1 = bank.number_account[0, 4]
+                                                part2 = bank.number_account[-4,4]%>
+                                                <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "bank_brasils"
+                                        current_user.bank_brasils.each do |bank|
+                                            
+                                            if bank.id.to_s === method[1]
+                                                part1 = bank.number_account[0, 4]
+                                                part2 = bank.number_account[-4,4]
+                                            %>
+                                                <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                                
+                                                <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "digital_payments"
+                                        current_user.digital_payments.each do |payment|
+                                            
+                                            if payment.id.to_s === method[1]
+                                                part1 = payment.number_phone[0, 3]
+                                                part2 = payment.number_phone[-4,4]
+                                                %>
+                                                <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "mobile_payments"
+                                        current_user.mobile_payments.each do |payment|
+                                            
+                                            if payment.id.to_s === method[1]
+                                                part1 = payment.number_phone[0, 3]
+                                                part2 = payment.number_phone[-4,4]
+                                                %>
+                                                <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "wallets"
+                                        current_user.wallets.each do |wallet|
+                                            
+                                            if wallet.id.to_s === method[1]
+                                                part1 = wallet.email[0, 4]
+                                                part2 = wallet.email[-7,7]
+                                                %>
+                                                <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "wallet_with_users"
+                                        current_user.wallets.each do |wallet|
+                                            
+                                            if wallet.id.to_s === method[1]
+                                                part1 = wallet.usuario[0, 3]
+                                                part2 = wallet.usuario[-2,2]
+                                                %>
+                                                <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                <%end%>
+                
+                                <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
+        
+                                <%=render "detectar-moneda", {country: transaction.country_destinity}%>
+                                <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
+                            </tr>
+                        <%end%>
+                    <%end%>
+                <%else%>
+                    <%@transactions.each do |transaction|%>
+                        <%if transaction.status === "realizada"%>
+                            <tr class="shadow-sm">
+                                <td class="align-middle"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></td>
+        
+                                <%method = transaction.account_destinity_usuario.split("-")%>
+                                
+                                <%case method[0]
+                                    when "banks"
+                                        transaction.user.banks.each do |bank|
+                                            
+                                            if bank.id.to_s === method[1]
+                                                part1 = bank.number_account[0, 4]
+                                                part2 = bank.number_account[-4,4]%>
+                                                <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "bank_brasils"
+                                        transaction.user.bank_brasils.each do |bank|
+                                            
+                                            if bank.id.to_s === method[1]
+                                                part1 = bank.number_account[0, 4]
+                                                part2 = bank.number_account[-4,4]
+                                            %>
+                                                <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                                
+                                                <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "digital_payments"
+                                        transaction.user.digital_payments.each do |payment|
+                                            
+                                            if payment.id.to_s === method[1]
+                                                part1 = payment.number_phone[0, 3]
+                                                part2 = payment.number_phone[-4,4]
+                                                %>
+                                                <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "mobile_payments"
+                                        transaction.user.mobile_payments.each do |payment|
+                                            
+                                            if payment.id.to_s === method[1]
+                                                part1 = payment.number_phone[0, 3]
+                                                part2 = payment.number_phone[-4,4]
+                                                %>
+                                                <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "wallets"
+                                        transaction.user.wallets.each do |wallet|
+                                            
+                                            if wallet.id.to_s === method[1]
+                                                part1 = wallet.email[0, 4]
+                                                part2 = wallet.email[-7,7]
+                                                %>
+                                                <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                    <%when "wallet_with_users"
+                                        transaction.user.wallets.each do |wallet|
+                                            
+                                            if wallet.id.to_s === method[1]
+                                                part1 = wallet.usuario[0, 3]
+                                                part2 = wallet.usuario[-2,2]
+                                                %>
+                                                <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                                <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                            <%end%>
+                                        <%end%>
+                                <%end%>
+                
+                                <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
+        
+                                <%=render "detectar-moneda", {country: transaction.country_destinity}%>
+                                <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
+
+                                <td class="align-middle"><a href="/transactions/<%=transaction.id%>" class="badge badge-secondary" id="td-ver">Ver Detalles<i class="far fa-eye ml-2"></i></a></td>
+                            </tr>
+                        <%end%>
+                    <%end%>
+                <%end%>
+            </tbody>
+        </table>
     </div>
 </div>

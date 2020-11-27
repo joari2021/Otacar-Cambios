@@ -1,12 +1,11 @@
 class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:pending]
-
+  before_action :authenticate_user!
+  before_action :authenticate_admin!, only: [:pending]
   # GET /transactions
   # GET /transactions.json
   def index
     @transactions = Transaction.all
-    @banks = Bank.all
   end
 
   def status
@@ -48,6 +47,12 @@ class TransactionsController < ApplicationController
   end
 
   def show
+    users = User.all
+    users.each do |user|
+      if user.is_admin?
+        @user_admin = user
+      end
+    end
   end
 
   # GET /transactions/new
@@ -94,6 +99,9 @@ class TransactionsController < ApplicationController
     end
 
     users = User.all
+    if current_user.is_admin?
+      @users = users
+    end
     users.each do |user|
       if user.is_admin?
         @user_admin = user
@@ -272,7 +280,7 @@ class TransactionsController < ApplicationController
       if @transaction.status === "por confirmar"
         @transaction.update(transaction_params_admin_edit)
 
-        if @transaction.motivo_rechazo === nil
+        if @transaction.motivo_rechazo === ""
 
           respond_to do |format|
             if @transaction.update(status:"envio en proceso")
@@ -295,8 +303,32 @@ class TransactionsController < ApplicationController
             end
           end
         end
-      else
+      elsif @transaction.status === "envio en proceso"
 
+        @transaction.update(transaction_params_admin_process)
+        unless @transaction.motivo_rechazo === ""
+
+          respond_to do |format|
+            if @transaction.update(status:"realizada")
+              format.html { redirect_to pending_transactions_path, notice: 'Transaccion realizada con exito.' }
+              format.json { render :show, status: :ok, location: @transaction }
+            else
+              format.html { render :edit }
+              format.json { render json: @transaction.errors, status: :unprocessable_entity }
+            end
+          end
+
+        else
+          respond_to do |format|
+            if @transaction.update(status:"rechazada")
+              format.html { redirect_to pending_transactions_path, notice: 'Transaccion rechazada con exito.' }
+              format.json { render :show, status: :ok, location: @transaction }
+            else
+              format.html { render :edit }
+              format.json { render json: @transaction.errors, status: :unprocessable_entity }
+            end
+          end
+        end
       end
     end
   end
@@ -324,10 +356,14 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params_user_edit
-      params.require(:transaction).permit(:status, :comprobante)
+      params.require(:transaction).permit(:status, :comprobante_pago_otacar)
     end
 
     def transaction_params_admin_edit
       params.require(:transaction).permit(:motivo_rechazo)
+    end
+
+    def transaction_params_admin_process
+      params.require(:transaction).permit(:motivo_rechazo, :comprobante_pago_usuario)
     end
 end
