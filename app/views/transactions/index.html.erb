@@ -13,9 +13,11 @@
                 </tr>
             </thead>
             <tbody>
+                <%coincidencia = false%>
                 <%unless current_user.is_admin?%>
                     <%current_user.transactions.each do |transaction|%>
                         <%if transaction.status === "realizada"%>
+                            <%coincidencia = true%>
                             <tr class="shadow-sm">
                                 <td><span class="d-block"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.localtime.strftime("%H:%M:%S")%></small>
                                 </td>
@@ -106,6 +108,7 @@
                 <%else%>
                     <%@transactions.each do |transaction|%>
                         <%if transaction.status === "realizada"%>
+                            <%coincidencia = true%>
                             <tr class="shadow-sm">
                                 <td class="align-middle"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></td>
         
@@ -198,4 +201,13 @@
             </tbody>
         </table>
     </div>
+    <%unless coincidencia%>
+        <div class="row justify-content-center mt-2">
+            <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+                <div class="alert alert-primary text-center" role="alert">
+                    ...No hay movimientos!!!<br>
+                </div>
+            </div>
+        </div>
+    <%end%>
 </div>

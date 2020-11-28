@@ -1,4 +1,5 @@
 class PaymentMethodsController < ApplicationController
+  before_action :authenticate_normal_user!, except: [:pending]
   def index
   end
 

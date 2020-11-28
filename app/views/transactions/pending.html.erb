@@ -119,8 +119,9 @@
 </div>
 
 <div class="row mb-3">
-    <!-- Tabla Por Pagar -->
+    
     <div class="col-12">
+        <!-- Tabla Por Pagar -->
         <h5 class="text-center">Envios Pendientes</h5>
         <div class="table-responsive">
             <table class="table">
@@ -205,7 +206,7 @@
                                         <%end%>
                                     <%end%>
                                 <%when "wallet_with_users"
-                                    transaction.user.wallets.each do |wallet|
+                                    transaction.user.wallet_with_users.each do |wallet|
                                         
                                         if wallet.id.to_s === method[1]
                                             part1 = wallet.usuario[0, 3]

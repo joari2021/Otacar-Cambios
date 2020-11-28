@@ -232,7 +232,7 @@
     accounts_venezuela = bank_venezuela + mobile_payments
 %>  
 
-<%paises = {"Argentina" => false, "Brasil" => false, "Chile" => false, "Colombia" => false, "Ecuador" => false, "España" => false, "Panama" => false, "Peru" => false, "USA" => false, "Venezuela" => false}%>
+<%paises = {"Argentina" => false, "Brasil" => false, "Chile" => false, "Colombia" => false, "Ecuador" => false, "España" => false, "Panama" => false, "Peru" => false, "Usa" => false, "Venezuela" => false}%>
 
 <%if current_user.country != "Argentina" && rate.rate_argentina != "0,00" && bank_argentina > 0 && accounts_admin_from_country_user > 0%>
     <%paises["Argentina"] = true%>
@@ -267,7 +267,7 @@
 <%end%>
 
 <%if current_user.country != "USA" && rate.rate_usa != "0,00" && wallet_usa > 0 && accounts_admin_from_country_user > 0%>
-    <%paises["USA"] = true%>
+    <%paises["Usa"] = true%>
 <%end%>
 
 <%if current_user.country != "Venezuela" && rate.rate_venezuela != "0,00" && accounts_venezuela > 0 && accounts_admin_from_country_user > 0%>
@@ -276,7 +276,7 @@
 
 <!--PAIS DESTINO-->
 <div class="row justify-content-center mt-5">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+    <div class="col-12 col-sm-9 col-lg-7">
         <h5 class="text-primary text-center">1.- Pais Destino <i class="fas fa-info-circle" onclick="mostrarInfo('infoPaisDestino')"></i></h5>    
         <div class="alert alert-info d-none" id="infoPaisDestino" role="alert">
                 Elige el pais donde deseas enviar tus remesas.
@@ -322,7 +322,7 @@
     </div>
 </div>
 <div class="row justify-content-center mt-2 d-none" id="listaMetodos">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+    <div class="col-12 col-sm-9 col-lg-7">
         <div class="alert alert-warning text-center" role="alert">
             Metodos de pago disponibles en <span id="countryDest" class="font-weight-bold"></span> para recibir envio de remesas.<br>
             <article id="metodosDisp" class="font-weight-bold"></article>
@@ -331,16 +331,16 @@
 </div>
 
 <div class="row justify-content-center mt-2 d-none" id="añadirAccount">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+    <div class="col-12 col-sm-9 col-lg-7">
         <div class="alert alert-danger text-center" role="alert">
-            No tienes un metodo de pago registrado en <span id="country" class="font-weight-bold"></span> para recibir el envio de tus remesas.<br><a href="/set_method" class="alert-link" style="text-decoration:none">Haz click aquí</a> para añadir un metodo de pago.
+            No tienes un metodo de pago registrado en <span id="country" class="font-weight-bold"></span> para recibir el envio de tus remesas.<br><a href="/set_method" class="special-link alert-link" style="text-decoration:none">Haz click aquí</a> para añadir un metodo de pago.
         </div>
     </div>
 </div>
 
 <!--CUENTA DESTINO DEL USUARIO-->
 <div class="row justify-content-center d-none" id="accountUserDestinity">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+    <div class="col-12 col-sm-9 col-lg-7">
         <h5 class="text-primary text-center">2.- Cuenta Credito <i class="fas fa-info-circle" onclick="mostrarInfo('infoCuentaDestino')"></i></h5>    
         <div class="alert alert-info d-none" id="infoCuentaDestino" role="alert">
                 Elige la cuenta de <span id="spanPaisDestino"></span> donde deseas que sea acreditado el envio de tus remesas. En esta lista solo apareceran los metodos de pago que hayas registrado y a los que la empresa puede hacer envios en ese pais, por ello, si en esta lista no aparece un metodo de pago que tienes registrado es porque no estan disponibles los envios a esa cuenta por el momento.
@@ -363,7 +363,7 @@
 
 <!--CUENTA DESTINO DEL ADMIN-->
 <div class="row justify-content-center d-none" id="accountAdminDestinity">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+    <div class="col-12 col-sm-9 col-lg-7">
         <h5 class="text-primary text-center">3.- Cuentas De Otacar Cambios <i class="fas fa-info-circle" onclick="mostrarInfo('infoCuentaDestinoAdmin')"></i></h5>    
         <div class="alert alert-info d-none" id="infoCuentaDestinoAdmin" role="alert">
             Elige una cuenta de las disponibles de Otacar Cambios en <span class="font-weight-bold"><%=current_user.country%></span> donde deseas realizar el pago en tu moneda local (<span class="font-weight-bold"><%=rate.moneda%></span>).
@@ -388,7 +388,7 @@
 
 <!--METODOS DE PAGO-->
 <div class="row justify-content-center d-none" id="metodosPago">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+    <div class="col-12 col-sm-9 col-lg-7">
         <h5 class="text-primary text-center">4.- Metodos de Pago <i class="fas fa-info-circle" onclick="mostrarInfo('infoMetodosPago')"></i></h5>    
         <div class="alert alert-info d-none" id="infoMetodosPago" role="alert">
             Elige el metodo de pago que deseas utilizar para pagar a la cuenta de Otacar Cambios que has elegido.
@@ -411,7 +411,7 @@
 
 <!--MONTO ENVIO-->
 <div class="row justify-content-center field mt-2 d-none" id="montoEnvio">
-    <div class="col-12 col-sm-6 col-md-7 col-lg-6 text-center">
+    <div class="col-12 col-sm-9 col-lg-7 text-center">
     
         <h5 class="text-primary">5.- Monto De Envio <i class="fas fa-info-circle" onclick="mostrarInfo('infoMontoEnvio')"></i></h5>    
         <div class="alert alert-info d-none" id="infoMontoEnvio" role="alert">
@@ -431,7 +431,7 @@
                 </p>
             </div>
         </div> 
-        <input class="form-control is-invalid text-center mt-3" id="validationMonto" type="text" name="transaction[monto_envio]" autofocus="autofocus">
+        <input class="form-control is-invalid text-center mt-3" id="validationMonto" type="text" name="transaction[monto_envio]">
         <div class="invalid-feedback">
           Ingrese el monto que deseas enviar en <%=rate.moneda%>.<br>
           Monto Minimo: <span id="montoMin"></span>

@@ -6,18 +6,7 @@ module PermissionsConcern
     end
 
     def is_normal_user?
-        self.name != nil
-        self.last_name != nil
-        self.document != nil
-        self.gender != nil
-        self.phone != nil
-        self.day != nil
-        self.month != nil
-        self.year != nil
-        self.country != nil
-        self.state != nil
-        self.city != nil
-        self.address != nil
+        self.name != nil && self.last_name != nil && self.document != nil && self.gender != nil && self.phone != nil && self.day != nil && self.month != nil && self.year != nil && self.country != nil && self.state != nil && self.city != nil && self.address != nil
     end
 
     def is_admin?

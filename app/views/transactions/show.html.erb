@@ -1,45 +1,57 @@
 <%=render 'partials/name-and-cod-of-banks'%>
-<%if @transaction.status === "realizada" || @transaction.status === "rechazada"%>
-  <div class="row justify-content-center mt-3">
-      <div class="col-6 p-3 fondo" style="border-radius:12px;">
-          <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
-              <li class="nav-item d-inline-block w-50" role="presentation">
-                  <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cuenta Crédito Usuario</a>
-              </li>
-              <li class="nav-item d-inline-block w-50" role="presentation">
-                  <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cuenta Crédito Otacar</a>
-              </li>
-          </ul>
-          <div class="tab-content mt-4" id="myTabContent">
-              
-              <!--CUENTA DEL USUARIO--------------------------------------------------------------------->
-              <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                  
-                  <%@method = @transaction.account_destinity_usuario.split("-")%>
-                  <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
-                  
-                  <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
-                  <label class="text-primary">Monto a enviar</label><br>
-                  <%=@moneda_destinity%> <span id="monto_a_enviar"><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+    <%if current_user.is_admin?%>
+        <%clases1 = ""%>
+    <%else%>
 
-                  <label class="text-primary">Comprobante</label><br>
-                  <%=image_tag url_for(@transaction.comprobante_pago_usuario), class:"comprobante"%>
-              </div>
-              <!--CUENTA DE OTACAR-->
-              <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                  
-                  <%@user_account = @user_admin%>
-                  <%@method = @transaction.account_destinity_admin.split("-")%>
-                  <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @user_account, method: @method} %>
+    <%end%>
+    <div class="row justify-content-center mt-3">
+        <div class="col-10 col-md-9 col-lg-6 p-3 mb-5 fondo" style="border-radius:12px;">
+            <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
+                <li class="nav-item d-inline-block w-50" role="presentation">
+                    <a class="nav-link <%if @transaction.status != "presenta incidencia"%>active<%end%>" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cuenta Crédito Usuario</a>
+                </li>
+                <li class="nav-item d-inline-block w-50" role="presentation">
+                    <a class="nav-link <%if @transaction.status === 'presenta incidencia'%>active<%end%>" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cuenta Crédito Otacar</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-4" id="myTabContent">
+                
+                <!--CUENTA DEL USUARIO--------------------------------------------------------------------->
+                <div class="tab-pane fade <%if @transaction.status != "presenta incidencia"%>show active<%end%>" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    
+                    <%@method = @transaction.account_destinity_usuario.split("-")%>
+                    <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
+                    
+                    <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
+                    <label class="text-primary">Monto a enviar</label><br>
+                    <%=@moneda_destinity%> <span id="monto_a_enviar"><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
 
-                  <%=render 'detectar-moneda', {country: @transaction.user.country}%>
-                  <label class="text-primary">Monto Transferido</label><br>
-                  <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                    <label class="text-primary">Comprobante</label><br>
+                    <%if @transaction.status === "realizada"%>
+                        <a href="<%=url_for(@transaction.comprobante_pago_usuario)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_usuario), class:"comprobante"%></a>
+                    <%else%>
+                        No hay ningun archivo...
+                    <%end%>
+                </div>
+                <!--CUENTA DE OTACAR-->
+                <div class="tab-pane fade <%if @transaction.status === "presenta incidencia"%>show active<%end%>" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    
+                    <%@user_account = @user_admin%>
+                    <%@method = @transaction.account_destinity_admin.split("-")%>
+                    <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @user_account, method: @method} %>
 
-                  <label class="text-primary">Comprobante</label><br>
-                  <%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%>
-              </div>
-          </div> 
-      </div>
-  </div>
-<%end%>
+                    <%=render 'detectar-moneda', {country: @transaction.user.country}%>
+                    <label class="text-primary">Monto Transferido</label><br>
+                    <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+
+                    <label class="text-primary">Comprobante</label><br>
+                    <%unless @transaction.status === "en proceso"%>
+                        <a href="<%=url_for(@transaction.comprobante_pago_otacar)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%></a>
+                    <%else%>
+                        No hay ningun archivo...
+                    <%end%>
+                </div>
+            </div> 
+        </div>
+    </div>
+

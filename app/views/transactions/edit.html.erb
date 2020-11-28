@@ -6,7 +6,7 @@
     </div>
                 
     <div class="row justify-content-center mt-3">
-        <div class="col-6 p-3 fondo" style="border-radius:12px;">
+        <div class="col-10 col-md-9 col-lg-6 p-3 fondo" style="border-radius:12px;">
             <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                 <li class="nav-item d-inline-block w-50" role="presentation">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Origen</a>
@@ -140,7 +140,7 @@
     <%if @transaction.status === "por confirmar"%> 
 
         <div class="row justify-content-center mt-3 mb-5">
-            <div class="col-6 p-3 fondo" style="border-radius:12px;">
+            <div class="col-10 col-md-9 col-lg-6 p-3 fondo" style="border-radius:12px;">
                 <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                     <li class="nav-item d-inline-block w-50" role="presentation">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cuenta Crédito Otacar</a>
@@ -163,7 +163,8 @@
                         <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
 
                         <label class="text-primary">Comprobante</label><br>
-                        <%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%>
+
+                        <a href="<%=url_for(@transaction.comprobante_pago_otacar)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%></a>
 
                         <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
                             <%if @transaction.errors.any?%>
@@ -182,7 +183,7 @@
                                 <%= form.submit "Confirmar", class:"btn btn-success", onclick:"borrarMotivo()"%>
 
                                 <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#staticBackdrop">
-                                    Rechazar transacción
+                                    Rechazar
                                 </button>
 
                                 <!--MODAL-->
@@ -338,7 +339,7 @@
     <%elsif @transaction.status === "envio en proceso"%>
 
         <div class="row justify-content-center mt-3">
-            <div class="col-6 p-3 fondo" style="border-radius:12px;">
+            <div class="col-10 col-md-9 col-lg-6 p-3 fondo" style="border-radius:12px;">
                 <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                     <li class="nav-item d-inline-block w-50" role="presentation">
                         <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cuenta Crédito Usuario</a>
@@ -383,7 +384,7 @@
                                     <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
                                     
                                     <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#staticBackdrop">
-                                        Rechazar transacción
+                                        Rechazar
                                     </button>
 
                                     <!--MODAL-->
@@ -427,7 +428,7 @@
                         <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
 
                         <label class="text-primary">Comprobante</label><br>
-                        <%=image_tag url_for(@transaction.comprobante_pago_otacar), style:"width:100%"%>
+                        <a href="<%=url_for(@transaction.comprobante_pago_otacar)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%></a>
                     </div>
                 </div> 
             </div>
@@ -481,6 +482,7 @@
             }, 2000);
             
         }
+
         nameArchivo = document.getElementById("name-archivo");
         comprobante = document.getElementById("validatedComprobante");
         motivo = document.getElementById("validationTextarea");
