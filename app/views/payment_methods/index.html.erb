@@ -11,7 +11,7 @@
     <%else%>
 
     <!-- Tabla cuentas -->
-    <%if current_user.banks.count > 0 || current_user.bank_brasils.count > 0%>
+    <%if current_user.banks.where(view:true).count > 0 || current_user.bank_brasils.where(view:true).count > 0%>
     <div class="col-12">
     <h5 class="mt-5">Cuentas Bancarias</h5>
         <div class="table-responsive">
@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% current_user.banks.each do |account_bank| %>
+                    <% current_user.banks.where(view:true).each do |account_bank| %>
                     <tr class="shadow-sm">
                         <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
 
@@ -107,14 +107,14 @@
                         
                         <%if account_bank.permit_delete != "denied"%>
                             <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
-                        <%else%> <!--MOSTRAR QUE LOS POPOVER SE VEAN-->
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="bottom" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                        <%else%>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
                         <%end%>
                     </tr>
                     <%end%>
 
                     <!--Bancos de Brasil-->
-                    <% current_user.bank_brasils.each do |account_bank| %>
+                    <% current_user.bank_brasils.where(view:true).each do |account_bank| %>
                     <tr class="shadow-sm">
                         <td class="align-middle"><img src="/img/paises/Brasil.svg" class="img-fluid rounded-circle avatar" alt="Brasil" title="Brasil"/></td>
                         <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
@@ -188,8 +188,12 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+
+                        <%if account_bank.permit_delete != "denied"%>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%else%>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-container="body"  data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                        <%end%>
                     </tr>
                     <%end%>
                 </tbody>
@@ -199,7 +203,7 @@
     <%end%>
 
     <!-- Tabla de Monederos Digitales -->
-    <%if current_user.wallets.count > 0 || current_user.wallet_with_users.count > 0%>
+    <%if current_user.wallets.where(view:true).count > 0%>
     <div class="col-12">
     <h5 class="mt-4">Monederos Digitales</h5>
         <div class="table-responsive">
@@ -213,7 +217,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% current_user.wallets.each do |wallet| %>
+                    <% current_user.wallets.where(view:true).each do |wallet| %>
                     <tr class="shadow-sm">
                         
                         <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
@@ -273,7 +277,11 @@
                             </div>
                         </div>
 
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallets/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%if wallet.permit_delete != "denied"%>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallets/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%else%>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                        <%end%>
                     </tr>
                     <%end%>
                 </tbody>
@@ -283,7 +291,7 @@
     <%end%>
 
     <!-- Tabla de Pagos Digitales -->
-    <%if current_user.digital_payments.count > 0 || current_user.wallet_with_users.count > 0%>
+    <%if current_user.digital_payments.where(view:true).count > 0 || current_user.wallet_with_users.where(view:true).count > 0%>
     <div class="col-12">
     <h5 class="mt-4">Pagos Digitales</h5>
         <div class="table-responsive">
@@ -297,7 +305,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% current_user.digital_payments.each do |payment| %>
+                    <% current_user.digital_payments.where(view:true).each do |payment| %>
                     <tr class="shadow-sm">
                         <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
                         <td class="align-middle"><span><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
@@ -358,11 +366,15 @@
                             </div>
                         </div>
 
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/digital_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%if payment.permit_delete != "denied"%>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/digital_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%else%>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                        <%end%>
                     </tr>
                     <%end%>
 
-                    <% current_user.wallet_with_users.each do |wallet| %>
+                    <% current_user.wallet_with_users.where(view:true).each do |wallet| %>
                     <tr class="shadow-sm">
                         <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
                         <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
@@ -423,7 +435,11 @@
                             </div>
                         </div>
 
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallet_with_users/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%if wallet.permit_delete != "denied"%>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallet_with_users/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%else%>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                        <%end%>
                     </tr>
                     <%end%>
                 </tbody>
@@ -433,7 +449,7 @@
     <%end%>
 
     <!-- Tabla de Pagos Moviles -->
-    <%if current_user.mobile_payments.count > 0%>
+    <%if current_user.mobile_payments.where(view:true).count > 0%>
     <div class="col-12">
     <h5 class="mt-4">Pagos Moviles</h5>
         <div class="table-responsive">
@@ -447,9 +463,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% current_user.mobile_payments.each do |payment| %>
+                    <% current_user.mobile_payments.where(view:true).each do |payment| %>
                     <tr class="shadow-sm">
-                        
                         
                         <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
 
@@ -517,7 +532,11 @@
                             </div>
                         </div>
 
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/mobile_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%if payment.permit_delete != "denied"%>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/mobile_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%else%>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                        <%end%>
                     </tr>
                     <%end%>
                 </tbody>
@@ -533,6 +552,3 @@
         $('[data-toggle="popover"]').popover()
     })
 </script>
-
-
-

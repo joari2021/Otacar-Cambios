@@ -4,6 +4,5 @@ class PaymentMethodsController < ApplicationController
   end
 
   def set_method
-    @bank = Bank.new
   end
 end
