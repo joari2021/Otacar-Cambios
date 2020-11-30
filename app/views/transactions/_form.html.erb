@@ -83,7 +83,7 @@
                     bank_peru += 1
                     if bank.banco === "Banco BCP"
                         bank_bcp += 1
-                    elsif bank.banco === "Escotia Bank"
+                    elsif bank.banco === "Scotiabank"
                         bank_escotia_bank += 1
                     end
                 end
@@ -116,6 +116,7 @@
     bank_do_brasil = 0
     bank_bradesco = 0
     bank_caixa = 0
+    bank_nubank = 0
     bank_itau = 0
     bank_iti = 0
     bank_santander = 0
@@ -131,7 +132,7 @@
                     bank_caixa += 1
                 elsif bank.bank === "Itaú"
                     bank_itau += 1
-                elsif bank.bank === "Ití"
+                elsif bank.bank === "Iti"
                     bank_iti += 1
                 elsif bank.bank === "Nubank"
                     bank_nubank += 1
@@ -232,7 +233,7 @@
     accounts_venezuela = bank_venezuela + mobile_payments
 %>  
 
-<%paises = {"Argentina" => false, "Brasil" => false, "Chile" => false, "Colombia" => false, "Ecuador" => false, "España" => false, "Panama" => false, "Peru" => false, "Usa" => false, "Venezuela" => false}%>
+<%paises = {"Argentina" => false, "Brasil" => false, "Chile" => false, "Colombia" => false, "Ecuador" => false, "España" => false, "Panama" => false, "Peru" => false, "USA" => false, "Venezuela" => false}%>
 
 <%if current_user.country != "Argentina" && rate.rate_argentina != "0,00" && bank_argentina > 0 && accounts_admin_from_country_user > 0%>
     <%paises["Argentina"] = true%>
@@ -267,7 +268,7 @@
 <%end%>
 
 <%if current_user.country != "USA" && rate.rate_usa != "0,00" && wallet_usa > 0 && accounts_admin_from_country_user > 0%>
-    <%paises["Usa"] = true%>
+    <%paises["USA"] = true%>
 <%end%>
 
 <%if current_user.country != "Venezuela" && rate.rate_venezuela != "0,00" && accounts_venezuela > 0 && accounts_admin_from_country_user > 0%>
@@ -757,10 +758,6 @@
                     mostrarMetodoDisp("Santander");
                 <%end%>
 
-                <%if bank_santander > 0%>
-                    mostrarMetodoDisp("Santander");
-                <%end%>
-
                 <%if wallet_brasil > 0%>
                     mostrarMetodoDisp("Pix");
                 <%end%>
@@ -877,7 +874,7 @@
         }
         <%if current_user.banks.count > 0%>    
             <%current_user.banks.each do |bank_user|%>
-                if ("<%=bank_user.country%>" === country){
+                if (<%=bank_user.view%> && "<%=bank_user.country%>" === country){
                     <%admin.banks.each do |bank_admin| %>  
                         <%if bank_admin.status === "activo"%>
                             <%if bank_admin.banco === bank_user.banco%>
@@ -913,9 +910,9 @@
                                 divPadre.appendChild(divHijo);
                                 enlace.appendChild(divPadre);
                                 selectBox.appendChild(enlace);
-                                
+                                account += 1;
                             <%end%>
-                            account += 1;
+                            
                         <%end%>
                     <%end%>
                 }
@@ -939,7 +936,7 @@
         }
         <%if current_user.bank_brasils.count > 0%>  
             <%current_user.bank_brasils.each do |bank_user|%>
-                if ("<%=bank_user.country%>" === country){
+                if (<%=bank_user.view%> &&"<%=bank_user.country%>" === country){
                     <%admin.bank_brasils.each do |bank_admin| %>
                         <%if bank_admin.status === "activo"%>
                             <%if bank_admin.bank === bank_user.bank%>
@@ -1002,7 +999,7 @@
         }
         <%if current_user.wallets.count > 0%>    
             <%current_user.wallets.each do |wallet_user|%>
-                if ("<%=wallet_user.country%>" === country){
+                if (<%=wallet_user.view%> && "<%=wallet_user.country%>" === country){
                     <%admin.wallets.each do |wallet_admin| %>
                         <%if wallet_admin.status === "activo"%>
                             <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
@@ -1063,7 +1060,7 @@
         }
         <%if current_user.wallet_with_users.count > 0%>    
             <%current_user.wallet_with_users.each do |wallet_user|%>
-                if ("<%=wallet_user.country%>" === country){
+                if (<%=wallet_user.view%> && "<%=wallet_user.country%>" === country){
                     <%admin.wallet_with_users.each do |wallet_admin| %>
                         <%if wallet_admin.status === "activo"%>
                             <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
@@ -1116,7 +1113,7 @@
 
         <%if current_user.digital_payments.count > 0%>    
             <%current_user.digital_payments.each do |payment_user|%>
-                if ("<%=payment_user.country%>" === country){
+                if (<%=payment_user.view%> && "<%=payment_user.country%>" === country){
                     <%admin.digital_payments.each do |payment_admin| %>
                         <%if payment_admin.status === "activo"%>
                             <%if payment_admin.payment_method === payment_user.payment_method%>
@@ -1168,7 +1165,7 @@
         
         <%if current_user.mobile_payments.count > 0%>    
             <%current_user.mobile_payments.each do |payment_user|%>
-                if ("<%=payment_user.country%>" === country){
+                if (<%=payment_user.view%> && "<%=payment_user.country%>" === country){
                     <%admin.mobile_payments.each do |payment_admin| %>
                         <%if payment_admin.status === "activo"%>
                             

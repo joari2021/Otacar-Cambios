@@ -1,6 +1,6 @@
 <%=render "partials/name-and-cod-of-banks"%>
 <h4>Mis metodos para recibir pagos</h4>
-<a class="btn btn-success mt-2" href="/set_method">Añadir <i class="fas fa-plus"></i></a>
+<a class="btn btn-info mt-2" href="/set_method">Añadir <i class="fas fa-plus"></i></a>
 <div class="row mb-5">
     <%if current_user.banks.count <= 0 && current_user.bank_brasils.count <= 0 && current_user.wallets.count <= 0 && current_user.wallet_with_users.count <= 0 && current_user.digital_payments.count <= 0 && current_user.mobile_payments.count <= 0%>
     <div class="container">
@@ -20,9 +20,9 @@
                     <tr>
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
                         <th scope="col"><small class="font-weight-bold">Titular<small></th>
-                        <th scope="col"><small class="font-weight-bold">Nro DNI<small></th>
+                        <th scope="col"><small class="font-weight-bold">DNI<small></th>
                         <th scope="col"><small class="font-weight-bold">Banco<small></th>
-                        <th scope="col"><small class="font-weight-bold">Nro Cuenta<small></th>
+                        <th scope="col"><small class="font-weight-bold">Cuenta<small></th>
                         <%if current_user.is_admin?%>
                             <th scope="col"><small class="font-weight-bold">Status<small></th>
                         <%end%>
@@ -31,7 +31,7 @@
                 <tbody>
                     <% current_user.banks.each do |account_bank| %>
                     <tr class="shadow-sm">
-                        <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country.capitalize%>" title="<%=account_bank.country.capitalize%>"/></td>
+                        <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
 
                         <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
                         
@@ -105,7 +105,11 @@
                             </div>
                         </div>
                         
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%if account_bank.permit_delete != "denied"%>
+                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                        <%else%> <!--MOSTRAR QUE LOS POPOVER SE VEAN-->
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="bottom" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                        <%end%>
                     </tr>
                     <%end%>
 
@@ -121,8 +125,8 @@
                         </td>
                         <td class="align-middle"><img src="/img/bancos/<%=account_bank.bank%>.png" class="img-fluid avatar" alt="<%=account_bank.bank%>" title="<%=account_bank.bank%>"/></td>
                         </td>
-                        <%part1 = account_bank.number_account[0, 4]%>
-                        <%part2 = account_bank.number_account[-4,4]%> 
+                        <%part1 = account_bank.number_agency%>
+                        <%part2 = account_bank.number_account[-2,2]%> 
                         <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
                         </td>
 
@@ -438,8 +442,8 @@
                     <tr>
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
                         <th scope="col"><small class="font-weight-bold">Banco<small></th>
-                        <th scope="col"><small class="font-weight-bold">Nro Telefono<small></th>
-                        <th scope="col"><small class="font-weight-bold">Nro Documento<small></th>
+                        <th scope="col"><small class="font-weight-bold">Telefono<small></th>
+                        <th scope="col"><small class="font-weight-bold">Documento<small></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -524,7 +528,11 @@
 
     <%end%>
 </div>
-<!-- Fin tabla cuentas -->
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
 
 
 

@@ -1,9 +1,12 @@
 <%=render 'partials/name-and-cod-of-banks'%>
+<%=render 'partials/zone-time'%>
+<%@zona_horaria = "Caracas"%>
 <div class="row mb-3">
     <!-- Tabla Por Confirmar -->
     <div class="col-12">
         <h5 class="text-center">Por Confirmar</h5>
         <div class="table-responsive">
+
             <table class="table">
                 <thead>
                 <tr>
@@ -20,7 +23,9 @@
                     <%if transaction.status === "por confirmar"%>
                         <%transaction_for_confirm = true%>
                         <tr class="shadow-sm">
-                            <td><span class="d-block"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.localtime.strftime("%H:%M:%S")%></small>
+                            
+                            <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
+                            
                             </td>
                             <td><span class="d-block"><%=transaction.user.name%> <%=transaction.user.last_name%></span><small class="text-muted"><%=transaction.user.email%></small>
                             </td>
@@ -42,8 +47,8 @@
                                     current_user.bank_brasils.each do |bank|
                                         
                                         if bank.id.to_s === method[1]
-                                            part1 = bank.number_account[0, 4]
-                                            part2 = bank.number_account[-4,4]
+                                            part1 = bank.number_agency
+                                            part2 = bank.number_account[-2,2]
                                         %>
                                             <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
                                             <td class="align-middle"><%=part1 << "****" << part2%></td>
@@ -118,10 +123,11 @@
     </div>
 </div>
 
+<!-- Tabla Por Pagar -->
 <div class="row mb-3">
     
     <div class="col-12">
-        <!-- Tabla Por Pagar -->
+        
         <h5 class="text-center">Envios Pendientes</h5>
         <div class="table-responsive">
             <table class="table">
@@ -140,7 +146,7 @@
                     <%if transaction.status === "envio en proceso"%>
                         <%transaction_for_confirm = true%>
                         <tr class="shadow-sm">
-                            <td><span class="d-block"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.localtime.strftime("%H:%M:%S")%></small>
+                            <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
                             </td>
 
                             <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
@@ -165,8 +171,8 @@
                                     transaction.user.bank_brasils.each do |bank|
                                         
                                         if bank.id.to_s === method[1]
-                                            part1 = bank.number_account[0, 4]
-                                            part2 = bank.number_account[-4,4]
+                                            part1 = bank.number_agency
+                                            part2 = bank.number_account[-2,2]
                                         %>
                                             <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
                                             <td class="align-middle"><%=part1 << "****" << part2%></td>
@@ -238,3 +244,12 @@
         <%end%>
     </div>
 </div>
+<script>
+/*
+    $(document).ready(function(){
+
+       setInterval(() => {
+           $('#seccionRecargar').load('confirm.html.erb');
+       }, 5000);
+    });*/
+</script>

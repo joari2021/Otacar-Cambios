@@ -92,24 +92,33 @@
 
     <!--DNI y Banco-->
     <div class="form-row field mb-3">
-        <div class="col-3 col-md-3 col-lg-2 mb-2">
-            <label>Tipo *</label>
-            <select class="custom-select is-invalid" name="bank[type_document]" onchange="validarSelectDNI(this)" onkeyup="habilitarSave()" required>
-                <option selected disabled value="">...</option>
-                <option value="V">V</option>
-                <option value="E">E</option>
-                <option value="P">P</option>
-                <option value="J">J</option>
-            </select>
-        </div>
-        <div class="col-9 col-md-4 col-lg-4 mb-2">
-            <label for="validationDNI">Nro Documento *</label>
-            <input class="form-control is-invalid" id="validationDNI" type="text" name="bank[identidy]" value="<%=bank.identidy%>" disabled="disabled">
-            <div class="invalid-feedback">
-                Ingrese un DNI valido
+        <%if params[:country] === "Venezuela"%>
+            <div class="col-3 col-md-3 col-lg-2 mb-2">
+                <label>Tipo *</label>
+                <select class="custom-select is-invalid" name="bank[type_document]" onchange="validarSelectDNI(this)" onkeyup="habilitarSave()" required>
+                    <option selected disabled value="">...</option>
+                    <option value="V">V</option>
+                    <option value="E">E</option>
+                    <option value="P">P</option>
+                    <option value="J">J</option>
+                </select>
             </div>
-        </div>
-
+            <div class="col-9 col-md-4 col-lg-4 mb-2">
+                <label for="validationDNI">Nro Documento *</label>
+                <input class="form-control is-invalid" id="validationDNI" type="text" name="bank[identidy]" value="<%=bank.identidy%>" disabled="disabled">
+                <div class="invalid-feedback">
+                    Ingrese un DNI valido
+                </div>
+            </div>
+        <%else%>
+            <div class="col-12 col-md-7 col-lg-6 mb-2">
+                <label for="validationDNI">Nro Documento *</label>
+                <input class="form-control is-invalid" id="validationDNI" maxlength="15" type="text" name="bank[identidy]" value="<%=bank.identidy%>" oninput="soloNumeros(this,6,15),habilitarSave()">
+                <div class="invalid-feedback">
+                    Ingrese un DNI valido
+                </div>
+            </div>
+        <%end%>
         <div class="col-12 col-md-5 col-lg-6 mb-2">
             <label>Banco *</label>
 
@@ -133,7 +142,7 @@
                 <option value="Banco Mercantil Panama" <%if bank.banco === "Banco Mercantil Panama"%>selected<%end%>>Banco Mercantil Panama</option>
                 <%when "Peru"%>
                 <option value="Banco BCP" <%if bank.banco === "Banco BCP"%>selected<%end%>>Banco BCP</option>
-                <option value="Escotia Bank" <%if bank.banco === "Escotia Bank"%>selected<%end%>>Escotia Bank</option>
+                <option value="Scotiabank" <%if bank.banco === "Scotiabank"%>selected<%end%>>Scotiabank</option>
                 <%when "Venezuela"%>
                 <option value="Banco Banesco" <%if bank.banco === "Banco Banesco"%>selected<%end%>>Banco Banesco</option>
                 <option value="B.O.D" <%if bank.banco === "B.O.D"%>selected<%end%>>B.O.D</option>
@@ -184,21 +193,21 @@
     var inputs = document.getElementsByTagName("input");
     var select0 = document.getElementsByTagName("select")[0];
     var select1 = document.getElementsByTagName("select")[1];
-    var select2 = document.getElementsByTagName("select")[2];
+    <%if params[:country] === "Venezuela"%>var select2 = document.getElementsByTagName("select")[2];<%end%>
     if (div.id === "error_explanation"){
         
         soloLetras(input[2]);
         soloLetras(input[3]);
         soloNumeros(input[4],12);
         validarSelect(select1);
-        validarSelect(select2);
+        <%if params[:country] === "Venezuela"%>validarSelect(select2);<%end%>
         soloNumeros(input[5],20);
     }
 
     function habilitarSave() {
         botonSave = document.getElementById("btn");
         formulario = false
-        if (inputs[2].className.indexOf("is-valid") != -1 && inputs[3].className.indexOf("is-valid") != -1 && inputs[4].className.indexOf("is-valid") != -1 && inputs[5].className.indexOf("is-valid") != -1 && select0.className.indexOf("is-valid") != -1 && select1.className.indexOf("is-valid") != -1 && select2.className.indexOf("is-valid") != -1){
+        if (inputs[2].className.indexOf("is-valid") != -1 && inputs[3].className.indexOf("is-valid") != -1 && inputs[4].className.indexOf("is-valid") != -1 && inputs[5].className.indexOf("is-valid") != -1 && select0.className.indexOf("is-valid") != -1 && select1.className.indexOf("is-valid") != -1 <%if params[:country] === "Venezuela"%>&& select2.className.indexOf("is-valid") != -1<%end%>){
             formulario = true;
         }
         if (formulario == true){

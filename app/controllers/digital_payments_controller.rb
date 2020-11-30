@@ -80,10 +80,23 @@ class DigitalPaymentsController < ApplicationController
   # DELETE /digital_payments/1
   # DELETE /digital_payments/1.json
   def destroy
-    @digital_payment.destroy
-    respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'El Pago Digital ha sido eliminado con exito.' }
-      format.json { head :no_content }
+    if @digital_payment.permit_delete === "denied"
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción y debe terminar las transacciones que tenga en proceso para poder eliminarla.' }
+        format.json { head :no_content }
+      end
+    elsif @digital_payment.permit_delete === "only_user"
+      @digital_payment.update(view:"false")
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Pago Digital eliminado con exito.' }
+        format.json { head :no_content }
+      end
+    else
+      @digital_payment.destroy
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Pago Digital eliminado con exito.' }
+        format.json { head :no_content }
+      end
     end
   end
 

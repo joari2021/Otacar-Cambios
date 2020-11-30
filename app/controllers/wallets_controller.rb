@@ -81,10 +81,23 @@ class WalletsController < ApplicationController
   # DELETE /wallets/1
   # DELETE /wallets/1.json
   def destroy
-    @wallet.destroy
-    respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'El monedero digital fue eliminado con exito.' }
-      format.json { head :no_content }
+    if @wallet.permit_delete === "denied"
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción y debe terminar las transacciones que tenga en proceso para poder eliminarla.' }
+        format.json { head :no_content }
+      end
+    elsif @wallet.permit_delete === "only_user"
+      @wallet.update(view:"false")
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Monedero Digital eliminado con exito.' }
+        format.json { head :no_content }
+      end
+    else
+      @wallet.destroy
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Monedero Digital eliminado con exito.' }
+        format.json { head :no_content }
+      end
     end
   end
 

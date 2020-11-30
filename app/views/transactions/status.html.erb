@@ -1,5 +1,4 @@
 <%=render 'partials/name-and-cod-of-banks'%>
-<script>console.log("<%=@valor%>") </script>
 <div class="col-12">
     <h4>Estado de mis transacciones</h4>
     <!--TRANSACCION PENDIENTE-->
@@ -37,8 +36,8 @@
                             @user_admin.bank_brasils.each do |bank|
                                 
                                 if bank.id.to_s === method[1]
-                                    part1 = bank.number_account[0, 4]
-                                    part2 = bank.number_account[-4,4]
+                                    part1 = bank.number_agency
+                                    part2 = bank.number_account[-2,2]
                                    %>
                                     <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                     
@@ -120,7 +119,7 @@
                 <tr>
                     <th scope="col"><small class="font-weight-bold">Pais Destino<small></th>
                     <th scope="col"><small class="font-weight-bold">Nombre Titular<small></th>
-                    <th scope="col"><small class="font-weight-bold">Nro Documento<small></th>
+                    <th scope="col"><small class="font-weight-bold">DNI<small></th>
                     <th colspan="2"><small class="font-weight-bold">Cuenta Credito<small></th>
                     <th scope="col"><small class="font-weight-bold">Monto a recibir<small></th>
                     <th scope="col"><small class="font-weight-bold">Estado<small></th>
@@ -167,8 +166,8 @@
                                 current_user.bank_brasils.each do |bank|
                                     
                                     if bank.id.to_s === method[1]
-                                        part1 = bank.number_account[0, 4]
-                                        part2 = bank.number_account[-4,4]
+                                        part1 = bank.number_agency
+                                        part2 = bank.number_account[-2,2]
                                         part3 = bank.cpf[0, 3]
                                         part4 = bank.cpf[-2,2]%>
                                         <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>

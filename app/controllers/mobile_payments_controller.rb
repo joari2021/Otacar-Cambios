@@ -81,10 +81,23 @@ class MobilePaymentsController < ApplicationController
   # DELETE /mobile_payments/1
   # DELETE /mobile_payments/1.json
   def destroy
-    @mobile_payment.destroy
-    respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'Pago Movil eliminado con exito.' }
-      format.json { head :no_content }
+    if @mobile_payment.permit_delete === "denied"
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción y debe terminar las transacciones que tenga en proceso para poder eliminarla.' }
+        format.json { head :no_content }
+      end
+    elsif @mobile_payment.permit_delete === "only_user"
+      @mobile_payment.update(view:"false")
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Pago Movil eliminado con exito.' }
+        format.json { head :no_content }
+      end
+    else
+      @mobile_payment.destroy
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Pago Movil eliminado con exito.' }
+        format.json { head :no_content }
+      end
     end
   end
 

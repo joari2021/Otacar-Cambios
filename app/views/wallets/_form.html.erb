@@ -82,10 +82,10 @@
       <select class="custom-select is-invalid" name="wallet[wallet_name]" onchange="validarSelect(this),habilitarSave()" required>
           <option selected disabled value="">Elegir...</option>
           <%country = params[:country] || wallet.country%>
-          <%case country.capitalize%>
+          <%case country%>
           <%when "Brasil"%>
           <option value="Pix" <%if wallet.wallet_name === "Pix"%>selected<%end%>>Pix</option>
-          <%when "Usa"%>
+          <%when "USA"%>
           <option value="Zelle" <%if wallet.wallet_name === "Zelle"%>selected<%end%>>Zelle</option>
           <%end%>
       </select>

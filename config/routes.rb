@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :banks
 
   get 'payment_methods' => "payment_methods#index"
+  get '/transaction-for-confirm' => "transactions#confirm"
   get 'set_method' => "payment_methods#set_method"
   get 'register_succesfull' => "register#index"
   resources :transactions

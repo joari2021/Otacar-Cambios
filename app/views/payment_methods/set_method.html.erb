@@ -28,7 +28,7 @@
       <option value="Peru">Peru</option>
       <%end%>
       <!--<option value="Portugal">Portugal</option>-->
-      <%if current_user.country != "Usa" || current_user.is_admin?%>
+      <%if current_user.country != "USA" || current_user.is_admin?%>
       <option value="USA">USA</option>
       <%end%>
       <%if current_user.country != "Venezuela" || current_user.is_admin?%>
@@ -155,7 +155,7 @@
 <%end%>
 
 <!--Metodos de Pago de USA-->
-<%if current_user.country != "Usa" || current_user.is_admin?%>
+<%if current_user.country != "USA" || current_user.is_admin?%>
 <div class="row justify-content-center mt-3 d-none" id="MethodsUSA">
   <div class="col-12 col-sm-5 was-validated text-center">
     <label for="validationMethodsUSA" class="">Elije un metodo de pago</label>
@@ -235,7 +235,7 @@
         listaMethodsPeru.classList.add("d-none");
         <%end%>
 
-        <%if current_user.country != "Usa" || current_user.is_admin?%>
+        <%if current_user.country != "USA" || current_user.is_admin?%>
         listaMethodsUSA = document.getElementById("MethodsUSA");
         listaMethodsUSA.classList.add("d-none");
         <%end%>
@@ -327,7 +327,7 @@
                 break;
             <%end%>
 
-            <%if current_user.country != "Usa" || current_user.is_admin?%>
+            <%if current_user.country != "USA" || current_user.is_admin?%>
             case "USA":
 
                 eliminarCajas();

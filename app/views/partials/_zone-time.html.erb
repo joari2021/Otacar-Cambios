@@ -1,0 +1,13 @@
+<%
+if current_user.country === "Argentina" || current_user.country === "Brasil" || current_user.country === "Chile"
+    @zona_horaria = "Brasilia" #  -03:00
+elsif current_user.country === "Colombia" || current_user.country === "Ecuador" || current_user.country === "Peru" || current_user.country === "Panama"
+    @zona_horaria = "Bogota"  #   -05:00
+elsif current_user.country === "España"
+    @zona_horaria = "Madrid"  #   +01:00
+elsif current_user.country === "USA"
+    @zona_horaria = "Pacific Time (US & Canada)"  #   -08:00
+elsif current_user.country === "Venezuela"
+    @zona_horaria = "Caracas"  #   -04:00
+end
+%>

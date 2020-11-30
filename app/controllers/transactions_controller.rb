@@ -9,6 +9,9 @@ class TransactionsController < ApplicationController
     @transactions = Transaction.all
   end
 
+  def confirm
+    @transactions = Transaccion.all
+  end
   def status
 
     current_user.transactions.each do |transaction|

@@ -80,10 +80,23 @@ class BanksController < ApplicationController
   # DELETE /banks/1
   # DELETE /banks/1.json
   def destroy
-    @bank.destroy
-    respond_to do |format|
-      format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
-      format.json { head :no_content }
+    if @bank.permit_delete === "denied"
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción y debe terminar las transacciones que tenga en proceso para poder eliminarla.' }
+        format.json { head :no_content }
+      end
+    elsif @bank.permit_delete === "only_user"
+      @bank.update(view:"false")
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
+        format.json { head :no_content }
+      end
+    else
+      @bank.destroy
+      respond_to do |format|
+        format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
+        format.json { head :no_content }
+      end
     end
   end
 

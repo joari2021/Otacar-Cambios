@@ -1,3 +1,4 @@
+<%=render 'partials/zone-time'%>
 <h4>Transaciones realizadas</h4>
 
 <div class="col-12">
@@ -19,7 +20,7 @@
                         <%if transaction.status === "realizada"%>
                             <%coincidencia = true%>
                             <tr class="shadow-sm">
-                                <td><span class="d-block"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.localtime.strftime("%H:%M:%S")%></small>
+                                <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
                                 </td>
         
                                 <%method = transaction.account_destinity_usuario.split("-")%>
@@ -40,8 +41,8 @@
                                         current_user.bank_brasils.each do |bank|
                                             
                                             if bank.id.to_s === method[1]
-                                                part1 = bank.number_account[0, 4]
-                                                part2 = bank.number_account[-4,4]
+                                                part1 = bank.number_agency
+                                                part2 = bank.number_account[-2,2]
                                             %>
                                                 <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                                 
@@ -130,8 +131,8 @@
                                         transaction.user.bank_brasils.each do |bank|
                                             
                                             if bank.id.to_s === method[1]
-                                                part1 = bank.number_account[0, 4]
-                                                part2 = bank.number_account[-4,4]
+                                                part1 = bank.number_agency
+                                                part2 = bank.number_account[-2,2]
                                             %>
                                                 <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                                 

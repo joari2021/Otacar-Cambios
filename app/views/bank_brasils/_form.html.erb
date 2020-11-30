@@ -15,17 +15,10 @@
             <div class="card bg-light my-3" style="max-width: 18rem;">
                 <div class="card-header text-capitalize"><%=bank_brasil.name%> <%=bank_brasil.last_name%></div>
                 <div class="card-body">
-                    <%
-                        bancos = {
-                            "Banco De Venezuela" => "0102",
-                            "Banco Mercantil" => "0105",
-                            "Banco Banesco" => "0134",
-                            "B.O.D" => "0116"
-                        }
-                    %>
+                
                     <%part1 = bank_brasil.number_account[0, 4]%>
                     <%part2 = bank_brasil.number_account[-4,4]%> 
-                    <p class="card-text"><img src="/img/bancos/<%=bancos[bank_brasil.bank]%>.png" class="img-fluid rounded-circle avatar" alt="<%=bank_brasil.bank%>" title="<%=bank_brasil.bank%>"/> <span class=""><%=part1 << "****" << part2%></span></p>
+                    <p class="card-text"><img src="/img/bancos/<%=bank_brasil.bank%>.png" class="img-fluid rounded-circle avatar" alt="<%=bank_brasil.bank%>" title="<%=bank_brasil.bank%>"/> <span class=""><%=part1 << "****" << part2%></span></p>
 
                 </div>
             </div>
@@ -101,29 +94,29 @@
           <option value="Bradesco" <%if bank_brasil.bank === "Bradesco"%>selected<%end%>>Bradesco</option>
           <option value="Caixa" <%if bank_brasil.bank === "Caixa"%>selected<%end%>>Caixa</option>
           <option value="Itaú" <%if bank_brasil.bank === "Itaú"%>selected<%end%>>Itaú</option>
-          <option value="Ití" <%if bank_brasil.bank === "Ití"%>selected<%end%>>Ití</option>
+          <option value="Iti" <%if bank_brasil.bank === "Iti"%>selected<%end%>>Iti</option>
           <option value="Nubank" <%if bank_brasil.bank === "Nubank"%>selected<%end%>>Nubank</option>
           <option value="Santander" <%if bank_brasil.bank === "Santander"%>selected<%end%>>Santander</option>
         </select>
         <div class="invalid-feedback">Elige una opcion</div>
       </div>
     </div>
-  <!--Banco-->
-  <div class="form-row field mb-3">
-    <div class="col-12 col-sm-4 mb-2">
-      <label for="validationAgencia">Nro Agencia *</label>
-      <input class="form-control is-invalid" id="validationAgencia" type="text" maxlength="4" oninput="soloNumeros(this,4,4),habilitarSave()" name="bank_brasil[number_agency]" value="<%=bank_brasil.number_agency%>">
+    <!--Banco-->
+    <div class="form-row field mb-3">
+      <div class="col-12 col-sm-4 mb-2">
+        <label for="validationAgencia">Nro Agencia *</label>
+        <input class="form-control is-invalid" id="validationAgencia" type="text" maxlength="4" oninput="soloNumeros(this,4,4),habilitarSave()" name="bank_brasil[number_agency]" value="<%=bank_brasil.number_agency%>">
+      <div class="invalid-feedback">
+        Ingrese un número valido
+      </div>
+    </div>
+    <div class="col-12 col-sm-8 mb-2">
+      <label for="validationNumberAccount">Nro de Cuenta *</label>
+      <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,3,20),habilitarSave()" name="bank_brasil[number_account]" value="<%=bank_brasil.number_account%>" required>
     <div class="invalid-feedback">
-      Ingrese un número valido
+      Ingrese un número de cuenta válido
     </div>
   </div>
-  <div class="col-12 col-sm-8 mb-2">
-    <label for="validationNumberAccount">Nro de Cuenta *</label>
-    <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20,20),habilitarSave()" name="bank_brasil[number_account]" value="<%=bank_brasil.number_account%>" required>
-  <div class="invalid-feedback">
-    Ingrese un número de cuenta válido
-  </div>
-</div>
 </div>
 <div class="actions">
   <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5", id:"btn", disabled:"disabled" %>

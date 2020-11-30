@@ -3,7 +3,7 @@ class BankBrasil < ApplicationRecord
 
     def verify_data_saved
         #VALIDAR EL CAMPO BANCO#
-        bancos = %w{ Bradesco Caixa Itaú Ití Nubank Santander }
+        bancos = %w{ Bradesco Caixa Itaú Iti Nubank Santander }
 
         encontrado = false
         if self.bank != "Banco Do Brasil"
@@ -35,7 +35,7 @@ class BankBrasil < ApplicationRecord
      
      validates :number_agency, :number_account, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
   
-     validates :number_account, length: { is: 20, message: " Este campo debe contener 20 numeros" }
+     validates :number_account, length: { in: 3..20, message: " Este campo debe contener 20 numeros" }
      validates :number_agency, length: { is: 4, message: " Este campo debe contener 4 numeros" }
      validates :cpf, length: { is: 11, message: " Este campo debe contener 11 numeros" }
 end
