@@ -235,7 +235,7 @@
                         <%end%>
                         <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
 
-                        <%eliminar = false%><!--DAR VALORES A LOS BADGES-->
+                        <%eliminar = false%>
                         <%if transaction.status === "por confirmar"
                             badge = "badge-secondary"
                             text = "por confirmar"
@@ -268,7 +268,7 @@
                         end%>
 
                         <%if transaction.status != "presenta incidencia"%>
-                            <td class="align-middle"><span role="button" class="badge badge-pill <%=badge%>" data-toggle="popover" data-placement="bottom" title="Información" data-content="<%=info%>"><%=text%></span></td>
+                            <td class="align-middle"><span role="button" class="badge badge-pill <%=badge%>" data-toggle="popover" data-placement="left" title="Información" data-content="<%=info%>"><%=text%></span></td>
                         <%else%>
                             <td class="align-middle"><span role="button" class="badge badge-pill badge-warning" data-toggle="modal" data-target="#exampleModal"><%=transaction.status%></span></td>
 

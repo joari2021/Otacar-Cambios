@@ -41,7 +41,7 @@
     accounts_admin_from_country_user = 0
 
     if admin.banks.count > 0
-        admin.banks.each do |bank|
+        admin.banks.where(view:true).each do |bank|
             #BANCOS DEL PAIS DESTINO DEL USUARIO
             case bank.country
             when "Argentina"
@@ -121,8 +121,8 @@
     bank_iti = 0
     bank_santander = 0
     if admin.bank_brasils.count > 0
-        admin.bank_brasils.each do |bank|
-            if bank.status === "activo"
+        admin.bank_brasils.where(view:true).each do |bank|
+            if bank.status === "activo" 
                 bank_brasil += 1
                 if bank.bank === "Banco Do Brasil"
                     bank_do_brasil += 1
@@ -152,7 +152,7 @@
     wallet_brasil = 0
     wallet_usa = 0
     if admin.wallets.count > 0
-        admin.wallets.each do |wallet|
+        admin.wallets.where(view:true).each do |wallet|
             if wallet.wallet_name === "Pix"
                 if wallet.status === "activo"
                     wallet_brasil += 1
@@ -164,7 +164,7 @@
                     end  
                 end
             end
-            if wallet.wallet_name === "Zelle"
+            if wallet.wallet_name === "Zelle" 
                 if wallet.status === "activo"
                     wallet_usa += 1
                 end
@@ -180,7 +180,7 @@
 
     wallet_with_user_brasil = 0
     if admin.wallet_with_users.count > 0
-        admin.wallet_with_users.each do |wallet|
+        admin.wallet_with_users.where(view:true).each do |wallet|
             if wallet.status === "activo"
                 wallet_with_user_brasil += 1
             end
@@ -195,7 +195,7 @@
 
     digital_payments = 0
     if admin.digital_payments.count > 0
-        admin.digital_payments.each do |payment|
+        admin.digital_payments.where(view:true).each do |payment|
             if payment.status === "activo"
                 digital_payments += 1
             end
@@ -210,7 +210,7 @@
 
     mobile_payments = 0
     if admin.mobile_payments.count > 0
-        admin.mobile_payments.each do |payment|
+        admin.mobile_payments.where(view:true).each do |payment|
             if payment.status === "activo"
                 mobile_payments += 1
             end
@@ -872,9 +872,9 @@
                 selectBox.removeChild(options[0]);   
             }
         }
-        <%if current_user.banks.count > 0%>    
-            <%current_user.banks.each do |bank_user|%>
-                if (<%=bank_user.view%> && "<%=bank_user.country%>" === country){
+        <%if current_user.banks.where(view:true).count > 0%>    
+            <%current_user.banks.where(view:true).each do |bank_user|%>
+                if ("<%=bank_user.country%>" === country){
                     <%admin.banks.each do |bank_admin| %>  
                         <%if bank_admin.status === "activo"%>
                             <%if bank_admin.banco === bank_user.banco%>
@@ -934,9 +934,9 @@
                 selectBox.removeChild(options[0]);   
             }
         }
-        <%if current_user.bank_brasils.count > 0%>  
-            <%current_user.bank_brasils.each do |bank_user|%>
-                if (<%=bank_user.view%> &&"<%=bank_user.country%>" === country){
+        <%if current_user.bank_brasils.where(view:true).count > 0%>  
+            <%current_user.bank_brasils.where(view:true).each do |bank_user|%>
+                if ("<%=bank_user.country%>" === country){
                     <%admin.bank_brasils.each do |bank_admin| %>
                         <%if bank_admin.status === "activo"%>
                             <%if bank_admin.bank === bank_user.bank%>
@@ -997,9 +997,9 @@
                 }
             }
         }
-        <%if current_user.wallets.count > 0%>    
-            <%current_user.wallets.each do |wallet_user|%>
-                if (<%=wallet_user.view%> && "<%=wallet_user.country%>" === country){
+        <%if current_user.wallets.where(view:true).count > 0%>    
+            <%current_user.wallets.where(view:true).each do |wallet_user|%>
+                if ("<%=wallet_user.country%>" === country){
                     <%admin.wallets.each do |wallet_admin| %>
                         <%if wallet_admin.status === "activo"%>
                             <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
@@ -1058,9 +1058,9 @@
                 }
             }
         }
-        <%if current_user.wallet_with_users.count > 0%>    
-            <%current_user.wallet_with_users.each do |wallet_user|%>
-                if (<%=wallet_user.view%> && "<%=wallet_user.country%>" === country){
+        <%if current_user.wallet_with_users.where(view:true).count > 0%>    
+            <%current_user.wallet_with_users.where(view:true).each do |wallet_user|%>
+                if ("<%=wallet_user.country%>" === country){
                     <%admin.wallet_with_users.each do |wallet_admin| %>
                         <%if wallet_admin.status === "activo"%>
                             <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
@@ -1111,9 +1111,9 @@
         var selectBox = document.getElementById("opcionesAccountUserDestino");
         account = 0;
 
-        <%if current_user.digital_payments.count > 0%>    
-            <%current_user.digital_payments.each do |payment_user|%>
-                if (<%=payment_user.view%> && "<%=payment_user.country%>" === country){
+        <%if current_user.digital_payments.where(view:true).count > 0%>    
+            <%current_user.digital_payments.where(view:true).each do |payment_user|%>
+                if ("<%=payment_user.country%>" === country){
                     <%admin.digital_payments.each do |payment_admin| %>
                         <%if payment_admin.status === "activo"%>
                             <%if payment_admin.payment_method === payment_user.payment_method%>
@@ -1163,9 +1163,9 @@
         var selectBox = document.getElementById("opcionesAccountUserDestino");
         account = 0;
         
-        <%if current_user.mobile_payments.count > 0%>    
-            <%current_user.mobile_payments.each do |payment_user|%>
-                if (<%=payment_user.view%> && "<%=payment_user.country%>" === country){
+        <%if current_user.mobile_payments.where(view:true).count > 0%>    
+            <%current_user.mobile_payments.where(view:true).each do |payment_user|%>
+                if ("<%=payment_user.country%>" === country){
                     <%admin.mobile_payments.each do |payment_admin| %>
                         <%if payment_admin.status === "activo"%>
                             
@@ -1393,7 +1393,7 @@
     function optionBanksAdmin(country){
         var selectBox = document.getElementById("opcionesAccountAdminDestino");
 
-        <%admin.banks.each do |bank_admin|%>
+        <%admin.banks.where(view:true).each do |bank_admin|%>
             if ("<%=bank_admin.country%>" === country){
                 <%if bank_admin.status === "activo"%>
                 //ENLACE
@@ -1417,9 +1417,7 @@
                     //H1
                     var h2 = document.createElement("h2");
                     h2.classList.add("titulo","tam-h2");
-                    <%part1 = bank_admin.number_account[0, 4]%>
-                    <%part2 = bank_admin.number_account[-4,4]%>
-                    var content = document.createTextNode("<%=part1%>********<%=part2%>");
+                    var content = document.createTextNode("<%=bank_admin.banco%>");
                     
                     h2.appendChild(content);
                     divHijo.appendChild(h2);
@@ -1435,10 +1433,12 @@
     function optionBanksBrasilAdmin(country){
         var selectBox = document.getElementById("opcionesAccountAdminDestino");
 
-        <%admin.bank_brasils.each do |bank_admin|%>
+        <%caixaFind = false%>
+        <%admin.bank_brasils.where(view:true).each do |bank_admin|%>
             if ("<%=bank_admin.country%>" === country){
-                <%if bank_admin.status === "activo"%>
-                //ENLACE
+                
+                <%if bank_admin.status === "activo" && !caixaFind%>
+                    //ENLACE
                     var enlace = document.createElement("a");
                     enlace.setAttribute("href","#");
                     enlace.setAttribute("id","bank_brasils-<%=bank_admin.id%>");
@@ -1459,9 +1459,7 @@
                     //H1
                     var h2 = document.createElement("h2");
                     h2.classList.add("titulo","tam-h2");
-                    <%part1 = bank_admin.number_account[0, 4]%>
-                    <%part2 = bank_admin.number_account[-4,4]%>
-                    var content = document.createTextNode("<%=part1%>********<%=part2%>");
+                    var content = document.createTextNode("<%=bank_admin.bank%>");
                     
                     h2.appendChild(content);
                     divHijo.appendChild(h2);
@@ -1469,6 +1467,10 @@
                     divPadre.appendChild(divHijo);
                     enlace.appendChild(divPadre);
                     selectBox.appendChild(enlace);
+
+                    <%if bank_admin.bank === "Caixa"%>
+                        <%caixaFind = true%>
+                    <%end%>
                 <%end%>
             } 
         <%end%>         
@@ -1477,7 +1479,7 @@
     function optionWalletsAdmin(country){
         var selectBox = document.getElementById("opcionesAccountAdminDestino");
 
-        <%admin.wallets.each do |wallet_admin|%>
+        <%admin.wallets.where(view:true).each do |wallet_admin|%>
             if ("<%=wallet_admin.country%>" === country){
                 <%if wallet_admin.status === "activo"%>
                 //ENLACE
@@ -1519,7 +1521,7 @@
     function optionWalletsAdminWithUser(country){
         var selectBox = document.getElementById("opcionesAccountAdminDestino");
 
-        <%admin.wallet_with_users.each do |wallet_admin|%>
+        <%admin.wallet_with_users.where(view:true).each do |wallet_admin|%>
             if ("<%=wallet_admin.country%>" === country){
                 <%if wallet_admin.status === "activo"%>
                 //ENLACE
@@ -1561,7 +1563,7 @@
     function optionDigitalPaymentsAdmin(country){
         var selectBox = document.getElementById("opcionesAccountAdminDestino");
 
-        <%admin.digital_payments.each do |payment_admin|%>
+        <%admin.digital_payments.where(view:true).each do |payment_admin|%>
             if ("<%=payment_admin.country%>" === country){
                 <%if payment_admin.status === "activo"%>
                 //ENLACE
@@ -1603,10 +1605,10 @@
     function optionMobilePaymentsAdmin(country){
         var selectBox = document.getElementById("opcionesAccountAdminDestino");
 
-        <%admin.mobile_payments.each do |payment_admin|%>
+        <%admin.mobile_payments.where(view:true).each do |payment_admin|%>
             if ("<%=payment_admin.country%>" === country){
                 <%if payment_admin.status === "activo"%>
-                //ENLACE
+                    //ENLACE
                     var enlace = document.createElement("a");
                     enlace.setAttribute("href","#");
                     enlace.setAttribute("id","mobile_payments-<%=payment_admin.id%>");
@@ -1916,11 +1918,67 @@
                 mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
                 break;
 
+            case "Chile":
+                montoTasa = "<%=rate.rate_chile%>";
+                montoTasaOferta = "<%=rate.rate_chile_min%>";
+                montoMinimo = "<%=rate.monto_min_chile%>";
+                monedaPaisD = "CLP";
+                mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
+                break;
+
+            case "Colombia":
+                montoTasa = "<%=rate.rate_colombia%>";
+                montoTasaOferta = "<%=rate.rate_colombia_min%>";
+                montoMinimo = "<%=rate.monto_min_colombia%>";
+                monedaPaisD = "$";
+                mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
+                break;
+
+            case "Ecuador":
+                montoTasa = "<%=rate.rate_ecuador%>";
+                montoTasaOferta = "<%=rate.rate_ecuador_min%>";
+                montoMinimo = "<%=rate.monto_min_ecuador%>";
+                monedaPaisD = "$";
+                mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
+                break;
+
+            case "España":
+                montoTasa = "<%=rate.rate_españa%>";
+                montoTasaOferta = "<%=rate.rate_españa_min%>";
+                montoMinimo = "<%=rate.monto_min_españa%>";
+                monedaPaisD = "€";
+                mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
+                break;
+
+            case "Panama":
+                montoTasa = "<%=rate.rate_panama%>";
+                montoTasaOferta = "<%=rate.rate_panama_min%>";
+                montoMinimo = "<%=rate.monto_min_panama%>";
+                monedaPaisD = "$";
+                mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
+                break;
+
+            case "Peru":
+                montoTasa = "<%=rate.rate_peru%>";
+                montoTasaOferta = "<%=rate.rate_peru_min%>";
+                montoMinimo = "<%=rate.monto_min_peru%>";
+                monedaPaisD = "/S";
+                mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
+                break;
+
+            case "USA":
+                montoTasa = "<%=rate.rate_usa%>";
+                montoTasaOferta = "<%=rate.rate_usa_min%>";
+                montoMinimo = "<%=rate.monto_min_usa%>";
+                monedaPaisD = "$";
+                mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
+                break;
+
             case "Venezuela":
                 montoTasa = "<%=rate.rate_venezuela%>";
                 montoTasaOferta = "<%=rate.rate_venezuela_min%>";
                 montoMinimo = "<%=rate.monto_min_venezuela%>";
-                monedaPaisD = "Bs"
+                monedaPaisD = "Bs";
                 mostrarTasa(paisDestino.value,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD);
                 break;
         
