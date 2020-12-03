@@ -1,0 +1,49 @@
+<h5 class="mb-5">Configurar Depositos Por Loterica</h5>
+
+<div class="row">
+  <div class="col-xl-6 col-lg-12">
+    <div class="card mb-5 shadow-sm border-0 shadow-hover">
+      <div class="card-header bg-light border-0 pt-3 pb-0">
+        <h6 class="mb-0">Depositos igual o menores a 100R$</h6>
+      </div>
+      <div class="card-body field">
+        <label>Prioridad 1</label><br>
+        <%if @prioridad_min_1.present?%><%= @prioridad_min_1%><%else%><i>Sin Definir</i><%end%>
+        <hr>
+        <label>Prioridad 2</label><br>
+        <%if @prioridad_min_2.present?%><%= @prioridad_min_2%><%else%><i>Sin Definir</i><%end%>
+        <hr>
+        <label>Prioridad 3</label><br>
+        <%if @prioridad_min_3.present?%><%= @prioridad_min_3%><%else%><i>Sin Definir</i><%end%>
+        <hr>
+
+        <%if @config_loterica_deposit.present?%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/1/edit?edit=less_than">Editar</a><%else%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/new?edit=less_than">Editar</a><%end%>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-xl-6 col-lg-12">
+    <div class="card mb-5 shadow-sm border-0 shadow-hover">
+      <div class="card-header bg-light border-0 pt-3 pb-0">
+        <h6 class="mb-0">Depositos mayores a 100R$</h6>
+      </div>
+      <div class="card-body field">
+        <label>Prioridad 1</label><br>
+        <%if @prioridad_max_1.present?%><%= @prioridad_max_1%><%else%><i>Sin Definir</i><%end%>
+        <hr>
+        <label>Prioridad 2</label><br>
+        <%if @prioridad_max_2.present?%><%= @prioridad_max_2%><%else%><i>Sin Definir</i><%end%>
+        <hr>
+        <label>Prioridad 3</label><br>
+        <%if @prioridad_max_3.present?%><%= @prioridad_max_3%><%else%><i>Sin Definir</i><%end%>
+        <hr>
+
+        <%if @config_loterica_deposit.present?%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/1/edit?edit=greater_than">Editar</a><%else%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/new?edit=greater_than">Editar</a><%end%>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>

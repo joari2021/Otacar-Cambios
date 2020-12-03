@@ -1,0 +1,2 @@
+module ConfigLotericaDepositsHelper
+end

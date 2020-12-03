@@ -12,6 +12,7 @@ class TransactionsController < ApplicationController
   def confirm
     @transactions = Transaccion.all
   end
+
   def status
 
     current_user.transactions.each do |transaction|
@@ -61,7 +62,6 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/new
   def new
-
     current_user.transactions.each do |transaction|
       if transaction.status === "en proceso"
         segundos = (Time.now.utc - transaction.created_at).to_i
@@ -78,13 +78,31 @@ class TransactionsController < ApplicationController
     users.each do |user|
       if user.is_admin?
         @user_admin = user
+        break;
       end
     end
+
     rates = Rate.all
     rates.each do |rate|
       if rate.country === current_user.country
         @rate = rate
       end
+    end
+
+    day_actual = Time.now.utc.strftime("%Y-%m-%d")
+    parsed_date = Date.parse(day_actual)
+
+    deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
+    
+    count = deposit_for_loterica.count
+    bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
+    if count === 0
+        bancos_caixa.update_all(cupos_for_loterica:3)
+    end
+    
+    @cupos_for_loterica = 0
+    bancos_caixa.each do |bank|
+      @cupos_for_loterica += bank.cupos_for_loterica
     end
   end
 
@@ -240,27 +258,148 @@ class TransactionsController < ApplicationController
             @transaction.modify_monto_envio
             @transaction.monto_a_recibir = resultado
             
-            respond_to do |format|
-              if @transaction.save
-                method_usuario = @transaction.account_destinity_usuario.split("-")
-                model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
-                num = model.transactions_in_process
-                num += 1
-                model.update(permit_delete:"denied",transactions_in_process:num)
-                
-                method_admin = @transaction.account_destinity_admin.split("-")
-                model = find_method_for_id(method_admin[0],method_admin[1].to_i)
-                num = model.transactions_in_process
-                num += 1 
-                model.update(permit_delete:"denied",transactions_in_process:num)
+            method_admin = @transaction.account_destinity_admin.split("-")
 
-                format.html { redirect_to status_transactions_path, notice: "Transacción iniciada con exito. Tiene 20 minutos para hacer el pago" }
-                format.json { render :show, status: :created, location: @transaction }
-              else
-                format.html { render :new }
-                format.json { render json: @transaction.errors, status: :unprocessable_entity }
-              end
+            if method_admin[0] === "caixa"
+                if @transaction.metodo === "Deposito Por Loterica"
+                    day_actual = Time.now.utc.strftime("%Y-%m-%d")
+                    parsed_date = Date.parse(day_actual)
+
+                    deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
+
+                    users = User.all
+                    users.each do |user|
+                      if user.is_admin?
+                        @user_admin = user
+                      end
+                    end
+
+                    count = deposit_for_loterica.count
+                    
+                    bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
+                    if count === 0
+                      bancos_caixa.update_all(cupos_for_loterica:3)
+                    end
+                    
+                    cupos_for_loterica = 0
+                    bancos_caixa.each do |bank|
+                      cupos_for_loterica += bank.cupos_for_loterica
+                    end
+                    
+                    config_deposit_loterica = ConfigLotericaDeposit.all
+                    find_account = false
+                    if cupos_for_loterica > 0
+                        if monto_envio <= 100  #PARA MONTOS MENORES A 100R$
+                            
+                            if config_deposit_loterica.count > 0
+                                config_deposit_loterica = ConfigLotericaDeposit.find(1)
+                                
+                                if config_deposit_loterica.prioridad_min_1 > 0
+                                    account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_1)
+
+                                    if account_caixa.cupos_for_loterica > 0
+                                        @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
+                                        find_account = true
+                                    end
+                                end
+
+                                unless find_account
+                                  if config_deposit_loterica.prioridad_min_2 > 0
+                                      account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_2)
+
+                                      if account_caixa.cupos_for_loterica > 0
+                                          @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
+                                          find_account = true
+                                      end
+                                  end
+                                end
+
+                                unless find_account
+                                  if config_deposit_loterica.prioridad_min_3 > 0
+                                      account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_3)
+
+                                      if account_caixa.cupos_for_loterica > 0
+                                          @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
+                                          find_account = true
+                                      end
+                                  end
+                                end
+                            end       
+                        else    #PARA MONTOS MAYORES A 100R$
+                            if config_deposit_loterica.count > 0
+                                config_deposit_loterica = ConfigLotericaDeposit.find(1)
+                                
+                                if config_deposit_loterica.prioridad_min_1 > 0
+                                    account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_1)
+
+                                    if account_caixa.cupos_for_loterica > 0
+                                        @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
+                                        find_account = true
+                                    end
+                                end
+
+                                unless find_account
+                                    if config_deposit_loterica.prioridad_min_2 > 0
+                                        account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_2)
+
+                                        if account_caixa.cupos_for_loterica > 0
+                                            @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
+                                            find_account = true
+                                        end
+                                    end
+                                end
+
+                                unless find_account
+                                    if config_deposit_loterica.prioridad_min_3 > 0
+                                        account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_3)
+
+                                        if account_caixa.cupos_for_loterica > 0
+                                            @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
+                                            find_account = true
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    else
+                        respond_to do |format|
+                            format.html { redirect_to new_transaction_path, alert: 'Disculpanos. El ultimo cupo se agoto hace pocos segundos.' }
+                        end
+                    end
+                else 
+                  @transaction.account_destinity_admin = "bank_brasils-#{method_admin[1]}"
+                end
             end
+               
+            respond_to do |format|
+                if @transaction.save
+                    method_usuario = @transaction.account_destinity_usuario.split("-")
+                    model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
+                    num = model.transactions_in_process
+                    num += 1
+                    model.update(permit_delete:"denied",transactions_in_process:num)
+                    
+                    method_admin = @transaction.account_destinity_admin.split("-")
+                    model = find_method_for_id(method_admin[0],method_admin[1].to_i)
+                    num = model.transactions_in_process
+                    num += 1 
+                    model.update(permit_delete:"denied",transactions_in_process:num)
+
+                    #actualizar cupos de la cuenta caixa utilizada si la forma de pago fue deposito por loterica
+                    if @transaction.metodo === "Deposito Por Loterica"
+                        cupos_actuales = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
+                        cupos_actuales -= 1
+                        BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos_actuales)
+                    end
+
+                    format.html { redirect_to status_transactions_path, notice: "Transacción iniciada con exito. Tiene 20 minutos para hacer el pago" }
+                    format.json { render :show, status: :created, location: @transaction }
+                else
+                    format.html { render :new }
+                    format.json { render json: @transaction.errors, status: :unprocessable_entity }
+                end
+            end
+            
           else
             respond_to do |format|
               format.html { redirect_to new_transaction_path, alert: 'Monto inferior al monto minimo.' }

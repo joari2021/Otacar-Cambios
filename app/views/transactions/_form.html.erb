@@ -378,21 +378,19 @@
                     <i class="fas fa-angle-down"></i>
                 </div>
 
-                <div class="opciones" id="opcionesAccountAdminDestino">
-
-                </div>
+                <div class="opciones" id="opcionesAccountAdminDestino"></div>
             </div>
             <input type="hidden" name="transaction[account_destinity_admin]" id="inputAccountAdminDestino" value="">    
         </div>
     </div>
 </div>
 
-<!--METODOS DE PAGO-->
+<!--FORMA DE PAGO-->
 <div class="row justify-content-center d-none" id="metodosPago">
     <div class="col-12 col-sm-9 col-lg-7">
-        <h5 class="text-primary text-center">4.- Metodos de Pago <i class="fas fa-info-circle" onclick="mostrarInfo('infoMetodosPago')"></i></h5>    
+        <h5 class="text-primary text-center">4.- Formas de Pago <i class="fas fa-info-circle" onclick="mostrarInfo('infoMetodosPago')"></i></h5>    
         <div class="alert alert-info d-none" id="infoMetodosPago" role="alert">
-            Elige el metodo de pago que deseas utilizar para pagar a la cuenta de Otacar Cambios que has elegido.
+            Elige la forma de pago que deseas utilizar para pagar a la cuenta de Otacar Cambios que has elegido.
         </div>
         <div class="contenedor">     
             <div class="selectbox">
@@ -1166,44 +1164,42 @@
         <%if current_user.mobile_payments.where(view:true).count > 0%>    
             <%current_user.mobile_payments.where(view:true).each do |payment_user|%>
                 if ("<%=payment_user.country%>" === country){
-                    <%admin.mobile_payments.each do |payment_admin| %>
-                        <%if payment_admin.status === "activo"%>
-                            
-                            //ENLACE
-                            var enlace = document.createElement("a");
-                            enlace.setAttribute("href","#");
-                            enlace.setAttribute("id","mobile_payments-<%=payment_user.id%>");
-                            enlace.setAttribute("onclick","activarEnlace(event)");
-                            enlace.classList.add("opcion");
+                    <% if admin.mobile_payments.where(view:true,status:"activo").count > 0%>   
 
-                            //DIV PADRE
-                            var divPadre = document.createElement("div");
-                            divPadre.classList.add("contenido-opcion");
-                            
-                            //IMAGEN
-                            var img = document.createElement("img");
-                            img.setAttribute("src","/img/bancos/<%=payment_user.bank%>.png");
+                        //ENLACE
+                        var enlace = document.createElement("a");
+                        enlace.setAttribute("href","#");
+                        enlace.setAttribute("id","mobile_payments-<%=payment_user.id%>");
+                        enlace.setAttribute("onclick","activarEnlace(event)");
+                        enlace.classList.add("opcion");
 
-                            //DIV HIJO
-                            var divHijo = document.createElement("div");
-                            divHijo.classList.add("textos");
+                        //DIV PADRE
+                        var divPadre = document.createElement("div");
+                        divPadre.classList.add("contenido-opcion");
+                        
+                        //IMAGEN
+                        var img = document.createElement("img");
+                        img.setAttribute("src","/img/bancos/<%=payment_user.bank%>.png");
 
-                            //H1
-                            var h2 = document.createElement("h2");
-                            h2.classList.add("titulo","tam-h2");
-                            <%part1 = payment_user.number_phone[0, 3]%>
-                            <%part2 = payment_user.number_phone[-4,4]%>
-                            var content = document.createTextNode("<%=part1%>****<%=part2%>");
+                        //DIV HIJO
+                        var divHijo = document.createElement("div");
+                        divHijo.classList.add("textos");
+
+                        //H1
+                        var h2 = document.createElement("h2");
+                        h2.classList.add("titulo","tam-h2");
+                        <%part1 = payment_user.number_phone[0, 3]%>
+                        <%part2 = payment_user.number_phone[-4,4]%>
+                        var content = document.createTextNode("<%=part1%>****<%=part2%>");
+                        
+                        h2.appendChild(content);
+                        divHijo.appendChild(h2);
+                        divPadre.appendChild(img);
+                        divPadre.appendChild(divHijo);
+                        enlace.appendChild(divPadre);
+                        selectBox.appendChild(enlace);
+                        account += 1;
                             
-                            h2.appendChild(content);
-                            divHijo.appendChild(h2);
-                            divPadre.appendChild(img);
-                            divPadre.appendChild(divHijo);
-                            enlace.appendChild(divPadre);
-                            selectBox.appendChild(enlace);
-                            account += 1;
-                            
-                        <%end%>
                     <%end%>
                 }
             <%end%>
@@ -1434,14 +1430,24 @@
         var selectBox = document.getElementById("opcionesAccountAdminDestino");
 
         <%caixaFind = false%>
-        <%admin.bank_brasils.where(view:true).each do |bank_admin|%>
+        <%admin.bank_brasils.where(view:true,status:"activo").each do |bank_admin|%>
             if ("<%=bank_admin.country%>" === country){
                 
-                <%if bank_admin.status === "activo" && !caixaFind%>
+                <%if !caixaFind%>
                     //ENLACE
                     var enlace = document.createElement("a");
                     enlace.setAttribute("href","#");
-                    enlace.setAttribute("id","bank_brasils-<%=bank_admin.id%>");
+                    <%if bank_admin.bank === "Caixa"%>
+                        //RASTREAR AQUI LA CUENTA ESTANDAR DE CAIXA DE OTACAR A DONDE DEPOSITAR Y TRANSFERIR
+                        <%if @cupos_for_loterica > 0%>
+                            enlace.setAttribute("id","caixa-<%=bank_admin.id%>");
+                        <%else%>
+                            enlace.setAttribute("id","bank_brasils-<%=bank_admin.id%>");
+                        <%end%>
+                        <%caixaFind = true%>
+                    <%else%>
+                        enlace.setAttribute("id","bank_brasils-<%=bank_admin.id%>");
+                    <%end%>
                     enlace.classList.add("opcion");
 
                     //DIV PADRE
@@ -1467,10 +1473,6 @@
                     divPadre.appendChild(divHijo);
                     enlace.appendChild(divPadre);
                     selectBox.appendChild(enlace);
-
-                    <%if bank_admin.bank === "Caixa"%>
-                        <%caixaFind = true%>
-                    <%end%>
                 <%end%>
             } 
         <%end%>         
@@ -1503,9 +1505,7 @@
                     //H1
                     var h2 = document.createElement("h2");
                     h2.classList.add("titulo","tam-h2");
-                    <%part1 = wallet_admin.email[0, 4]%>
-                    <%part2 = wallet_admin.email[-8,8]%>
-                    var content = document.createTextNode("<%=part1%>*******<%=part2%>");
+                    var content = document.createTextNode("<%=wallet_admin.wallet_name%>");
                     
                     h2.appendChild(content);
                     divHijo.appendChild(h2);
@@ -1545,9 +1545,7 @@
                     //H1
                     var h2 = document.createElement("h2");
                     h2.classList.add("titulo","tam-h2");
-                    <%part1 = wallet_admin.usuario[0, 3]%>
-                    <%part2 = wallet_admin.usuario[-3,3]%>
-                    var content = document.createTextNode("<%=part1%>****<%=part2%>");
+                    var content = document.createTextNode("<%=wallet_admin.wallet_name%>");
                     
                     h2.appendChild(content);
                     divHijo.appendChild(h2);
@@ -1587,9 +1585,7 @@
                     //H1
                     var h2 = document.createElement("h2");
                     h2.classList.add("titulo","tam-h2");
-                    <%part1 = payment_admin.number_phone[0, 3]%>
-                    <%part2 = payment_admin.number_phone[-4,4]%>
-                    var content = document.createTextNode("<%=part1%>*****<%=part2%>");
+                    var content = document.createTextNode("<%=payment_admin.payment_method%>");
                     
                     h2.appendChild(content);
                     divHijo.appendChild(h2);
@@ -1857,6 +1853,12 @@
                 metodos = ["Transferencia", "Deposito Directo", "Deposito Por Cajero Automatico"];
                 crearElementosMetodoPago(metodos); 
                 break;
+            
+            case "caixa":
+
+                metodos = ["Transferencia", "Deposito Directo", "Deposito Por Cajero Automatico", "Deposito Por Loterica"];
+                crearElementosMetodoPago(metodos); 
+                break;
 
             case "mobile_payments":         
                 metodos = ["Pago Movil"];
@@ -2022,5 +2024,4 @@
         resultado = resultado.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");*/
     }
     
-
 </script>

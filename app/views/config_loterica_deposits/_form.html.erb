@@ -1,0 +1,46 @@
+<%= form_with(model: config_loterica_deposit, local: true) do |form| %>
+
+  <%if params[:edit] === "less_than"%>
+    <label for="ControlSelect1">Prioridad 1</label>
+    <select class="form-control mb-3" id="ControlSelect1" name="config_loterica_deposit[prioridad_min_1]"><option value="0">Sin Definir...</option></select>
+
+    <label for="ControlSelect2">Prioridad 2</label>
+    <select class="form-control mb-3" id="ControlSelect2" name="config_loterica_deposit[prioridad_min_2]"><option value="0">Sin Definir...</option></select>
+
+    <label for="ControlSelect3">Prioridad 3</label>
+    <select class="form-control" id="ControlSelect3" name="config_loterica_deposit[prioridad_min_3]"><option value="0">Sin Definir..</option></select>
+
+  <%elsif params[:edit] === "greater_than"%>
+    <label for="ControlSelect1">Prioridad 1</label>
+    <select class="form-control mb-3" id="ControlSelect1" name="config_loterica_deposit[prioridad_max_1]"><option value="0">Sin Definir...</option></select>
+
+    <label for="ControlSelect2">Prioridad 2</label>
+    <select class="form-control mb-3" id="ControlSelect2" name="config_loterica_deposit[prioridad_max_2]"><option value="0">Sin Definir...</option></select>
+
+    <label for="ControlSelect3">Prioridad 3</label>
+    <select class="form-control" id="ControlSelect3" name="config_loterica_deposit[prioridad_max_3]"><option value="0">Sin Definir..</option></select>
+  <%end%>
+
+  <div class="actions mt-4">
+    <%= form.submit "Guardar", class:"btn btn-info" %>
+  </div>
+<% end %>
+
+<script>
+  selects = document.getElementsByTagName("select");
+
+  function añadirOptions() {
+    for (i = 0; i < selects.length; i++){
+      <%current_user.bank_brasils.where(bank:"Caixa",status:"activo",view:true).each do |bank|%>
+        option = document.createElement("option")
+        option.setAttribute("value","<%=bank.id%>")
+
+        content = document.createTextNode("<%=bank.name.capitalize%> <%=bank.last_name.capitalize%>. Cta: <%=bank.number_account%>")
+        option.appendChild(content)
+        selects[i].appendChild(option)
+      <%end%>
+    }
+  }
+  añadirOptions()
+  
+</script>

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  prioridad_min_1: 1
+  prioridad_min_2: 1
+  prioridad_min_3: 1
+  prioridad_max_1: 1
+  prioridad_max_2: 1
+  prioridad_max_3: 1
+
+two:
+  prioridad_min_1: 1
+  prioridad_min_2: 1
+  prioridad_min_3: 1
+  prioridad_max_1: 1
+  prioridad_max_2: 1
+  prioridad_max_3: 1

@@ -1,0 +1,2 @@
+class ConfigLotericaDeposit < ApplicationRecord
+end

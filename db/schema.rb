@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_28_123340) do
+ActiveRecord::Schema.define(version: 2020_12_01_140900) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 2020_11_28_123340) do
     t.string "permit_delete", default: "permit"
     t.boolean "view", default: true
     t.integer "transactions_in_process", default: 0
+    t.boolean "deposit_for_loterica", default: false
+    t.integer "cupos_for_loterica", default: 3
     t.index ["user_id"], name: "index_bank_brasils_on_user_id"
   end
 
@@ -68,6 +70,15 @@ ActiveRecord::Schema.define(version: 2020_11_28_123340) do
     t.boolean "view", default: true
     t.integer "transactions_in_process", default: 0
     t.index ["user_id"], name: "index_banks_on_user_id"
+  end
+
+  create_table "config_loterica_deposits", force: :cascade do |t|
+    t.integer "prioridad_min_1"
+    t.integer "prioridad_min_2"
+    t.integer "prioridad_min_3"
+    t.integer "prioridad_max_1"
+    t.integer "prioridad_max_2"
+    t.integer "prioridad_max_3"
   end
 
   create_table "digital_payments", force: :cascade do |t|

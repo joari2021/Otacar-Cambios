@@ -233,7 +233,7 @@
                                     <%end%>
                                 <%end%>
                         <%end%>
-                        <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
+                        <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
 
                         <%eliminar = false%>
                         <%if transaction.status === "por confirmar"
@@ -256,9 +256,6 @@
                                 info = "La transacción fue rechazada por el siguiente motivo: #{transaction.motivo_rechazo}"
                                 eliminar = true;
                             elsif transaction.status === "presenta incidencia"
-                                text = transaction.status
-                                badge = "badge-warning"
-                                info = ""
                                 eliminar = true;  
                             elsif transaction.status === "en proceso" 
                                 badge = "badge-danger"
