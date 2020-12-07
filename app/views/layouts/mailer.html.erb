@@ -4,6 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
       /* Email styles need to be inline */
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+      
       .bold{
         font-weight: bold;
         color: #0b254b;
@@ -22,14 +24,31 @@
         height: auto;
         margin: auto;
       }
+      div.caja-padre{
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      div.caja-subpadre{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center !important;
+        font-family: 'Poppins', sans-serif !important;
+      }
+      div.caja-hijo{
+        flex:0 0 85%;
+        max-width: 85%;
+      }
       
     </style>
   </head>
 
   <body>
-      <div style="width: 100%; padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto;" >
-        <div style="display: flex; flex-wrap: wrap; justify-content: center !important; font-family: 'Poppins', sans-serif !important;">
-          <div style="flex:0 0 85%; max-width: 85%;">
+      <div class="caja-padre">
+        <div class="caja-sub-padre">
+          <div class="caja-hijo">
             <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
             <%= yield %>
           </div>
