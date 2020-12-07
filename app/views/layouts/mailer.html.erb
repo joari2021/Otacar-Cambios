@@ -31,10 +31,16 @@
         margin-left: auto;
       }
       div.caja-subpadre{
+        margin-right: -15px;
+        margin-left:-15px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center !important;
         font-family: 'Arial', sans-serif !important;
+      }
+      div.caja-hijo{
+            flex: 0 0 91.66667%;
+            max-width: 91.66667%;
       }
       
     </style>
@@ -43,8 +49,11 @@
   <body>
       <div class="caja-padre">
         <div class="caja-subpadre">
-            <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
-            <%= yield %>
+
+            <div class="caja-hijo">
+              <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
+              <%= yield %>
+            </div>
         </div>
       </div>
     
