@@ -47,8 +47,8 @@ class TransactionsController < ApplicationController
   # GET /transactions/1.json
 
   def pending
-    @transactions = Transaction.all
-
+    @transactions = Transaction.order("created_at ASC")
+    
     rates = Rate.all
   end
 
@@ -279,8 +279,8 @@ class TransactionsController < ApplicationController
                 end
             end
 
-            @transaction.monto_envio = monto_envio
-            @transaction.monto_a_recibir = resultado
+            @transaction.monto_envio = monto_envio.to_s.rjust(2, '0')
+            @transaction.monto_a_recibir = resultado.to_s.rjust(2, '0')
             
             method_admin = @transaction.account_destinity_admin.split("-")
 
@@ -467,7 +467,8 @@ class TransactionsController < ApplicationController
     
       respond_to do |format|
         if @transaction.update(transaction_params_user_edit)
-          @transaction.send_email
+          
+          @transaction.send_email()
           format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }
         else
           format.html { render :edit }

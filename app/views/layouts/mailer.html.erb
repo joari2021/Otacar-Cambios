@@ -4,11 +4,35 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
       /* Email styles need to be inline */
+      *{
+        font-family: "Poppins", sans-serif;
+      }
+      .bold{
+        font-weight: bold;
+        color: #0b254b;
+        font-size: 15px;
+      }
+      p,h1{
+        color: #0b254b;
+        text-align: center;
+      }
+      img{
+        display: block;
+        font-size: 24px;
+        text-align: center;
+        text-decoration: none;
+        height: auto;
+        margin: auto;
+      }
     </style>
   </head>
 
   <body>
-    <h1>Nueva transaccion por confirmar</h1>
-    <%= yield %>
+    <div style="margin-top: -30px; margin-right: -15px; margin-left: -15px; display: flex; flex-wrap: wrap; justify-content: center !important;">
+      <div style="flex:0 0 50%; max-width: 50%;">
+        <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
+        <%= yield %>
+       </div>
+    </div>
   </body>
 </html>

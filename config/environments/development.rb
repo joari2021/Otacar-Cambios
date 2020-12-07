@@ -60,6 +60,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+=begin
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
     config.action_mailer.delivery_method = :smtp
   
@@ -72,4 +73,6 @@ Rails.application.configure do
       :user_name => 'jorge.uchija2021@gmail.com',
       :password => 'wfqpbfewbxmbzqde'
     }
+=end
+  config.action_mailer.delivery_method = :letter_opener
 end
