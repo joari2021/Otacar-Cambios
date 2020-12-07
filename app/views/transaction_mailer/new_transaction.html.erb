@@ -8,6 +8,8 @@
     <%case method[0]
         when "banks"
             bank = @user_admin.banks.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Pais: </span><span style="float: right;"><%=bank.country%></span></li>
+
             <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></li>
 
             <li style="margin-top: 12px;"><span class="bold">Cuenta Credito: </span><span style="float: right;"><%=bank.banco%></span></li>
@@ -15,6 +17,8 @@
             
         <%when "bank_brasils"
             bank = @user_admin.bank_brasils.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Pais: </span><span style="float: right;"><%=bank.country%></span></li>
+
             <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></li>
 
             <li style="margin-top: 12px;"><span class="bold">Cuenta Credito: </span><span style="float: right;"><%=bank.bank%></span></li>
@@ -22,22 +26,29 @@
 
         <%when "digital_payments"
             payment = @user_admin.digital_payments.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Pais: </span><span style="float: right;"><%=payment.country%></span></li>
+
             <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></li>
 
             <li style="margin-top: 12px;"><span class="bold">Cuenta Credito: </span><span style="float: right;"><%=payment.payment_method%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Telefono: </span><span style="float: right;"><%=payment.number_phone%></span></li>
         <%when "mobile_payments"
             payment = @user_admin.mobile_payments.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Pais: </span><span style="float: right;"><%=payment.country%></span></li>
+
             <li style="margin-top: 12px;"><span class="bold">Documento: </span><span  style="float: right;"><%=payment.document%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Codigo Bancario: </span><span style="float: right;"><%=payment.bank%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Telefono: </span><span style="float: right;"><%=payment.number_phone%></span></li>
         <%when "wallets"
             wallet = @user_admin.wallets.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Pais: </span><span style="float: right;"><%=wallet.country%></span></li>
+
             <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Monedero Digital: </span><span style="float: right;"><%=wallet.wallet_name%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Email: </span><span style="float: right;"><%=wallet.email%></span></li>
         <%when "wallet_with_users"
             wallet = @user_admin.wallet_with_users.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Pais: </span><span style="float: right;"><%=wallet.country%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Monedero Digital: </span><span style="float: right;"><%=wallet.wallet_name%></span></li>
             <li style="margin-top: 12px;"><span class="bold">Usuario: </span><span style="float: right;"><%=wallet.usuario%></span></li>
