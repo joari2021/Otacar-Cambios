@@ -24,36 +24,30 @@
         height: auto;
         margin: auto;
       }
-      .container-content {
-        margin-top: -30px; 
+      
+    </style>
+  </head>
+
+  <body>
+      <div style="margin-top: -30px; 
         margin-right: -15px; 
         margin-left: -15px; 
         display: flex; 
         flex-wrap: wrap; 
-        justify-content: center !important;
-      }
-      @media (min-width: 768px) {
+        justify-content: center !important;">
+        <div style="@media (min-width: 768px) {
         .col {
           flex:0 0 50%; 
           max-width: 50%;
         } 
          
-      }
-      @media (max-width: 767px) {
+      } @media (max-width: 767px) {
          
         .col {
           flex:0 0 90%; 
           max-width: 90%;
         } 
-      }
-    </style>
-  </head>
-
-  <body>
-
-    
-      <div class="container-content">
-        <div class="col">
+      }">
           <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
           <%= yield %>
          </div>
