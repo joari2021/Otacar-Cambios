@@ -18,6 +18,7 @@
         font-size: 24px;
         text-align: center;
         text-decoration: none;
+        width: 300px;
         height: auto;
         margin: auto;
       }
@@ -33,14 +34,7 @@
         flex-wrap: wrap; 
         justify-content: center !important;
         font-family: 'Poppins', sans-serif !important;">
-        <div style="@media (min-width: 768px) {
-          flex:0 0 50%; 
-          max-width: 50%;
-      } @media (max-width: 767px) {
-          flex:0 0 90%; 
-          max-width: 90%;
-       
-      }">
+        <div style="flex:0 0 85%; max-width: 85%;">
           <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
           <%= yield %>
          </div>

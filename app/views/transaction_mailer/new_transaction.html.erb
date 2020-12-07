@@ -4,8 +4,7 @@
 
 <ul>
     <li><span class="bold">ID Transacción: </span><span style="float: right;"><%=@transaction.num_id%></span></li>
-    <%method = @transaction.account_destinity_admin.split("-")%>
-                    
+    <%method = @transaction.account_destinity_admin.split("-")%>            
     <%case method[0]
         when "banks"
             bank = @user_admin.banks.find(method[1].to_i)%>
