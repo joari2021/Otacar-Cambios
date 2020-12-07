@@ -1,4 +1,4 @@
-<h1 style="margin-top: -60px;">Nueva transaccion por confirmar</h1>
+<h1 style="margin-top: 10px;">Nueva transaccion por confirmar</h1>
 
 <p>Tienes una nueva transacción por confirmar con los siguientes detalles:</p>
 
@@ -11,8 +11,8 @@
             bank = @user_admin.banks.find(method[1].to_i)%>
             <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></li>
 
-            <li class=""><span class="bold">Cuenta Credito: </span><span><%=bank.banco%></span></li>
-            <li class=""><span class="bold">Nro Cuenta: </span><span><%=bank.number_account%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Cuenta Credito: </span><span style="float: right;"><%=bank.banco%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Nro Cuenta: </span><span style="float: right;"><%=bank.number_account%></span></li>
             
         <%when "bank_brasils"
             bank = @user_admin.bank_brasils.find(method[1].to_i)%>
@@ -22,53 +22,26 @@
             <li style="margin-top: 12px;"><span class="bold">Nro Cuenta: </span><span style="float: right;"><%=bank.number_account%></span></li>
 
         <%when "digital_payments"
-            @user_admin.digital_payments.each do |payment|
-                
-                if payment.id.to_s === method[1]
-                    part1 = payment.number_phone[0, 3]
-                    part2 = payment.number_phone[-4,4]
-                    %>
-                    <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
-                    <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
-                    <td class="align-middle"><%=part1 << "****" << part2%></td>
-                <%end%>
-            <%end%>
+            payment = @user_admin.digital_payments.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></li>
+
+            <li style="margin-top: 12px;"><span class="bold">Cuenta Credito: </span><span style="float: right;"><%=payment.payment_method%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Telefono: </span><span style="float: right;"><%=payment.number_phone%></span></li>
         <%when "mobile_payments"
-            @user_admin.mobile_payments.each do |payment|
-                
-                if payment.id.to_s === method[1]
-                    part1 = payment.number_phone[0, 3]
-                    part2 = payment.number_phone[-4,4]
-                    %>
-                    <td class="align-middle"><span class="">N/A</span></td>
-                    <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
-                    <td class="align-middle"><%=part1 << "****" << part2%></td>
-                <%end%>
-            <%end%>
+            payment = @user_admin.mobile_payments.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Documento: </span><span  style="float: right;"><%=payment.document%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Codigo Bancario: </span><span style="float: right;"><%=payment.bank%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Telefono: </span><span style="float: right;"><%=payment.number_phone%></span></li>
         <%when "wallets"
-            @user_admin.wallets.each do |wallet|
-                
-                if wallet.id.to_s === method[1]
-                    part1 = wallet.email[0, 4]
-                    part2 = wallet.email[-7,7]
-                    %>
-                    <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
-                    <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                    <td class="align-middle"><%=part1 << "****" << part2%></td>
-                <%end%>
-            <%end%>
+            wallet = @user_admin.wallets.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Monedero Digital: </span><span style="float: right;"><%=wallet.wallet_name%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Email: </span><span style="float: right;"><%=wallet.email%></span></li>
         <%when "wallet_with_users"
-            @user_admin.wallet_with_users.each do |wallet|
-                
-                if wallet.id.to_s === method[1]
-                    part1 = wallet.usuario[0, 3]
-                    part2 = wallet.usuario[-2,2]
-                    %>
-                    <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
-                    <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                    <td class="align-middle"><%=part1 << "****" << part2%></td>
-                <%end%>
-            <%end%>
+            wallet = @user_admin.wallet_with_users.find(method[1].to_i)%>
+            <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Monedero Digital: </span><span style="float: right;"><%=wallet.wallet_name%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Usuario: </span><span style="float: right;"><%=wallet.usuario%></span></li>
     <%end%>
     
     <li style="margin-top: 12px;"><span class="bold">Monto: </span><span style="float:right;"><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span></li>
