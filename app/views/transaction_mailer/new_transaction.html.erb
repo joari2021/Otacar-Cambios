@@ -18,8 +18,9 @@
             bank = @user_admin.bank_brasils.find(method[1].to_i)%>
             <li style="margin-top: 12px;"><span class="bold">Titular de la cuenta: </span><span  style="float: right;"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></li>
 
-            <li style="margin-top: 12px;"><span class="bold">Cuenta Credito: </span><span><%=bank.bank%></span></li>
-            <li style="margin-top: 12px;"><span class="bold">Nro Cuenta: </span><span><%=bank.number_account%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Cuenta Credito: </span><span style="float: right;"><%=bank.bank%></span></li>
+            <li style="margin-top: 12px;"><span class="bold">Nro Cuenta: </span><span style="float: right;"><%=bank.number_account%></span></li>
+
         <%when "digital_payments"
             @user_admin.digital_payments.each do |payment|
                 
