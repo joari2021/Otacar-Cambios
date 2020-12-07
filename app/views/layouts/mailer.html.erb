@@ -2,12 +2,9 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
       /* Email styles need to be inline */
-      *{
-        font-family: 'Arial', sans-serif !important;
-      }
+      
       .bold{
         font-weight: bold;
         color: #0b254b;
@@ -27,32 +24,17 @@
         margin: auto;
       }
       div.caja-padre{
-        width: 100% !important;
-        /*
+        width: 100%;
         padding-right: 15px;
         padding-left: 15px;
         margin-right: auto;
-        margin-left: auto;*/
+        margin-left: auto;
       }
       div.caja-subpadre{
-        padding-bottom: 3rem !important;
-        padding-top: 1.5rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        /*
-        */
-        
-      }
-      div.sub-caja{
-        margin-right: -15px;
-        margin-left: -15px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center !important;
-      }
-      div.caja-hijo{
-        flex:0 0 85%;
-        max-width: 85%;
+        font-family: 'Arial', sans-serif !important;
       }
       
     </style>
@@ -60,13 +42,11 @@
 
   <body>
       <div class="caja-padre">
-        <div class="caja-subpadre">
-          <div class="sub-caja">
-            <div class="caja-hijo">
-              <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
-              <%= yield %>
-            </div>
-          </div>
+        <div class="caja-sub-padre">
+          
+            <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png">
+            <%= yield %>
+          
         </div>
       </div>
     
