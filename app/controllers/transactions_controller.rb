@@ -18,12 +18,13 @@ class TransactionsController < ApplicationController
     current_user.transactions.each do |transaction|
       if transaction.status === "en proceso"
         segundos = (Time.now.utc - transaction.created_at).to_i
-        if segundos < 1200
+        if segundos <= 1200
           @transaction_pendiente = transaction
           segundos = 1200 - segundos
           @minutos = segundos / 60
           @segundos = segundos - (@minutos * 60)
-          break
+        else
+          Transaction.find(transaction.id).update(status:"vencida")
         end
       end
     end
@@ -88,8 +89,8 @@ class TransactionsController < ApplicationController
         @rate = rate
       end
     end
-
-    day_actual = Time.now.utc.strftime("%Y-%m-%d")
+    
+    day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
     parsed_date = Date.parse(day_actual)
 
     deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
@@ -98,6 +99,17 @@ class TransactionsController < ApplicationController
     bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
     if count === 0
         bancos_caixa.update_all(cupos_for_loterica:3)
+    else
+        deposit_for_loterica.where(status:"en proceso").each do |transaction|
+          segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+          if segundos > 1200
+              Transaction.find(transaction.id).update(status:"vencida")
+              method = transaction.account_destinity_admin.split("-")
+              cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
+              cupos += 1
+              BankBrasil.find(method[1].to_i).update(cupos_for_loterica: cupos)
+          end
+        end
     end
     
     @cupos_for_loterica = 0
@@ -252,17 +264,29 @@ class TransactionsController < ApplicationController
             else
               tasa_definitiva = tasaMin
             end
+            
             resultado = monto_envio * tasa_definitiva
             
             @transaction = current_user.transactions.create(transaction_params)
-            @transaction.modify_monto_envio
+            
+            
+            method_usuario = @transaction.account_destinity_usuario.split("-")
+            if method_usuario[0] === "mobile_payments"
+              bancos = ["0102", "0105", "0134", "0116"]
+              bank_pago = MobilePayment.find(method_usuario[1].to_i).bank
+                if bancos.include?(bank_pago)
+                  monto_envio *= 1.003
+                end
+            end
+
+            @transaction.monto_envio = monto_envio
             @transaction.monto_a_recibir = resultado
             
             method_admin = @transaction.account_destinity_admin.split("-")
 
             if method_admin[0] === "caixa"
                 if @transaction.metodo === "Deposito Por Loterica"
-                    day_actual = Time.now.utc.strftime("%Y-%m-%d")
+                    day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
                     parsed_date = Date.parse(day_actual)
 
                     deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
@@ -278,7 +302,17 @@ class TransactionsController < ApplicationController
                     
                     bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
                     if count === 0
-                      bancos_caixa.update_all(cupos_for_loterica:3)
+                        bancos_caixa.update_all(cupos_for_loterica:3)
+                    else
+                        deposit_for_loterica.where(status:"en proceso").each do |transaction|
+                            segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+                            if segundos > 1200
+                                method = transaction.account_destinity_admin.split("-")
+                                cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
+                                cupos += 1
+                                BankBrasil.find(method[1].to_i).update(cupos_for_loterica: cupos)
+                            end
+                        end
                     end
                     
                     cupos_for_loterica = 0
@@ -370,9 +404,10 @@ class TransactionsController < ApplicationController
                   @transaction.account_destinity_admin = "bank_brasils-#{method_admin[1]}"
                 end
             end
-               
+            @transaction.num_id = 20.times.map { [*'0'..'9', *'A'..'Z'].sample }.join
             respond_to do |format|
                 if @transaction.save
+                   
                     method_usuario = @transaction.account_destinity_usuario.split("-")
                     model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
                     num = model.transactions_in_process
@@ -415,6 +450,7 @@ class TransactionsController < ApplicationController
           format.html { redirect_to new_transaction_path, alert: 'Monto Invalido.' }
         end
       end
+
     else
       respond_to do |format|
         format.html { redirect_to new_transaction_path, alert: 'Debe completar el pago pendiente por realizar para iniciar otra transacción.' }
@@ -431,6 +467,7 @@ class TransactionsController < ApplicationController
     
       respond_to do |format|
         if @transaction.update(transaction_params_user_edit)
+          @transaction.send_email
           format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }
         else
           format.html { render :edit }
@@ -463,6 +500,12 @@ class TransactionsController < ApplicationController
               method_admin = @transaction.account_destinity_admin.split("-")
               model = find_method_for_id(method_admin[0],method_admin[1].to_i)
               model.update(permit_delete:"only_user")
+
+              if @transaction.metodo === "Deposito Por Loterica"
+                cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
+                cupos += 1
+                BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos)
+              end
 
               format.html { redirect_to pending_transactions_path, notice: 'Transaccion rechazada con exito.' }
               format.json { render :show, status: :ok, location: @transaction }
@@ -521,7 +564,7 @@ class TransactionsController < ApplicationController
   # DELETE /transactions/1
   # DELETE /transactions/1.json
   def destroy
-    if @transaction.status === "rechazada" || @transaction.status === "en proceso" || @transaction.status === "presenta incidencia"
+    if @transaction.status === "rechazada" || @transaction.status === "en proceso" || @transaction.status === "presenta incidencia" || @transaction.status === "vencida" 
       method_usuario = @transaction.account_destinity_usuario.split("-")
       model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
       num = model.transactions_in_process
@@ -561,7 +604,7 @@ class TransactionsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to status_transactions_path, notice: 'Esta transacción no puede ser eliminada.' }
+        format.html { redirect_to status_transactions_path, alert: 'Esta transacción no puede ser eliminada.' }
         format.json { head :no_content }
       end
     end
@@ -572,6 +615,7 @@ class TransactionsController < ApplicationController
     def set_transaction
       @transaction = Transaction.find(params[:id])
     end
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
 

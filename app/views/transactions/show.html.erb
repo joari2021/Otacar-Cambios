@@ -6,6 +6,10 @@
     <%end%>
     <div class="row justify-content-center mt-3">
         <div class="col-10 col-md-9 col-lg-6 p-3 mb-5 fondo" style="border-radius:12px;">
+            <p class="text-center">
+                <label  class="text-primary">ID Transacción</label><br>
+                <%=@transaction.num_id%>
+            </p>
             <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                 <li class="nav-item d-inline-block w-50" role="presentation">
                     <a class="nav-link <%if @transaction.status != "presenta incidencia"%>active<%end%>" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cuenta Crédito Usuario</a>
@@ -45,7 +49,7 @@
                     <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
 
                     <label class="text-primary">Comprobante</label><br>
-                    <%unless @transaction.status === "en proceso"%>
+                    <%unless @transaction.status === "en proceso" || @transaction.status === "vencida"%>
                         <a href="<%=url_for(@transaction.comprobante_pago_otacar)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%></a>
                     <%else%>
                         No hay ningun archivo...

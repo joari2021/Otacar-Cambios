@@ -1,5 +1,5 @@
 <%=render 'partials/name-and-cod-of-banks'%>
-<%unless current_user.is_admin?%>
+<%unless current_user.is_admin?%><!--VISTA DE USUARIO -------------------------------------------------------------------------->
     <div id="copy" class="">
         <span class="fas fa-check-circle"></span>
         <p class="msg text-justify" id="msj"></p>
@@ -7,6 +7,10 @@
                 
     <div class="row justify-content-center mt-3">
         <div class="col-10 col-md-9 col-lg-6 p-3 fondo" style="border-radius:12px;">
+            <p class="text-center">
+                <label  class="text-primary">ID Transacción</label><br>
+                <%=@transaction.num_id%>
+            </p>
             <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                 <li class="nav-item d-inline-block w-50" role="presentation">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Origen</a>
@@ -20,7 +24,7 @@
                     <h5>Detalles de la transaccion<span class="float-right h5 <%if @minutos < 5%>text-danger<%else%>text-success<%end%>" id="td-time2"><i class="fas fa-history mr-1"></i><span id="minuto2"><%=@minutos%></span>:<span id="segundo2"><%=@segundos.to_s.rjust(2, '0')%></span></h5>
                     
                     <div class="mt-5">
-                        
+
                         <%@method = @transaction_pendiente.account_destinity_admin.split("-")%>
                         <%= render 'detalle-account-for-copy', {transaction: @transaction_pendiente, user_account: @user_admin, method: @method} %>
                         
@@ -49,7 +53,7 @@
 
                             <div class="actions mt-4">
                                 <%= form.submit "Continuar", class:"btn btn-success m-auto"%>
-                                <a type="button" rel="nofollow" data-method="delete" href="/transactions/<%=@transaction.id%>" data-confirm="Esta segur@ de eliminar esta transacción?" class="btn btn-danger float-right">Cancelar transaccion</a>
+                                <a type="button" rel="nofollow" data-method="delete" href="/transactions/<%=@transaction.id%>" data-confirm="Esta segur@ de eliminar esta transacción?" class="btn btn-danger float-right" style="-webkit-appearance: none !important;">Cancelar</a>
                             </div>
                         <%end%>
                         
@@ -141,6 +145,11 @@
 
         <div class="row justify-content-center mt-3 mb-5">
             <div class="col-10 col-md-9 col-lg-6 p-3 fondo" style="border-radius:12px;">
+
+                <p class="text-center">
+                    <label  class="text-primary">ID Transacción</label><br>
+                    <%=@transaction.num_id%>
+                </p>
                 <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                     <li class="nav-item d-inline-block w-50" role="presentation">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cuenta Crédito Otacar</a>
@@ -153,7 +162,7 @@
                     
                     <!--CUENTA DE OTACAR-->
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        
+
                         <%@user_account = current_user%>
                         <%@method = @transaction.account_destinity_admin.split("-")%>
                         <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @user_account,method: @method} %>
@@ -340,6 +349,10 @@
 
         <div class="row justify-content-center mt-3">
             <div class="col-10 col-md-9 col-lg-6 p-3 fondo" style="border-radius:12px;">
+                <p class="text-center">
+                    <label  class="text-primary">ID Transacción</label><br>
+                    <%=@transaction.num_id%>
+                </p>
                 <ul class="nav nav-tabs text-center" id="myTab" role="tablist">
                     <li class="nav-item d-inline-block w-50" role="presentation">
                         <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cuenta Crédito Usuario</a>
@@ -499,7 +512,7 @@
         });
         $("#button").click(function(){
             motivo.value = "";
-            //comprobante.removeAttribute("required");
+            motivo.removeAttribute("required");
         });
         $("#requerirComprobante").click(function(){
             comprobante.setAttribute("required","required");

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_01_140900) do
+ActiveRecord::Schema.define(version: 2020_12_05_195116) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(version: 2020_12_01_140900) do
     t.string "account_destinity_admin"
     t.string "country_destinity"
     t.string "motivo_rechazo"
+    t.string "num_id", default: ""
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 

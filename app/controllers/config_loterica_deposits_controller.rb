@@ -5,6 +5,37 @@ class ConfigLotericaDepositsController < ApplicationController
   # GET /config_loterica_deposits
   # GET /config_loterica_deposits.json
   def index
+
+    users = User.all
+    users.each do |user|
+      if user.is_admin?
+        @user_admin = user
+        break;
+      end
+    end
+
+    day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+    parsed_date = Date.parse(day_actual)
+
+    deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
+    
+    count = deposit_for_loterica.count
+    bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
+    if count === 0
+        bancos_caixa.update_all(cupos_for_loterica:3)
+    else
+        deposit_for_loterica.where(status:"en proceso").each do |transaction|
+          segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+          if segundos > 1200
+              Transaction.find(transaction.id).update(status:"vencida")
+              method = transaction.account_destinity_admin.split("-")
+              cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
+              cupos += 1
+              BankBrasil.find(method[1].to_i).update(cupos_for_loterica: cupos)
+          end
+        end
+    end
+
     config_loterica_deposits = ConfigLotericaDeposit.all
     
     if config_loterica_deposits.count > 0
@@ -17,26 +48,32 @@ class ConfigLotericaDepositsController < ApplicationController
     
         unless @config_loterica_deposit.prioridad_min_1.nil? || @config_loterica_deposit.prioridad_min_1 === 0
           @prioridad_min_1 = find_account_caixa(@config_loterica_deposit.prioridad_min_1)
+          @cupos_restantes1 =  BankBrasil.find(@config_loterica_deposit.prioridad_min_1).cupos_for_loterica
         end
     
         unless @config_loterica_deposit.prioridad_min_2.nil? || @config_loterica_deposit.prioridad_min_2 === 0
           @prioridad_min_2 = find_account_caixa(@config_loterica_deposit.prioridad_min_2)
+          @cupos_restantes2 =  BankBrasil.find(@config_loterica_deposit.prioridad_min_2).cupos_for_loterica
         end
     
         unless @config_loterica_deposit.prioridad_min_3.nil? || @config_loterica_deposit.prioridad_min_3 === 0
           @prioridad_min_3 = find_account_caixa(@config_loterica_deposit.prioridad_min_3)
+          @cupos_restantes3 =  BankBrasil.find(@config_loterica_deposit.prioridad_min_3).cupos_for_loterica
         end
     
         unless @config_loterica_deposit.prioridad_max_1.nil? || @config_loterica_deposit.prioridad_max_1 === 0
           @prioridad_max_1 = find_account_caixa(@config_loterica_deposit.prioridad_max_1)
+          @cupos_restantes4 =  BankBrasil.find(@config_loterica_deposit.prioridad_max_1).cupos_for_loterica
         end
     
         unless @config_loterica_deposit.prioridad_max_2.nil? || @config_loterica_deposit.prioridad_max_2 === 0
           @prioridad_max_2 = find_account_caixa(@config_loterica_deposit.prioridad_max_2)
+          @cupos_restantes5 =  BankBrasil.find(@config_loterica_deposit.prioridad_max_2).cupos_for_loterica
         end
     
         unless @config_loterica_deposit.prioridad_max_3.nil? || @config_loterica_deposit.prioridad_max_3 === 0
           @prioridad_max_3 = find_account_caixa(@config_loterica_deposit.prioridad_max_3)
+          @cupos_restantes6 =  BankBrasil.find(@config_loterica_deposit.prioridad_max_3).cupos_for_loterica
         end
     end
 

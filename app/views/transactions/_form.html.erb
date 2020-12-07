@@ -1,3 +1,4 @@
+
 <%= form_with(model: transaction, local: true, :html => { :class => "mb-5"}) do |form| %>
 <% if transaction.errors.any? %>
 <div id="error_explanation">
@@ -344,7 +345,9 @@
     <div class="col-12 col-sm-9 col-lg-7">
         <h5 class="text-primary text-center">2.- Cuenta Credito <i class="fas fa-info-circle" onclick="mostrarInfo('infoCuentaDestino')"></i></h5>    
         <div class="alert alert-info d-none" id="infoCuentaDestino" role="alert">
-                Elige la cuenta de <span id="spanPaisDestino"></span> donde deseas que sea acreditado el envio de tus remesas. En esta lista solo apareceran los metodos de pago que hayas registrado y a los que la empresa puede hacer envios en ese pais, por ello, si en esta lista no aparece un metodo de pago que tienes registrado es porque no estan disponibles los envios a esa cuenta por el momento.
+            Elige la cuenta de <span id="spanPaisDestino"></span> donde deseas que sea acreditado el envio de tus remesas. En esta lista solo apareceran los metodos de pago que hayas registrado y a los que la empresa puede hacer envios en ese pais, por ello, si en esta lista no aparece un metodo de pago que tienes registrado es porque no estan disponibles los envios a esa cuenta por el momento.
+            
+            <article id="info-comision-pago-movil"><br>Si eliges un pago movil del Banco Mercantil, Banco B.O.D, Banco Banesco o del Banco de Venezuela para recibir el envio de tus remesas en Venezuela, deberas pagar una comisión del 0.30% adicional al monto que envies. Para evitar esto te recomendamos registrarlo en tus metodos de pago como cuenta bancaria ingresando todos los datos solicitados correctamente y si ya lo tienes registrado solo selecciona la cuenta en lugar del pago movil.</article>
         </div>
         <div class="contenedor">     
             <div class="selectbox">
@@ -437,7 +440,59 @@
         </div>
 
         <div class="actions mb-5 mt-4 d-none" id="btnEnviarDinero">
-            <%= form.submit "Continuar", class:"btn btn-success m-auto"%>
+            
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#staticBackdrop" onclick="detail_transaction()">
+            Continuar
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Detalles de la transacción</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <span class="float-left font-weight-bold">Pais destino</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-pais-destino"></span></li>
+                                <li class="list-group-item">
+                                    <span class="float-left font-weight-bold">Cuenta credito</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-cuenta-credito-usuario"></span></li>
+                                <li class="list-group-item">
+                                    <span class="float-left font-weight-bold">Cuenta Otacar Cambios</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-cuenta-otacar"></span></li>
+                                <li class="list-group-item">
+                                    <span class="float-left font-weight-bold">Forma de pago</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-forma-pago"></span></li>
+                                <li class="list-group-item">
+                                    <span class="float-left font-weight-bold">Tasa x 1 <%=rate.moneda%></span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-tasa"></span></li>
+                                <li class="list-group-item">
+                                    <span class="float-left font-weight-bold">Monto a pagar</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-monto-envio"></span></li>
+                                <li class="list-group-item d-none" id="list-comision">
+                                    <span class="float-left font-weight-bold">Comisión 0,30% (pago movil)</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-comision"></span></li>
+                                <li class="list-group-item" id="list-comision-2">
+                                    <span class="float-left font-weight-bold">Total a pagar</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-monto-total"></span></li>
+                                <li class="list-group-item">
+                                    <span class="float-left font-weight-bold">Monto a recibir</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-monto-a-recibir"></span></li>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <%= form.submit "Continuar", class:"btn btn-info m-auto"%>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -673,7 +728,7 @@
 
     selectPaisDestino = document.querySelector('#selectPaisDestino');
     opcionesPaisDestino = document.querySelector('#opcionesPaisDestino');
-
+    
     selectAccountUserDestino = document.querySelector('#selectAccountUserDestino');
     opcionesAccountUserDestino = document.querySelector('#opcionesAccountUserDestino');
 
@@ -1180,6 +1235,8 @@
                         //IMAGEN
                         var img = document.createElement("img");
                         img.setAttribute("src","/img/bancos/<%=payment_user.bank%>.png");
+                        img.setAttribute("alt","<%=payment_user.bank%>")
+                        img.setAttribute("id","img-bank-payment")
 
                         //DIV HIJO
                         var divHijo = document.createElement("div");
@@ -1306,6 +1363,13 @@
         if (existMetodosUser > 0){
             spanInfoPaisDestino = document.getElementById("spanPaisDestino");
             spanInfoPaisDestino.innerHTML = country;
+            infoComisionPagoMovil = document.getElementById("info-comision-pago-movil")
+            if (spanInfoPaisDestino.innerHTML === "Venezuela"){
+                
+                infoComisionPagoMovil.classList.remove("d-none")
+            }else{
+                infoComisionPagoMovil.classList.add("d-none")
+            }
             msjAñadirAccount.classList.add("d-none");
             accountUserDestinity.classList.remove("d-none");
 
@@ -1315,7 +1379,7 @@
         }
         
     }
-    //SELECT BOX PAIS//////////////////////////////////////////////////////////////////////////////////
+
     function activarFuncionSelectBoxPaisDestinity(){
         
         contenidoSelectPaisDestino = document.querySelector('#selectPaisDestino .contenido-select');
@@ -1329,7 +1393,7 @@
                 selectPaisDestino.classList.toggle('active');
                 opcionesPaisDestino.classList.toggle('active');
                 hiddenInputPaisDestino.value = e.currentTarget.querySelector('.titulo').innerText;
-
+                document.getElementById("detail-pais-destino").innerHTML = e.currentTarget.querySelector('.titulo').innerText;
                 habilitarAccountDestinity(hiddenInputPaisDestino.value);
             });
         });
@@ -1348,6 +1412,7 @@
             opcionesMetodoPago.classList.remove('active'); 
         });
     }
+
     activarFuncionSelectBoxPaisDestinity();
     
     //SELECT BOX CUENTA DESTINO DEL USUARIO
@@ -1381,6 +1446,7 @@
         selectAccountUserDestino.classList.toggle('active');
         opcionesAccountUserDestino.classList.toggle('active');
         hiddenInputAccountUserDestino.value = e.currentTarget.id;
+        document.getElementById("detail-cuenta-credito-usuario").innerHTML = e.currentTarget.querySelector('.titulo').innerText;
         accountAdminDestino.classList.remove("d-none");
 
     }
@@ -1740,6 +1806,7 @@
                 selectAccountAdminDestino.classList.remove('active');
                 opcionesAccountAdminDestino.classList.remove('active');
                 hiddenInputAccountAdminDestino.value = e.currentTarget.id;
+                document.getElementById("detail-cuenta-otacar").innerHTML = e.currentTarget.querySelector('.titulo').innerText;
                 mostrarMetodosPago(hiddenInputAccountAdminDestino.value);
                 cajaMetodosPago.classList.remove('d-none');
             });
@@ -1796,6 +1863,8 @@
         selectMetodoPago.classList.toggle('active');
         opcionesMetodoPago.classList.toggle('active');
         hiddenInputMetodoPago.value = e.currentTarget.querySelector('.titulo').innerText;
+        //Escribir dato en los detalles del Modal
+        document.getElementById("detail-forma-pago").innerHTML =  e.currentTarget.querySelector('.titulo').innerText;
         habilitarMonto();
         cajaMontoEnvio.classList.remove("d-none");
 
@@ -1873,7 +1942,46 @@
     }   
 
     //FUNCIONES DEl INPUT MONTO
+    function formatearNumeros(numero){
+        valor = numero.replace(/\D/g, "");
+        valor = valor.replace(/([0-9])([0-9]{2})$/, "$1.$2");
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
+        numeroF = parseFloat(valor);
+        return numeroF;
+    }
+    function formatearString(numero){
+        valor = numero.toString()
+        valor = valor.replace(/\D/g, "");
+        valor = valor.replace(/([0-9])([0-9]{2})$/, "$1,$2");
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
 
+        if (valor.length === 1){
+            valor = "0,0".concat(valor);
+        }else if(valor.length === 2){
+            
+            valor = "0,".concat(valor);
+             
+        }else if(valor.length === 4){
+
+        }
+        else if(valor.length === 5){
+            if (valor[0] === "0") {
+                valor = valor.slice(1);
+            }
+            
+        }else{           
+            limit = valor.length 
+            for (i=0; i < limit; i++){
+                if(valor[0] === "0" || valor[0] === "."){
+                    valor = valor.slice(1);
+                }else{
+                    break;
+                }  
+            }   
+        }  
+        return valor;
+    }
+    
     function mostrarTasa(paisDestino,montoTasa,montoTasaOferta,montoMinimo,monedaPaisD){
         let imgPaisD = document.getElementById("paisDestino"),
             tasa = document.getElementById("tasa"),
@@ -1887,11 +1995,14 @@
         imgPaisD.setAttribute("alt",paisDestino);
         
         tasa.innerHTML = montoTasa + " " + monedaPaisD;
+        tasa_minima = formatearNumeros(montoTasa)
         tasaOf.innerHTML = "";
         tasaOf2.innerHTML = "";
         if ("<%=rate.monto_oferta%>" != "0,00" && montoTasaOferta != "0,00"){
             tasaOf.innerHTML = "<br><br>Más de <%=rate.monto_oferta%> <%=rate.moneda%><br>"
+            monto_oferta = formatearNumeros("<%=rate.monto_oferta%>")
             tasaOf2.innerHTML = montoTasaOferta + " " + monedaPaisD;
+            tasa_oferta = formatearNumeros(montoTasaOferta)
         }
 
         inputMonto.setAttribute("oninput","monto(this),validarMonto(this,'"+montoMinimo+"')");
@@ -2016,12 +2127,69 @@
             input.classList.add("is-valid");
             boton.classList.remove("d-none");
         }
-        /*
-        var resultado = montoE * monto_tasa;
-        resultado = resultado.toFixed(2);
-        resultado = resultado.replace(/\D/g, "");
-        resultado = resultado.replace(/([0-9])([0-9]{2})$/, '$1,$2');
-        resultado = resultado.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");*/
+    }
+
+    //FUNCION DATOS DE LOS DETALLES EN EL MODAL
+    tasa_minima = 0.0
+    tasa_oferta = 0.0
+    monto_oferta = 0.0
+    monedaPaisD = ""
+    function detail_transaction(){
+        //TASA Y MONTO A RECIBIR
+        spanTasa = document.getElementById("detail-tasa");
+        spanMontoToRecibir = document.getElementById("detail-monto-a-recibir")
+
+        input_monto_envio = document.getElementById("validationMonto").value
+        monto_envio = formatearNumeros(input_monto_envio)
+        
+        if (monto_oferta > 0){
+            if (monto_envio >= monto_oferta){
+                spanTasa.innerHTML = document.getElementById("tasaOf2").innerText
+                monto_a_recibir = monto_envio * tasa_oferta
+                spanMontoToRecibir.innerHTML = formatearString(monto_a_recibir.toFixed(2)) + " " + monedaPaisD
+            }else{
+                spanTasa.innerHTML = document.getElementById("tasa").innerText
+                monto_a_recibir = monto_envio * tasa_minima
+                spanMontoToRecibir.innerHTML = formatearString(monto_a_recibir.toFixed(2)) + " " + monedaPaisD
+            }
+        }else{
+            spanTasa.innerHTML = document.getElementById("tasa").innerText
+            monto_a_recibir = monto_envio * tasa_minima
+            spanMontoToRecibir.innerHTML = formatearString(monto_a_recibir.toFixed(2)) + " " + monedaPaisD
+        }
+
+        //MONTO ENVIO
+        document.getElementById("detail-monto-envio").innerHTML = input_monto_envio + " <%=rate.moneda%>"
+
+        //COMISION
+        account_usuario = document.getElementById("inputAccountUserDestino").value
+        method = account_usuario.split("-")
+        if (method[0] === "mobile_payments"){
+            banks = ["0102","0116","0134","0105"]
+            if (banks.indexOf(document.getElementById("img-bank-payment").alt) != -1 ){
+                document.getElementById("list-comision").classList.remove("d-none")
+                document.getElementById("list-comision-2").classList.remove("d-none")
+                
+                //ESCRIBIR COMISIÓN
+                comision = monto_envio * 0.003
+                document.getElementById("detail-comision").innerHTML = formatearString(comision.toFixed(2)) + " <%=rate.moneda%>"
+                //ESCRIBIR TOTAL A PAGAR
+                total_a_pagar = monto_envio + comision
+                console.log(total_a_pagar)
+                document.getElementById("detail-monto-total").innerHTML = formatearString(total_a_pagar.toFixed(2)) + " <%=rate.moneda%>"
+
+            }else{
+                document.getElementById("list-comision").classList.add("d-none")
+                document.getElementById("list-comision-2").classList.add("d-none")
+            }
+        }else{
+            document.getElementById("list-comision").classList.add("d-none")
+            document.getElementById("list-comision-2").classList.add("d-none")
+        }
+
+        //MONTO A RECIBIR
+        
+
     }
     
 </script>

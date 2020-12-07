@@ -108,7 +108,26 @@
                         <%if account_bank.permit_delete != "denied"%>
                             <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                         <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBank<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="infoBank<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger" role="alert">
+                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
+                                            </div>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
                         <%end%>
                     </tr>
                     <%end%>
@@ -139,6 +158,7 @@
                             <td class="align-middle">|</td>
                             <td class="align-middle"><a href="/bank_brasils/<%=account_bank.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
                         <%end%>
+
                         <!--Boton Modal-->
                         <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#bankBrasilModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
@@ -190,9 +210,51 @@
                         </div>
 
                         <%if account_bank.permit_delete != "denied"%>
-                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                            <%if current_user.is_admin? && account_bank.bank === "Caixa" && account_bank.deposit_for_loterica%>
+                                <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBankBrasil<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="infoBankBrasil<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert alert-warning" role="alert">
+                                                    Esta cuenta no puede ser eliminada porque esta siendo utilizada en la recepcion de depositos por Loterica. Debe modificar la <a href="/config_loterica_deposits" class="alert-link special-link">configuracion de los depositos por loterica</a> y quitar esta cuenta para poder eliminarla.
+                                                </div>
+                                            </div>        
+                                        </div>
+                                    </div>
+                                </div>
+                            <%else%>
+                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                            <%end%>
                         <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-container="body"  data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBankBrasil<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="infoBankBrasil<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger" role="alert">
+                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
+                                            </div>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
                         <%end%>
                     </tr>
                     <%end%>
@@ -280,7 +342,26 @@
                         <%if wallet.permit_delete != "denied"%>
                             <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallets/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                         <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoWallet<%=wallet.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="infoWallet<%=wallet.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger" role="alert">
+                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
+                                            </div>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
                         <%end%>
                     </tr>
                     <%end%>
@@ -369,7 +450,26 @@
                         <%if payment.permit_delete != "denied"%>
                             <td class="align-middle"><a rel="nofollow" data-method="delete" href="/digital_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                         <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoDigitalPayment<%=payment.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="infoDigitalPayment<%=payment.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger" role="alert">
+                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
+                                            </div>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
                         <%end%>
                     </tr>
                     <%end%>
@@ -438,7 +538,26 @@
                         <%if wallet.permit_delete != "denied"%>
                             <td class="align-middle"><a rel="nofollow" data-method="delete" href="/wallet_with_users/<%=wallet.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                         <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoWalletWithUser<%=wallet.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="infoWalletWithUser<%=wallet.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger" role="alert">
+                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
+                                            </div>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
                         <%end%>
                     </tr>
                     <%end%>
@@ -535,7 +654,26 @@
                         <%if payment.permit_delete != "denied"%>
                             <td class="align-middle"><a rel="nofollow" data-method="delete" href="/mobile_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                         <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="popover" data-placement="left" title="Información" data-content="Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoMobilePayment<%=payment.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="infoMobilePayment<%=payment.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger" role="alert">
+                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
+                                            </div>
+                                        </div>        
+                                    </div>
+                                </div>
+                            </div>
                         <%end%>
                     </tr>
                     <%end%>
