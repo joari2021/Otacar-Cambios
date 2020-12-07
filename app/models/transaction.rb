@@ -10,6 +10,6 @@ class Transaction < ApplicationRecord
     #validates :monto_envio, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
 
     def send_email
-        TransactionMailer.new_transaction(self)
+        TransactionMailer.new_transaction(self).deliver_later
     end
 end
