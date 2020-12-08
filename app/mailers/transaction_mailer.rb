@@ -8,7 +8,7 @@ class TransactionMailer < ApplicationMailer
                 @user_admin = user
             end
         end
-
+            
         mail(to: "jorge.uchija2021@gmail.com", subject: "Nueva transacción por confirmar")
     end
 end

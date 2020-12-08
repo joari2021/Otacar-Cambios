@@ -1,5 +1,23 @@
-<p>Bienvenido(a) <%= @email %>!</p>
+<div style="width:100%;">
+    <div style="padding:40px;color:#0b254b;font-size:1.5em;">
+        <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png" style="display: block;font-size: 24px;text-align: center;text-decoration: none;width: 300px;height: auto;margin: auto;">
+        <p style="margin-top:15px;text-align:center">Bienvenido(a) <span style="font-weight:bold;"><%= @email %>!</span>.</p>
+        
+        <p>Te damos la mas cordial bienvenida a nuestra pagina web. Desde nuestra pagina podras hacer envios de remesas a otros paises a las mejores tasas del mercado y con la mayor seguridad por nuestra amplia clientela que respalda nuestro trabajo.</p>
 
-<p>You can confirm your account email through the link below:</p>
+        <p>Para poder disfrutar de tu cuenta debes confirmar tu correo haciendo click en el siguiente link:</p>
+        
+        <p style="font-weight:bold;color:#ffc107!important;text-align:center"><%= link_to 'Confirmar mi cuenta', confirmation_url(@resource, confirmation_token: @token) %></p>
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+        <p>Si tu no haz solicitado un registro en nuestra pagina web, por favor, ignora este mensaje.</p>
+
+        <footer style="background: #2e3149;overflow: hidden;">
+            <span style="height: 1px;width: 60%;margin: 0 auto;border: 1px solid #434769;display: block;margin-top: 30px;"></span>
+
+            <p style="color: #565b87;text-align: center;font-size: 18px;padding: 40px 0;">
+            © Copyright 2020 Otacar Cambios. Todos los derechos reservados. <br>
+            Pagina Web <a href="https://frozen-taiga-71507.herokuapp.com" target="_blank">otacarcambios.com</a>.
+            </p>
+        </footer>
+    </div>
+</div>

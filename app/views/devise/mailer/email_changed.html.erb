@@ -1,7 +1,23 @@
-<p>Hello <%= @email %>!</p>
+<div style="width:100%;">
+    <div style="padding:40px;color:#0b254b;font-size:1.5em;">
+        <img src="https://frozen-taiga-71507.herokuapp.com/img/Logo.png" style="display: block;font-size: 24px;text-align: center;text-decoration: none;width: 300px;height: auto;margin: auto;">
+        <p style="margin-top:15px;text-align:center">Hola <span style="font-weight:bold;"><%= @resource.name.capitalize %> <%= @resource.last_name.capitalize %>!</span>.</p>
+        
+        <% if @resource.try(:unconfirmed_email?) %>
+            <p>Nos estamos comunicando contigo para notificarte que tu correo electrónico se cambiará a <span style="font-weight:bold;"><%= @resource.unconfirmed_email %></span>.</p>
+        <% else %>
+            <p>Nos estamos comunicando contigo para notificarte que tu correo electrónico ha sido cambiado a <span style="font-weight:bold;"><%= @resource.email %></span>.</p>
+        <% end %>
 
-<% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
-<% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
-<% end %>
+        <footer style="background: #2e3149;overflow: hidden;">
+            <span style="height: 1px;width: 60%;margin: 0 auto;border: 1px solid #434769;display: block;margin-top: 30px;"></span>
+
+            <p style="color: #565b87;text-align: center;font-size: 18px;padding: 40px 0;">
+            © Copyright 2020 Otacar Cambios. Todos los derechos reservados. <br>
+            Pagina Web <a href="https://frozen-taiga-71507.herokuapp.com" target="_blank">otacarcambios.com</a>.
+            </p>
+        </footer>
+    </div>
+</div>
+
+
