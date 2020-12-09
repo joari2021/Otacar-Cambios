@@ -51,7 +51,7 @@
                 <span id="payment-digital"><%=payment.payment_method%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('payment-digital','Pago digital')"></i><br><hr>
 
                 <label class="text-primary">Numero de telefono</label><br>
-                <span id="number-phone"><%=bank.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
+                <span id="number-phone"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
             <%end%>
         <%end%>
     <%when "mobile_payments"

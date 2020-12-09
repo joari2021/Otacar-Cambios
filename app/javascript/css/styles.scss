@@ -62,8 +62,11 @@ input[type="checkbox"] {
 }
 
 .comprobante{
-  width:100%;
-  cursor:pointer;
+  max-width:100%;
+  display: block;
+  text-align:center;
+  height: auto;
+  margin: auto;
 }
 
 a.special-link {

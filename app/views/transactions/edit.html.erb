@@ -32,7 +32,7 @@
                         <label class="text-primary">Monto a pagar</label><br>
                         <%=@moneda_destinity%> <span id="monto_pagar"><%= number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_pagar','Monto a pagar')"></i><br><hr>
 
-                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
+                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", multipart: true}) do |form| %>
                             <% if @transaction.errors.any? %>
                             <div id="error_explanation">
                                 <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -173,8 +173,8 @@
 
                         <label class="text-primary">Comprobante</label><br>
 
-                        <a href="<%=url_for(@transaction.comprobante_pago_otacar)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%></a>
-
+                       <%=render 'comprobante-pago', {identifier: "otacar", url: @transaction.comprobante_pago_otacar.url}%>
+                        
                         <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
                             <%if @transaction.errors.any?%>
                             <div id="error_explanation">
@@ -347,7 +347,7 @@
 
     <%elsif @transaction.status === "envio en proceso"%>
 
-        <div class="row justify-content-center mt-3">
+        <div class="row justify-content-center mt-3 mb-5">
             <div class="col-10 col-md-9 col-lg-6 p-3 fondo" style="border-radius:12px;">
                 <p class="text-center">
                     <label  class="text-primary">ID Transacción</label><br>
@@ -441,7 +441,7 @@
                         <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
 
                         <label class="text-primary">Comprobante</label><br>
-                        <a href="<%=url_for(@transaction.comprobante_pago_otacar)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%></a>
+                        <%=render 'comprobante-pago', {identifier: "otacar", url: @transaction.comprobante_pago_otacar.url}%>
                     </div>
                 </div> 
             </div>

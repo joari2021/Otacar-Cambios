@@ -120,6 +120,7 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/1/edit
   def edit
+    
     current_user.transactions.each do |transaction|
       if transaction.status === "en proceso"
         segundos = (Time.now.utc - transaction.created_at).to_i

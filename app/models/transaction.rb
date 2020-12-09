@@ -1,7 +1,7 @@
 class Transaction < ApplicationRecord
     belongs_to :user
-    has_one_attached :comprobante_pago_otacar
-    has_one_attached :comprobante_pago_usuario
+    mount_uploader :comprobante_pago_otacar, ImagenTransactionUploader
+    mount_uploader :comprobante_pago_usuario, ImagenTransactionUploader
 
     validates :country_destinity, :account_destinity_admin, :account_destinity_usuario, presence: { message:" Este campo no puede estar vacio" }
 

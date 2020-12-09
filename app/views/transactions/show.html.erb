@@ -32,7 +32,7 @@
 
                     <label class="text-primary">Comprobante</label><br>
                     <%if @transaction.status === "realizada"%>
-                        <a href="<%=url_for(@transaction.comprobante_pago_usuario)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_usuario), class:"comprobante"%></a>
+                        <%=render 'comprobante-pago', {identifier: "usuario", url: @transaction.comprobante_pago_usuario.url}%>
                     <%else%>
                         No hay ningun archivo...
                     <%end%>
@@ -50,7 +50,7 @@
 
                     <label class="text-primary">Comprobante</label><br>
                     <%unless @transaction.status === "en proceso" || @transaction.status === "vencida"%>
-                        <a href="<%=url_for(@transaction.comprobante_pago_otacar)%>" target="_blank"><%=image_tag url_for(@transaction.comprobante_pago_otacar), class:"comprobante"%></a>
+                        <%=render 'comprobante-pago', {identifier: "otacar", url: @transaction.comprobante_pago_otacar.url}%>
                     <%else%>
                         No hay ningun archivo...
                     <%end%>

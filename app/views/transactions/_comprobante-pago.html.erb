@@ -1,0 +1,21 @@
+<!--Button Modal-->
+<span role="button" style="cursor:pointer;" data-toggle="modal" data-target="#img-<%=identifier%>">
+    <%=image_tag(url, class: "comprobante")%>
+</span>
+
+<!-- Modal -->
+<div class="modal fade" id="img-<%=identifier%>" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-center d-inline-block">
+                <h5 class="modal-title" id="staticBackdropLabel">Comprobante de pago</h5>
+            </div>
+            <div class="modal-body">
+                <%=image_tag(url, class: "comprobante")%>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
