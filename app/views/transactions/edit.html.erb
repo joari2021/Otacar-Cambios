@@ -173,7 +173,7 @@
 
                         <label class="text-primary">Comprobante</label><br>
 
-                       <%=render 'comprobante-pago', {identifier: "otacar", url: @transaction.comprobante_pago_otacar.url}%>
+                       
                         
                         <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
                             <%if @transaction.errors.any?%>
