@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
   
+  resources :notifications
+  get 'notification/destroy'
   resources :mobile_payments
   resources :digital_payments
   resources :wallet_with_users
@@ -22,7 +24,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   get '/dhasboard' => "home#index", :as => :user_root
- 
+  get '/calculate_shipping' => "home#calculate_shipping"
 end
 
 

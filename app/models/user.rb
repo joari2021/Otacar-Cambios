@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :digital_payments
   has_many :mobile_payments
   has_many :transactions
+  has_many :notifications
   include PermissionsConcern
   
   validates :name, :second_name, :last_name, :second_surname, :state, :city, length: { maximum: 15, message: " El contenido es muy largo (caracteres minimos 15)" }

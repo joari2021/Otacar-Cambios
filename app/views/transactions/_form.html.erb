@@ -488,7 +488,7 @@
                             </ul>
                         </div>
                         <div class="modal-footer">
-                            <%= form.submit "Continuar", class:"btn btn-info m-auto"%>
+                            <%= form.submit "Continuar", class:"btn btn-info m-auto", onclick:"formatearMonto()"%>
                         </div>
                     </div>
                 </div>
@@ -2177,7 +2177,6 @@
                 total_a_pagar = monto_envio + comision
                 console.log(total_a_pagar)
                 document.getElementById("detail-monto-total").innerHTML = formatearString(total_a_pagar.toFixed(2)) + " <%=rate.moneda%>"
-
             }else{
                 document.getElementById("list-comision").classList.add("d-none")
                 document.getElementById("list-comision-2").classList.add("d-none")
@@ -2186,10 +2185,13 @@
             document.getElementById("list-comision").classList.add("d-none")
             document.getElementById("list-comision-2").classList.add("d-none")
         }
+    }
 
-        //MONTO A RECIBIR
-        
-
+    //FORMATEAR MONTOS PARA GUARDARLOS EN LA BASE DE DATOS
+    function formatearMonto(){
+        input_monto_envio = document.getElementById("validationMonto")
+        monto_envio = formatearNumeros(input_monto_envio.value)
+        input_monto_envio.value = monto_envio
     }
     
 </script>

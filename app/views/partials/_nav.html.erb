@@ -1,40 +1,44 @@
 <div id="sidebar-container" class="bg-light border-right">
-    <div class="logo">
-        <span class="h4 font-weight-bold mb-0">Otacar Cambios</span>              
-        <button class="btn btn-primary text-dark ml-1 d-none" id="menu-toggle2" style="margin-top:-10px"><i class="fas fa-bars"></i></button>
-    </div>
-    <div class="menu">
-        <%if current_user.is_normal_user?%>
+    <div id="menu-hoz">
+        <div class="logo">
+            <span class="h4 font-weight-bold mb-0">Otacar Cambios</span>              
+            <button class="btn btn-primary text-dark ml-1 d-none" id="menu-toggle2" style="margin-top:-10px"><i class="fas fa-bars"></i></button>
+        </div>
+        <div class="menu">
+            <%if current_user.is_normal_user?%>
+                <a href="/dhasboard" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-house-user icono mr-3"></i>Dhasboard <%if current_user.notifications.where(view:false).count > 0%><span class="ml-2 mat-badge-content badge-menu bg-info"><%=current_user.notifications.where(view:false).count%></span><%end%></a>
 
+               
             <%unless current_user.is_admin?%>
-            <a href="/transactions/new" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-comments-dollar lead mr-1"></i> Enviar dinero</a>
+                <a href="/transactions/new" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-comments-dollar icono mr-3"></i>Enviar dinero</a>
             <%end%>
 
-            <a href="/dhasboard" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-calculator lead mr-2"></i> Calcular envio</a>
+            <a href="/calculate_shipping" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-calculator icono mr-3"></i>Calcular envio</a>
 
-            <a href="/payment_methods" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="far fa-file-alt lead mr-3"></i>Metodos de pago</a>
+            <a href="/payment_methods" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-wallet icono mr-3"></i>Metodos de pago</a>
 
             <%unless current_user.is_admin?%>
-                <a href="/transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-file-invoice lead mr-3"></i>Transacciones realizadas</a>
+                <a href="/transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-file-invoice icono mr-3"></i>Transacciones realizadas</a>
 
-                <a href="/status_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="external"><i class="fas fa-tasks lead mr-2"></i> Estado de transacciones</a>
+                <a href="/status_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="external"><i class="fas fa-tasks icono mr-3"></i>Estado de transacciones</a>
             <%else%>
-                <a href="/transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-file-invoice lead mr-3"></i>Historial de transacciones</a>
+                <a href="/transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-file-invoice icono mr-3"></i>Historial de transacciones</a>
 
-                <a href="/pending_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="external"><i class="fas fa-tasks lead mr-2"></i> Transacciones pendientes</a>
+                <a href="/pending_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="external"><i class="fas fa-tasks icono mr-3"></i>Transacciones pendientes</a>
             <%end%>
-        
-        <!--
-        <a href="#" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"> <i class="icon ion-md-settings lead mr-2"></i> Configuración</a>
-        -->
-        <%end%>
-
-        <%if current_user.is_admin?%>
-            <a href="/rates" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-hand-holding-usd lead mr-2"></i>Tasas</a>
-
-            <a href="/config_loterica_deposits" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-cog lead mr-2"></i> Configurar D. Loterica</a>
-        <%end%>
-        <a href="/users/sign_out" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="nofollow" data-method="delete"> <i class="far fa-arrow-alt-circle-left lead mr-2"></i>Cerrar Sesión</a>
+            
+            <!--
+            <a href="#" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"> <i class="icon ion-md-settings lead mr-2"></i> Configuración</a>
+            -->
+            <%end%>
+    
+            <%if current_user.is_admin?%>
+                <a href="/rates" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-hand-holding-usd icono mr-3"></i>Tasas</a>
+    
+                <a href="/config_loterica_deposits" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-cog icono mr-3"></i>Configurar D. Loterica</a>
+            <%end%>
+            <a href="/users/sign_out" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="nofollow" data-method="delete"> <i class="far fa-arrow-alt-circle-left icono mr-3"></i>Cerrar Sesión</a>
+        </div>
     </div>
 
 </div>

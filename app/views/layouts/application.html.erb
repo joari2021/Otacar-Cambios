@@ -75,7 +75,21 @@
                 $("#bodys").addClass("overflow-hidden");
                 $("#page-content-wrapper").removeClass("position-fixed");
             });
-
+            
+            $(document).ready(function(){
+                if(typeof refresh === "undefined"){
+                    refresh = setInterval(refrescarNotificaciones, 30000);
+                    $.ajaxSetup({ cache: false });
+                }
+                
+            });
+            function refrescarNotificaciones() {
+                //$("#salastatus").css('opacity', 0.4);
+                $("#sidebar-container").load(window.location + '?randval='+ Math.random() + " #menu-hoz", function(){
+                    //aquí puedes meter más código si necesitas;
+                // $("#salastatus").css('opacity', 1);
+                });
+            }
         <%end%>
 
         <%if alert && user_signed_in?%>
@@ -92,7 +106,6 @@
         <%end%>
 
         <%if notice && user_signed_in?%>
-        
             var campoAlerta = document.getElementById("notice");
             setTimeout(() => {
                 campoAlerta.classList.add("hide");
@@ -105,7 +118,6 @@
             }, 6000);
         <%end%>
 
-        
     </script>
 
 </body>

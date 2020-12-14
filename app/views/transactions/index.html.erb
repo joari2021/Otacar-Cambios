@@ -115,7 +115,8 @@
                         <%if transaction.status === "realizada"%>
                             <%coincidencia = true%>
                             <tr class="shadow-sm">
-                                <td class="align-middle"><%=transaction.created_at.localtime.strftime("%d/%m/%Y")%></td>
+                                <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
+                                </td>
         
                                 <%method = transaction.account_destinity_usuario.split("-")%>
                                 

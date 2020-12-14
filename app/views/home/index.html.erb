@@ -1,453 +1,230 @@
-<h4 class="text-primary text-center">Calcular Envio</h4>
-
-<div class="row mt-3">
-
-    <button class="badge badge-primary text-primary m-auto" type="button" data-toggle="modal" data-target="#exampleModal">Ver Tasas de otros Paises</button>
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-success" id="exampleModalLabel">Tasas de <%=current_user.country%> para envios a:</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
-
-                        <div class="card-header text-success text-center">
-                            <% @rates.each do |rate| %>
-
-                            <%if current_user.country === rate.country%>
-
-                            <%@rate = rate%>
-                            <%= render "partials/tasas", collection: @rate %>
-
-                            <%end%>
-                            <%end%>
+<%=render 'partials/zone-time'%>
+<section class="py-3">
+    <!-- Highlights -->
+    <div class="row">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card mb-5 shadow-sm border-0 shadow-hover">
+                <div class="card-body d-flex">
+                    <div>
+                        <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
+                            <i class="icon ion-md-trending-up text-primary align-self-center mx-auto lead"></i>
                         </div>
                     </div>
+                    <div class="align-self-center">
+                        <h6 class="mb-0"><%=@transactions_totales%></h6>
+                        <small class="text-muted">Envios realizados</small>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card mb-5 shadow-sm border-0 shadow-hover">
+                <div class="card-body d-flex">
+                    <div>
+                        <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
+                            <i class="icon ion-md-people text-primary align-self-center mx-auto lead"></i>
+                        </div>
+                    </div>
+                    <div class="align-self-center">
+                        <h6 class="mb-0">1345</h6>
+                        <small class="text-muted">Referidos</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card mb-5 shadow-sm border-0 shadow-hover">
+                <div class="card-body d-flex">
+                    <div>
+                        <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
+                            <i class="icon ion-md-cash text-primary align-self-center mx-auto lead"></i>
+                        </div>
+                    </div>
+                    <div class="align-self-center">
+                        <%=render 'transactions/detectar-moneda', {country: current_user.country}%>
+                        <h6 class="mb-0"><%=@moneda_destinity%> <%=number_with_precision(@monto_total_send, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></h6>
+                        
+                        <small class="text-muted">Enviados a otros paises</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- Fin highlights -->
 
-<div class="row mt-5">
-    <div class="col-6 field text-right">
-        <label class="mt-2" for="pais">Enviar a: </label>
+    <div class="row mb-3">
 
-    </div>
-    <div class="col-6 was-validated">
-        <div class="px-2">
-            <select class="custom-select" id="pais" required>
-                <option selected disabled value="">Eligir...</option>
-                <%@rates.each do |rate|%>
-                <%if rate.country === current_user.country%>
+        <!-- Tabla de ultimas transacciones -->
+        <div class="col-xl-7 col-lg-12">
+            <h5>Ultimas Transacciones</h5>
+            <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><small class="font-weight-bold">Fecha<small></th>
+                        <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Monto<small></th>
+                        <th scope="col"><small class="font-weight-bold">Estado<small></th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                <%@transactions.each do |transaction|%>
+                <tr class="shadow-sm">
+                    <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small></td>
 
-                <%if current_user.country != "Brasil" && rate.rate_brasil != "0,00"%><option value="Brasil">Brasil</option><%end%>
-                <%if current_user.country != "Chile" && rate.rate_chile != "0,00"%><option value="Chile">Chile</option><%end%>
-                <%if current_user.country != "Ecuador" && rate.rate_ecuador != "0,00"%><option value="Ecuador">Ecuador</option><%end%>
-                <%if current_user.country != "España" && rate.rate_españa != "0,00"%><option value="España">España</option><%end%>
-                <%if current_user.country != "Panama" && rate.rate_panama != "0,00"%><option value="Panama">Panama</option><%end%>
-                <%if current_user.country != "Peru" && rate.rate_peru != "0,00"%><option value="Peru">Peru</option><%end%>
-                <%if current_user.country != "Portugal" && rate.rate_portugal != "0,00"%><option value="Portugal">Portugal</option><%end%>
-                <%if current_user.country != "USA" && rate.rate_usa != "0,00"%><option value="USA">USA</option><%end%>
-                <%if current_user.country != "Venezuela" && rate.rate_venezuela != "0,00"%><option value="Venezuela">Venezuela</option><%end%>
+                    <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
+
+                    <%=render 'transactions/detectar-moneda', {country: transaction.country_destinity}%>
+                    <td class="align-middle"><span class=""><%=@moneda_destinity%> <%=number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span></td>
+
+                    <%case transaction.status
+                        when "en proceso"
+                            badge = "badge-primary"
+                        
+                        when "por confirmar"
+                            badge = "badge-secondary"
+
+                        when "envio en proceso"
+                            badge = "badge-info"
+
+                        when "realizada"
+                            badge = "badge-success"
+
+                        when "rechazada"
+                            badge = "badge-warning"
+                        
+                        when "presenta incidencia"
+                            badge = "badge-warning"
+                        
+                        when "vencida"
+                            badge = "badge-danger"
+                    
+                    end%>
+                    <td class="align-middle"><span class="badge badge-pill <%=badge%>"><%=transaction.status%></span></td>
+                </tr>
                 <%end%>
+                
+                </tbody>
+            </table>
+            <%if @transactions.count === 0%>
+                    <div class="alert alert-primary text-center" role="alert">
+                        No tienes transacciones registradas!
+                    </div>
                 <%end%>
-            </select>
-        </div>
-    </div>
-</div>
+            </div>
 
-<div class="accordion mt-4" id="accordionExample">
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h6 class="mb-0 text-center">
-        <a class="text-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          Calcular monto a recibir
-        </a>
-      </h6>
-    </div>
-
-    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-        <div class="mt-5">
-            <div class="row field m-auto text-center">
-                <div class="col-12 col-sm-6 mb-3">
-                    <label>Monto a enviar</label>
-                    <input type="text" class="text-center" id="montoEnvio" value="0,00" oninput="monto(this)">
-                </div>
-                <div class="col-12 col-sm-6">
-                    <label>Monto a recibir</label>
-                    <input type="text" class="text-center" id="montoRecibir" value="" disabled>
+            <div class="col mt-4">
+                <div class="card mb-5 shadow-sm border-0 shadow-hover">
+                    <div class="card-header bg-light border-0 pt-3 pb-0">
+                        <h6 class="mb-0">Centro de atención OC</h6>
+                    </div>
+                    <div class="card-body">
+                        
+                        <span>Lunes - Viernes</span><span class="float-right">10:00 - 17:00</span><br><br>
+                        <span>Sabados</span><span class="float-right">10:00 - 14:00</span><hr>
+                        <i class="fas fa-headphones text-primary" style="font-size:25px"></i><span class="float-right text-primary">+51 9947 8038</span>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Fin tabla transacciones -->
 
-        <div class="field mt-5 text-center">
-            <button class="btn btn-success mb-3" id="botonC">Calcular</button>
-            <button class="btn btn-danger mb-3 ml-3" id="boton">Borrar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card mb-5">
-    <div class="card-header" id="headingTwo">
-      <h6 class="mb-0 text-center">
-        <a class="text-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Calcular monto a enviar
-        </a>
-      </h6>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-        <div class="mt-5">
-            <div class="row field m-auto text-center">
-                <div class="col-12 col-sm-6 mb-3">
-                    <label>Monto a recibir</label>
-                    <input type="text" class="text-center" id="montoRecibir2" value="0,00" oninput="monto(this)">
+        <!-- Mensajes -->
+        <div class="col-xl-5 col-lg-12" id="content-notify">
+            <div class="card mb-5 shadow-sm border-0 shadow-hover" id="notify">
+                <div class="card-header bg-light border-0 pt-3 pb-0">
+                    <h6 class="mb-0">Notificaciones</h6>
                 </div>
-                <div class="col-12 col-sm-6">
-                    <label>Monto a enviar</label>
-                    <input type="text" class="text-center" id="montoEnvio2" value="" disabled>
+                <div class="card-body">
+                    <%@notifications.limit(5).each do |notification|%>
+                    <div class="py-3 caja-notf">     
+                        <div class="mb-2">
+                            <span class="mb-0"><%=notification.emisor%></span>
+                            <%segundos = (Time.now - notification.updated_at).to_i
+                            if segundos < 120
+                                nueva = true
+                            else
+                                nueva = false 
+                            end%>
+
+                            <%if nueva%>
+                                <span class="text-white small badge border rounded-pill d-inline-block float-right">Nueva</span>
+                            <%end%>
+                        </div>
+                        <small class="text-muted"><%=notification.asunto%></small><br>
+                        <small class="text-muted"><%=notification.content%></small>
+                    </div>
+                    <%end%>
+                    <hr>
+                    <div class="text-center text-primary pt-3">
+                        <%if @notifications.count > 0%>
+                            <!--Button Modal-->
+                            <span role="button" style="cursor:pointer;" data-toggle="modal" data-target="#modal-notifications" id="span-modal" onclick="refrescarNotificationsModal()">
+                                <small>Ver todas las notificaciones</small>
+                            </span>
+                        <%else%>
+                            <small class="">No tienes notificaciones</small>
+                        <%end%>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Fin mensajes -->
 
-        <div class="field mt-5 text-center">
-            <button class="btn btn-success mb-3" id="botonC2">Calcular</button>
-            <button class="btn btn-danger mb-3 ml-3" id="botonB2">Borrar</button>
+        <!-- Modal de Notificaciones -->
+        <div class="modal fade" id="modal-notifications" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" id="content-modal">
+                <div class="modal-content" id="content-reload">
+                    <div class="modal-header text-center d-inline-block">
+                        <h5 class="modal-title" id="staticBackdropLabel">Notificaciones</h5>
+                    </div>
+                    <div class="modal-body">
+                        <%@notifications.each do |notification|%>
+                        <div class="py-3 caja-notf">     
+                            <div class="mb-2">
+                                <span class="mb-0"><%=notification.emisor%></span>
+                                <%segundos = (Time.now.utc - notification.updated_at).to_i
+                                if segundos < 120
+                                    nueva = true
+                                else
+                                    nueva = false 
+                                end%>
+
+                                <%if nueva%>
+                                    <span class="text-white small badge border rounded-pill d-inline-block float-right">Nueva</span>
+                                <%end%>
+                            </div>
+                            <small class="text-muted"><%=notification.asunto%></small><br>
+                            <small class="text-muted"><%=notification.content%></small>
+                        </div>
+                        <%end%>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>  
-
-    
-<script src="/js/vistas/script-form-for-campos.js"></script>
-<script>
-    var pais = document.querySelector('#pais'),
-        botonB = document.querySelector('#boton'),
-        botonB2 = document.querySelector('#botonB2'),
-        botonC = document.querySelector('#botonC'),
-        botonC2 = document.querySelector('#botonC2'),
-        montoEnvio = document.querySelector('#montoEnvio'),
-        montoEnvio2 = document.querySelector('#montoEnvio2'),
-        montoRecibir = document.querySelector('#montoRecibir'),
-        montoRecibir2 = document.querySelector('#montoRecibir2');
-
-    //Funciones
-    var convertAmount = function (montoOferta,tasa,tasaOferta,monedaE,monedaR, objetivo) {
         
-                    
-        //Formatear Monto de Oferta
-        montoOf = montoOferta.replace(/\D/g, "");                
-        montoOf = montoOf.replace(/([0-9])([0-9]{2})$/, '$1.$2');
-        montoOf = parseFloat(montoOf);
+    </div> 
+</section>
 
-        //Formatear Tasa
-        tasa = tasa.replace(/\D/g, "");                
-        tasa = tasa.replace(/([0-9])([0-9]{2})$/, '$1.$2');
-        tasa = parseFloat(tasa);
-
-        //Formatear Tasa Oferta
-        tasaO = tasaOferta.replace(/\D/g, "");                
-        tasaO = tasaO.replace(/([0-9])([0-9]{2})$/, '$1.$2');
-        tasaO = parseFloat(tasaO);
-
-        monedaE = " ".concat(monedaE);
-        monedaR = " ".concat(monedaR);
-
-        if (objetivo == "enviar"){
-            //Formatear Monto de Envio
-            valor = montoEnvio.value.replace(/\D/g, "");                
-            valor = valor.replace(/([0-9])([0-9]{2})$/, '$1.$2');
-            montoE = parseFloat(valor);
-            
-            if(montoOf === 0){
-                monto_tasa = tasa;
-                
-            }else{
-                if (tasaO === 0){
-                    monto_tasa = tasa;
-                }else{
-                    if (montoE < montoOf){
-                        monto_tasa = tasa;
-                    }else{
-                        monto_tasa = tasaO;
-                    }
-                    
-                }    
-            }
-            
-            var resultado = montoE * monto_tasa;
-            resultado = resultado.toFixed(2);
-            resultado = resultado.replace(/\D/g, "");
-            resultado = resultado.replace(/([0-9])([0-9]{2})$/, '$1,$2');
-            resultado = resultado.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
-
-            montoEnvio.value = montoEnvio.value.concat(monedaE);
-            montoRecibir.value = resultado.concat(monedaR);
-            botonC.setAttribute("disabled","disabled");
-
-            if (montoRecibir.value == "NaN"){
-                montoRecibir.value = "Monto a enviar invalido";
-            }
-
-        } else if(objetivo == "recibir"){
-            valor = montoRecibir2.value.replace(/\D/g, "");                
-            valor = valor.replace(/([0-9])([0-9]{2})$/, '$1.$2');
-            montoR = parseFloat(valor);
-
-            var montoE = montoR / tasa;
-
-            if(montoOf === 0){
-                monto_tasa = tasa;
-                
-            }else{
-                if (tasaO === 0){
-                    monto_tasa = tasa;
-                }else{
-                    if (montoE < montoOf){
-                        monto_tasa = tasa;
-                    }else{
-                        monto_tasa = tasaO;
-                    } 
-                }    
-            }
-            
-            var resultado = montoR / monto_tasa;
-            resultado = resultado.toFixed(2);
-            resultado = resultado.replace(/\D/g, "");
-            resultado = resultado.replace(/([0-9])([0-9]{2})$/, '$1,$2');
-            resultado = resultado.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
-
-            montoEnvio2.value = resultado.concat(monedaE);
-            montoRecibir2.value = montoRecibir2.value.concat(monedaR);
-            botonC2.setAttribute("disabled","disabled");
-
-            if (montoEnvio2.value == "NaN"){
-                montoEnvio2.value = "Monto a enviar invalido";
-            }
-        }        
+<script>
+    
+    $(document).ready(function(){
+        if(typeof refreshNotify === "undefined"){
+            refreshNotify = setInterval(refrescarNotifications, 15000);
+            $.ajaxSetup({ cache: false });
+        }
+    });
+   
+    function refrescarNotifications() {
+        $("#content-notify").load(window.location + '?randval='+ Math.random() + " #notify");
     }
 
-    var setCalculateMontoEnviar = function () {
-        
-        <% @rates.each do |rate| %>
-
-        <%if current_user.country === rate.country%>
-        var paisV = pais.value
-        switch (paisV) {
-            
-            <%if current_user.country != "Brasil"%>
-            case "Brasil":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_brasil%>","<%=rate.rate_brasil_min%>","<%=rate.moneda%>","R$","enviar");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Chile"%>
-            case "Chile":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_chile%>","<%=rate.rate_chile_min%>","<%=rate.moneda%>","CLP","enviar");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Ecuador"%>
-            case "Ecuador":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_ecuador%>","<%=rate.rate_ecuador_min%>","<%=rate.moneda%>","$","enviar");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "España"%>
-            case "España":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_españa%>","<%=rate.rate_españa_min%>","<%=rate.moneda%>","€","enviar");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Panama"%>
-            case "Panama":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_panama%>","<%=rate.rate_panama_min%>","<%=rate.moneda%>","$","enviar");
-                              
-                break;
-            <%end%>
-            
-            <%if current_user.country != "Peru"%>
-            case "Peru":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_peru%>","<%=rate.rate_peru_min%>","<%=rate.moneda%>","S/","enviar");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Portugal"%>
-            case "Portugal":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_portugal%>","<%=rate.rate_portugal_min%>","<%=rate.moneda%>","€","enviar");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "USA"%>
-            case "USA":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_usa%>","<%=rate.rate_usa_min%>","<%=rate.moneda%>","$","enviar");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Venezuela"%>
-            case "Venezuela":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_venezuela%>","<%=rate.rate_venezuela_min%>","<%=rate.moneda%>","Bs","enviar");
-                              
-                break;
-            <%end%>
-
-            default:
-                
-                montoRecibir.value = "";                
-                break;
-            
-        }
-        <%end%>
-        <%end%>
-    };
-
-    //Adaptar
-    var setCalculateMontoRecibir = function () {
-        
-        <% @rates.each do |rate| %>
-
-        <%if current_user.country === rate.country%>
-        var paisV = pais.value
-        switch (paisV) {
-            
-            <%if current_user.country != "Brasil"%>
-            case "Brasil":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_brasil%>","<%=rate.rate_brasil_min%>","<%=rate.moneda%>","R$","recibir");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Chile"%>
-            case "Chile":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_chile%>","<%=rate.rate_chile_min%>","<%=rate.moneda%>","CLP","recibir");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Ecuador"%>
-            case "Ecuador":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_ecuador%>","<%=rate.rate_ecuador_min%>","<%=rate.moneda%>","$","recibir");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "España"%>
-            case "España":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_españa%>","<%=rate.rate_españa_min%>","<%=rate.moneda%>","€","recibir");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Panama"%>
-            case "Panama":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_panama%>","<%=rate.rate_panama_min%>","<%=rate.moneda%>","$","recibir");
-                              
-                break;
-            <%end%>
-            
-            <%if current_user.country != "Peru"%>
-            case "Peru":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_peru%>","<%=rate.rate_peru_min%>","<%=rate.moneda%>","S/","recibir");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Portugal"%>
-            case "Portugal":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_portugal%>","<%=rate.rate_portugal_min%>","<%=rate.moneda%>","€","recibir");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "USA"%>
-            case "USA":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_usa%>","<%=rate.rate_usa_min%>","<%=rate.moneda%>","$","recibir");
-                              
-                break;
-            <%end%>
-
-            <%if current_user.country != "Venezuela"%>
-            case "Venezuela":
-                
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_venezuela%>","<%=rate.rate_venezuela_min%>","<%=rate.moneda%>","Bs","recibir");
-                              
-                break;
-            <%end%>
-
-            default:
-                
-                montoRecibir.value = "";                
-                break;
-            
-        }
-        <%end%>
-        <%end%>
-    };  
-
-    montoEnvio.addEventListener("focus", function () {
-         montoRecibir.value = "";
-         montoEnvio.value = "0,00";
-         botonC.removeAttribute("disabled");
-    });
-
-    montoRecibir2.addEventListener("focus", function () {
-         montoRecibir2.value = "0,00";
-         montoEnvio2.value = "";
-         botonC2.removeAttribute("disabled");
-    });
-    
-    botonC.addEventListener('click', setCalculateMontoEnviar);
-    botonC2.addEventListener('click', setCalculateMontoRecibir);
-    botonB.addEventListener('click', function() {
-        pais.value = "";
-        montoEnvio.value = "0,00";
-        montoRecibir.value = "";
-        botonC.removeAttribute("disabled");
-
-    });
-    botonB2.addEventListener('click', function() {
-        pais.value = "";
-        montoEnvio2.value = "";
-        montoRecibir2.value = "0,00";
-        botonC2.removeAttribute("disabled");
-    });
-
-    function format(input) {
-        input.value = "";
+    //REFRESCAR LAS NOTIFICACIONES EN EL MODAL
+    function refrescarNotificationsModal(){
+        $("#content-modal").load(window.location + '?randval='+ Math.random() + " #content-reload");
     }
 </script>

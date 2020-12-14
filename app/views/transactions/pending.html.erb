@@ -25,12 +25,9 @@
                         <%if transaction.status === "por confirmar"%>
                             <%transaction_for_confirm = true%>
                             <tr class="shadow-sm">
-                                
-                                <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
-                                
-                                </td>
-                                <td><span class="d-block"><%=transaction.user.name%> <%=transaction.user.last_name%></span><small class="text-muted"><%=transaction.user.email%></small>
-                                </td>
+                                <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small></td>
+
+                                <td><span class="d-block"><%=transaction.user.name%> <%=transaction.user.last_name%></span><small class="text-muted"><%=transaction.user.email%></small></td>
 
                                 <%method = transaction.account_destinity_admin.split("-")%>
                                 
@@ -249,15 +246,6 @@
     </div>
 </div>
 <script>
-
-      //setTimeout("location.reload();",60000);
-      /*
-      $(document).ready(
-        function(){
-            setInterval(function(){
-            $('#mydiv').load('/controller/transactions/pending');
-            }, 3000);
-        });*/
 
     $(document).ready(function(){
         if(typeof refreshId === "undefined"){

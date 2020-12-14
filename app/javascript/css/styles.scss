@@ -29,6 +29,25 @@ li {
   margin-top: 170px;
 }
 */
+.icono{
+  font-size: 25px;
+  font-weight: 300;
+  width:25px !important;
+  height:25px;
+}
+.caja-notf { 
+  color: #ffffff; 
+  font-size: 18px; 
+  font-weight: 400; 
+  background: #889ccf; 
+  margin: 0 0 25px; 
+  overflow: hidden; 
+  padding: 20px; 
+  border-radius: 35px 0px 35px 0px; 
+  -moz-border-radius: 35px 0px 35px 0px; 
+  -webkit-border-radius: 35px 0px 35px 0px; 
+  border: 2px solid #5878ca;
+}
 
 .field {
   
@@ -81,6 +100,35 @@ a.special-link:hover, a.special-link:focus {
   background-size: 100% 2px;
 }
 
+.mat-badge-content {
+  color: #fff;
+  position: absolute;
+  text-align: center;
+  display: inline-block;
+  border-radius: 50%;
+  transition: transform .2s ease-in-out;
+  transform: scale(.6);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  font-weight: 600;
+  font-size: 12px;
+  transform: none;
+}
+.badge-menu{
+  top: 14px;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+}
+.badge-dash{
+  bottom: 18px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+}
+
 .was-validated .custom-select:valid, .custom-select.is-valid { border-color: #28a745; padding-right: calc(0.75em + 2.3125rem); background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") #fff no-repeat right 0.5rem center /18px 20px !important;}
 .was-validated .custom-select:invalid, .custom-select.is-invalid { border-color: #dc3545; padding-right: calc(0.75em + 2.3125rem); background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") #fff no-repeat right 0.50rem center /18px 20px !important; }
 
@@ -121,7 +169,8 @@ h1, h2, h3, h4, h5, h6 {
   will-change: opacity;
 }
 .shadow-sm {
-  box-shadow: 0 0 1.25rem rgba(11,37,75,.05);
+  //box-shadow: 0 .25 1.25rem rgba(11,37,75,.08);
+  box-shadow: 0 .5rem 1rem rgba(11,37,75,.10)!important;
 }
 
 .shadow-hover {

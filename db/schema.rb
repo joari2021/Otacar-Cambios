@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_08_211211) do
+ActiveRecord::Schema.define(version: 2020_12_09_233948) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -112,6 +112,17 @@ ActiveRecord::Schema.define(version: 2020_12_08_211211) do
     t.index ["user_id"], name: "index_mobile_payments_on_user_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string "emisor"
+    t.string "content"
+    t.string "asunto"
+    t.boolean "view", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "rates", force: :cascade do |t|
     t.string "country"
     t.string "moneda"
@@ -159,8 +170,8 @@ ActiveRecord::Schema.define(version: 2020_12_08_211211) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", default: 1, null: false
     t.string "status", default: "en proceso"
-    t.string "monto_envio"
-    t.string "monto_a_recibir"
+    t.decimal "monto_envio", precision: 18, scale: 2
+    t.decimal "monto_a_recibir", precision: 18, scale: 2
     t.string "account_destinity_usuario"
     t.string "account_destinity_admin"
     t.string "country_destinity"
@@ -240,6 +251,7 @@ ActiveRecord::Schema.define(version: 2020_12_08_211211) do
   add_foreign_key "banks", "users"
   add_foreign_key "digital_payments", "users"
   add_foreign_key "mobile_payments", "users"
+  add_foreign_key "notifications", "users"
   add_foreign_key "transactions", "users"
   add_foreign_key "wallet_with_users", "users"
   add_foreign_key "wallets", "users"

@@ -9,10 +9,6 @@ class TransactionsController < ApplicationController
     @transactions = Transaction.all
   end
 
-  def confirm
-    @transactions = Transaccion.all
-  end
-
   def status
 
     current_user.transactions.each do |transaction|
@@ -42,6 +38,32 @@ class TransactionsController < ApplicationController
         @user_admin = user
       end
     end
+
+    #COMPROBAR CUPOS DE LOTERICA Y RESETEAR
+    if current_user.country === "Brasil"
+      day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+      parsed_date = Date.parse(day_actual)
+
+      deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
+      
+      count = deposit_for_loterica.count
+      bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
+      if count === 0
+          bancos_caixa.update_all(cupos_for_loterica:3)
+      else  #REDEFINIR EL ESTADO DE LAS TRANSACCIONES EN PROCESO SI ESTAN VENCIDAS
+          deposit_for_loterica.where(status:"en proceso").each do |transaction|
+            segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+            if segundos > 1200
+                Transaction.find(transaction.id).update(status:"vencida")
+                method = transaction.account_destinity_admin.split("-")
+                cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
+                cupos += 1
+                BankBrasil.find(method[1].to_i).update(cupos_for_loterica: cupos)
+            end
+          end
+      end
+    end
+    
   end
   # GET /transactions/1
   # GET /transactions/1.json
@@ -90,26 +112,29 @@ class TransactionsController < ApplicationController
       end
     end
     
-    day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
-    parsed_date = Date.parse(day_actual)
+    #COMPROBAR CUPOS DE LOTERICA Y RESETEAR
+    if current_user.country === "Brasil"
+      day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+      parsed_date = Date.parse(day_actual)
 
-    deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
-    
-    count = deposit_for_loterica.count
-    bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
-    if count === 0
-        bancos_caixa.update_all(cupos_for_loterica:3)
-    else
-        deposit_for_loterica.where(status:"en proceso").each do |transaction|
-          segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
-          if segundos > 1200
-              Transaction.find(transaction.id).update(status:"vencida")
-              method = transaction.account_destinity_admin.split("-")
-              cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
-              cupos += 1
-              BankBrasil.find(method[1].to_i).update(cupos_for_loterica: cupos)
+      deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
+      
+      count = deposit_for_loterica.count
+      bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
+      if count === 0
+          bancos_caixa.update_all(cupos_for_loterica:3)
+      else  #REDEFINIR EL ESTADO DE LAS TRANSACCIONES EN PROCESO SI ESTAN VENCIDAS
+          deposit_for_loterica.where(status:"en proceso").each do |transaction|
+            segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+            if segundos > 1200
+                Transaction.find(transaction.id).update(status:"vencida")
+                method = transaction.account_destinity_admin.split("-")
+                cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
+                cupos += 1
+                BankBrasil.find(method[1].to_i).update(cupos_for_loterica: cupos)
+            end
           end
-        end
+      end
     end
     
     @cupos_for_loterica = 0
@@ -173,10 +198,8 @@ class TransactionsController < ApplicationController
         end
       end
 
-      monto_envio = transaction_inicial.monto_envio.gsub('.','')
-      monto_envio.gsub!(',','.')
-      monto_envio = monto_envio.to_f
-
+      monto_envio = transaction_inicial.monto_envio.to_f
+    
       if monto_envio > 0
         case transaction_inicial.country_destinity
         
@@ -280,8 +303,8 @@ class TransactionsController < ApplicationController
                 end
             end
 
-            @transaction.monto_envio = monto_envio.to_s.rjust(2, '0')
-            @transaction.monto_a_recibir = resultado.to_s.rjust(2, '0')
+            @transaction.monto_envio = monto_envio
+            @transaction.monto_a_recibir = resultado
             
             method_admin = @transaction.account_destinity_admin.split("-")
 
@@ -405,7 +428,7 @@ class TransactionsController < ApplicationController
                   @transaction.account_destinity_admin = "bank_brasils-#{method_admin[1]}"
                 end
             end
-            @transaction.num_id = 20.times.map { [*'0'..'9', *'A'..'Z'].sample }.join
+            @transaction.num_id = 16.times.map { [*'0'..'9', *'A'..'Z'].sample }.join
             respond_to do |format|
                 if @transaction.save
                    
@@ -484,6 +507,8 @@ class TransactionsController < ApplicationController
 
           respond_to do |format|
             if @transaction.update(status:"envio en proceso")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción fue confirmada",asunto:"ID Transacción: #{@transaction.num_id}")
+              notification.save
               format.html { redirect_to pending_transactions_path, notice: 'Transaccion confirmada con exito.' }
               format.json { render :show, status: :ok, location: @transaction }
             else
@@ -495,6 +520,7 @@ class TransactionsController < ApplicationController
         else
           respond_to do |format|
             if @transaction.update(status:"rechazada")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción fue rechazada",asunto:"ID Transacción: #{@transaction.num_id}")
               method_usuario = @transaction.account_destinity_usuario.split("-")
               model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
               model.update(permit_delete:"only_user")
@@ -502,11 +528,18 @@ class TransactionsController < ApplicationController
               method_admin = @transaction.account_destinity_admin.split("-")
               model = find_method_for_id(method_admin[0],method_admin[1].to_i)
               model.update(permit_delete:"only_user")
-
+              
+              #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION ES RECHAZADA EL MISMO DIA
               if @transaction.metodo === "Deposito Por Loterica"
-                cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
-                cupos += 1
-                BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos)
+                day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+                date_transaction = @transaction.created_at.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+
+                if day_actual === date_transaction
+                  cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
+                  cupos += 1
+                  BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos)
+                end
+                
               end
 
               format.html { redirect_to pending_transactions_path, notice: 'Transaccion rechazada con exito.' }
@@ -524,6 +557,7 @@ class TransactionsController < ApplicationController
 
           respond_to do |format|
             if @transaction.update(status:"realizada")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio fue realizado",asunto:"ID Transacción: #{@transaction.num_id}")
               method_usuario = @transaction.account_destinity_usuario.split("-")
               model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
               model.update(permit_delete:"only_user")
@@ -543,6 +577,7 @@ class TransactionsController < ApplicationController
         else
           respond_to do |format|
             if @transaction.update(status:"presenta incidencia")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio no fue realizado porque presenta una incidencia",asunto:"ID Transacción: #{@transaction.num_id}")
               method_usuario = @transaction.account_destinity_usuario.split("-")
               model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
               model.update(permit_delete:"only_user")
@@ -599,6 +634,20 @@ class TransactionsController < ApplicationController
         end
       end
 
+      if @transaction.metodo === "Deposito Por Loterica"
+        #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION CON ESTADO EN PROCESO ES ELIMINADA
+        if @transaction.status === "en proceso"
+          day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+          date_transaction = @transaction.created_at.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+
+          if day_actual === date_transaction
+            cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
+            cupos += 1
+            BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos)
+          end
+          
+        end
+      end
       @transaction.destroy
       respond_to do |format|
         format.html { redirect_to status_transactions_path, notice: 'Transacción eliminada con exito.' }

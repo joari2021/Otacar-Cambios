@@ -4,6 +4,7 @@
 
 <ul>
     <li><span class="bold">ID Transacción: </span><span style="float: right;"><%=@transaction.num_id%></span></li>
+    <li style="margin-top: 12px;"><span class="bold">Usuario solicitante: </span><span  style="float: right;"><%=@transaction.user.name.capitalize%> <%=@transaction.user.last_name.capitalize%></span></li>
     <%method = @transaction.account_destinity_admin.split("-")%>            
     <%case method[0]
         when "banks"
