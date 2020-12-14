@@ -22,20 +22,27 @@ html {
   background: #234197;
   color: #fff !important;
 }
+.download-btn-first:hover a{
+  color: #fff !important;
+}
 
 .features-btn-first {
   font-weight: 700;
+  color: #f7f7f7;
 }
 
 .features-btn-first:hover {
   background: #f7f7f7 !important;
   color: #234197 !important;
 }
+.features-btn-first:hover a{
+  color: #234197 !important;
+}
 
 #fh5co-hero-wrapper {
   height: 800px;
   width: 100%;
-  background: url("../img/banner-bg.jpg") no-repeat center;
+  background: url("../img/banner-bg.png") no-repeat center;
   border-radius: 0 0 50% 50% / 4%;
 }
 
@@ -63,11 +70,11 @@ html {
   transition: all .33s ease;
 }
 .main-navbar-nav .active {
-  color: #fff !important;
+  color: #648cff !important;
   opacity: 1 !important;
 }
 .main-navbar-nav a {
-  color: #fff !important;
+  color: #648cff !important;
 }
 .main-navbar-nav .nav-link {
   opacity: 1 !important;
@@ -95,18 +102,22 @@ html {
   position: relative;
 }
 .fh5co-hero-inner > h1 {
-  color: #fff;
-  font-weight: 300;
+  color: #ffc107;
+  font-weight: 400;
   font-size: 55px;
   letter-spacing: 2px;
 }
 .fh5co-hero-inner > p {
   width: 400px;
   font-size: 14px;
-  color: #fff;
+  color: #ffc107;
   margin-top: 30px;
   margin-bottom: 30px;
   line-height: 2em;
+  font-weight: bold;
+  background: rgba(236,240,241,.9);
+  padding: 20px;
+  border-radius: 8px;
 }
 .fh5co-hero-inner .download-btn-first {
   font-size: 15px;
@@ -628,7 +639,6 @@ html {
 
   .fh5co-hero-inner .fh5co-hero-smartphone {
     position: absolute;
-    left: 0;
     right: 0;
     margin-left: auto;
     margin-right: auto;
@@ -786,8 +796,7 @@ html {
 }
 @media screen and (max-width: 800px) {
   .fh5co-hero-inner > h1 {
-    color: #fff;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 45px;
     letter-spacing: 2px;
   }
@@ -810,7 +819,9 @@ html {
   }
 
   .fh5co-hero-inner .fh5co-hero-smartphone {
+
     height: 420px;
+    left:0;
     top: 310px;
   }
 
