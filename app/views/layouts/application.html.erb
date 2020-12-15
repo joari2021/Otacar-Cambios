@@ -76,20 +76,23 @@
                 $("#page-content-wrapper").removeClass("position-fixed");
             });
             
-            $(document).ready(function(){
-                if(typeof refresh === "undefined"){
-                    refresh = setInterval(refrescarNotificaciones, 30000);
-                    $.ajaxSetup({ cache: false });
-                }
-                
-            });
-            function refrescarNotificaciones() {
-                //$("#salastatus").css('opacity', 0.4);
-                $("#sidebar-container").load(window.location + '?randval='+ Math.random() + " #menu-hoz", function(){
-                    //aquí puedes meter más código si necesitas;
-                // $("#salastatus").css('opacity', 1);
+            <%unless current_user.is_admin?%>
+                $(document).ready(function(){
+                    if(typeof refresh === "undefined"){
+                        refresh = setInterval(refrescarNotificaciones, 30000);
+                        $.ajaxSetup({ cache: false });
+                    }
+                    
                 });
-            }
+                
+                function refrescarNotificaciones() {
+                    //$("#salastatus").css('opacity', 0.4);
+                    $("#sidebar-container").load(window.location + '?randval='+ Math.random() + " #menu-hoz", function(){
+                        //aquí puedes meter más código si necesitas;
+                    // $("#salastatus").css('opacity', 1);
+                    });
+                }
+            <%end%>
         <%end%>
 
         <%if alert && user_signed_in?%>

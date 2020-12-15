@@ -70,22 +70,25 @@ html {
   transition: all .33s ease;
 }
 .main-navbar-nav .active {
-  color: #648cff !important;
+  color: #ffc107 !important;
   opacity: 1 !important;
 }
 .main-navbar-nav a {
-  color: #648cff !important;
+  color: #ffc107 !important;
+  font-weight: bold !important;
 }
 .main-navbar-nav .nav-link {
   opacity: 1 !important;
   margin: 0 35px;
   font-size: 14.5px;
   font-weight: 500;
+  color: #04a7fe !important;
 }
 
 .social-icons-header i {
   margin: 15px;
   font-size: 20px;
+  color: #04a7fe !important;
 }
 
 .social-icons-header a:hover i {
@@ -95,6 +98,7 @@ html {
   -o-transition: all .2s ease;
   -ms-transition: all .2s ease;
   transition: all .2s ease;
+  color: #04a7fe !important;
 }
 
 .fh5co-hero-inner {
@@ -102,8 +106,7 @@ html {
   position: relative;
 }
 .fh5co-hero-inner > h1 {
-  color: #ffc107;
-  font-weight: 400;
+  color: #04a7fe;
   font-size: 55px;
   letter-spacing: 2px;
 }
@@ -600,7 +603,7 @@ html {
   .fh5co-hero-inner .fh5co-hero-smartphone {
     position: absolute;
     right: 50px;
-    top: 200px;
+    top: 140px;
     height: 550px;
   }
 
@@ -796,7 +799,6 @@ html {
 }
 @media screen and (max-width: 800px) {
   .fh5co-hero-inner > h1 {
-    font-weight: 400;
     font-size: 45px;
     letter-spacing: 2px;
   }

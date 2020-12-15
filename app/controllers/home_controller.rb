@@ -10,8 +10,15 @@ class HomeController < ApplicationController
     end
     @monto_total_send = monto_total_send
 
-    @transactions = current_user.transactions.order("created_at DESC").limit(5)
-
+    if current_user.is_admin?
+      @transactions = Transaction.all
+      @users = User.all
+    else
+      @transactions = current_user.transactions.order("created_at DESC")
+                                  .limit(5)
+                                  .where status: "realizada"
+    end
+    
     @notifications = current_user.notifications.order("created_at DESC")
 
     #ACTUALIZAR LAS NOTIFICACIONES VISTAS

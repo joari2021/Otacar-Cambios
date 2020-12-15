@@ -234,7 +234,7 @@
     accounts_venezuela = bank_venezuela + mobile_payments
 %>  
 
-<%paises = {"Argentina" => false, "Brasil" => false, "Chile" => false, "Colombia" => false, "Ecuador" => false, "España" => false, "Panama" => false, "Peru" => false, "USA" => false, "Venezuela" => false}%>
+<%paises = {"Argentina" => false, "Brasil" => false, "Chile" => false, "Colombia" => false, "Ecuador" => false, "España" => false, "Panama" => false, "Peru" => false, "Usa" => false, "Venezuela" => false}%>
 
 <%if current_user.country != "Argentina" && rate.rate_argentina != "0,00" && bank_argentina > 0 && accounts_admin_from_country_user > 0%>
     <%paises["Argentina"] = true%>
@@ -269,7 +269,7 @@
 <%end%>
 
 <%if current_user.country != "USA" && rate.rate_usa != "0,00" && wallet_usa > 0 && accounts_admin_from_country_user > 0%>
-    <%paises["USA"] = true%>
+    <%paises["Usa"] = true%>
 <%end%>
 
 <%if current_user.country != "Venezuela" && rate.rate_venezuela != "0,00" && accounts_venezuela > 0 && accounts_admin_from_country_user > 0%>
@@ -285,7 +285,7 @@
         </div>
         
         <div class="contenedor">   
-            <div class="selectbox" >
+            <div class="selectbox">
                 <div class="select" id="selectPaisDestino">
                     <div class="contenido-select">
                         <h2 class="titulo">Elige un pais</h2>
