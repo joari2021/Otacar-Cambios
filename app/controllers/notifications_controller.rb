@@ -24,17 +24,95 @@ class NotificationsController < ApplicationController
   # POST /notifications
   # POST /notifications.json
   def create
-    @notification = Notification.new(notification_params)
+    parametros = notification_params
+    
+    alert = false
+    notice = false
 
+    #######  ENVIO A UN SOLO USUARIO #############
+    if parametros["destinatarios"] === "uno"
+      num_usuario = parametros["usuario"].to_i / 4
+      rastreo_usuario = User.where(id: num_usuario)
+
+      unless rastreo_usuario.nil? || rastreo_usuario != 0
+        usuario = User.find(num_usuario)
+        notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
+        notification.save
+        notice = true
+        info = "La notificacion se envio al usuario que eligio con exito"
+      else
+        alert = true
+        info = "El usuario destinatario no existe"
+      end
+
+    ######### ENVIO A VARIOS USUARIOS ################
+    elsif parametros["destinatarios"] === "varios"
+      destinatarios = parametros["usuarios"].split(",")
+      # Loops  
+      var = 0
+      usuario_no_find = []  
+      while var < destinatarios.length  
+        num_usuario = destinatarios[var].to_i / 4
+        rastreo_usuario = User.where(id: num_usuario)
+
+        unless rastreo_usuario.nil?
+          usuario = User.find(num_usuario)
+          notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
+          notification.save
+        else
+          usuario_no_find << "#{destinatarios[var]}"
+        end
+        var += 1  
+      end
+      if usuario_no_find.length === 0
+        notice = true
+        info = "La notificacion se envio a todos los usuarios que eligio con exito"
+      elsif usuario_no_find.length > 0 && usuario_no_find.length < destinatarios.length
+        alert = true
+        info = "La notificacion se envio a todos los usuarios excepto a: #{usuario_no_find.join(', ')}"
+      else 
+        alert = true
+        info = "La Notificación no fue enviada porque ninguno de los usuarios existe" 
+      end
+
+    ############# ENVIO A TODOS LOS USUARIOS #########################
+    elsif parametros["destinatarios"] === "todos"
+      users = User.all
+
+      users.each do |usuario|
+        notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
+        notification.save
+        notice = true
+        info = "La notificacion se envio a todos los usuarios con exito"
+      end
+    else
+      alert = true
+      info = "La notificacion no se envio a ningun usuario"
+    end
+
+    if notice
+      respond_to do |format|
+        format.html { redirect_to user_root_url, notice: info }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to new_notification_url, alert: info }
+        format.json { head :no_content }
+      end
+    end
+    
+=begin
     respond_to do |format|
       if @notification.save
-        format.html { redirect_to @notification, notice: 'Notification was successfully created.' }
+        format.html { redirect_to @notification, notice: 'Notificación enviada con exito.' }
         format.json { render :show, status: :created, location: @notification }
       else
         format.html { render :new }
         format.json { render json: @notification.errors, status: :unprocessable_entity }
       end
     end
+=end
   end
 
   # PATCH/PUT /notifications/1
@@ -69,6 +147,6 @@ class NotificationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def notification_params
-      params.fetch(:notification, {})
+      params.require(:notification).permit(:destinatarios,:usuario,:usuarios,:content,:asunto)
     end
 end

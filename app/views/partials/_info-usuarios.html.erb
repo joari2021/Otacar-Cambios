@@ -1,0 +1,33 @@
+<h5>Información del usuario</h5><br>
+
+<label>Nombre(s)</label><br>
+<span class="float-right"><%=usuario.name.capitalize%> <%=usuario.second_name.capitalize if present?%> <%=usuario.last_name.capitalize%> <%=usuario.second_surname.capitalize if present?%></span><br>
+<hr>
+<label>Correo Electrónico</label><br>
+<span class="float-right"><%=usuario.email%></span><br><hr>
+
+<label>Telefono</label><br>
+<span class="float-right"><%=usuario.phone%></span><br><hr>
+
+<%if current_user.is_admin?%>
+    <label>DNI</label><br>
+    <span class="float-right"><%=usuario.document%></span><br><hr>
+
+    <label>Sexo</label><br>
+    <span class="float-right"><%=usuario.gender%></span><br><hr>
+
+    <label>Fecha de nacimiento</label><br>
+    <span class="float-right"><%=usuario.day.to_s.rjust(2, '0')%> de <%=usuario.month%> del año <%=usuario.year%></span><br><hr>
+
+    <label>Pais</label><br>
+    <span class="float-right"><%=usuario.country%></span><br><hr>
+
+    <label>Estado</label><br>
+    <span class="float-right"><%=usuario.state%></span><br><hr>
+
+    <label>Ciudad</label><br>
+    <span class="float-right"><%=usuario.city%></span><br><hr>
+
+    <label>Dirección</label><br>
+    <span class="float-right"><%=usuario.address%></span><br><hr>
+<%end%>

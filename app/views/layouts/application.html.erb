@@ -26,7 +26,7 @@
 <body id="bodys" class="overflow-hidden">
     <div class="d-flex" id="content-wrapper">
         <%if user_signed_in?%>
-        <%= render "partials/nav" %>
+            <%= render "partials/nav" %>
         <%end%>
         
         <div id="page-content-wrapper" class="w-100 bg-light-blue">
@@ -76,23 +76,22 @@
                 $("#page-content-wrapper").removeClass("position-fixed");
             });
             
-            <%unless current_user.is_admin?%>
-                $(document).ready(function(){
-                    if(typeof refresh === "undefined"){
-                        refresh = setInterval(refrescarNotificaciones, 30000);
-                        $.ajaxSetup({ cache: false });
-                    }
-                    
-                });
-                
-                function refrescarNotificaciones() {
-                    //$("#salastatus").css('opacity', 0.4);
-                    $("#sidebar-container").load(window.location + '?randval='+ Math.random() + " #menu-hoz", function(){
-                        //aquí puedes meter más código si necesitas;
-                    // $("#salastatus").css('opacity', 1);
-                    });
+            $(document).ready(function(){
+                if(typeof refresh === "undefined"){
+                    refresh = setInterval(refrescarNotificaciones, 30000);
+                    $.ajaxSetup({ cache: false });
                 }
-            <%end%>
+                
+            });
+            
+            function refrescarNotificaciones() {
+                //$("#salastatus").css('opacity', 0.4);
+                $("#reload-link").load(window.location + '?randval='+ Math.random() + " #link-dashboard", function(){
+                    //aquí puedes meter más código si necesitas;
+                // $("#salastatus").css('opacity', 1);
+                });
+            }
+            
         <%end%>
 
         <%if alert && user_signed_in?%>

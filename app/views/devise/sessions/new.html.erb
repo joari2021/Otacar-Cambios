@@ -46,16 +46,18 @@
 
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name),:html => {:class => "sign-up-form"}) do |f| %>
             <%= render "devise/shared/error_messages", resource: resource %>
+            <img src="/img/Logo.png" style="display: block;
+                                            font-size: 24px;
+                                            text-align: center;
+                                            text-decoration: none;
+                                            width: 150px;
+                                            height: auto;
+                                            margin: auto;">
             <h2 class="title">Registro</h2>
 
             <div class="input-field">
                 <i class="fas fa-envelope"></i>
                 <input class="" placeholder="Correo Electronico" name="user[email]" autofocus="autofocus" autocomplete="autocomplete" id="email" value="" type="email" required></input>
-            </div>
-            <div class="input-field">
-                <i class="fas fa-address-card"></i>
-
-                <input class="" placeholder="Nro Documento" name="user[document]" autocomplete="autocomplete" value="" type="number" onkeypress="return soloNumeros(event,this)" required></input>
             </div>
             <div class="input-field">
                 <i class="fas fa-lock"></i>
@@ -66,7 +68,9 @@
                 <i class="fas fa-lock"></i>
                 <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Confirmar Contraseña", minlength: "8"%>
             </div>
-
+            
+            
+            <input type="hidden" name="user[num_referidor]" value="<%=params[:num_referidor]%>">    
             <%= f.submit "Continuar", class:"btn" %>
             <%end%>
         </div>

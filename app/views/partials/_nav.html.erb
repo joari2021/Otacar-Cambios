@@ -6,24 +6,25 @@
         </div>
         <div class="menu">
             <%if current_user.is_normal_user?%>
-                <a href="/dhasboard" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-house-user icono mr-3"></i>Dhasboard <%if current_user.notifications.where(view:false).count > 0%><span class="ml-2 mat-badge-content badge-menu bg-info"><%=current_user.notifications.where(view:false).count%></span><%end%></a>
-
-               
+                <span id="reload-link">
+                <a href="/dhasboard" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" id="link-dashboard"><i class="fas fa-house-user icono mr-3"></i>Dhasboard <%if current_user.notifications.where(view:false).count > 0%><span class="ml-2 mat-badge-content badge-menu bg-info"><%=current_user.notifications.where(view:false).count%></span><%end%></a></span>
+    
+                
             <%unless current_user.is_admin?%>
                 <a href="/transactions/new" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-comments-dollar icono mr-3"></i>Enviar dinero</a>
             <%end%>
-
+    
             <a href="/calculate_shipping" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-calculator icono mr-3"></i>Calcular envio</a>
-
+    
             <a href="/payment_methods" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-wallet icono mr-3"></i>Metodos de pago</a>
-
+    
             <%unless current_user.is_admin?%>
                 <a href="/transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-file-invoice icono mr-3"></i>Transacciones realizadas</a>
-
+    
                 <a href="/status_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="external"><i class="fas fa-tasks icono mr-3"></i>Estado de transacciones</a>
             <%else%>
                 <a href="/transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link"><i class="fas fa-file-invoice icono mr-3"></i>Historial de transacciones</a>
-
+    
                 <a href="/pending_transactions" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="external"><i class="fas fa-tasks icono mr-3"></i>Transacciones pendientes</a>
             <%end%>
             
@@ -40,5 +41,4 @@
             <a href="/users/sign_out" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" rel="nofollow" data-method="delete"> <i class="far fa-arrow-alt-circle-left icono mr-3"></i>Cerrar Sesión</a>
         </div>
     </div>
-
 </div>

@@ -5,7 +5,7 @@
 	var owlCarousel = function(){
 
         new WOW().init();
-
+        
         $('.owl-carousel').owlCarousel({
             items : 4,
             loop  : true,
@@ -20,12 +20,17 @@
             responsive:{
                 0:{
                     items:1,
-                    nav:true
+                    nav:true,
+                    loop:true,
+                    autoplay: true,
+                    autoplayTimeout: 1500
                 },
                 600:{
                     items:1,
                     nav:true,
-                    margin : 120,
+                    loop:true,
+                    autoplay: true,
+                    autoplayTimeout: 2000
                 },
                 1000:{
                     items:3,

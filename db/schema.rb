@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_09_233948) do
+ActiveRecord::Schema.define(version: 2020_12_19_000229) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 2020_12_09_233948) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
+    t.string "dato_clave"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -201,7 +202,7 @@ ActiveRecord::Schema.define(version: 2020_12_09_233948) do
     t.string "state"
     t.string "city"
     t.string "address"
-    t.string "num_user"
+    t.string "num_referidor"
     t.integer "permission_level", default: 1
     t.string "second_name"
     t.string "second_surname"
@@ -210,6 +211,7 @@ ActiveRecord::Schema.define(version: 2020_12_09_233948) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.string "status_referencia", default: "indefinido"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

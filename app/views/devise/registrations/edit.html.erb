@@ -1,3 +1,13 @@
+<%if current_user.is_admin?%>
+    <%if params[:id].present?%>
+        <%usuario = User.find(params[:id])%>
+    <%else%>
+        <%usuario = current_user%>
+    <%end%>
+<%else%>
+    <%usuario = current_user%>
+<%end%>
+
 <div class="alert alert-primary" role="alert">
     <%unless current_user.is_normal_user?%>
     <strong>Bienvenid@!</strong> Debes completar el registro de tu perfil para poder disfrutar de las funcionalidades de esta pagina.
@@ -10,96 +20,105 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
 <%= render "devise/shared/error_messages", resource: resource %>
 
-<%number = current_user.id.to_s.length %>
-<%num_vacio = "000000000"%>
-<%num_vacio = num_vacio[number...]%>
-<%num_comp = num_vacio << current_user.id.to_s%>
-
 <div class="field">
     <h6>* : Campos Obligatorios</h6>
 </div>
 <!--Nro usuario-->
-<div class="field">
-    <label for="validationDefault16">N° Usuario</label>
-    <input type="text" class="form-control mb-3" id="validationDefault16" value="<%=num_comp%>" readonly>
-</div>
+<!--
+<%number = (current_user.id * 4).to_s.length%>
+<%num_vacio = "000000000"%>
+<%num_vacio = num_vacio[number...]%>
+<%num_comp = num_vacio << "#{current_user.id * 4}"%>
+<%if current_user.is_normal_user?%>
+    <div class="field">
+        <label for="validationDefault16">N° Usuario</label>
+        <input type="text" class="form-control mb-3" id="validationDefault16" value="<%=num_comp%>" readonly>
+    </div>
+<%end%>
+-->
 
 <!--Nombres y Apellidos-->
 <div class="form-row field mb-3">
     <div class="col-6 col-md-3 mb-2">
         <label for="validationFirstName">Primer Nombre*</label>
-        <%unless current_user.is_normal_user?%>
-        <input type="text" class="form-control text-capitalize is-invalid" id="validationFirstName" name="user[name]" oninput="return soloLetras(this)" autofocus="autofocus" required>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationFirstName" name="user[name]" value="<%=usuario.name%>" oninput="return soloLetras(this)" maxlength="15" autofocus="autofocus" required>
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.name%>" readonly>
+        <input class="form-control text-capitalize" value="<%=usuario.name%>" name="user[name]" readonly>
+        
         <%end%>
     </div>
 
-
     <div class="col-6 col-md-3 mb-2">
         <label for="validationSecondName">Segundo Nombre</label>
-        <%unless current_user.is_normal_user?%>
-        <input type="text" class="form-control text-capitalize is-invalid" id="validationSecondName" name="user[second_name]" maxlength="15" oninput="return soloLetras(this)">
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationSecondName" name="user[second_name]" value="<%=usuario.second_name%>"maxlength="15" oninput="return soloLetras(this)">
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.second_name%>" readonly>
+        <input class="form-control text-capitalize" value="<%=usuario.second_name%>" readonly>
         <%end%>
     </div>
 
     <div class="col-6 col-md-3 mb-2">
         <label for="validationLastName">Primer Apellido *</label>
-        <%unless current_user.is_normal_user?%>
-        <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="user[last_name]" maxlength="15" oninput="return soloLetras(this)" required>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationLastName" name="user[last_name]" value="<%=usuario.last_name%>" maxlength="15" oninput="return soloLetras(this)" required>
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.last_name%>" readonly>
+        <input class="form-control text-capitalize" value="<%=usuario.last_name%>" readonly>
         <%end%>
     </div>
 
     <div class="col-6 col-md-3 mb-2">
         <label for="validationSecondSurname">Segundo Apellido</label>
-        <%unless current_user.is_normal_user?%>
-        <input type="text" class="form-control text-capitalize is-invalid" id="validationSecondSurname" name="user[second_surname]" maxlength="15" oninput="return soloLetras(this)">
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationSecondSurname" name="user[second_surname]" value="<%=usuario.second_surname%>" maxlength="15" oninput="return soloLetras(this)">
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.second_surname%>" readonly>
+        <input class="form-control text-capitalize" value="<%=usuario.second_surname%>" readonly>
         <%end%>
     </div>
 </div>
 
 <!--DNI, Sexo y Phone-->
 <div class="form-row field mb-3">
-    <div class="col-7 col-sm-4 mb-2">
+
+    
+    <div class="col-7 col-sm-4 mb-3">
         <label for="validationDNI">DNI *</label>
-        <input class="form-control text-capitalize" value="<%=current_user.document%>" readonly>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+            <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDNI" name="user[document]" value="<%=usuario.document%>" oninput="return soloNumeros(this,5,12)" maxlength="12" required>
+        <div class="invalid-feedback">
+            Ingrese solo numeros
+        </div>
+        <%else%>
+            <input class="form-control text-capitalize" value="<%=usuario.document%>" name="user[document]" readonly>
+        <%end%>
     </div>
 
     <div class="col-5 col-sm-3 mb-2">
         <label>Sexo *</label>
-        <%unless current_user.is_normal_user?%>
-        <select class="custom-select is-invalid" name="user[gender]" onChange="validarSelect(this)" required>
-            <option selected disabled value="">Elegir...</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Masculino">Masculino</option>
-        </select>
-        <div class="invalid-feedback">Seleccione una opcion</div>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" name="user[gender]" value="<%=usuario.gender%>" onchange="validarSelect(this)" required><option selected disabled value="">Elegir...</option><option value="Femenino">Femenino</option><option value="Masculino">Masculino</option></select>
+            
+            <div class="invalid-feedback">Seleccione una opcion</div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.gender%>" readonly>
+            <input class="form-control text-capitalize" value="<%=usuario.gender%>" readonly>
         <%end%>
     </div>
 
     <div class="col-12 col-sm-5 mb-2">
         <label for="validationPhone">Telefono *</label>
-        <input class="form-control <%unless current_user.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationPhone" type="text" maxlength="15" oninput="return soloNumeros(this)" name="user[phone]" value="<%=current_user.phone%>" required></input>
+        <input class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationPhone" type="text" maxlength="15" oninput="return soloNumeros(this,5,15)" name="user[phone]" value="<%=usuario.phone%>" required>
         <div class="invalid-feedback">
             Ingrese solo numeros
         </div>
@@ -113,80 +132,35 @@
     </div>
     <div class="col-4 mb-3">
         <label for="validationDefaultDia">Dia *</label>
-        <%unless current_user.is_normal_user?%>
-        <select class="custom-select is-invalid" id="validationDefaultDia" onChange="validarSelect(this)" name="user[day]" required>
-            <option selected disabled value="">Elegir...</option>
-            <option value="01">01</option>
-            <option value="02">02</option>
-            <option value="03">03</option>
-            <option value="04">04</option>
-            <option value="05">05</option>
-            <option value="06">06</option>
-            <option value="07">07</option>
-            <option value="08">08</option>
-            <option value="09">09</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
-            <option value="21">21</option>
-            <option value="22">22</option>
-            <option value="23">23</option>
-            <option value="24">24</option>
-            <option value="25">25</option>
-            <option value="26">26</option>
-            <option value="27">27</option>
-            <option value="28">28</option>
-            <option value="29">29</option>
-            <option value="30">30</option>
-            <option value="31">31</option>
-        </select>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultDia" onChange="validarSelect(this)" name="user[day]" value="<%=usuario.day%>"  required>
+            <option selected disabled value="">Elegir...</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
         <div class="invalid-feedback">Seleccione una opcion</div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.day%>" readonly>
+            <input class="form-control text-capitalize" value="<%=usuario.day%>" readonly>
         <%end%>
     </div>
 
     <div class="col-5 mb-3">
         <label for="validationDefaultMes">Mes *</label>
-        <%unless current_user.is_normal_user?%>
-        <select class="custom-select is-invalid" id="validationDefaultMes" onChange="validarSelect(this)" name="user[month]" required>
-            <option selected disabled value="">Elegir...</option>
-            <option value="Enero">Enero</option>
-            <option value="Febrero">Febrero</option>
-            <option value="Marzo">Marzo</option>
-            <option value="Abril">Abril</option>
-            <option value="Mayo">Mayo</option>
-            <option value="Junio">Junio</option>
-            <option value="Julio">Julio</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Septiembre">Septiembre</option>
-            <option value="Octubre">Octubre</option>
-            <option value="Noviembre">Noviembre</option>
-            <option value="Diciembre">Diciembre</option>
-        </select>
-        <div class="invalid-feedback">Seleccione una opcion</div>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultMes" onChange="validarSelect(this)" name="user[month]" value="<%=usuario.month%>" required>
+                <option selected disabled value="">Elegir...</option><option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option></select>
+            <div class="invalid-feedback">Seleccione una opcion</div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.month%>" readonly>
+            <input class="form-control text-capitalize" value="<%=usuario.month%>" readonly>
         <%end%>
     </div>
 
     <div class="col-3 mb-3">
         <label for="validationDefaultAño">Año *</label>
-        <%unless current_user.is_normal_user?%>
-        <input type="text" class="form-control is-invalid" id="validationDefaultAño" name="user[year]" oninput="return soloNumeros(this)"  maxlength="4" required>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultAño" name="user[year]" value="<%=usuario.year%>" oninput="return soloNumeros(this,4,4)"  maxlength="4" required>
         <div class="invalid-feedback">
             Ingrese solo numeros
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.year%>" readonly>
+        <input class="form-control text-capitalize" value="<%=usuario.year%>" readonly>
         <%end%>
     </div>
 </div>
@@ -196,45 +170,34 @@
 
     <div class="col-sm-4 mb-3">
         <label for="validationCountry">Pais *</label>
-        <%unless current_user.is_normal_user?%>
-        <select class="custom-select is-invalid" id="validationCountry" name="user[country]" onChange="validarSelect(this)" required>
-            <option selected disabled value="">Elegir...</option>
-            <option value="Brasil">Brasil</option>
-            <option value="Chile">Chile</option>
-            <option value="Ecuador">Ecuador</option>
-            <option value="España">España</option>
-            <option value="Panama">Panama</option>
-            <option value="Peru">Peru</option>
-            <option value="Portugal">Portugal</option>
-            <option value="USA">USA</option>
-            <option value="Venezuela">Venezuela</option>
-        </select>
-        <div class="invalid-feedback">Seleccione una opcion</div>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationCountry" name="user[country]" value="<%=usuario.country%>" onChange="validarSelect(this)" required><option selected disabled value="">Elegir...</option><option value="Argentina">Argentina</option><option value="Brasil">Brasil</option><option value="Chile">Chile</option><option value="Chile">Colombia</option><option value="Ecuador">Ecuador</option><option value="España">España</option><option value="Panama">Panama</option><option value="Peru">Peru</option><option value="Usa">USA</option><option value="Venezuela">Venezuela</option></select>
+            <div class="invalid-feedback">Seleccione una opcion</div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.country%>" readonly>
+            <input class="form-control text-capitalize" value="<%=usuario.country%>" readonly>
         <%end%>
     </div>
     <div class="col-sm-4 mb-3">
         <label for="validationState">Estado *</label>
-        <%unless current_user.is_normal_user?%>
-        <input type="text" class="form-control is-invalid text-capitalize" id="validationState" name="user[state]" maxlength="15" oninput="return soloLetras(this)" required>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%> text-capitalize" id="validationState" name="user[state]" value="<%=usuario.state%>" maxlength="20" oninput="return address(this)" required>
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.state%>" readonly>
+        <input class="form-control text-capitalize" value="<%=usuario.state%>" readonly>
         <%end%>
     </div>
 
     <div class="col-sm-4 mb-3">
         <label for="validationCity">Ciudad *</label>
-        <%unless current_user.is_normal_user?%>
-        <input type="text" class="form-control is-invalid text-capitalize" id="validationCity" name="user[city]" maxlength="15" oninput="return soloLetras(this)" required>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%> text-capitalize" id="validationCity" name="user[city]" value="<%=usuario.city%>" maxlength="20" oninput="return address(this)" required>
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=current_user.city%>" readonly>
+        <input class="form-control text-capitalize" value="<%=usuario.city%>" readonly>
         <%end%>
     </div>
 </div>
@@ -242,7 +205,7 @@
 <!--Direccion-->
 <div class="field mb-3">
     <label for="validationAddress">Dirección</label>
-    <input type="text" class="form-control text-capitalize <%unless current_user.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationAddress" name="user[address]" maxlength="30" oninput="return address(this)" value="<%=current_user.address%>" required>
+    <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationAddress" name="user[address]" maxlength="30" oninput="return address(this)" value="<%=usuario.address%>" required>
 
     <div class="invalid-feedback">
         El campo no puede estar vacio
@@ -252,13 +215,20 @@
 <!--Correo Electronico-->
 <div class="field mb-3">
     <label>Correo Electronico *</label>
-    <input class="form-control text-lowercase" value="<%=current_user.email%>" readonly>
+    <%if current_user.is_admin?%>
+        <input type="text" class="form-control is-valid text-lowercase" name="user[email]" value="<%=usuario.email%>" oninput="return validarEmail(this)" required>
+        <div class="invalid-feedback">
+            Ingrese solo letras
+        </div>
+    <%else%>
+        <input class="form-control text-lowercase" value="<%=usuario.email%>" readonly>
+    <%end%>
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div>Actualmente esperando la confirmación del correo: <%= resource.unconfirmed_email %></div>
+    <% end %>
 </div>
 
-<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-<div>Actualmente esperando la confirmación del correo: <%= resource.unconfirmed_email %></div>
-<% end %>
-
+<%unless current_user.is_admin? && !usuario.is_admin?%>
 <!--Contraseña-->
 <div class="form-row field mb-1">
     <div class="col-12 col-sm-6 mb-2">
@@ -278,55 +248,28 @@
     </div>
 </div>
 <i class="text-primary">** Nota: Deja los campos en blanco si no deseas cambiar tu contraseña</i>
+<%end%>
 
 <!--Referencia-->
-
 <%unless current_user.is_normal_user?%>
-<div class="was-validated mt-2">
-    <label class="text-primary font-weight-bold">La pagina te la recomendo un usuario?</label>
-    <div class="custom-control custom-radio">
-        <input type="radio" class="custom-control-input" id="customControlValidationSI" name="radio-stacked" required>
-        <label class="custom-control-label" for="customControlValidationSI">Si</label>
-    </div>
-    <div class="custom-control custom-radio mb-3">
-        <input type="radio" class="custom-control-input" id="customControlValidationNO" name="radio-stacked" required>
-        <label class="custom-control-label" for="customControlValidationNO">No</label>
-        <div class="invalid-feedback">Elije una opcion</div>
-    </div>
-</div>
-
-<div class="d-none" id="contenedor">
-    <div class="form-row field mb-3">
-
-        <label for="validationReferencia">Nro del Usuario</label>
-        <input class="form-control is-invalid" id="validationReferencia" type="text" maxlength="9" oninput="return soloNumeros(this)" maxlength="9" name="user[num_user]">
-        <div class="invalid-feedback">
-            Ingrese solo numeros
+    <div class="form-row field mt-3">
+        <div class="col-12">
+            <label for="validationReferencia">Referencia</label>
+            <input class="form-control <%if current_user.num_referidor.nil? || current_user.num_referidor === ""%>is-invalid<%else%>is-valid<%end%>" id="validationReferencia" type="text" maxlength="9" oninput="return soloNumeros(this,9,9)" name="user[num_referidor]" <%unless current_user.num_referidor.nil? || current_user.num_referidor === ""%>value="<%=usuario.num_referidor.to_s.rjust(9, '0')%>"<%end%> required>
+            <div class="invalid-feedback">
+                Ingrese el número del usuario que le recomendo esta página. El campo debe contener 9 caracteres numericos
+            </div>
         </div>
     </div>
-</div>
-<%else%>
-
-<% @users.each do |usuario|%>
-
-<%number = usuario.id.to_s.length %>
-<%num_vacio = "000000000"%>
-<%num_vacio = num_vacio[number...]%>
-<%num_comp = num_vacio << usuario.id.to_s%>
-
-<%if num_comp === current_user.num_user%>
-<%@referencia = usuario.email%>
-<%@coincidencia = true%>
-<%end%>
-<%end%>
-
-<div class="field mt-3">
-    <label for="validationReferencia">Referido por</label>
-    <input type="text" class="form-control" id="validationReferencia" value="<%if @coincidencia === true%><%=@referencia%><%else%>Ningun Usuario<%end%>" readonly>
-</div>
+<%else%>  
+    <div class="field mt-3">
+        <label for="validationReferencia">Referido por</label>
+        <input type="text" class="form-control" id="validationReferencia" value="<%if @referidor.present?%><%=@referidor.name.capitalize%> <%=@referidor.last_name.capitalize%><%else%>Ningun Usuario<%end%>" readonly>
+    </div>
 <%end%>
 
 <!--Current Password-->
+<%unless current_user.is_admin? && !usuario.is_admin?%>
 <div class="field my-3">
     <%= f.label :current_password, "Contraseña Actual" %>
     <%= f.password_field :current_password, autocomplete: "current-password", class:"is-invalid", onkeyup:"return validarCurrentPassword(event, this)" %>
@@ -334,24 +277,51 @@
         Debes ingresar tu contraseña actual para confirmar los cambios
     </div>
 </div>
+<%end%>
 
 <div class="actions">
-    <%= f.submit "Guardar", class:"btn btn-success mt-2 mb-5" %>
+    <%= f.submit "Guardar", class:"btn btn-success mt-2 mb-5", id:"btn-form"%>
 
-    <%= link_to "Volver", :back, class:"btn btn-success mt-2 mb-5 float-right" %>
+    <%if params[:id].present? && current_user.is_admin?%>
+         
+        <button type="button" class="btn btn-success mt-2 mb-5 float-right" onclick="mostrar_usuarios()">Volver</button>    
+        
+    <%else%>
+        <%= link_to "Volver", :back, class:"btn btn-success mt-2 mb-5 float-right" %>
+    <%end%>
+    
 </div>
 <% end %>
 
 <script src="/js/vistas/script-form-for-campos.js"></script>
+
+<%if current_user.is_admin?%>
+    <script>
+        selects = document.getElementsByTagName("select");
+        array_options = ["<%=usuario.gender%>", "<%=usuario.day%>", "<%=usuario.month%>", "<%=usuario.country%>"]
+
+        for (i=0; i<selects.length; i++){
+            options = selects[i].childNodes
+            
+            for(j=1; j<options.length; j++){
+                if (array_options[i] === options[j].value){
+                    //options[0].removeAttribute("selected")
+                    options[j].setAttribute("selected","selected")
+                    break;
+                }
+            }
+        }
+    </script>
+
+    
+<%end%>
+
+<%= form_tag( '/search_users', options = {name: "formulario1"}) do %>
+
+<%end%>
+
 <script>
-    $("#customControlValidationSI").click(function() {
-        if ($("#customControlValidationSI").is(":checked")) {
-            $("#contenedor").removeClass("d-none");
-        }
-    });
-    $("#customControlValidationNO").click(function() {
-        if ($("#customControlValidationNO").is(":checked")) {
-            $("#contenedor").addClass("d-none");
-        }
-    });
-</script>
+    function mostrar_usuarios(){
+        document.formulario1.submit()
+    }
+</script>  

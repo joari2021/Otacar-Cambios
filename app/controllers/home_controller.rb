@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   before_action :authenticate_normal_user!
   def index
+
     transactions = current_user.transactions.where(status: "realizada")
     @transactions_totales = transactions.count
 
@@ -26,9 +27,75 @@ class HomeController < ApplicationController
     if notifications.count > 0
       notifications.update_all(view:true,updated_at: Time.now.utc)
     end
+
+    #REFERIDOS
+    num_usuario = current_user.id * 4
+    @referidos = User.where(num_referidor: num_usuario.to_s,status_referencia: "confirmada").count
+    @referidos_sin_confirmar = User.where(num_referidor: num_usuario.to_s,status_referencia: "sin confirmar").count
   end
   
   def calculate_shipping
     @rates = Rate.all
+  end
+
+  def mostrar_referido
+    if params[:notify].present?
+      notify = Notification.find(params[:notify])
+      
+      if notify.user_id === current_user.id && notify.asunto === "Referencia de usuario"
+        usuario_a_referir = User.find(notify.dato_clave.to_i/4)
+        if usuario_a_referir.status_referencia === "sin confirmar"
+          @usuario_a_referir = usuario_a_referir
+        else
+          redirect_to user_root_path
+        end
+      else
+        redirect_to user_root_path
+      end
+    else
+      redirect_to user_root_path
+    end
+  end
+
+  def confirm_referido
+    if params[:notify].present?
+      notify = Notification.find(params[:notify])
+      
+      if notify.user_id === current_user.id && notify.asunto === "Referencia de usuario"
+        usuario_a_referir = User.find(notify.dato_clave.to_i/4)
+        if usuario_a_referir.status_referencia === "sin confirmar"
+          usuario_a_referir.update(status_referencia: "confirmada")
+          redirect_to user_root_path, notice: "Tu recomendación ha sido procesada con exito. Gracias por recomendar nuestra página."
+        else
+          redirect_to user_root_path
+        end
+        
+      else
+        redirect_to user_root_path
+      end
+    else
+      redirect_to user_root_path
+    end
+  end
+
+  def rechazar_referido
+    if params[:notify].present?
+      notify = Notification.find(params[:notify])
+      
+      if notify.user_id === current_user.id && notify.asunto === "Referencia de usuario"
+
+        usuario_a_referir = User.find(notify.dato_clave.to_i/4)
+        if usuario_a_referir.status_referencia === "sin confirmar"
+          usuario_a_referir.update(status_referencia: "rechazada")
+          redirect_to user_root_path, notice: "La recomendación ha sido rechazada con éxito. Gracias por responder."
+        else
+          redirect_to user_root_path
+        end
+      else
+        redirect_to user_root_path
+      end
+    else
+      redirect_to user_root_path
+    end
   end
 end

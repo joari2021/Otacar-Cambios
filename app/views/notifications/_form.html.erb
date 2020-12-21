@@ -1,17 +1,79 @@
-<%= form_with(model: notification, local: true) do |form| %>
-  <% if notification.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(notification.errors.count, "error") %> prohibited this notification from being saved:</h2>
+<%= form_with(model: notification, local: true, :html => {:class => "was-validated"}) do |form| %>
 
-      <ul>
-        <% notification.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= form.submit %>
+  
+  <div class="mb-3">
+    <label for="ControlSelect">Destinatario(s)</label>
+    <select class="custom-select" name="notification[destinatarios]" onchange="campo_destinatario(this)" required>
+      <option value="">Elige una opción</option>
+      <option value="uno">Un usuario en especifico</option>
+      <option value="varios">Varios usuarios en especifico</option>
+      <option value="todos">Todos los usuarios</option>
+    </select>
+    <div class="invalid-feedback">Elige una opción valida</div>
   </div>
-<% end %>
+
+  <div class="mb-3 d-none" id="usuario">
+    <label for="validationUsuario">Usuario</label>
+    <input class="form-control is-invalid" id="validationUsuario" name="notification[usuario]" minlength="9" maxlength="9">
+    <div class="invalid-feedback">
+      Ingresa el numero del usuario.
+    </div>
+  </div>
+
+  <div class="mb-3 d-none" id="usuarios">
+    <label for="validationUsuarios">Usuarios</label>
+    <input class="form-control is-invalid" id="validationUsuarios" name="notification[usuarios]">
+    <div class="invalid-feedback">
+      Ingresa el numero de los usuarios separados por coma(,)
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="validationAsunto">Asunto</label>
+    <input class="form-control is-invalid" id="validationAsunto" name="notification[asunto]" required>
+    <div class="invalid-feedback">
+      Ingresa el asunto de la notificación
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="validationTextarea">Mensaje</label>
+    <textarea class="form-control is-invalid" id="validationTextarea" placeholder="Escribe la notificación en este espacio" name="notification[content]" required></textarea>
+    <div class="invalid-feedback">
+      Escribe la notificación que desees enviar a los usuarios que seleccionaste
+    </div>
+  </div>
+
+  <div class="actions mt-4">
+    <button type="submit" name="commit" class="d-block w-100 btn btn-info" data-disable-with="Guardar">Enviar</button>
+  </div>
+
+<%end%>
+
+<script>
+    function campo_destinatario(select){
+        div_usuario = document.getElementById("usuario")
+        div_usuarios = document.getElementById("usuarios")
+        campo_usuario = document.getElementById("validationUsuario")
+        campo_usuarios = document.getElementById("validationUsuarios")
+
+        if (select.value === "uno"){
+            div_usuarios.classList.add("d-none")
+            campo_usuarios.removeAttribute("required")
+            div_usuario.classList.remove("d-none")
+            campo_usuario.setAttribute("required","required")
+
+        }else if(select.value === "varios"){
+            div_usuario.classList.add("d-none")
+            campo_usuario.removeAttribute("required")
+            div_usuarios.classList.remove("d-none")
+            campo_usuarios.setAttribute("required","required")
+
+        }else{
+            div_usuario.classList.add("d-none")
+            div_usuarios.classList.add("d-none")
+            campo_usuario.removeAttribute("required")
+            campo_usuarios.removeAttribute("required")
+        }
+    }
+</script>

@@ -162,7 +162,6 @@
                     
                     <!--CUENTA DE OTACAR-->
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
                         <%@user_account = current_user%>
                         <%@method = @transaction.account_destinity_admin.split("-")%>
                         <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @user_account,method: @method} %>
@@ -320,9 +319,7 @@
                                                             <%if coincidencia === true%><%=referencia%><%else%>Ningun Usuario<%end%>      
                                                         </div>                               
                                                     </div> 
-                                                </div>
-
-                                                
+                                                </div>        
                                             </div>
                                         </div>
                                         <div class="modal-footer">
