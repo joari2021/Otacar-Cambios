@@ -81,7 +81,7 @@
             <div class="col-lg-6">
                 <div class="card mb-5 shadow-sm border-0 shadow-hover">
                     <div class="card-body">
-                        <%link = "http://localhost:3000/users/register_or_login?num_referidor=#{current_user.id * 4}"%>
+                        <%link = "https://frozen-taiga-71507.herokuapp.com/users/register_or_login?num_referidor=#{current_user.id * 4}"%>
                         <h6 class="text-primary d-block">Link de referido: <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('<%=link%>')"></i></h6>
                         
                         <span><%=truncate(link,length: 35)%></span>
@@ -441,7 +441,7 @@
                 <div class="col">
                     <div class="card mb-5 shadow-sm border-0 shadow-hover">
                         <div class="card-body">
-                            <%link = "http://localhost:3000/users/register_or_login?num_referidor=#{current_user.id * 4}"%>
+                            <%link = "https://frozen-taiga-71507.herokuapp.com/users/register_or_login?num_referidor=#{current_user.id * 4}"%>
                             <h6 class="text-primary d-block">Link de referido: <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('<%=link%>')"></i></h6>
                             
                             <span><%=truncate(link,length: 35)%></span>
