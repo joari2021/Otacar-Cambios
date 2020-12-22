@@ -193,31 +193,9 @@
                     </div>
                     <div class="card-body">
                         <%@notifications.limit(3).each do |notification|%>
-                        <div class="py-3 caja-notf">     
-                            <div class="mb-2">
-                                <span class="mb-0"><%=notification.emisor%></span>
-                                <%segundos = (Time.now - notification.updated_at).to_i
-                                if segundos < 120
-                                    nueva = true
-                                else
-                                    nueva = false 
-                                end%>
-
-                                <%if nueva%>
-                                    <span class="text-white small badge border rounded-pill d-inline-block float-right">Nueva</span>
-                                <%end%>
-                            </div>
-                            <small class="text-muted"><%=notification.asunto%></small><br>
-                            <small class="text-muted"><%=notification.content%></small>
-                            <%if notification.asunto === "Referencia de usuario"%>
-                                <%if User.find(notification.dato_clave.to_i/4).status_referencia === "sin confirmar"%>
-                                    <br><small class="text-muted"><a href="/mostrar_referido?notify=<%=notification.id%>" class="alert-link text-white special-link" style="">haz click aqui</a></small>
-                                <%else%>
-                                    <br><small class="">Referencia <%=User.find(notification.dato_clave.to_i/4).status_referencia%></small>
-                                <%end%>  
-                            <%end%>
-                        </div>
+                            <%=render 'partials/notification', notification: notification%>
                         <%end%>
+   
                         <hr>
                         <div class="text-center text-primary pt-3">
                             <%if @notifications.count > 0%>
@@ -243,23 +221,7 @@
                         </div>
                         <div class="modal-body">
                             <%@notifications.each do |notification|%>
-                            <div class="py-3 caja-notf">     
-                                <div class="mb-2">
-                                    <span class="mb-0"><%=notification.emisor%></span>
-                                    <%segundos = (Time.now.utc - notification.updated_at).to_i
-                                    if segundos < 120
-                                        nueva = true
-                                    else
-                                        nueva = false 
-                                    end%>
-
-                                    <%if nueva%>
-                                        <span class="text-white small badge border rounded-pill d-inline-block float-right">Nueva</span>
-                                    <%end%>
-                                </div>
-                                <small class="text-muted"><%=notification.asunto%></small><br>
-                                <small class="text-muted"><%=notification.content%></small>
-                            </div>
+                                <%=render 'partials/notification', notification: notification%>
                             <%end%>
                         </div>
                         <div class="modal-footer">
@@ -496,30 +458,7 @@
                     </div>
                     <div class="card-body">
                         <%@notifications.limit(3).each do |notification|%>
-                        <div class="py-3 caja-notf">     
-                            <div class="mb-2">
-                                <span class="mb-0"><%=notification.emisor%></span>
-                                <%segundos = (Time.now - notification.updated_at).to_i
-                                if segundos < 120
-                                    nueva = true
-                                else
-                                    nueva = false 
-                                end%>
-
-                                <%if nueva%>
-                                    <span class="text-white small badge border rounded-pill d-inline-block float-right">Nueva</span>
-                                <%end%>
-                            </div>
-                            <small class="text-muted font-weight-bold">Asunto: <%=notification.asunto%>.</small><br>
-                            <small class="text-muted"><%=notification.content%></small>
-                            <%if notification.asunto === "Referencia de usuario"%>
-                                <%if User.find(notification.dato_clave.to_i/4).status_referencia === "sin confirmar"%>
-                                    <br><small class="text-muted"><a href="/mostrar_referido?notify=<%=notification.id%>" class="alert-link text-white special-link" style="">haz click aqui</a></small>
-                                <%else%>
-                                    <br><small class="">Referencia <%=User.find(notification.dato_clave.to_i/4).status_referencia%></small>
-                                <%end%>  
-                            <%end%>
-                        </div>
+                            <%=render 'partials/notification', notification: notification%>
                         <%end%>
                         <hr>
                         <div class="text-primary pt-3">
@@ -547,23 +486,7 @@
                         </div>
                         <div class="modal-body">
                             <%@notifications.each do |notification|%>
-                            <div class="py-3 caja-notf">     
-                                <div class="mb-2">
-                                    <span class="mb-0"><%=notification.emisor%></span>
-                                    <%segundos = (Time.now.utc - notification.updated_at).to_i
-                                    if segundos < 120
-                                        nueva = true
-                                    else
-                                        nueva = false 
-                                    end%>
-
-                                    <%if nueva%>
-                                        <span class="text-white small badge border rounded-pill d-inline-block float-right">Nueva</span>
-                                    <%end%>
-                                </div>
-                                <small class="text-muted"><%=notification.asunto%></small><br>
-                                <small class="text-muted"><%=notification.content%></small>
-                            </div>
+                                <%=render 'partials/notification', notification: notification%>
                             <%end%>
                         </div>
                         <div class="modal-footer">

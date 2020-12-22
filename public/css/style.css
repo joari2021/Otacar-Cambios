@@ -42,7 +42,7 @@ html {
 #fh5co-hero-wrapper {
   height: 800px;
   width: 100%;
-  background: url("../img/banner-bg-prueba.png") no-repeat center;
+  background: url("../img/fondo-unico2-prueba3.png") no-repeat center;
   border-radius: 0 0 50% 50% / 4%;
 }
 
@@ -102,7 +102,7 @@ html {
 }
 
 .fh5co-hero-inner {
-  margin-top: 110px;
+  margin-top: 90px;
   position: relative;
 }
 .fh5co-hero-inner > h1 {
