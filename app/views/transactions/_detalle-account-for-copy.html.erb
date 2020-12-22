@@ -7,7 +7,8 @@
                 <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
-                <%=bank.type_document%><span id="documento"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+                <%if bank.country ==="Venezuela"%><%=bank.type_document%><%end%>
+                <span id="documento"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco"><%=bank.banco%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
@@ -17,7 +18,6 @@
 
                 <label class="text-primary">Numero de cuenta</label><br>
                 <span id="number-account"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account','Numero de cuenta')"></i><br><hr>
-
             <%end%>
         <%end%>
     <%when "bank_brasils"
@@ -28,7 +28,10 @@
                 <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
-                <span id="documento"><%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+                <span id="documento">
+                <%part1 = bank.cpf[0, 9]%>
+                <%part2 = bank.cpf[-2,2]%> 
+                <%=number_with_precision(part1,delimiter: ".",precision: 0)%>-<%=part2%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>

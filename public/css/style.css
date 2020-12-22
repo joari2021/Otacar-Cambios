@@ -261,10 +261,11 @@ html {
   margin-top: -180px;
 }
 .fh5co-features-outer .col-sm-6 {
-  margin-top: 80px;
+  margin-top: 250px;
 }
 .fh5co-features-outer .col-sm-6 img {
   height: 550px;
+  border-radius: 20px;
 }
 .fh5co-features-outer .sm-6-content {
   margin-top: 250px;
@@ -286,7 +287,7 @@ html {
 }
 .fh5co-features-outer .col-sm-6 .col-sm-image-container {
   position: relative;
-  width: 300px;
+  width: 400px;
 }
 .fh5co-features-outer .col-sm-6 .span-new {
   color: #fff;

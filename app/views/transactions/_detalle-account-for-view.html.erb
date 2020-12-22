@@ -8,7 +8,7 @@
                 <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
-                <%=bank.type_document%><span id="document"><%=bank.identidy%></span><br><hr>
+                <%if bank.country === "Venezuela"%><%=bank.type_document%><%end%><span id="document"><%=bank.identidy%></span><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco"><%=bank.banco%></span><br><hr>
@@ -29,7 +29,9 @@
                 <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
-                <span id="document"><%=bank.cpf%></span><br><hr>
+                <span id="document"><%part1 = bank.cpf[0, 9]%>
+                                    <%part2 = bank.cpf[-2,2]%> 
+                                    <%=number_with_precision(part1,delimiter: ".",precision: 0)%>-<%=part2%></span><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco"><%=bank.bank%></span><br><hr>
