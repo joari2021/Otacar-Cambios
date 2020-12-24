@@ -141,6 +141,8 @@ class TransactionsController < ApplicationController
     bancos_caixa.each do |bank|
       @cupos_for_loterica += bank.cupos_for_loterica
     end
+
+    @avalaible_banks = AvalaibleBank.all
   end
 
   # GET /transactions/1/edit

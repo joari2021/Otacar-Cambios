@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   
+  resources :avalaible_banks
   resources :notifications
   get 'notification/destroy'
   resources :mobile_payments

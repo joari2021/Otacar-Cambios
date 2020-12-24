@@ -144,10 +144,43 @@
                 <option value="Banco BCP" <%if bank.banco === "Banco BCP"%>selected<%end%>>Banco BCP</option>
                 <option value="Scotiabank" <%if bank.banco === "Scotiabank"%>selected<%end%>>Scotiabank</option>
                 <%when "Venezuela"%>
-                <option value="Banco Banesco" <%if bank.banco === "Banco Banesco"%>selected<%end%>>Banco Banesco</option>
-                <option value="B.O.D" <%if bank.banco === "B.O.D"%>selected<%end%>>B.O.D</option>
-                <option value="Banco Mercantil" <%if bank.banco === "Banco Mercantil"%>selected<%end%>>Banco Mercantil</option>
-                <option value="Banco De Venezuela" <%if bank.banco === "Banco De Venezuela"%>selected<%end%>>Banco De Venezuela</option>
+                    <%unless current_user.is_admin?%>
+                        <option disabled class="font-italic" value="">******* Para transferencias del mismo banco *******</option>
+                    <%end%>
+                    <option value="Banco Banesco" <%if bank.banco === "Banco Banesco"%>selected<%end%>>BANCO BANESCO</option>
+                    <option value="B.O.D" <%if bank.banco === "B.O.D"%>selected<%end%>>B.O.D</option>
+                    <option value="Banco Mercantil" <%if bank.banco === "Banco Mercantil"%>selected<%end%>>BANCO MERCANTIL</option>
+                    <option value="Banco De Venezuela" <%if bank.banco === "Banco De Venezuela"%>selected<%end%>>BANCO DE VENEZUELA</option>
+                    <%unless current_user.is_admin?%>
+                        <option disabled class="font-italic" value="">******* Para transferencias de otro banco *******</option>
+                        <option value="0156">100% BANCO</option>
+                        <option value="0172">BANCAMIGA BANCO MICROFINANCIERO, C.A.</option>
+                        <option value="0171">BANCO ACTIVO BANCO COMERCIAL, C.A.</option>
+                        <option value="0175">BANCO BICENTENARIO</option>
+                        <option value="0128">BANCO CARONI, C.A. BANCO UNIVERSAL</option>
+                        <!--<option value="0164">BANCO DE DESARROLLO DEL MICROEMPRESARIO</option>-->
+                        <option value="0114">BANCO DEL CARIBE C.A.</option>
+                        <!--<option value="0149">BANCO DEL PUEBLO SOBERANO C.A.</option>-->
+                        <option value="0163">BANCO DEL TESORO</option>
+                        <!--<option value="0176">BANCO ESPIRITO SANTO, S.A.</option>-->
+                        <option value="0115">BANCO EXTERIOR C.A.</option>
+                        <!--<option value="0003">BANCO INDUSTRIAL DE VENEZUELA.</option>-->
+                        <!--<option value="0173">BANCO INTERNACIONAL DE DESARROLLO, C.A.</option>-->
+                        <option value="0191">BANCO NACIONAL DE CREDITO</option>
+                        <option value="0138">BANCO PLAZA</option>
+                        <option value="0108">BANCO PROVINCIAL BBVA</option>
+                        <option value="0104">BANCO VENEZOLANO DE CREDITO S.A.</option>
+                        <option value="0168">BANCRECER S.A. BANCO DE DESARROLLO</option>
+                        <option value="0177">BANFANB</option>
+                        <!--<option value="0146">BANGENTE</option>-->
+                        <option value="0174">BANPLUS BANCO COMERCIAL C.A</option>
+                        <!--<option value="0190">CITIBANK.</option>-->
+                        <option value="0157">DELSUR BANCO UNIVERSAL</option>
+                        <option value="0151">FONDO COMUN</option>
+                        <!--<option value="0601">INSTITUTO MUNICIPAL DE CR&#201;DITO POPULAR</option>-->
+                        <option value="0169">MIBANCO BANCO DE DESARROLLO, C.A.</option>
+                        <option value="0137">SOFITASA</option>
+                    <%end%>
                 <%end%>
             </select>
             <div class="invalid-feedback">Elige una opcion</div>

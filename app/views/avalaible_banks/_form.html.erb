@@ -1,0 +1,35 @@
+<%= form_with(model: avalaible_bank, local: true) do |form| %>
+  <% if avalaible_bank.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(avalaible_bank.errors.count, "error") %> prohibited this avalaible_bank from being saved:</h2>
+
+      <ul>
+        <% avalaible_bank.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <select class="custom-select" name="avalaible_bank[bank]">
+      <option selected disabled>Eligir..</option>
+      <%bancos_not_permitted = ["0102","0105","0116","0134"]  
+      bancos = false%>
+      <%@bancos.each do |codigo,bank| %>
+        <%unless AvalaibleBank.find_by(bank: codigo).present? || bancos_not_permitted.include?(codigo)%>
+          <option value="<%=codigo%>"><%=bank%></option>
+          <%bancos = true%>
+        <%end%>
+      <%end%>
+
+      <%unless bancos%>
+        <option disabled>No hay bancos que seleccionar</option>
+      <%end%>
+    </select>
+  </div>
+
+  <div class="actions mt-4">
+    <%= form.submit "Guardar", class:"btn btn-info" %>
+  </div>
+<% end %>

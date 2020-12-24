@@ -30,187 +30,211 @@
                 </thead>
                 <tbody>
                     <% current_user.banks.where(view:true).each do |account_bank| %>
-                    <tr class="shadow-sm">
-                        <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
+                        <tr class="shadow-sm">
+                            <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
 
-                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
-                        
-                        <%part2 = account_bank.identidy[0, 2]%>
-                        <%part3 = account_bank.identidy[-3,3]%> 
-                        
-                        <td class="align-middle"><span class=""><%=account_bank.type_document%><%=part2 << "***" << part3%></span>
-                        </td>
-                
-                        <td class="align-middle"><img src="/img/bancos/<%=account_bank.banco%>.png" class="img-fluid avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
-                        <%part1 = account_bank.number_account[0, 4]%>
-                        <%part2 = account_bank.number_account[-4,4]%> 
-                        <td class="align-middle"><span class=""><%=part1 << "****" << part2%></span>
-                        </td>
+                            <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
+                            
+                            <%part2 = account_bank.identidy[0, 2]%>
+                            <%part3 = account_bank.identidy[-3,3]%> 
+                            
+                            <td class="align-middle"><span class=""><%=account_bank.type_document%><%=part2 << "***" << part3%></span>
+                            </td>
+                    
+                            <td class="align-middle"><img src="/img/bancos/<%=account_bank.banco%>.png" class="img-fluid avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
+                            <%part1 = account_bank.number_account[0, 4]%>
+                            <%part2 = account_bank.number_account[-4,4]%> 
+                            <td class="align-middle"><span class=""><%=part1 + "****" + part2%></span>
+                            </td>
 
-                        <%if current_user.is_admin?%>
-                            <%if account_bank.status === "activo"%>
-                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
-                            <%else%>
-                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%if current_user.is_admin?%>
+                                <%if account_bank.status === "activo"%>
+                                    <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                                <%else%>
+                                    <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                                <%end%>
+                                <td class="align-middle">|</td>
+                                <td class="align-middle"><a href="/banks/<%=account_bank.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
                             <%end%>
-                            <td class="align-middle">|</td>
-                            <td class="align-middle"><a href="/banks/<%=account_bank.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
-                        <%end%>
 
-                        <!--Boton Modal-->
-                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#banksModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="banksModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.banco%></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
-                                            <div class="card-header text-success">
-                                                <div class="row">
-                                                    <div  class="col-5 text-right">Pais</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.country%>
-                                                    </div>
-                                                    <div class="col-5 text-right">Titular</div>
-                                                    <div class="col-7 text-left text-capitalize">
-                                                        <%=account_bank.name%> <%=account_bank.last_name%>      
-                                                    </div>
-                                                    <div class="col-5 text-right">Identidad</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.type_document%>-<%=account_bank.identidy%>  
-                                                    </div>
-                                                    <div class="col-5 text-right">Tipo de Cuenta</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.type_account%>   
-                                                    </div>
-                                                    <div class="col-5 text-right">Nro Cuenta</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.number_account%>   
-                                                    </div>
-                                                </div>                   
-                                            </div>
-                                        </div>                                 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <%if account_bank.permit_delete != "denied"%>
-                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
-                        <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBank<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+                            <!--Boton Modal-->
+                            <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#banksModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="infoBank<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="banksModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-scrollable">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.banco%></h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                                                <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="alert alert-danger" role="alert">
-                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
-                                            </div>
-                                        </div>        
+                                            <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
+                                                <div class="card-header text-success">
+                                                    <div class="row">
+                                                        <div  class="col-5 text-right">Pais</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.country%>
+                                                        </div>
+                                                        <div class="col-5 text-right">Titular</div>
+                                                        <div class="col-7 text-left text-capitalize">
+                                                            <%=account_bank.name%> <%=account_bank.last_name%>      
+                                                        </div>
+                                                        <div class="col-5 text-right">Identidad</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.type_document%>-<%=account_bank.identidy%>  
+                                                        </div>
+                                                        <div class="col-5 text-right">Tipo de Cuenta</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.type_account%>   
+                                                        </div>
+                                                        <div class="col-5 text-right">Nro Cuenta</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.number_account%>   
+                                                        </div>
+                                                    </div>                   
+                                                </div>
+                                            </div>                                 
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        <%end%>
-                    </tr>
+                            
+                            <%if account_bank.permit_delete != "denied"%>
+                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                            <%else%>
+                                <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBank<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="infoBank<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert alert-danger" role="alert">
+                                                    Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
+                                                </div>
+                                            </div>        
+                                        </div>
+                                    </div>
+                                </div>
+                            <%end%>
+                        </tr>
                     <%end%>
 
                     <!--Bancos de Brasil-->
                     <% current_user.bank_brasils.where(view:true).each do |account_bank| %>
-                    <tr class="shadow-sm">
-                        <td class="align-middle"><img src="/img/paises/Brasil.svg" class="img-fluid avatar" alt="Brasil" title="Brasil"/></td>
-                        <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
+                        <tr class="shadow-sm">
+                            <td class="align-middle"><img src="/img/paises/Brasil.svg" class="img-fluid avatar" alt="Brasil" title="Brasil"/></td>
+                            <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
 
-                        <%part1 = account_bank.cpf[0, 3]%>
-                        <%part2 = account_bank.cpf[-2,2]%> 
-                        <td class="align-middle"><span class=""><%=part1 << "***" << part2%></span>
-                        </td>
-                        <td class="align-middle"><img src="/img/bancos/<%=account_bank.bank%>.png" class="img-fluid avatar" alt="<%=account_bank.bank%>" title="<%=account_bank.bank%>"/></td>
-                        </td>
-                        <%part1 = account_bank.number_agency%>
-                        <%part2 = account_bank.number_account[-2,2]%> 
-                        <td class="align-middle"><span class=""><%=part1 + "****" + part2%></span>
-                        </td>
+                            <%part1 = account_bank.cpf[0, 3]%>
+                            <%part2 = account_bank.cpf[-2,2]%> 
+                            <td class="align-middle"><span class=""><%=part1 << "***" << part2%></span>
+                            </td>
+                            <td class="align-middle"><img src="/img/bancos/<%=account_bank.bank%>.png" class="img-fluid avatar" alt="<%=account_bank.bank%>" title="<%=account_bank.bank%>"/></td>
+                            </td>
+                            <%part1 = account_bank.number_agency%>
+                            <%part2 = account_bank.number_account[-2,2]%> 
+                            <td class="align-middle"><span class=""><%=part1 + "****" + part2%></span>
+                            </td>
 
-                        <%if current_user.is_admin?%>
-                            <%if account_bank.status === "activo"%>
-                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
-                            <%else%>
-                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                            <%if current_user.is_admin?%>
+                                <%if account_bank.status === "activo"%>
+                                    <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                                <%else%>
+                                    <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                                <%end%>
+                                <td class="align-middle">|</td>
+                                <td class="align-middle"><a href="/bank_brasils/<%=account_bank.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
                             <%end%>
-                            <td class="align-middle">|</td>
-                            <td class="align-middle"><a href="/bank_brasils/<%=account_bank.id%>/edit" class="badge badge-info">Editar <i class="fas fa-cogs ml-2"></i></a></td>
-                        <%end%>
 
-                        <!--Boton Modal-->
-                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#bankBrasilModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+                            <!--Boton Modal-->
+                            <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#bankBrasilModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="bankBrasilModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.bank%></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
-                                            <div class="card-header text-success">
-                                                <div class="row">
-                                                    <div class="col-5 text-right">Pais</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.country%>    
-                                                    </div>
-                                                    <div class="col-5 text-right">Titular</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.name%> <%=account_bank.last_name%>   
-                                                    </div>
-                                                    <div class="col-5 text-right">CPF</div>
-                                                    <div class="col-7 text-left">
-                                                        <%part1 = account_bank.cpf[0, 9]%>
-                                                        <%part2 = account_bank.cpf[-2,2]%> 
-                                                        <%=number_with_precision(part1,delimiter: ".",precision: 0)%>-<%=part2%>    
-                                                    </div>
-                                                    <div class="col-5 text-right">Nro Agencia</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.number_agency%>   
-                                                    </div>    
-                                                    <div class="col-5 text-right">Nro Cuenta</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=account_bank.number_account%>   
-                                                    </div>
-                                                </div>                   
-                                            </div>
-                                        </div>                                 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="bankBrasilModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.bank%></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                                <div class="card-header text-success">
+                                                    <div class="row">
+                                                        <div class="col-5 text-right">Pais</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.country%>    
+                                                        </div>
+                                                        <div class="col-5 text-right">Titular</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.name%> <%=account_bank.last_name%>   
+                                                        </div>
+                                                        <div class="col-5 text-right">CPF</div>
+                                                        <div class="col-7 text-left">
+                                                            <%part1 = account_bank.cpf[0, 9]%>
+                                                            <%part2 = account_bank.cpf[-2,2]%> 
+                                                            <%=number_with_precision(part1,delimiter: ".",precision: 0)%>-<%=part2%>    
+                                                        </div>
+                                                        <div class="col-5 text-right">Nro Agencia</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.number_agency%>   
+                                                        </div>    
+                                                        <div class="col-5 text-right">Nro Cuenta</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.number_account%>   
+                                                        </div>
+                                                    </div>                   
+                                                </div>
+                                            </div>                                 
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <%if account_bank.permit_delete != "denied"%>
-                            <%if current_user.is_admin? && account_bank.bank === "Caixa" && account_bank.deposit_for_loterica%>
+                            <%if account_bank.permit_delete != "denied"%>
+                                <%if current_user.is_admin? && account_bank.bank === "Caixa" && account_bank.deposit_for_loterica%>
+                                    <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBankBrasil<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="infoBankBrasil<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Esta cuenta no puede ser eliminada porque esta siendo utilizada en la recepcion de depositos por Loterica. Debe modificar la <a href="/config_loterica_deposits" class="alert-link special-link">configuracion de los depositos por loterica</a> y quitar esta cuenta para poder eliminarla.
+                                                    </div>
+                                                </div>        
+                                            </div>
+                                        </div>
+                                    </div>
+                                <%else%>
+                                    <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                                <%end%>
+                            <%else%>
                                 <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBankBrasil<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
 
                                 <!-- Modal -->
@@ -224,42 +248,22 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="alert alert-warning" role="alert">
-                                                    Esta cuenta no puede ser eliminada porque esta siendo utilizada en la recepcion de depositos por Loterica. Debe modificar la <a href="/config_loterica_deposits" class="alert-link special-link">configuracion de los depositos por loterica</a> y quitar esta cuenta para poder eliminarla.
+                                                <div class="alert alert-danger" role="alert">
+                                                    Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
                                                 </div>
                                             </div>        
                                         </div>
                                     </div>
                                 </div>
-                            <%else%>
-                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/bank_brasils/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
                             <%end%>
-                        <%else%>
-                            <td class="align-middle"><span role="button" class="badge badge-danger" data-toggle="modal" data-target="#infoBankBrasil<%=account_bank.id%>">Eliminar <i class="fas fa-trash-alt ml-2"></i></span></td>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="infoBankBrasil<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="alert alert-danger" role="alert">
-                                                Esta cuenta no puede ser eliminada porque esta siendo utilizada en una transacción. Debe terminarla para poder eliminar este metodo de pago. Si tiene una transacción vencida donde incluyo esta cuenta, por favor eliminela primero.
-                                            </div>
-                                        </div>        
-                                    </div>
-                                </div>
-                            </div>
-                        <%end%>
-                    </tr>
+                        </tr>
                     <%end%>
+
                 </tbody>
             </table>
+            <%if current_user.is_admin?%>
+                <div class="text-center"><a href="/avalaible_banks" class="btn btn-info">Otros Bancos De Venezuela</a></div>
+            <%end%>
         </div>
     </div>
     <%end%>
@@ -600,7 +604,7 @@
                         elsif payment.document.to_i > 80000000 && payment.document < 100000000
                             type_document = "E-"
                         end%>
-                        <td class="align-middle"><span><%=type_document << part1 << "***" << part2%></span></td>
+                        <td class="align-middle"><span><%=type_document + part1 + "***" + part2%></span></td>
                         
                         <%if current_user.is_admin?%>
                             <%if payment.status === "activo"%>

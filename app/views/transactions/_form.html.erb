@@ -1,4 +1,4 @@
-
+<%render "partials/name-and-cod-of-banks"%>
 <%= form_with(model: transaction, local: true, :html => { :class => "mb-5"}) do |form| %>
 <% if transaction.errors.any? %>
 <div id="error_explanation">
@@ -323,6 +323,8 @@
         </div>
     </div>
 </div>
+
+<!--METODOS DE PAGO DISPONIBLES PARA RECIBIR ENVIOS-->
 <div class="row justify-content-center mt-2 d-none" id="listaMetodos">
     <div class="col-12 col-sm-9 col-lg-7">
         <div class="alert alert-warning text-center" role="alert">
@@ -331,6 +333,25 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="list-methods" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content text-center">
+      <div class="modal-header m-auto">
+        <h5 class="modal-title" id="staticBackdropLabel">Otros Bancos</h5>
+      </div>
+      <div class="modal-body alert-warning">
+        <%@avalaible_banks.each do |bank|%>
+            <%=@bancos[bank.bank]%><br>
+        <%end%>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--FIN DE METODOS DE PAGOS DISPONIBLES PARA RECIBIR DINERO-->
 
 <div class="row justify-content-center mt-2 d-none" id="añadirAccount">
     <div class="col-12 col-sm-9 col-lg-7">
@@ -876,7 +897,16 @@
                 break;
             
             case "Venezuela":
+                var span = document.createElement("span");
+                var content = document.createTextNode("Para transferencias de un mismo banco");
+                var br = document.createElement("br");
+                var br2 = document.createElement("br");
 
+                span.appendChild(content);
+                span.classList.add("font-italic")
+                article.appendChild(span);
+                article.appendChild(br);
+                article.appendChild(br2);
                 <%if bank_vzla > 0%>
                     mostrarMetodoDisp("Banco De Venezuela");
                 <%end%>
@@ -892,6 +922,29 @@
                 <%if bank_banesco > 0%>
                     mostrarMetodoDisp("Banco Banesco");
                 <%end%>
+                article.appendChild(br);
+                var span = document.createElement("span");
+                var content = document.createTextNode("Para transferencias de otro banco");
+                var br = document.createElement("br");
+
+                span.appendChild(content);
+                span.classList.add("font-italic")
+                article.appendChild(span);
+                article.appendChild(br);
+                
+                var link = document.createElement("a");
+                var content = document.createTextNode("Ver Bancos");
+                var br = document.createElement("br");
+                var br2 = document.createElement("br");
+
+                link.appendChild(content);
+                link.setAttribute("role","button")
+                link.setAttribute("data-toggle","modal")
+                link.setAttribute("data-target","#list-methods")
+                link.classList.add("special-link","alert-link")
+                article.appendChild(link);
+                article.appendChild(br);
+                article.appendChild(br2);
 
                 <%if mobile_payments > 0%>
                     mostrarMetodoDisp("Pago Movil");
@@ -964,13 +1017,53 @@
                                 enlace.appendChild(divPadre);
                                 selectBox.appendChild(enlace);
                                 account += 1;
-                            <%end%>
-                            
+                            <%end%>       
                         <%end%>
                     <%end%>
                 }
             <%end%>
         <%end%>
+
+        <%if current_user.banks.where(view:true).count > 0%>    
+            <%current_user.banks.where(view:true).each do |bank_user|%>
+                <%if @avalaible_banks.find_by(bank: bank_user.banco).present?%>      
+                    //ENLACE
+                    var enlace = document.createElement("a");
+                    enlace.setAttribute("href","#");
+                    enlace.setAttribute("id","banks-<%=bank_user.id%>");
+                    enlace.setAttribute("onclick","activarEnlace(event)");
+                    enlace.classList.add("opcion");
+                    
+                    //DIV PADRE
+                    var divPadre = document.createElement("div");
+                    divPadre.classList.add("contenido-opcion");
+                    
+                    //IMAGEN
+                    var img = document.createElement("img");
+                    img.setAttribute("src","/img/bancos/<%=bank_user.banco%>.png");
+
+                    //DIV HIJO
+                    var divHijo = document.createElement("div");
+                    divHijo.classList.add("textos");
+
+                    //H1
+                    var h2 = document.createElement("h2");
+                    h2.classList.add("titulo","tam-h2");
+                    <%part1 = bank_user.number_account[0, 4]%>
+                    <%part2 = bank_user.number_account[-4,4]%>
+                    var content = document.createTextNode("<%=part1%>********<%=part2%>");
+                    
+                    h2.appendChild(content);
+                    divHijo.appendChild(h2);
+                    divPadre.appendChild(img);
+                    divPadre.appendChild(divHijo);
+                    enlace.appendChild(divPadre);
+                    selectBox.appendChild(enlace);
+                    account += 1;
+                 <%end%>              
+            <%end%>
+        <%end%>
+
         return account;
     }
 

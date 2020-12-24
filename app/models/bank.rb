@@ -37,7 +37,21 @@ class Bank < ApplicationRecord
                self.banco = ""
             end
          when "Venezuela"
+            valido = false
             if self.banco != "Banco Mercantil" && self.banco != "B.O.D" && self.banco != "Banco De Venezuela" && self.banco != "Banco Banesco"
+               valido = true
+            end
+
+            lista_bancos = ["0156","0172","0171","0175","0128","0114","0163","0115","0191","0138","0108","0104","0168","0177","0174","0157","0151","0169","0137"]
+
+            lista_bancos.each do |codigo|
+                  if codigo === self.banco
+                     valido = true
+                     break;
+                  end
+            end
+
+            unless valido
                self.banco = ""
             end
 

@@ -711,7 +711,7 @@ html {
 
   .fh5co-features-outer .col-sm-6 .col-sm-image-container {
     position: relative;
-    width: 295px !important;
+    width: 400px !important;
     text-align: center;
     margin: 15px auto 0;
   }
@@ -772,10 +772,30 @@ html {
     flex-direction: column;
   }
   .fh5co-features-grid-columns .in-order-4 {
-    order: 1;
+    order: 2;
   }
   .fh5co-features-grid-columns .in-order-3 {
-    order: 2;
+    order: 1;
+  }
+
+  .fh5co-features-grid-columns .in-order-5 {
+    order: 3;
+  }
+  .fh5co-features-grid-columns .in-order-6 {
+    order: 4;
+  }
+
+  .fh5co-features-grid-columns .in-order-7 {
+    order: 5;
+  }
+  .fh5co-features-grid-columns .in-order-8 {
+    order: 6;
+  }
+  .fh5co-features-grid-columns .in-order-9 {
+    order: 7;
+  }
+  .fh5co-features-grid-columns .in-order-10 {
+    order: 8;
   }
 
   .fh5co-reviews-outer {

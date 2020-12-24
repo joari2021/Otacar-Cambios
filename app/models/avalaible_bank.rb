@@ -1,0 +1,2 @@
+class AvalaibleBank < ApplicationRecord
+end
