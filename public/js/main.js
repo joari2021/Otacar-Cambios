@@ -6,7 +6,7 @@
 
         new WOW().init();
         
-        $('.owl-carousel').owlCarousel({
+        $('#owl-carousel-1').owlCarousel({
             items : 4,
             loop  : true,
             margin : 170,
@@ -46,7 +46,19 @@
             }
         });
 
-	};
+        $('#owl-carousel-2').owlCarousel({
+            items : 1,
+            loop  : true,
+            center : true,
+            smartSpeed :900,
+            autoplay: true,
+            autoplayTimeout: 5000
+            
+        });
+
+    };
+    
+    
 
     $.fn.goTo = function() {
         $('html, body').animate({

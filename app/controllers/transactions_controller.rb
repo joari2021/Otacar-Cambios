@@ -11,6 +11,7 @@ class TransactionsController < ApplicationController
 
   def status
 
+    ## IDENTIFICANDO TRANSACCIONES PENDIENTES ###############
     current_user.transactions.each do |transaction|
       if transaction.status === "en proceso"
         segundos = (Time.now.utc - transaction.created_at).to_i

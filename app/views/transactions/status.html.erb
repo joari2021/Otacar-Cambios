@@ -125,7 +125,7 @@
             <tbody>
                 <%transaction_for_confirm = false%>
                 <%current_user.transactions.each do |transaction| %>
-                    <%if  @transaction_pendiente%>
+                    <%if  @transaction_pendiente.present?%>
                         <%if  transaction.id != @transaction_pendiente.id%>
                             <%view_transaction = true%>
                         <%else%>
@@ -133,187 +133,201 @@
                         <%end%>
                     <%else%>
                         <%view_transaction = true%>
+
                     <%end%>
 
+                    <%
+                    ######## TRANSACCIONES REALIZADAS   ########## 
+                    if transaction.status === "realizada"
+                        segundos = (Time.now.utc - transaction.created_at).to_i
+                        minutos = segundos / 60
+                        
+                        if minutos <= 1440
+                            view_transaction = true
+                        else
+                            view_transaction = false
+                        end
+                    end%>
+
                     <%if view_transaction%>
-                    <%transaction_for_confirm = true%>
-                    <tr class="shadow-sm">
-                        <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid rounded-circle avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
-                        <%method = transaction.account_destinity_usuario.split("-")%>
+                        <%transaction_for_confirm = true%>
+                        <tr class="shadow-sm">
+                            <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid rounded-circle avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
+                            <%method = transaction.account_destinity_usuario.split("-")%>
 
-                        <%=render 'detectar-moneda', {country: transaction.country_destinity}%>
-                        
-                        <%case method[0]
-                            when "banks"
-                                current_user.banks.each do |bank|
-                                    
-                                    if bank.id.to_s === method[1]
-                                        part1 = bank.number_account[0, 4]
-                                        part2 = bank.number_account[-4,4]
-                                        part3 = bank.identidy[0, 3]
-                                        part4 = bank.identidy[-2,2]%>
+                            <%=render 'detectar-moneda', {country: transaction.country_destinity}%>
+                            
+                            <%case method[0]
+                                when "banks"
+                                    current_user.banks.each do |bank|
                                         
-                                        <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
-                                        <td class="align-middle"><span class=""><%=bank.type_document%><%=part3 << "***" << part4%></span></td>
-                                        <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
-                                        <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                        if bank.id.to_s === method[1]
+                                            part1 = bank.number_account[0, 4]
+                                            part2 = bank.number_account[-4,4]
+                                            part3 = bank.identidy[0, 3]
+                                            part4 = bank.identidy[-2,2]%>
+                                            
+                                            <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                            <td class="align-middle"><span class=""><%=bank.type_document%><%=part3 << "***" << part4%></span></td>
+                                            <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                        <%end%>
                                     <%end%>
-                                <%end%>
-                            <%when "bank_brasils"
-                                current_user.bank_brasils.each do |bank|
-                                    
-                                    if bank.id.to_s === method[1]
-                                        part1 = bank.number_agency
-                                        part2 = bank.number_account[-2,2]
-                                        part3 = bank.cpf[0, 3]
-                                        part4 = bank.cpf[-2,2]%>
-                                        <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
-                                        <td class="align-middle"><span class=""><%=part3 << "***" << part4%></span></td>
-                                        <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
-                                        <td class="align-middle"><%=part1 << "****" << part2%></td>
-                                    <%end%>
-                                <%end%>
-                            <%when "digital_payments"
-                                current_user.digital_payments.each do |payment|
-                                    
-                                    if payment.id.to_s === method[1]
-                                        part1 = payment.number_phone[0, 3]
-                                        part2 = payment.number_phone[-4,4]
-                                        %>
-                                        <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
-                                        <td class="align-middle"><span class="">N/A</span></td>
-                                        <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
-                                        <td class="align-middle"><%=part1 << "****" << part2%></td>
-                                    <%end%>
-                                <%end%>
-                            <%when "mobile_payments"
-                                current_user.mobile_payments.each do |payment|
-                                    
-                                    if payment.id.to_s === method[1]
-                                        part1 = payment.number_phone[0, 3]
-                                        part2 = payment.number_phone[-4,4]
-                                        part3 = payment.document[0,2]
-                                        part4 = payment.document[-2,2]
-                                        %>
+                                <%when "bank_brasils"
+                                    current_user.bank_brasils.each do |bank|
                                         
-                                        <td class="align-middle"><span class="">N/A</span></td>
-                                        <td class="align-middle"><span class=""><%=part3 << "***" << part4%></span></td>
-                                        <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
-                                        <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                        if bank.id.to_s === method[1]
+                                            part1 = bank.number_agency
+                                            part2 = bank.number_account[-2,2]
+                                            part3 = bank.cpf[0, 3]
+                                            part4 = bank.cpf[-2,2]%>
+                                            <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                            <td class="align-middle"><span class=""><%=part3 + "***" + part4%></span></td>
+                                            <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                        <%end%>
                                     <%end%>
-                                <%end%>
-                            <%when "wallets"
-                                current_user.wallets.each do |wallet|
-                                    
-                                    if wallet.id.to_s === method[1]
-                                        part1 = wallet.email[0, 4]
-                                        part2 = wallet.email[-7,7]
-                                        %>
-                                        <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
-                                        <td class="align-middle"><span class="">N/A</span></td>
-                                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                        <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                <%when "digital_payments"
+                                    current_user.digital_payments.each do |payment|
+                                        
+                                        if payment.id.to_s === method[1]
+                                            part1 = payment.number_phone[0, 3]
+                                            part2 = payment.number_phone[-4,4]
+                                            %>
+                                            <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
+                                            <td class="align-middle"><span class="">N/A</span></td>
+                                            <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                        <%end%>
                                     <%end%>
-                                <%end%>
-                            <%when "wallet_with_users"
-                                current_user.wallet_with_users.each do |wallet|
-                                    
-                                    if wallet.id.to_s === method[1]
-                                        part1 = wallet.usuario[0, 3]
-                                        part2 = wallet.usuario[-2,2]
-                                        %>
-                                        <script>console.log("<%=method[0]%>")</script>
-                                        <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
-                                        <td class="align-middle"><span class="">N/A</span></td>
-                                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                        <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                <%when "mobile_payments"
+                                    current_user.mobile_payments.each do |payment|
+                                        
+                                        if payment.id.to_s === method[1]
+                                            part1 = payment.number_phone[0, 3]
+                                            part2 = payment.number_phone[-4,4]
+                                            part3 = payment.document[0,2]
+                                            part4 = payment.document[-2,2]
+                                            %>
+                                            
+                                            <td class="align-middle"><span class="">N/A</span></td>
+                                            <td class="align-middle"><span class=""><%=part3 << "***" << part4%></span></td>
+                                            <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
+                                            <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                        <%end%>
                                     <%end%>
-                                <%end%>
-                        <%end%>
-                        <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
+                                <%when "wallets"
+                                    current_user.wallets.each do |wallet|
+                                        
+                                        if wallet.id.to_s === method[1]
+                                            part1 = wallet.email[0, 4]
+                                            part2 = wallet.email[-7,7]
+                                            %>
+                                            <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                            <td class="align-middle"><span class="">N/A</span></td>
+                                            <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                            <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                        <%end%>
+                                    <%end%>
+                                <%when "wallet_with_users"
+                                    current_user.wallet_with_users.each do |wallet|
+                                        
+                                        if wallet.id.to_s === method[1]
+                                            part1 = wallet.usuario[0, 3]
+                                            part2 = wallet.usuario[-2,2]
+                                            %>
+                                            <script>console.log("<%=method[0]%>")</script>
+                                            <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                            <td class="align-middle"><span class="">N/A</span></td>
+                                            <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                            <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                        <%end%>
+                                    <%end%>
+                            <%end%>
+                            <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
 
-                        <%eliminar = false%>
-                        <%if transaction.status === "por confirmar"
-                            fondo_msj = "alert-secondary"
-                            badge = "badge-secondary"
-                            text = "por confirmar"
-                            info = "Debes esperar que sea confirmado el pago que has realizado a la cuenta de Otacar Cambios."
+                            <%eliminar = false%>
+                            <%if transaction.status === "por confirmar"
+                                fondo_msj = "alert-secondary"
+                                badge = "badge-secondary"
+                                text = "por confirmar"
+                                info = "Debes esperar que sea confirmado el pago que has realizado a la cuenta de Otacar Cambios."
 
-                            elsif transaction.status === "envio en proceso"
-                                fondo_msj = "alert-info"
-                                badge = "badge-info"
-                                text = "envio en proceso"
-                                info = "Su pago fue confirmado con exito. En los proximos minutos le sera realizado el envio de sus remesas a la cuenta que eligio."
-                            elsif transaction.status === "realizada"
-                                fondo_msj = "alert-success"
-                                badge = "badge-success"
-                                text = "realizada"
-                                info = "El envio de tus remesas ya fue procesado a la cuenta que elegiste. haz click en el icono de al lado para ver los detalles de la transacción junto con el comprobante del pago a dicha cuenta."
+                                elsif transaction.status === "envio en proceso"
+                                    fondo_msj = "alert-info"
+                                    badge = "badge-info"
+                                    text = "envio en proceso"
+                                    info = "Su pago fue confirmado con exito. En los proximos minutos le sera realizado el envio de sus remesas a la cuenta que eligio."
+                                elsif transaction.status === "realizada"
+                                    fondo_msj = "alert-success"
+                                    badge = "badge-success"
+                                    text = "realizada"
+                                    info = "El envio de tus remesas ya fue procesado a la cuenta que elegiste. haz click en el icono de al lado para ver los detalles de la transacción junto con el comprobante del pago a dicha cuenta."
 
-                            elsif transaction.status === "rechazada"
-                                text = "rechazada"
-                                fondo_msj = "alert-warning"
-                                badge = "badge-warning"
-                                info = "La transacción fue rechazada por el siguiente motivo: #{transaction.motivo_rechazo}"
-                                eliminar = true;
-                            elsif transaction.status === "presenta incidencia"
-                                text = "presenta incidencia"
-                                fondo_msj = "alert-danger"
-                                badge = "badge-warning"
-                                eliminar = true;  
-                            elsif transaction.status === "en proceso" || transaction.status === "vencida"
-                                fondo_msj = "alert-danger"
-                                badge = "badge-danger"
-                                text = "vencida"
-                                info = "Ha vencido el tiempo para realizar el pago, si hiciste el pago pero no pudiste completar la transacción a tiempo, por favor, inicia una nueva transacción y envia el comprobante de pago a tiempo. Si al momento de iniciar la transacción encuentras que no tienes un metodo de pago que coincida con la lista de metodos de pago disponibles para recibir remesas en el pais al cual deseas enviarlas, por favor, comunicate con atencion al cliente de Otacar Cambios -cuyos datos de contacto y horarios de atención se muestran en Inicio- para la correspondiente solución del inconveniente."
-                                eliminar = true
-                        end%>
+                                elsif transaction.status === "rechazada"
+                                    text = "rechazada"
+                                    fondo_msj = "alert-warning"
+                                    badge = "badge-warning"
+                                    info = "La transacción fue rechazada por el siguiente motivo: #{transaction.motivo_rechazo}"
+                                    eliminar = true;
+                                elsif transaction.status === "presenta incidencia"
+                                    text = "presenta incidencia"
+                                    fondo_msj = "alert-danger"
+                                    badge = "badge-warning"
+                                    eliminar = true;  
+                                elsif transaction.status === "en proceso" || transaction.status === "vencida"
+                                    fondo_msj = "alert-danger"
+                                    badge = "badge-danger"
+                                    text = "vencida"
+                                    info = "Ha vencido el tiempo para realizar el pago, si hiciste el pago pero no pudiste completar la transacción a tiempo, por favor, inicia una nueva transacción y envia el comprobante de pago a tiempo. Si al momento de iniciar la transacción encuentras que no tienes un metodo de pago que coincida con la lista de metodos de pago disponibles para recibir remesas en el pais al cual deseas enviarlas, por favor, comunicate con atencion al cliente de Otacar Cambios -cuyos datos de contacto y horarios de atención se muestran en Inicio- para la correspondiente solución del inconveniente."
+                                    eliminar = true
+                            end%>
 
-                        
-                        <td class="align-middle"><span role="button" class="badge badge-pill <%=badge%>" data-toggle="modal" data-target="#exampleModal<%=transaction.id%>"><%=text%></span></td>
+                            
+                            <td class="align-middle"><span role="button" class="badge badge-pill <%=badge%>" data-toggle="modal" data-target="#exampleModal<%=transaction.id%>"><%=text%></span></td>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal<%=transaction.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Información</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="alert <%=fondo_msj%>" role="alert">
-                                            <%if transaction.status === "presenta incidencia"%>
-                                                No pudimos completar el envio de tus remesas por el siguiente error en los datos registrados en tu metodo de pago:<br><br>
-                                                <b> * <%=transaction.motivo_rechazo%>.</b><br><br> 
-                                                Por favor sigue las siguientes instrucciones:<br><br>
-                                                1.- Elimina el <a class="special-link alert-link" href="/payment_methods">metodo de pago</a> que presenta el error y agregalo de nuevo asegurandote de ingresar los datos correctamente e inicia una nueva transacción o si dispones de otro metodo de pago para recibir tus remesas en el pais que seleccionaste puedes usarlo, siempre y cuando ese metodo de pago este disponible para recibir envios de remesas por medio de Otacar Cambios.<br><br>
-                                                2.- Inicia la transaccion seleccionando la misma cuenta de Otacar Cambios a la cual hiciste el pago e ingresa el mismo monto.<br><br>
-                                                3.- Una vez iniciada la transacción y la cuenta regresiva para enviar el comprobante accede a ver la transacción y sube el comprobante del pago que ya realizaste y envialo.<br><br>
-                                                <i>Nota: Si perdiste el comprobante recuerda que puedes descargarlo accediendo en los detalles de esta transaccion o haciendo <a href="/transactions/<%=transaction.id%>" class="alert-link special-link">click aqui</a> y pulsa click derecho sobre la imagen y elige la opción guardar como (si estas ingresando desde un equipo de computo) o manten presionado tu dedo encima de la imagen para mostrar la opcion de guardar imagen (si estas accediendo desde un equipo movil)</i><br><br>
-                                                4.- Espera que la transacción sea confirmada y realizada.
-                                            <%else%>
-                                                <%=info%>
-                                            <%end%>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal<%=transaction.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                        
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <div class="modal-body">
+                                            <div class="alert <%=fondo_msj%>" role="alert">
+                                                <%if transaction.status === "presenta incidencia"%>
+                                                    No pudimos completar el envio de tus remesas por el siguiente error en los datos registrados en tu metodo de pago:<br><br>
+                                                    <b> * <%=transaction.motivo_rechazo%>.</b><br><br> 
+                                                    Por favor sigue las siguientes instrucciones:<br><br>
+                                                    1.- Elimina el <a class="special-link alert-link" href="/payment_methods">metodo de pago</a> que presenta el error y agregalo de nuevo asegurandote de ingresar los datos correctamente e inicia una nueva transacción o si dispones de otro metodo de pago para recibir tus remesas en el pais que seleccionaste puedes usarlo, siempre y cuando ese metodo de pago este disponible para recibir envios de remesas por medio de Otacar Cambios.<br><br>
+                                                    2.- Inicia la transaccion seleccionando la misma cuenta de Otacar Cambios a la cual hiciste el pago e ingresa el mismo monto.<br><br>
+                                                    3.- Una vez iniciada la transacción y la cuenta regresiva para enviar el comprobante accede a ver la transacción y sube el comprobante del pago que ya realizaste y envialo.<br><br>
+                                                    <i>Nota: Si perdiste el comprobante recuerda que puedes descargarlo accediendo en los detalles de esta transaccion o haciendo <a href="/transactions/<%=transaction.id%>" class="alert-link special-link">click aqui</a> y pulsa click derecho sobre la imagen y elige la opción guardar como (si estas ingresando desde un equipo de computo) o manten presionado tu dedo encima de la imagen para mostrar la opcion de guardar imagen (si estas accediendo desde un equipo movil)</i><br><br>
+                                                    4.- Espera que la transacción sea confirmada y realizada.
+                                                <%else%>
+                                                    <%=info%>
+                                                <%end%>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
+                            
 
-                        <td class="align-middle"><a href="/transactions/<%=transaction.id%>" class="badge badge-secondary" id="td-ver"><i class="far fa-eye"></i></a></td>
-                        <%if eliminar%>
-                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta transacción?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td> 
-                        <%else%>
-                        <td class="align-middle"><span></span></td>
-                        <%end%>
-                    </tr>
+                            <td class="align-middle"><a href="/transactions/<%=transaction.id%>" class="badge badge-secondary" id="td-ver"><i class="far fa-eye"></i></a></td>
+                            <%if eliminar%>
+                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/transactions/<%=transaction.id%>" data-confirm="Esta segur@ de eliminar esta transacción?" class="badge badge-danger"><i class="fas fa-trash-alt"></i></a></td> 
+                            <%else%>
+                            <td class="align-middle"><span></span></td>
+                            <%end%>
+                        </tr>
                     <%end%>
                 <%end%>
             </tbody>

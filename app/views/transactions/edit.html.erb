@@ -252,12 +252,9 @@
                                                 <div class="card-header text-primary">
                                                     <div class="row">
                                                         <div class="col-6 text-right">ID Usuario</div>
-                                                        <%number = current_user.id.to_s.length %>
-                                                        <%num_vacio = "000000000"%>
-                                                        <%num_vacio = num_vacio[number...]%>
-                                                        <%num_comp = num_vacio << current_user.id.to_s%>
+                                                        
                                                         <div class="col-6 text-left text-capitalize">
-                                                            <%=num_comp%>   
+                                                            <%=(@transaction.user.id*4).to_s.rjust(9, '0')%>   
                                                         </div>
 
                                                         <div class="col-6 text-right">Nombre y Apellido</div>
@@ -303,21 +300,15 @@
                                                         </div> 
 
                                                         <%coincidencia = false%>
-                                                        <% @users.each do |usuario|%>
-                                                            <%number = usuario.id.to_s.length %>
-                                                            <%num_vacio = "000000000"%>
-                                                            <%num_vacio = num_vacio[number...]%>
-                                                            <%num_comp = num_vacio << usuario.id.to_s%>
-
-                                                            <%if num_comp === current_user.num_user%>
-                                                                <%referencia = usuario.email%>
-                                                                <%coincidencia = true%>
-                                                            <%end%>
-                                                        <%end%>
                                                         <div class="col-6 text-right">Referido Por</div>
                                                         <div class="col-6 text-left">
-                                                            <%if coincidencia === true%><%=referencia%><%else%>Ningun Usuario<%end%>      
-                                                        </div>                               
+                                                            <% if usuario = @users.where(id: current_user.num_referidor*4).present?%>
+                                                                <%usuario.name.capitalize%> <%usuario.last_name.capitalize%>
+                                                            <%else%>
+                                                                Ningun usuario
+                                                            <%end%>
+                                                        </div> 
+                                                                                    
                                                     </div> 
                                                 </div>        
                                             </div>
