@@ -510,7 +510,7 @@ class TransactionsController < ApplicationController
 
           respond_to do |format|
             if @transaction.update(status:"envio en proceso")
-              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción fue confirmada",asunto:"ID Transacción: #{@transaction.num_id}")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción ID: #{@transaction.num_id}, fue confirmada",asunto:"Transacción Confirmada")
               notification.save
               format.html { redirect_to pending_transactions_path, notice: 'Transaccion confirmada con exito.' }
               format.json { render :show, status: :ok, location: @transaction }
@@ -523,7 +523,7 @@ class TransactionsController < ApplicationController
         else
           respond_to do |format|
             if @transaction.update(status:"rechazada")
-              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción fue rechazada",asunto:"ID Transacción: #{@transaction.num_id}")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción ID: #{@transaction.num_id}, fue rechazada",asunto:"Transacción rechazada")
               method_usuario = @transaction.account_destinity_usuario.split("-")
               model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
               model.update(permit_delete:"only_user")
@@ -560,7 +560,7 @@ class TransactionsController < ApplicationController
 
           respond_to do |format|
             if @transaction.update(status:"realizada")
-              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio fue realizado",asunto:"ID Transacción: #{@transaction.num_id}")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio fue realizado con exito. Transacción ID: #{@transaction.num_id}.",asunto:"Envio realizado")
               method_usuario = @transaction.account_destinity_usuario.split("-")
               model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
               model.update(permit_delete:"only_user")
@@ -580,7 +580,7 @@ class TransactionsController < ApplicationController
         else
           respond_to do |format|
             if @transaction.update(status:"presenta incidencia")
-              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio no fue realizado porque presenta una incidencia",asunto:"ID Transacción: #{@transaction.num_id}")
+              notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio no fue realizado porque presenta una incidencia. ID Transacción: #{@transaction.num_id}",asunto:"Envio no realizado")
               method_usuario = @transaction.account_destinity_usuario.split("-")
               model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
               model.update(permit_delete:"only_user")
@@ -669,7 +669,6 @@ class TransactionsController < ApplicationController
     def set_transaction
       @transaction = Transaction.find(params[:id])
     end
-
 
     # Never trust parameters from the scary internet, only allow the white list through.
 
