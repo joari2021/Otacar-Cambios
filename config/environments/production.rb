@@ -109,7 +109,7 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
-  config.action_mailer.default_url_options = { :host => 'https://frozen-taiga-71507.herokuapp.com' }
+  config.action_mailer.default_url_options = { :host => 'https://otacarcambios.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
       :address => 'smtp.gmail.com',
@@ -117,7 +117,7 @@ Rails.application.configure do
       :domain => 'gmail.com',
       :authentication => :plain,
       :enable_starttls_auto => true,
-      :user_name => 'jorge.uchija2021@gmail.com',
-      :password => 'qtwtkazekgsnuyfz'
+      :user_name => 'otacarcambios@gmail.com',
+      :password => 'jcdcmdccdxuhfghd'
   }
 end
