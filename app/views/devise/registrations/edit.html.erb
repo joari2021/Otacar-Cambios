@@ -9,10 +9,14 @@
 <%end%>
 
 <div class="alert alert-primary" role="alert">
-    <%unless current_user.is_normal_user?%>
-    <strong>Bienvenid@!</strong> Debes completar el registro de tu perfil para poder disfrutar de las funcionalidades de esta pagina.
+    <%unless current_user.is_admin?%>
+        <%unless current_user.is_normal_user?%>
+            <strong>Bienvenid@!</strong> Debes completar el registro de tu perfil para poder disfrutar de las funcionalidades de esta pagina.
+        <%else%>
+            <strong class="text-capitalize">Hola <%=current_user.name%>!</strong> Solo puedes editar tu telefono, dirección y contraseña. Si deseas editar otro dato debes enviar un correo a otacarcambios@gmail.com y tu requerimiento sera atendido por esa via.
+        <%end%>
     <%else%>
-    <strong class="text-capitalize">Hola <%=current_user.name%>!</strong> Solo puedes editar tu telefono, dirección y contraseña. Si deseas editar otro dato debes enviar un correo a otacarcambios@gmail.com y tu requerimiento sera atendido por esa via.
+        <strong class="text-capitalize">Hola Sr(a) Administrador!</strong> Aqui podras editar todos los datos que desees de este perfil asi como ver toda la informacion registrada del mismo.
     <%end%>
 </div>
 <h2 class="text-primary font-weight-bold">Editar Perfil</h2>
@@ -24,18 +28,14 @@
     <h6>* : Campos Obligatorios</h6>
 </div>
 <!--Nro usuario-->
-<!--
-<%number = (current_user.id * 4).to_s.length%>
-<%num_vacio = "000000000"%>
-<%num_vacio = num_vacio[number...]%>
-<%num_comp = num_vacio << "#{current_user.id * 4}"%>
-<%if current_user.is_normal_user?%>
+
+<%if current_user.is_normal_user? || current_user.is_admin?%>
     <div class="field">
         <label for="validationDefault16">N° Usuario</label>
-        <input type="text" class="form-control mb-3" id="validationDefault16" value="<%=num_comp%>" readonly>
+        <input type="text" class="form-control mb-3" id="validationDefault16" value="<%=(usuario.id*4).to_s.rjust(9,"0")%>" readonly>
     </div>
 <%end%>
--->
+
 
 <!--Nombres y Apellidos-->
 <div class="form-row field mb-3">
@@ -47,7 +47,7 @@
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=usuario.name%>" name="user[name]" readonly>
+            <input class="form-control text-capitalize" value="<%=usuario.name%>" name="user[name]" readonly>
         
         <%end%>
     </div>
@@ -228,26 +228,27 @@
     <% end %>
 </div>
 
-<%unless current_user.is_admin? && !usuario.is_admin?%>
 <!--Contraseña-->
-<div class="form-row field mb-1">
-    <div class="col-12 col-sm-6 mb-2">
-        <%= f.label :password, "Contraseña **" %>
-        <%= f.password_field :password, autocomplete: "new-password", class:"form-control is-invalid", id:"contraseña",  onkeyup:"return validarPassword(event)" %>
+<%unless current_user.is_admin? && !usuario.is_admin?%>
+    
+    <div class="form-row field mb-1">
+        <div class="col-12 col-sm-6 mb-2">
+            <%= f.label :password, "Contraseña **" %>
+            <%= f.password_field :password, autocomplete: "new-password", class:"form-control is-invalid", id:"contraseña",  onkeyup:"return validarPassword(event)" %>
 
-    </div>
+        </div>
 
-    <div class="col-12 col-sm-6">
-        <%= f.label :password_confirmation, "Confirmar Contraseña **" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control is-invalid", id:"confirmacion-contraseña", onkeyup:"return validarPassword(event)" %>
+        <div class="col-12 col-sm-6">
+            <%= f.label :password_confirmation, "Confirmar Contraseña **" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control is-invalid", id:"confirmacion-contraseña", onkeyup:"return validarPassword(event)" %>
 
+        </div>
+        <div class="validar-feedback ml-1">
+            <article id="art-1" class="art-invalid"><i class="fas fa-times-circle" id="icon-1"></i> La contraseña debe tener minimo <%= @minimum_password_length %> caracteres</article>
+            <article id="art-2" class="art-invalid"><i class="fas fa-times-circle" id="icon-2"></i> Las contraseñas deben coincidir</article>
+        </div>
     </div>
-    <div class="validar-feedback ml-1">
-        <article id="art-1" class="art-invalid"><i class="fas fa-times-circle" id="icon-1"></i> La contraseña debe tener minimo <%= @minimum_password_length %> caracteres</article>
-        <article id="art-2" class="art-invalid"><i class="fas fa-times-circle" id="icon-2"></i> Las contraseñas deben coincidir</article>
-    </div>
-</div>
-<i class="text-primary">** Nota: Deja los campos en blanco si no deseas cambiar tu contraseña</i>
+    <i class="text-primary">** Nota: Deja los campos en blanco si no deseas cambiar tu contraseña</i>
 <%end%>
 
 <!--Referencia-->
