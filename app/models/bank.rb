@@ -38,7 +38,7 @@ class Bank < ApplicationRecord
             end
          when "Venezuela"
             valido = false
-            if self.banco != "Banco Mercantil" && self.banco != "B.O.D" && self.banco != "Banco De Venezuela" && self.banco != "Banco Banesco"
+            if self.banco === "Banco Mercantil" || self.banco === "B.O.D" || self.banco === "Banco De Venezuela" || self.banco === "Banco Banesco"
                valido = true
             end
 
