@@ -3,7 +3,7 @@ class SearchController < ApplicationController
         if params[:termino].present?
             @users = User.buscador(params[:termino])
         else
-            @users = User.all
+            @users = User.where.not(id:1)
         end
     end
 end
