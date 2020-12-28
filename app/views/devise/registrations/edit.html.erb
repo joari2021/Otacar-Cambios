@@ -265,6 +265,11 @@
 <%else%>  
     <div class="field mt-3">
         <label for="validationReferencia">Referido por</label>
+        <%if usuario.status_referencia === "confirmada"%> 
+            <span class="float-right badge badge-pill" style="background-color: #007bff;color:#fff;">Referencia <%=usuario.status_referencia.capitalize%></span>
+        <%elsif usuario.status_referencia === "rechazada"%>
+            <span class="float-right badge badge-pill badge-danger">Referencia <%=usuario.status_referencia.capitalize%></span>
+        <%end%>
         <input type="text" class="form-control" id="validationReferencia" value="<%if @referidor.present?%><%=@referidor.name.capitalize%> <%=@referidor.last_name.capitalize%><%else%>Ningun Usuario<%end%>" readonly>
     </div>
 <%end%>
