@@ -35,7 +35,7 @@
                                                 part2 = bank.number_account[-4,4]%>
                                                 <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "bank_brasils"
@@ -48,7 +48,7 @@
                                                 <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                                 
                                                 <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "digital_payments"
@@ -60,7 +60,7 @@
                                                 %>
                                                 <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "mobile_payments"
@@ -72,7 +72,7 @@
                                                 %>
                                                 <td class="align-middle"><span class="">N/A</span></td>
                                                 <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "wallets"
@@ -84,7 +84,7 @@
                                                 %>
                                                 <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "wallet_with_users"
@@ -96,7 +96,7 @@
                                                 %>
                                                 <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                 <%end%>
@@ -129,7 +129,7 @@
                                                 part2 = bank.number_account[-4,4]%>
                                                 <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "bank_brasils"
@@ -142,7 +142,7 @@
                                                 <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                                 
                                                 <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "digital_payments"
@@ -154,7 +154,7 @@
                                                 %>
                                                 <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "mobile_payments"
@@ -166,7 +166,7 @@
                                                 %>
                                                 <td class="align-middle"><span class="">N/A</span></td>
                                                 <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "wallets"
@@ -178,7 +178,7 @@
                                                 %>
                                                 <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                     <%when "wallet_with_users"
@@ -190,7 +190,7 @@
                                                 %>
                                                 <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
                                                 <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                                <td class="align-middle"><%=part1 << "****" << part2%></td>
+                                                <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
                                         <%end%>
                                 <%end%>
