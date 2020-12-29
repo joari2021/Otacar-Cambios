@@ -175,10 +175,18 @@
                             <h6 class="mb-0">Centro de atención OC</h6>
                         </div>
                         <div class="card-body">
-                            
-                            <span>Lunes - Viernes</span><span class="float-right">10:00 - 17:00</span><br><br>
-                            <span>Sabados</span><span class="float-right">10:00 - 14:00</span><hr>
-                            <img src="/img/apoyo.svg" style="width:30px"><span class=" mt-2 float-right text-primary">+51 9947 8038</span>
+                            <%hour = 13
+                            if current_user.country === "Brasil" 
+                            hour -= 1 
+                            end%>
+                            <%hora_inicio = DateTime.new(2000,01,01,hour,00,01).in_time_zone(@zona_horaria)%>
+                            <%hora_final_1 = DateTime.new(2000,01,01,hour+7,00,01).in_time_zone(@zona_horaria)%>
+                            <%hora_final_2 = DateTime.new(2000,01,01,hour+4,00,01).in_time_zone(@zona_horaria)%>
+
+                            <span>Lunes - Viernes</span><span class="float-right"><%=hora_inicio.strftime("%H:%M")%> - <%=hora_final_1.strftime("%H:%M")%></span><br><br>
+                            <span>Sabados</span><span class="float-right"><%=hora_inicio.strftime("%H:%M")%> - <%=hora_final_2.strftime("%H:%M")%></span><hr>
+                            <img src="/img/apoyo.svg" style="width:30px">
+                            <span class=" mt-2 float-right text-primary">+51 9947 8038</span>
                         </div>
                     </div>
                 </div>

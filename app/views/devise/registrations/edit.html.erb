@@ -16,10 +16,11 @@
             <strong class="text-capitalize">Hola <%=current_user.name%>!</strong> Solo puedes editar tu telefono, dirección y contraseña. Si deseas editar otro dato debes enviar un correo a otacarcambios@gmail.com y tu requerimiento sera atendido por esa via.
         <%end%>
     <%else%>
-        <strong class="text-capitalize">Hola Sr(a) Administrador!</strong> Aqui podras editar todos los datos que desees de este perfil asi como ver toda la informacion registrada del mismo.
+        <strong>Hola Sr(a) Administrador(a)!</strong> Aqui podras editar todos los datos que desees de este perfil asi como ver toda la informacion registrada del mismo.
     <%end%>
 </div>
-<h2 class="text-primary font-weight-bold">Editar Perfil</h2>
+<h2 class="text-primary font-weight-bold">Editar Perfil 
+<%if current_user.is_admin? && !usuario.is_admin?%><%= button_to "Eliminar usuario", registration_path(resource_name), data: { confirm: "Esta seguro de eliminar este usuario, esta opción es irreversible?" }, method: :delete, class:"btn btn-danger float-right" %><%end%></h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
 <%= render "devise/shared/error_messages", resource: resource %>
@@ -330,4 +331,12 @@
     function mostrar_usuarios(){
         document.formulario1.submit()
     }
+
+    inputHidden = document.createElement("input")
+    inputHidden.setAttribute("type","hidden")
+    inputHidden.setAttribute("name","usuario[id]")
+    inputHidden.setAttribute("value","<%=usuario.id%>")
+    formulario = document.getElementsByTagName("form")[0]
+    formulario.appendChild(inputHidden)
+
 </script>  
