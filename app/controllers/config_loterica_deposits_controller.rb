@@ -39,7 +39,7 @@ class ConfigLotericaDepositsController < ApplicationController
     config_loterica_deposits = ConfigLotericaDeposit.all
     
     if config_loterica_deposits.count > 0
-        @config_loterica_deposit = config_loterica_deposits.find(1)
+        @config_loterica_deposit = config_loterica_deposits.find(2)
 
         def find_account_caixa(id)
           account_caixa =  BankBrasil.find(id)
