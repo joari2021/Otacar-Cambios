@@ -18,7 +18,7 @@
                     
                     <%part1 = wallet_with_user.usuario[0, 3]%>
                     <%part2 = wallet_with_user.usuario[-2,2]%> 
-                    <p class="card-text"><img src="/img/wallets/<%=wallet_with_user.wallet_name%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet_with_user.wallet_name%>" title="<%=wallet_with_user.wallet_name%>"/> <span class=""><%=part1 << "***" << part2%></span></p>
+                    <p class="card-text"><img src="/img/wallets/<%=wallet_with_user.wallet_name%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet_with_user.wallet_name%>" title="<%=wallet_with_user.wallet_name%>"/> <span class="ml-2"><%=part1 + "***" + part2%></span></p>
 
                 </div>
             </div>

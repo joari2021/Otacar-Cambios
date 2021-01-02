@@ -18,7 +18,7 @@
                     
                     <%part1 = digital_payment.number_phone[0, 3]%>
                     <%part2 = digital_payment.number_phone[-4,4]%> 
-                    <p class="card-text"><img src="/img/wallets/<%=digital_payment.payment_method%>.png" class="img-fluid rounded-circle avatar" alt="<%=digital_payment.payment_method%>" title="<%=digital_payment.payment_method%>"/> <span class=""><%=part1 << "****" << part2%></span></p>
+                    <p class="card-text"><img src="/img/wallets/<%=digital_payment.payment_method%>.png" class="img-fluid rounded-circle avatar" alt="<%=digital_payment.payment_method%>" title="<%=digital_payment.payment_method%>"/> <span class="ml-2"><%=part1 + "****" + part2%></span></p>
 
                 </div>
             </div>

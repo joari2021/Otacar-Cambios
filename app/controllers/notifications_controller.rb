@@ -34,7 +34,7 @@ class NotificationsController < ApplicationController
       num_usuario = parametros["usuario"].to_i / 4
       rastreo_usuario = User.where(id: num_usuario)
 
-      unless rastreo_usuario.nil? || rastreo_usuario != 0
+      unless rastreo_usuario.nil? || rastreo_usuario === 0
         usuario = User.find(num_usuario)
         notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
         notification.save
