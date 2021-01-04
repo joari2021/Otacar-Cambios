@@ -12,23 +12,21 @@ class ApplicationController < ActionController::Base
         unless current_user.is_normal_user?
             user = User.new(params_referido)
             num_referidor = user.num_referidor.to_i
-            if num_referidor === 0
-                user_find = false
-            else
-                if num_referidor % 2 === 0
+            user_find = false
+            
+            if num_referidor != 0
+                if num_referidor % 4 === 0
                     num_referidor /= 4
-                    referidor = User.where(id: num_referidor)
+                    if num_referidor != current_user.id
+                        referidor = User.where(id: num_referidor)
 
-                    if referidor.present?
-                        user_find = true
-                    else
-                        user_find = false
+                        if referidor.present?
+                            user_find = true
+                        end
                     end
-                else
-                    user_find = false
                 end
             end
-            redirect_to edit_user_registration_path, alert: "El numero de usuario que ingreso en la referencia no existe" unless user_find 
+            redirect_to edit_user_registration_path, alert: "El numero de usuario que ingreso en la referencia no existe o no es valido para ti" unless user_find 
         end
     end
 

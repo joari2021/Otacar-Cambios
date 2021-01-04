@@ -9,6 +9,6 @@ class TransactionMailer < ApplicationMailer
             end
         end
             
-        mail(to: "jorge.uchija2021@gmail.com", subject: "Nueva transacción por confirmar")
+        mail(to: "otacarcambios@gmail.com", subject: "Nueva transacción por confirmar")
     end
 end

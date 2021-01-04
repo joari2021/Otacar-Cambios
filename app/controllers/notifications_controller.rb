@@ -31,15 +31,22 @@ class NotificationsController < ApplicationController
 
     #######  ENVIO A UN SOLO USUARIO #############
     if parametros["destinatarios"] === "uno"
-      num_usuario = parametros["usuario"].to_i / 4
-      rastreo_usuario = User.where(id: num_usuario)
+      num_usuario = parametros["usuario"].to_i
 
-      unless rastreo_usuario.nil? || rastreo_usuario === 0
-        usuario = User.find(num_usuario)
-        notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
-        notification.save
-        notice = true
-        info = "La notificacion se envio al usuario que eligio con exito"
+      if num_usuario % 4 === 0
+        num_usuario /= 4
+        rastreo_usuario = User.where(id: num_usuario)
+
+        unless rastreo_usuario.nil? || rastreo_usuario === 0
+          usuario = User.find(num_usuario.to_i)
+          notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
+          notification.save
+          notice = true
+          info = "La notificacion se envio al usuario que eligio con exito"
+        else
+          alert = true
+          info = "El usuario destinatario no existe"
+        end
       else
         alert = true
         info = "El usuario destinatario no existe"
@@ -52,17 +59,24 @@ class NotificationsController < ApplicationController
       var = 0
       usuario_no_find = []  
       while var < destinatarios.length  
-        num_usuario = destinatarios[var].to_i / 4
-        rastreo_usuario = User.where(id: num_usuario)
+        num_usuario = destinatarios[var].to_i
+        
+        if num_usuario % 4 === 0
+          num_usuario /= 4
+          rastreo_usuario = User.where(id: num_usuario)
 
-        unless rastreo_usuario.nil?
-          usuario = User.find(num_usuario)
-          notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
-          notification.save
+          if rastreo_usuario.present?
+            usuario = User.find(num_usuario)
+            notification = usuario.notifications.create(emisor:"Otacar Cambios",content:"#{parametros["content"]}",asunto:"#{parametros["asunto"]}")
+            notification.save
+          else
+            usuario_no_find << "#{destinatarios[var]}"
+          end
+          var += 1  
         else
           usuario_no_find << "#{destinatarios[var]}"
         end
-        var += 1  
+          
       end
       if usuario_no_find.length === 0
         notice = true
