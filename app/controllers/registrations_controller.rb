@@ -4,19 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
   
   def edit
     
-
-    unless current_user.num_referidor.nil?
-      num_referidor = current_user.num_referidor.to_i / 4
-      referidor = User.where(id: num_referidor)
-    end
     
-    unless referidor.nil? || !referidor.present?
-      referidor = User.find(num_referidor)
-
-      if referidor.is_normal_user? 
-        @referidor = referidor
-      end
-    end
   end
 
   def create
@@ -99,6 +87,12 @@ class RegistrationsController < Devise::RegistrationsController
       usuario.wallet_with_users.destroy_all
       usuario.digital_payments.destroy_all
       usuario.mobile_payments.destroy_all
+
+      #DELETE DE NOTIFICATION DEL USUARIO
+      id = usuario.id * 4
+      notifications = Notification.where(dato_clave: id)
+      notifications.destroy_all 
+      #END
       
       respond_to do |format|
         if usuario.destroy

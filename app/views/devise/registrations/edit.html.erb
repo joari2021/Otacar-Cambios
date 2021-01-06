@@ -280,7 +280,25 @@
             <span class="float-right badge badge-pill" style="background-color: #007bff;color:#fff;">Referencia <%=usuario.status_referencia.capitalize%></span>
         <%elsif usuario.status_referencia === "rechazada"%>
             <span class="float-right badge badge-pill badge-danger">Referencia <%=usuario.status_referencia.capitalize%></span>
+        <%elsif usuario.status_referencia === "sin confirmar"%>
+            <span class="float-right badge badge-pill badge-secondary">Referencia <%=usuario.status_referencia.capitalize%></span>
+        <%elsif usuario.status_referencia === "indefinido"%>
+            <span class="float-right badge badge-pill badge-dark">Referencia <%=usuario.status_referencia.capitalize%></span>
         <%end%>
+        <%
+        unless usuario.num_referidor.nil?
+            num_referidor = usuario.num_referidor.to_i / 4
+            referidor = User.where(id: num_referidor)
+        end
+            
+        unless referidor.nil? || !referidor.present?
+            referidor = User.find(num_referidor)
+
+            if referidor.is_normal_user? 
+                @referidor = referidor
+            end
+        end
+        %>
         <input type="text" class="form-control" id="validationReferencia" value="<%if @referidor.present?%><%=@referidor.name.capitalize%> <%=@referidor.last_name.capitalize%><%else%>Ningun Usuario<%end%>" readonly>
     </div>
 <%end%>
