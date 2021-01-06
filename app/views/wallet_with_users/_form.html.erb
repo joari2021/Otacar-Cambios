@@ -1,6 +1,6 @@
 <%if vista === "edit" && current_user.is_admin?%>
     <div class="form-row justify-content-center">
-    <%= form_with(model: wallet_with_user, local: true, :html => {:class => "was-validated"}) do |form| %>
+    <%= form_with(model: wallet_with_user, local: true, :html => {:class => "was-validated", :id => "form"}) do |form| %>
     <% if wallet_with_user.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <h5 class="text-danger"><%if wallet_with_user.errors.count > 1%><%=wallet_with_user.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=wallet_with_user.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
@@ -41,7 +41,7 @@
     <%end%>
      </div>
 <%else%>
-<%= form_with(model: wallet_with_user, local: true) do |form| %>
+<%= form_with(model: wallet_with_user, local: true, :html => {:id => "form"}) do |form| %>
   <% if wallet_with_user.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <h5 class="text-danger"><%= pluralize(wallet_with_user.errors.count, "error")%><%if wallet_with_user.errors.count > 1%> han sido detectados en los siguientes campos:<%else%> ha sido detectado en el siguiente campo:<%end%></h5>

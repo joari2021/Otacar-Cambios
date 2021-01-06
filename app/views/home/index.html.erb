@@ -264,7 +264,7 @@
             </div>
             <div class="col-sm-6 col-xl-3">
                 <%= form_tag( '/search_users', options = {name: "formulario1"}) do %>
-                    <a href="#" onclick="mostrar_usuarios()">
+                    <a href="#" onclick="mostrar_usuarios(),show_preloader()">
                         <div class="card mb-5 shadow-sm border-0 shadow-hover">
                             <div class="card-body d-flex">
                                 <div>
@@ -286,7 +286,9 @@
                 <script>
                     function mostrar_usuarios(){
                         document.formulario1.submit()
+                        
                     }
+                    
                 </script>        
             </div>
             <div class="col-sm-6 col-xl-3">
@@ -470,7 +472,7 @@
                         <%end%>
                         <hr>
                         <div class="text-primary pt-3">
-                            <a href="/notifications/new" class="d-inline-block float-left small">Enviar notificación</a>
+                            <a href="/notifications/new" class="d-inline-block float-left small" onclick="show_preloader()">Enviar notificación</a>
                             <%if @notifications.count > 0%>
                                 <!--Button Modal-->
                                 <span role="button" style="cursor:pointer;" data-toggle="modal" data-target="#modal-notifications" id="span-modal" onclick="refrescarNotificationsModal()">
@@ -554,5 +556,4 @@
             cajaMsj.classList.add("d-none");
         }, 4000);
     }
-
 </script>

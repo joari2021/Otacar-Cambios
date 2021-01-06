@@ -6,7 +6,7 @@
                 Su cuenta fue creada con exito. Acceda a traves del enlace de confirmacion que le fue enviado a su correo electronico para confirmar su cuenta y terminar con el proceso de registro. Si el correo no se encuentra en su bandeja de entrada revice en su bandeja de spam o correo no deseado.
             </p>
             <button class="btn transparent">
-                <a href="/" style="color:#fff">Ir al Inicio</a>
+                <a href="/" style="color:#fff" onclick="show_preloader()">Ir al Inicio</a>
             </button>
         </div>
     </div>
@@ -16,4 +16,5 @@
     var cuerpo = document.getElementById('bodys');
 
     cuerpo.classList.add('body_fondo');
+    <%=render "partials/script-preloader-js"%>
 </script>

@@ -2,12 +2,12 @@
     <div class="contenedor">
         <h2>Reenviar instrucciones de confirmación</h2>
 
-        <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+        <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, :id => "form" }) do |f| %>
         <%= render "devise/shared/error_messages", resource: resource %>
 
         <div class="input-field">
             <i class="fas fa-envelope"></i>
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), placeholder: "Correo Electronico" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), placeholder: "Correo Electronico", required: "required" %>
 
         </div>
 
@@ -27,4 +27,6 @@
     var cuerpo = document.getElementById('bodys');
 
     cuerpo.classList.add('body_fondo');
+
+    <%=render "partials/script-preloader-js"%>
 </script>

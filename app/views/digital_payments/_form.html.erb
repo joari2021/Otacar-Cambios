@@ -1,6 +1,6 @@
 <%if vista === "edit" && current_user.is_admin?%>
     <div class="form-row justify-content-center">
-    <%= form_with(model: digital_payment, local: true, :html => {:class => "was-validated"}) do |form| %>
+    <%= form_with(model: digital_payment, local: true, :html => {:class => "was-validated", :id => "form"}) do |form| %>
     <% if digital_payment.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <h5 class="text-danger"><%if digital_payment.errors.count > 1%><%=digital_payment.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=digital_payment.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
@@ -41,7 +41,7 @@
     <%end%>
      </div>
 <%else%>
-<%= form_with(model: digital_payment, local: true) do |form| %>
+<%= form_with(model: digital_payment, local: true, :id => "form") do |form| %>
     <% if digital_payment.errors.any? %>
       <div id="error_explanation" class="alert alert-danger">
         <h5 class="text-danger"><%if digital_payment.errors.count > 1%><%=digital_payment.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=digital_payment.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>

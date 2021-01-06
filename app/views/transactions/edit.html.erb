@@ -1,5 +1,6 @@
 <%=render 'partials/name-and-cod-of-banks'%>
 <%unless current_user.is_admin?%><!--VISTA DE USUARIO -------------------------------------------------------------------------->
+    <%=render "partials/btn-back", link: url_for(status_transactions_url)%>
     <div id="copy" class="">
         <span class="fas fa-check-circle"></span>
         <p class="msg text-justify" id="msj"></p>
@@ -32,7 +33,7 @@
                         <label class="text-primary">Monto a pagar</label><br>
                         <%=@moneda_destinity%> <span id="monto_pagar"><%= number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_pagar','Monto a pagar')"></i><br><hr>
 
-                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", multipart: true}) do |form| %>
+                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", :id => "form", multipart: true}) do |form| %>
                             <% if @transaction.errors.any? %>
                             <div id="error_explanation">
                                 <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -135,7 +136,7 @@
         });
     </script>
 <%else%> <!--VISTA DE ADMINISTRADOR ----------------------------------------------------------------------------------------->
-
+    <%=render "partials/btn-back", link: url_for(pending_transactions_url)%>
     <div id="copy" class="">
         <span class="fas fa-check-circle"></span>
         <p class="msg text-justify" id="msj"></p>
@@ -174,7 +175,7 @@
 
                        <%=render 'comprobante-pago', {identifier: "otacar", url: @transaction.comprobante_pago_otacar.url}%>
                         
-                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
+                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", :id => "form"}) do |form| %>
                             <%if @transaction.errors.any?%>
                             <div id="error_explanation">
                                 <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -363,7 +364,7 @@
 
                         <button class="btn btn-copy-all" onclick="copyAll()">Copiar Todo</button>
 
-                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5"}) do |form| %>
+                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", :id => "form"}) do |form| %>
                             <%if @transaction.errors.any?%>
                             <div id="error_explanation">
                                 <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -538,6 +539,5 @@
             cajaMsj.classList.add("d-none");
         }, 2000);
     }
-
-    
+    <%= render 'partials/script-preloader'%>
 </script>

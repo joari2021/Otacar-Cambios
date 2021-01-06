@@ -1,3 +1,11 @@
+<%if params[:id].present? && current_user.is_admin?%>
+         
+    <a href="#" class="a_demo_four" onclick="mostrar_usuarios(),show_preloader()">Volver!</a>
+<%else%>
+    <%= render "partials/btn-back", link: url_for(user_root_path) %>
+<%end%>
+
+
 <%if current_user.is_admin?%>
     <%if params[:id].present?%>
         <%usuario = User.find(params[:id])%>
@@ -8,7 +16,7 @@
     <%usuario = current_user%>
 <%end%>
 
-<div class="alert alert-primary" role="alert">
+<div class="alert alert-primary mt-4" role="alert">
     <%unless current_user.is_admin?%>
         <%unless current_user.is_normal_user?%>
             <strong>Bienvenid@!</strong> Debes completar el registro de tu perfil para poder disfrutar de las funcionalidades de esta pagina.
@@ -22,7 +30,7 @@
 <h2 class="text-primary font-weight-bold">Editar Perfil 
 <%if current_user.is_admin? && !usuario.is_admin?%><%= button_to "Eliminar usuario", registration_path(resource_name), data: { confirm: "Esta seguro de eliminar este usuario, esta opción es irreversible?" }, method: :delete, class:"btn btn-danger float-right" %><%end%></h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, :id => "form" }) do |f| %>
 <%= render "devise/shared/error_messages", resource: resource %>
 
 <div class="field">
@@ -288,14 +296,6 @@
 
 <div class="actions">
     <%= f.submit "Guardar", class:"btn btn-success mt-2 mb-5", id:"btn-form"%>
-
-    <%if params[:id].present? && current_user.is_admin?%>
-         
-        <button type="button" class="btn btn-success mt-2 mb-5 float-right" onclick="mostrar_usuarios()">Volver</button>    
-        
-    <%else%>
-        <%= link_to "Volver", :back, class:"btn btn-success mt-2 mb-5 float-right" %>
-    <%end%>
     
 </div>
 <% end %>
@@ -339,4 +339,6 @@
     formulario = document.getElementsByTagName("form")[0]
     formulario.appendChild(inputHidden)
 
+    <%= render 'partials/script-preloader'%>
+    
 </script>  

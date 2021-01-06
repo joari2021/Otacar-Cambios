@@ -1,6 +1,6 @@
 <%=render "partials/name-and-cod-of-banks"%>
 <h4>Mis metodos para recibir pagos</h4>
-<a class="btn btn-info mt-2" href="/set_method">Añadir <i class="fas fa-plus"></i></a>
+<a class="btn btn-info mt-2" href="/set_method" onclick="show_preloader()">Añadir <i class="fas fa-plus"></i></a>
 <div class="row mb-5">
     <%if current_user.banks.count <= 0 && current_user.bank_brasils.count <= 0 && current_user.wallets.count <= 0 && current_user.wallet_with_users.count <= 0 && current_user.digital_payments.count <= 0 && current_user.mobile_payments.count <= 0%>
     <div class="container">

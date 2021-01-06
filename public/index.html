@@ -55,6 +55,12 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
+    <span class="ir_arriba"><i class="fas fa-arrow-up"></i></span>
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+        <div class="loader2"></div>
+        <div class="loader3"></div>
+    </div>
     <div id="page-wrap">
       <!-- ==========================================================================================================
 														   HERO
@@ -109,6 +115,7 @@
                 >
               </li>
             </ul>
+            <!--
             <div class="social-icons-header">
               <a href="https://www.facebook.com/fh5co"
                 ><i class="fab fa-facebook-f"></i
@@ -116,11 +123,12 @@
               <a href="https://freehtml5.co"
                 ><i class="fab fa-instagram"></i
               ></a>
-              <!--
+              
               <a href="https://www.twitter.com/fh5co"
                 ><i class="fab fa-twitter"></i
-              ></a>-->
+              ></a>
             </div>
+            -->
           </div>
         </nav>
 
@@ -137,11 +145,11 @@
 
           <div style="margin-top: 150px;">
             <button class="btn btn-md download-btn-first wow fadeInLeft animated">
-              <a href="/users/login_or_register">Iniciar Sesion</a>
+              <a href="/users/login_or_register" onclick="show_preloader()">Iniciar Sesion</a>
             </button>
   
             <button class="btn btn-md features-btn-first animated fadeInLeft wow">
-              <a href="/users/register_or_login" class="text-light">Registro</a>
+              <a href="/users/register_or_login" class="text-light" onclick="show_preloader()">Registro</a>
             </button>
           </div>
           <img
@@ -204,7 +212,7 @@
 
       <div class="fh5co-slider-outer wow fadeIn" data-wow-delay="0.36s">
         <h1 style="color:#04a7fe;">PAISES ASOCIADOS</h1>
-        <small>Y vamos por mas</small>
+        <small>Y vamos por más</small>
         <div class="container fh5co-slider-inner">
           <div class="owl-carousel owl-theme" id="owl-carousel-1">
             <div class="item"><img src="/img/paises/Argentina.svg" alt="Argentina" title="Argentina"/></div>
@@ -605,6 +613,7 @@
                 </ul>
               </nav>
             </div>
+            <!--
             <div class="column-3-3">
               <div class="social-icons-footer">
                 <a href="https://www.facebook.com/fh5co"
@@ -618,6 +627,7 @@
                 ></a>
               </div>
             </div>
+            -->
           </div>
 
           <span class="border-bottom-footer"></span>
@@ -636,5 +646,31 @@
     <script src="/js/owl.carousel.js"></script>
     <script src="/js/wow.min.js"></script>
     <script src="/js/main.js"></script>
+
+    <script>
+      window.onload = function() {
+          var contenedor = document.getElementById("loader");
+          contenedor.classList.add("efecto_desv")
+      }
+      function show_preloader(){
+        document.getElementById("loader").classList.remove("efecto_desv")
+      }
+
+      $(document).ready(function() {
+        $(".ir_arriba").click(function() {
+          $("body,html").animate({
+            scrollTop:"0px"
+          }, 500);
+        });
+
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > 0) {
+            $(".ir_arriba").slideDown(300);
+          }else{
+            $(".ir_arriba").slideUp(300);
+          }
+        })
+      });
+    </script>
   </body>
 </html>

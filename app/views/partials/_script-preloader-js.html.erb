@@ -1,0 +1,13 @@
+form = document.getElementById("form")
+form.addEventListener("submit",function(){
+    document.getElementById("loader").classList.remove("efecto_desv")
+})
+
+form2 = document.getElementById("form2")
+form2.addEventListener("submit",function(){
+    document.getElementById("loader").classList.remove("efecto_desv")
+})
+
+function show_preloader(){
+    document.getElementById("loader").classList.remove("efecto_desv")
+}

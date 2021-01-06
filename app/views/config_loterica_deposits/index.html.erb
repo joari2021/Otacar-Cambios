@@ -17,7 +17,7 @@
         <%if @prioridad_min_3.present?%><%= @prioridad_min_3%><br>Cupos restantes: <%=@cupos_restantes3%><%else%><i>Sin Definir</i><%end%>
         <hr>
 
-        <%if @config_loterica_deposit.present?%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/2/edit?edit=less_than">Editar</a><%else%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/new?edit=less_than">Editar</a><%end%>
+        <%if @config_loterica_deposit.present?%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/2/edit?edit=less_than" onclick="show_preloader()">Editar</a><%else%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/new?edit=less_than" onclick="show_preloader()">Editar</a><%end%>
       </div>
     </div>
   </div>
@@ -38,7 +38,7 @@
         <%if @prioridad_max_3.present?%><%= @prioridad_max_3%><br>Cupos restantes: <%=@cupos_restantes6%><%else%><i>Sin Definir</i><%end%>
         <hr>
 
-        <%if @config_loterica_deposit.present?%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/2/edit?edit=greater_than">Editar</a><%else%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/new?edit=greater_than">Editar</a><%end%>
+        <%if @config_loterica_deposit.present?%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/2/edit?edit=greater_than" onclick="show_preloader()">Editar</a><%else%><a class="btn btn-info d-block m-auto" href="/config_loterica_deposits/new?edit=greater_than" onclick="show_preloader()">Editar</a><%end%>
       </div>
     </div>
   </div>

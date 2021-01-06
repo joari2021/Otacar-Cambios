@@ -16,7 +16,7 @@
     <small class="text-muted"><%=notification.content%></small>
     <%if notification.asunto === "Referencia de usuario"%>
         <%if User.find(notification.dato_clave.to_i/4).status_referencia === "sin confirmar"%>
-            <br><small class="text-muted"><a href="/mostrar_referido?notify=<%=notification.id%>" class="alert-link text-white special-link" style="">haz click aqui</a></small>
+            <br><small class="text-muted"><a href="/mostrar_referido?notify=<%=notification.id%>" class="alert-link text-white special-link" onclick="show_preloader()">haz click aqui</a></small>
         <%else%>
             <br><small class="">Referencia <%=User.find(notification.dato_clave.to_i/4).status_referencia%></small>
         <%end%>  

@@ -1,6 +1,6 @@
 <%if vista === "edit" && current_user.is_admin?%>
     <div class="form-row justify-content-center">
-    <%= form_with(model: wallet, local: true, :html => {:class => "was-validated"}) do |form| %>
+    <%= form_with(model: wallet, local: true, :html => {:class => "was-validated", :id => "form"}) do |form| %>
     <% if wallet.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <h5 class="text-danger"><%if wallet.errors.count > 1%><%=wallet.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=wallet.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
@@ -40,7 +40,7 @@
     <%end%>
      </div>
 <%else%>
-<%= form_with(model: wallet, local: true) do |form| %>
+<%= form_with(model: wallet, local: true, :html => {:id => "form"}) do |form| %>
   <% if wallet.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <h5 class="text-danger"><%= pluralize(wallet.errors.count, "error")%><%if wallet.errors.count > 1%> han sido detectados en los siguientes campos:<%else%> ha sido detectado en el siguiente campo:<%end%></h5>
@@ -83,9 +83,9 @@
           <%country = params[:country] || wallet.country%>
           <%case country%>
           <%when "Brasil"%>
-          <option value="Pix" <%if wallet.wallet_name === "Pix"%>selected<%end%>>Pix</option>
+            <option value="Pix" <%if wallet.wallet_name === "Pix"%>selected<%end%>>Pix</option>
           <%when "USA"%>
-          <option value="Zelle" <%if wallet.wallet_name === "Zelle"%>selected<%end%>>Zelle</option>
+            <option value="Zelle" <%if wallet.wallet_name === "Zelle"%>selected<%end%>>Zelle</option>
           <%end%>
       </select>
       <div class="invalid-feedback">Elige una opcion</div>
@@ -133,5 +133,4 @@
       botonSave.setAttribute("disabled", "disabled");
     }
   }
-
 </script>

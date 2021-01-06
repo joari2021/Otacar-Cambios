@@ -1,4 +1,4 @@
-<%= form_with(model: avalaible_bank, local: true) do |form| %>
+<%= form_with(model: avalaible_bank, local: true, html: {:id => "form" }) do |form| %>
   <% if avalaible_bank.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(avalaible_bank.errors.count, "error") %> prohibited this avalaible_bank from being saved:</h2>
@@ -33,3 +33,6 @@
     <%= form.submit "Guardar", class:"btn btn-info" %>
   </div>
 <% end %>
+<script>
+  <%= render 'partials/script-preloader'%>
+</script>

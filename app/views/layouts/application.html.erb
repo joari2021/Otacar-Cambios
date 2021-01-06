@@ -7,8 +7,8 @@
     <%= csp_meta_tag %>
     <link  rel="shorcut icon"   href="/img/logo/Logo.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Diego Velázquez">
-    <meta name="description" content="Tablero con Bootstrap 4 - Webook">
+    <meta name="author" content="Jorge Ochoa">
+    <meta name="description" content="Envio de remesas a otros paises">
     
     <%if user_signed_in?%>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -24,6 +24,11 @@
 </head>
 
 <body id="bodys" class="overflow-hidden">
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+        <div class="loader2"></div>
+        <div class="loader3"></div>
+    </div>
     <div class="d-flex" id="content-wrapper">
         <%if user_signed_in?%>
             <%= render "partials/nav" %>
@@ -33,21 +38,25 @@
             <%if user_signed_in?%><%=render "partials/subnav"%><%end%>
 
             <%if alert && user_signed_in?%>
-            <div id="alert" class="show showAlert">
-                <span class="fas fa-exclamation-circle"></span>
-                <p class="msg text-justify"><%=alert%></p>
-            </div>
-            <%end%>
-            <%if notice && user_signed_in?%>
-            <div id="notice" class="show showAlert">
-                <span class="fas fa-check-circle"></span>
-                <p class="msg text-justify"><%=notice%></p>
-            </div>
-            <%end%>
-            <div id="content" class="bg-grey w-100">
-                <div class="pt-4 px-3 pb-5">
-                    <%= yield %>
+                <div id="alert" class="show showAlert">
+                    <span class="fas fa-exclamation-circle"></span>
+                    <p class="msg text-justify"><%=alert%></p>
                 </div>
+            <%end%>
+
+            <%if notice && user_signed_in?%>
+                <div id="notice" class="show showAlert">
+                    <span class="fas fa-check-circle"></span>
+                    <p class="msg text-justify"><%=notice%></p>
+                </div>
+            <%end%>
+            
+            <div id="content" class="bg-grey w-100">
+                
+                <%if user_signed_in?%><div class="pt-4 px-3 pb-5"><%end%>
+                    <%= yield %>
+                <%if user_signed_in?%></div><%end%>
+                
             </div>
         
         </div>
@@ -56,8 +65,14 @@
     <div id="sidenav-overlay" style="opacity: 1;" class=""></div>
 
     <script>
+
+        window.onload = function() {
+            var contenedor = document.getElementById("loader");
+            contenedor.classList.add("efecto_desv")
+        }
         <%if user_signed_in?%>
-       
+            <%=render "partials/script-preloader"%>
+
             $("#menu-toggle").click(function(e) {
                 e.preventDefault();
                 $("#content-wrapper").addClass("toggled");
@@ -81,7 +96,6 @@
                     refresh = setInterval(refrescarNotificaciones, 30000);
                     $.ajaxSetup({ cache: false });
                 }
-                
             });
             
             function refrescarNotificaciones() {
@@ -121,7 +135,6 @@
         <%end%>
 
     </script>
-
 </body>
 
 </html>

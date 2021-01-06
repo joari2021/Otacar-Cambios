@@ -1,12 +1,13 @@
+<%=render "partials/btn-back", link: url_for(user_root_path)%>
 <div class="row justify-content-center mt-3 mb-5">
     <div class="col-lg-10 col-xl-7">
 
         <h5 class="text-center">Usuarios</h5>
         <div class="table-responsive">
-            <button type="button" class="btn btn-outline-warning mt-md-3 mt-4" onclick="mostrar_usuarios()">Mostrar Todos</button>
+            <button type="button" class="btn btn-outline-warning mt-md-3 mt-4" onclick="mostrar_usuarios(),show_preloader()">Mostrar Todos</button>
               
             <div class="float-right">
-                <%= form_tag( '/search_users', options = { class: "d-none d-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search", name: "formulario1" }) do %>
+                <%= form_tag( '/search_users', options = { class: "d-none d-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search", name: "formulario1", id: "form"}) do %>
                     <div class="mt-3 input-group">
                     <%= text_field_tag("termino", value = nil, options = { class: "form-control bg-light border-0 small", placeholder: "Nro Usuario...", id: "text_field"}) %>
                         <div class="input-group-append">

@@ -1,5 +1,5 @@
 <%render "partials/name-and-cod-of-banks"%>
-<%= form_with(model: transaction, local: true, :html => { :class => "mb-5"}) do |form| %>
+<%= form_with(model: transaction, local: true, :html => { :class => "mb-5", :id => "form"}) do |form| %>
 <% if transaction.errors.any? %>
 <div id="error_explanation">
     <h2><%= pluralize(transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -2287,4 +2287,5 @@
         input_monto_envio.value = monto_envio
     }
     
+    <%= render 'partials/script-preloader'%>
 </script>
