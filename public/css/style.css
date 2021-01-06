@@ -713,18 +713,21 @@ html {
     top: 200px;
     height: 550px;
   }
+  .fh5co-hero-inner > h1{
+    font-size: 45px;
+  }
 }
 @media screen and (max-width: 993px) {
   body {
     overflow-x: hidden;
   }
 
-  #fh5co-hero-wrapper {
-    height: 95vh;
-  }
-
+  
   .fh5co-hero-inner {
     margin-top: 30px;
+  }
+  .fh5co-hero-inner > h1{
+    font-size: 45px;
   }
 
   .fh5co-hero-inner .fh5co-hero-smartphone {

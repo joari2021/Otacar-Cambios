@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  #  :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :confirmable, :registerable,
+  #  :lockable, :timeoutable, :trackable and :omniauthable :confirmable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
   has_many :banks
@@ -35,7 +35,9 @@ class User < ApplicationRecord
 
   validates :year, length: { maximum: 4, message: " El contenido es muy largo (caracteres minimos 4)" }, presence: {message: " este campo no puede estar vacio", on: :update} 
 
-  validates :address, :state, :city, length: { maximum: 30, message: " El contenido es muy largo (caracteres minimos 30)", on: :update }, presence: {message: " este campo no puede estar vacio", on: :update} 
+  validates :state, :city, length: { maximum: 30, message: " El contenido es muy largo (caracteres minimos 30)", on: :update }, presence: {message: " este campo no puede estar vacio", on: :update} 
+
+  validates :address, length: { maximum: 100, message: " El contenido es muy largo (caracteres minimos 100)", on: :update }, presence: {message: " este campo no puede estar vacio", on: :update} 
 
   validates :country, :gender, length: { maximum: 9, message: " El contenido es muy largo (caracteres minimos 9)" }, presence: {message: " este campo no puede estar vacio", on: :update}, format: { with: /\A[a-zA-Z]+\z/, message: " Este campo no puede estar vacio y solo acepta letras", on: :update }
 

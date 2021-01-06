@@ -2,7 +2,9 @@
          
     <a href="#" class="a_demo_four" onclick="mostrar_usuarios(),show_preloader()">Volver!</a>
 <%else%>
-    <%= render "partials/btn-back", link: url_for(user_root_path) %>
+    <%if current_user.is_normal_user?%>
+        <%= render "partials/btn-back", link: url_for(user_root_path) %>
+    <%end%>
 <%end%>
 
 
@@ -214,7 +216,7 @@
 <!--Direccion-->
 <div class="field mb-3">
     <label for="validationAddress">Dirección</label>
-    <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationAddress" name="user[address]" maxlength="30" oninput="return address(this)" value="<%=usuario.address%>" required>
+    <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationAddress" name="user[address]" maxlength="100" oninput="return address(this)" value="<%=usuario.address%>" required>
 
     <div class="invalid-feedback">
         El campo no puede estar vacio

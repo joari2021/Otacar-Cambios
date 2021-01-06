@@ -20,18 +20,22 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def create
+      super
+=begin
     @user = User.new(sign_up_params)
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to register_succesfull_path }
+        format.html { redirect_to edit_user_registration_path, notice: "Bienvenido. Debes completar el registro para poder utilizar nuestros servicios" }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+=end
   end
+
 
   def update
       
