@@ -58,6 +58,10 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    airbrake (11.0.1)
+      airbrake-ruby (~> 5.1)
+    airbrake-ruby (5.2.0)
+      rbtree3 (~> 0.5)
     bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.4.8)
@@ -225,6 +229,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rbtree3 (0.6.0)
     regexp_parser (1.8.2)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -310,6 +315,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  airbrake
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
