@@ -42,9 +42,7 @@ class RegistrationsController < Devise::RegistrationsController
       parametros = account_update_params_user
       usuario_edit = User.find_by(document: parametros["document"])
 
-      if usuario_edit.permission_level === 3
-        super
-      else
+      if usuario_edit.permission_level === 1
         respond_to do |format|
           if usuario_edit.update(account_update_params_user)
             format.html { redirect_to user_root_path, notice: "El perfil del usuario fue actualzado con exito." }
@@ -53,6 +51,8 @@ class RegistrationsController < Devise::RegistrationsController
             format.json { render json: @user.errors, status: :unprocessable_entity }
           end
         end
+      else
+        super
       end
     end
   end
@@ -105,6 +105,6 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def account_update_params_user
-    params.require(:user).permit(:email, :name, :last_name, :document, :address, :phone, :day, :month, :year, :gender, :country, :state, :city, :second_name, :second_surname, :num_referidor)
+    params.require(:user).permit(:email, :name, :last_name, :document, :address, :phone, :day, :month, :year, :gender, :country, :state, :city, :second_name, :second_surname, :num_referidor, :id)
   end
 end
