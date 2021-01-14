@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+    before_action :authenticate_user!
     def results
         if params[:termino].present?
             @users = User.buscador(params[:termino])

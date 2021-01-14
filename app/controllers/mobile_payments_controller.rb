@@ -1,6 +1,7 @@
 class MobilePaymentsController < ApplicationController
   before_action :set_mobile_payment, only: [:edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:edit, :update]
+  before_action :authenticate_user!
 
   # GET /mobile_payments
   # GET /mobile_payments.json

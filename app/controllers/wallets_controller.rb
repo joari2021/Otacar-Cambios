@@ -1,6 +1,7 @@
 class WalletsController < ApplicationController
   before_action :set_wallet, only: [:edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:edit, :update]
+  before_action :authenticate_user!
   # GET /wallets
   # GET /wallets.json 
   def index
