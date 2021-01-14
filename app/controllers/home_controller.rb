@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   before_action :authenticate_normal_user!
+  before_action :authenticate_user!
   def index
 
     transactions = current_user.transactions.where(status: "realizada")

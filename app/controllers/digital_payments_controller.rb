@@ -1,6 +1,7 @@
 class DigitalPaymentsController < ApplicationController
   before_action :set_digital_payment, only: [:edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:edit, :update]
+  before_action :authenticate_user!
 
   # GET /digital_payments
   # GET /digital_payments.json

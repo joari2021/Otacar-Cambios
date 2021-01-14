@@ -42,7 +42,7 @@ class RegistrationsController < Devise::RegistrationsController
       parametros = account_update_params_user
       usuario_edit = User.find_by(document: parametros["document"])
 
-      if usuario_edit.is_admin?
+      if usuario_edit.permission_level === 3
         super
       else
         respond_to do |format|
