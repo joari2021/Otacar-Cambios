@@ -27,7 +27,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def update
       
-    unless @user.is_admin?
+    unless current_user.is_admin?
       super
 
       if @user.is_normal_user? && @user.status_referencia === "indefinido"
@@ -42,7 +42,7 @@ class RegistrationsController < Devise::RegistrationsController
       parametros = account_update_params_user
       usuario_edit = User.find_by(document: parametros["document"])
 
-      if @user.document === usuario_edit.document
+      if usuario_edit.is_admin?
         super
       else
         respond_to do |format|
