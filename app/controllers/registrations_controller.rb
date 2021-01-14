@@ -42,7 +42,7 @@ class RegistrationsController < Devise::RegistrationsController
       parametros = account_update_params_user
       usuario_edit = User.find_by(document: parametros["document"])
 
-      if usuario_edit.permission_level === 1
+      if usuario_edit.present?
         respond_to do |format|
           if usuario_edit.update(account_update_params_user)
             format.html { redirect_to user_root_path, notice: "El perfil del usuario fue actualzado con exito." }
