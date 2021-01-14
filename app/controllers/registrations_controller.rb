@@ -24,11 +24,19 @@ class RegistrationsController < Devise::RegistrationsController
 =end
   end
 
-
   def update
       
     unless @user.is_admin?
       super
+
+      if @user.is_normal_user? && @user.status_referencia === "indefinido"
+          num_referidor = @user.num_referidor.to_i
+          @user.update(num_referidor:"#{num_referidor}",status_referencia:"sin confirmar")
+          num_referidor /= 4
+          usuario = User.find(num_referidor)
+          notification = usuario.notifications.create(emisor:"#{@user.name.capitalize} #{@user.last_name.capitalize}",content:"Gracias por recomendar nuestra pagina a este usuario, ahora debes confirmar que es tu referido.",asunto:"Referencia de usuario",dato_clave:"#{@user.id*4}")
+          notification.save
+      end
     else
       parametros = account_update_params_user
       usuario_edit = User.find_by(document: parametros["document"])
@@ -46,32 +54,6 @@ class RegistrationsController < Devise::RegistrationsController
         end
       end
     end
-    
-    if @user.status_referencia === "indefinido"
-      num_referidor = @user.num_referidor.to_i
-      @user.update(num_referidor:"#{num_referidor}",status_referencia:"sin confirmar")
-      num_referidor /= 4
-      usuario = User.find(num_referidor)
-      notification = usuario.notifications.create(emisor:"#{@user.name.capitalize} #{@user.last_name.capitalize}",content:"Gracias por recomendar nuestra pagina a este usuario, ahora debes confirmar que es tu referido.",asunto:"Referencia de usuario",dato_clave:"#{@user.id*4}")
-      notification.save
-    end
-    
-=begin
-    respond_to do |format|
-      if @user.update(account_update_params) && @user.update(num_referidor: num_referidor.to_s)
-        num_referidor /= 4
-        usuario = User.find(num_referidor)
-        notification = usuario.notifications.create(emisor:"#{usuario.name.capitalize} #{usuario.last_name.capitalize}",content:"Gracias por recomendar nuestra pagina a este usuario, ahora debes confirmar que es tu referido",asunto:"#{parametros["asunto"]}")
-        notification.save
-
-        format.html { redirect_to user_root_path, notice: "Su registro ha sido completado con exito" }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-=end
   end
 
   def destroy
