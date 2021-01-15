@@ -179,7 +179,7 @@
                                         if bank.id.to_s === method[1]
                                             part1 = bank.number_agency
                                             part2 = bank.number_account[-2,2]
-                                            part3 = bank.cpf[0, 3]
+                                            part3 = bank.cpf[0, 2]
                                             part4 = bank.cpf[-2,2]%>
                                             <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
                                             <td class="align-middle"><span class=""><%=part3 + "***" + part4%></span></td>

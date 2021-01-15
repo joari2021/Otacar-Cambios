@@ -3,9 +3,7 @@ class RegistrationsController < Devise::RegistrationsController
   before_action :authenticate_referidor!, only: [:update] 
   before_action :authenticate_user!, only: [:update,:destroy]
   
-  def edit
-    
-    
+  def edit 
   end
 
   def create

@@ -29,9 +29,7 @@
 
                 <label class="text-primary">Nro Documento</label><br>
                 <span id="documento">
-                <%part1 = bank.cpf[0, 9]%>
-                <%part2 = bank.cpf[-2,2]%> 
-                <%=number_with_precision(part1,delimiter: ".",precision: 0)%>-<%=part2%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+                <%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>

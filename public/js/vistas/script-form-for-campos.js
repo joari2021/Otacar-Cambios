@@ -224,7 +224,6 @@ function inputCPF(input) {
     input.classList.remove("is-valid");
     input.classList.add("is-invalid");
   }
-
 }
 
 function monto(input) {
@@ -270,7 +269,6 @@ function validarUsuario(input) {
 
   var re = / /g;
   var resultado = input.value.replace(re, "");
-  console.log(resultado);
 
   if (resultado != "") {
     input.value = resultado
@@ -280,6 +278,52 @@ function validarUsuario(input) {
     input.value = "";
     input.classList.remove("is-valid");
     input.classList.add("is-invalid");
+  }
+}
+
+function verifyBank(select){
+  campo_identidy = document.getElementById("validationCPF")
+  label_cp = document.getElementById("label-cp")
+  div_cp = document.getElementById("div-cp")
+  if (select.value === "Santander"){
+    campo_identidy.removeAttribute("oninput")
+    campo_identidy.setAttribute("oninput","habilitarSave(),inputCPNJ(this)")
+
+    label_cp.innerHTML = "Nro CPNJ *"
+    div_cp.innerHTML = "Ingrese un CPNJ válido"
+    
+  }else{
+    campo_identidy.removeAttribute("oninput")
+    campo_identidy.setAttribute("oninput","habilitarSave(),inputCPF(this)")
+
+    label_cp.innerHTML = "Nro CPF *"
+    div_cp.innerHTML = "Ingrese un CPF válido"
+  }
+  campo_identidy.value = ""
+  campo_identidy.classList.remove("is-valid")
+  campo_identidy.classList.add("is-invalid")
+}
+
+function inputCPNJ(input){
+  valor = input.value.replace(/\D/g, "");
+  valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
+  valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
+
+  if (valor.length === 14){
+    aux = valor.slice(0,12)
+    valor2 = aux.replace(/\D/g, "");
+    valor2 = valor2.replace(/([0-9])([0-9]{4})$/, "$1/$2");
+    valor2 = valor2.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+    valor3 = valor2 + "-" + valor.slice(12)
+    valor4 = valor3.slice(0,12) + valor3.slice(13)
+    input.value = valor4
+    input.classList.remove("is-invalid")
+    input.classList.add("is-valid")
+
+  }else{
+    input.value = valor
+    input.classList.remove("is-valid")
+    input.classList.add("is-invalid")
   }
 }
 //VALIDACIONES

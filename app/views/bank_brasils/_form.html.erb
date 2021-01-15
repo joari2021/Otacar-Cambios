@@ -78,16 +78,10 @@
     </div>
     <!--DNI y Banco-->
     <div class="form-row field mb-3">
-      <div class="col-12 col-sm-6 mb-2">
-        <label for="validationCPF">Nro CPF *</label>
-        <input class="form-control is-invalid" id="validationCPF" type="text" maxlength="14" oninput="inputCPF(this),habilitarSave()" name="bank_brasil[cpf]" value="<%=bank_brasil.cpf%>">
-        <div class="invalid-feedback">
-          Ingrese un CPF valido
-        </div>
-      </div>
+      
       <div class="col-12 col-sm-6 mb-2">
         <label>Banco *</label>
-        <select class="custom-select is-invalid" name="bank_brasil[bank]" onchange="validarSelect(this),habilitarSave()" required>
+        <select class="custom-select is-invalid" name="bank_brasil[bank]" onchange="validarSelect(this),habilitarSave(),verifyBank(this)" required>
           <option selected disabled value="">Elegir...</option>
           <option value="Banco Do Brasil" <%if bank_brasil.bank === "Banco Do Brasil"%>selected<%end%>>Banco Do Brasil</option>
           <option value="Bradesco" <%if bank_brasil.bank === "Bradesco"%>selected<%end%>>Bradesco</option>
@@ -98,6 +92,13 @@
           <option value="Santander" <%if bank_brasil.bank === "Santander"%>selected<%end%>>Santander</option>
         </select>
         <div class="invalid-feedback">Elige una opcion</div>
+      </div>
+      <div class="col-12 col-sm-6 mb-2">
+        <label for="validationCPF" id="label-cp">Nro CPF *</label>
+        <input class="form-control is-invalid" id="validationCPF" type="text" maxlength="14" oninput="inputCPF(this),habilitarSave()" name="bank_brasil[cpf]" value="<%=bank_brasil.cpf%>">
+        <div class="invalid-feedback" id="div-cp">
+          Ingrese un CPF válido
+        </div>
       </div>
     </div>
     <!--Banco-->
