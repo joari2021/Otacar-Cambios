@@ -26,7 +26,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def update
-      
+    
     unless current_user.is_admin?
       super
 
@@ -40,9 +40,11 @@ class RegistrationsController < Devise::RegistrationsController
       end
     else
       parametros = account_update_params_user
-      usuario_edit = User.find_by(document: parametros["document"])
-
-      if usuario_edit.present?
+      usuario_edit = User.find(parametros["id"])
+      
+      if usuario_edit.is_admin?
+        super
+      else
         respond_to do |format|
           if usuario_edit.update(account_update_params_user)
             format.html { redirect_to user_root_path, notice: "El perfil del usuario fue actualzado con exito." }
@@ -51,8 +53,6 @@ class RegistrationsController < Devise::RegistrationsController
             format.json { render json: @user.errors, status: :unprocessable_entity }
           end
         end
-      else
-        super
       end
     end
   end
@@ -98,13 +98,17 @@ class RegistrationsController < Devise::RegistrationsController
 
   def account_update_params
     if current_user.is_normal_user?
-      params.require(:user).permit(:phone, :address, :password, :password_confirmation, :current_password)
+      unless current_user.is_admin?
+        params.require(:user).permit(:phone, :address, :password, :password_confirmation, :current_password)
+      else
+        params.require(:user).permit(:name, :last_name, :document, :phone, :day, :month, :year, :gender, :country, :state, :city, :address, :password, :password_confirmation, :current_password, :second_name, :second_surname)
+      end
     elsif current_user.is_new_user? 
       params.require(:user).permit(:name, :last_name, :document, :phone, :day, :month, :year, :gender, :country, :state, :city, :address, :password, :password_confirmation, :current_password, :second_name, :second_surname, :num_referidor)
     end
   end
 
   def account_update_params_user
-    params.require(:user).permit(:email, :name, :last_name, :document, :address, :phone, :day, :month, :year, :gender, :country, :state, :city, :second_name, :second_surname, :num_referidor, :id)
+    params.require(:user).permit(:email, :name, :last_name, :document, :address, :phone, :day, :month, :year, :gender, :country, :state, :city, :second_name, :second_surname, :id)
   end
 end
