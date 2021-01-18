@@ -139,8 +139,10 @@ class TransactionsController < ApplicationController
     end
     
     @cupos_for_loterica = 0
-    bancos_caixa.each do |bank|
-      @cupos_for_loterica += bank.cupos_for_loterica
+    if bancos_caixa.present?
+      bancos_caixa.each do |bank|
+        @cupos_for_loterica += bank.cupos_for_loterica
+      end
     end
 
     @avalaible_banks = AvalaibleBank.all
