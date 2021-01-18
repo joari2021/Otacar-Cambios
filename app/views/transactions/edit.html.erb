@@ -301,6 +301,18 @@
                                                         </div> 
 
                                                         <%coincidencia = false%>
+                                                        
+                                                        <div class="col-6 text-right">Referido Por</div>
+                                                        <div class="col-6 text-left">
+
+                                                            <%id = @transaction.user.num_referidor.to_i / 4%>
+                                                            <%usuario = @users.find_by(id: id)%>
+                                                            <% if usuario.present?%>
+                                                                <%usuario.name.capitalize%> <%usuario.last_name.capitalize%>
+                                                            <%else%>
+                                                                Ningun usuario
+                                                            <%end%>
+                                                        </div> 
                                                                             
                                                     </div> 
                                                 </div>        
