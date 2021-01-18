@@ -304,8 +304,9 @@
 
                                                         <div class="col-6 text-right">Referido Por</div>
                                                         <div class="col-6 text-left">
-                                                            <%id = @transaction.users.num_referidor.to_i / 4%>
-                                                            <% if usuario = @users.where(id: id).present?%>
+                                                            <%id = @transaction.user.num_referidor.to_i / 4%>
+                                                            <%usuario = @users.where(id: id)%>
+                                                            <% if usuario.present?%>
                                                                 <%usuario.name.capitalize%> <%usuario.last_name.capitalize%>
                                                             <%else%>
                                                                 Ningun usuario
