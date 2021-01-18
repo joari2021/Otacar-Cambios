@@ -372,7 +372,7 @@
         </div>
         <div class="contenedor">     
             <div class="selectbox">
-                <div class="select" id="selectAccountUserDestino" onclick="activarFuncionSelectBoxAccountDestinityUser()">
+                <div class="select" id="selectAccountUserDestino" onclick="activarFuncionSelectBoxAccountDestinityUser(this)">
                     <div class="contenido-select text-center" id="contenidoSelectAccountUserDestinity">
                         <h2 class="titulo" id='tituloAccountUserDestino'>Elige una opcion</h2>
                     </div>
@@ -383,6 +383,35 @@
             </div>
             <input type="hidden" name="transaction[account_destinity_usuario]" id="inputAccountUserDestino" value="">    
         </div>
+        <!--
+        <div class="contenedor">     
+            <div class="selectbox">
+                <div class="select" id="selectAccountUserDestino" onclick="activarFuncionSelectBoxAccountDestinityUser(this,2)">
+                    <div class="contenido-select text-center" id="contenidoSelectAccountUserDestinity">
+                        <h2 class="titulo" id='tituloAccountUserDestino'>Elige una opcion</h2>
+                    </div>
+                    <i class="fas fa-angle-down"></i>
+                </div>
+
+                <div class="opciones" id="opcionesAccountUserDestino2"></div>
+            </div>
+            <input type="hidden" name="transaction[account_destinity_usuario]" id="inputAccountUserDestino" value="">    
+        </div>
+
+        <div class="contenedor">     
+            <div class="selectbox">
+                <div class="select" id="selectAccountUserDestino" onclick="activarFuncionSelectBoxAccountDestinityUser(this,3)">
+                    <div class="contenido-select text-center" id="contenidoSelectAccountUserDestinity">
+                        <h2 class="titulo" id='tituloAccountUserDestino'>Elige una opcion</h2>
+                    </div>
+                    <i class="fas fa-angle-down"></i>
+                </div>
+
+                <div class="opciones" id="opcionesAccountUserDestino3"></div>
+            </div>
+            <input type="hidden" name="transaction[account_destinity_usuario]" id="inputAccountUserDestino" value="">    
+        </div>
+        -->
     </div>
 </div>
 
@@ -752,6 +781,8 @@
     
     selectAccountUserDestino = document.querySelector('#selectAccountUserDestino');
     opcionesAccountUserDestino = document.querySelector('#opcionesAccountUserDestino');
+    //opcionesAccountUserDestino2 = document.querySelector('#opcionesAccountUserDestino2');
+    //opcionesAccountUserDestino3 = document.querySelector('#opcionesAccountUserDestino3');
 
     selectAccountAdminDestino = document.querySelector('#selectAccountAdminDestino');
     opcionesAccountAdminDestino = document.querySelector('#opcionesAccountAdminDestino');
@@ -1509,11 +1540,19 @@
     activarFuncionSelectBoxPaisDestinity();
     
     //SELECT BOX CUENTA DESTINO DEL USUARIO
-    function activarFuncionSelectBoxAccountDestinityUser(){
+    function activarFuncionSelectBoxAccountDestinityUser(select){
         
-        selectAccountUserDestino.classList.toggle('active');
+        select.classList.toggle('active');
         opcionesAccountUserDestino.classList.toggle('active');
-
+        /*
+        if (div_num === 1){
+            opcionesAccountUserDestino.classList.toggle('active');
+        }else if (div_num === 2){
+            opcionesAccountUserDestino2.classList.toggle('active');
+        }else if (div_num === 3){
+            opcionesAccountUserDestino3.classList.toggle('active');
+        }*/
+        
         //INACTIVAR SELECT BOX PAIS DESTINO
         selectPaisDestino.classList.remove('active');
         opcionesPaisDestino.classList.remove('active');
@@ -1529,7 +1568,6 @@
 
     function activarEnlace(e){
         e.preventDefault();
-        selectAccountUserDestino = document.querySelector('#selectAccountUserDestino');
         accountAdminDestino = document.querySelector('#accountAdminDestinity');
         opcionesAccountUserDestino = document.querySelector('#opcionesAccountUserDestino');
         contenidoSelectAccountUserDestino = document.querySelector('#selectAccountUserDestino .contenido-select');
@@ -1541,7 +1579,6 @@
         hiddenInputAccountUserDestino.value = e.currentTarget.id;
         document.getElementById("detail-cuenta-credito-usuario").innerHTML = e.currentTarget.querySelector('.titulo').innerText;
         accountAdminDestino.classList.remove("d-none");
-
     }
 
     //SELECT BOX CUENTA DESTINO DEL ADMIN
