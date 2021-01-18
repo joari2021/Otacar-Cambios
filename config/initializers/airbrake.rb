@@ -71,3 +71,4 @@ Airbrake.configure do |c|
 # integration with the Logger class from stdlib.
 # https://github.com/airbrake/airbrake#logger
 # Rails.logger = Airbrake::AirbrakeLogger.new(Rails.logger)
+end
