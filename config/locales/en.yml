@@ -35,6 +35,7 @@ en:
       user:
         one: Usuario
         other: Usuarios
+        current_password: "La contraseña "
     attributes:
       bank:
         name: "Primer Nombre:"

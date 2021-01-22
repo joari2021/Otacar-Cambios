@@ -1,4 +1,5 @@
 <%#image_tag url_for(@transaction_pendiente.comprobante), style:"width:100%"%>
+<%=render "partials/name-and-cod-of-banks"%>
 <%case method[0]
     when "banks"
         user_account.banks.each do |bank|
@@ -11,7 +12,14 @@
                 <%if bank.country === "Venezuela"%><%=bank.type_document%><%end%><span id="document"><%=bank.identidy%></span><br><hr>
 
                 <label class="text-primary">Banco</label><br>
-                <span id="banco"><%=bank.banco%></span><br><hr>
+                <span id="banco">
+                    <%array_banks = ["Banco De Venezuela","Banco Mercantil", "B.O.D", "Banco Banesco"]%>
+                    <%if array_banks.include?(bank.banco)%>
+                        <%=bank.banco%>
+                    <%else%>
+                        <%=@bancos[bank.banco]%>
+                    <%end%>
+                </span><br><hr>
                 
                 <label class="text-primary">Tipo de cuenta</label><br>
                 <span id="type-account"><%=bank.type_account%></span><br><hr>

@@ -11,7 +11,8 @@
                 <span id="documento<%=i%>"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
-                <span id="banco<%=i%>"><%=bank.banco%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
+                <span id="banco<%=i%>"><%array_banks = ["Banco De Venezuela","Banco Mercantil", "B.O.D", "Banco Banesco"]%><%if array_banks.include?(bank.banco)%><%=bank.banco%><%else%><%=@bancos[bank.banco]%><%end%></span>
+                <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
                 
                 <label class="text-primary">Tipo de cuenta</label><br>
                 <span id="type-account<%=i%>"><%=bank.type_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('type-account<%=i%>','Tipo de cuenta')"></i><br><hr>
@@ -28,8 +29,7 @@
                 <span id="titular<%=i%>"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
-                <span id="documento<%=i%>">
-                <%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
+                <span id="documento<%=i%>"><%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco<%=i%>"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>

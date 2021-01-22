@@ -184,9 +184,11 @@
                                                         <div class="col-7 text-left">
                                                             <%=account_bank.name%> <%=account_bank.last_name%>   
                                                         </div>
-                                                        <div class="col-5 text-right">CPF</div>
+                                                        <div class="col-5 text-right"><%if account_bank.bank != "Santander"%>CPF<%else%>CPNJ<%end%></div>
                                                         <div class="col-7 text-left">
-                                                            <%=account_bank.cpf%>  
+                                                            
+                                                            <%=account_bank.cpf%> 
+                                                            
                                                         </div>
                                                         <div class="col-5 text-right">Nro Agencia</div>
                                                         <div class="col-7 text-left">

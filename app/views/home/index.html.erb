@@ -347,6 +347,25 @@
                             "Banco Mercantil" => 0,
                             "B.O.D" => 0,
                             "Pago Movil" => 0,
+                            "0156" => 0,
+                            "0172" => 0,
+                            "0171" => 0,
+                            "0175" => 0,
+                            "0128" => 0,
+                            "0114" => 0,
+                            "0163" => 0,
+                            "0115" => 0,
+                            "0191" => 0,
+                            "0138" => 0,
+                            "0108" => 0,
+                            "0104" => 0,
+                            "0168" => 0,
+                            "0177" => 0,
+                            "0174" => 0,
+                            "0157" => 0,
+                            "0151" => 0,
+                            "0169" => 0,
+                            "0137" => 0,
                             
                             #BRASIL
                             "Brasil" => "country",
@@ -399,26 +418,60 @@
                         }
 
                         @transactions.where(status: "envio en proceso").each do |transaction|
-                            method = transaction.account_destinity_usuario.split("-")
+                            method_array = transaction.account_destinity_usuario.split(",")
+                            i = 1
+                            method_array.each do |sub_method_array|
+                                method = sub_method_array.split("-")
+                                case method[0]
+                                    when "banks"
+                                        if method_array.count > 1
+                                            if i === 1
+                                                monto_a_recibir = transaction.sub_monto_a_recibir_1 
+                                            elsif i === 2
+                                                monto_a_recibir = transaction.sub_monto_a_recibir_2
+                                            elsif i === 3
+                                                monto_a_recibir = transaction.sub_monto_a_recibir_3
+                                            end
+                                            monto_a_recibir.gsub!('.','')
+                                            monto_a_recibir.gsub!(',','.')
+                                            monto_a_recibir = monto_a_recibir.to_f
+                                            @accounts[Bank.find(method[1].to_i).banco] += monto_a_recibir
+                                        else
+                                            @accounts[Bank.find(method[1].to_i).banco] += transaction.monto_a_recibir
+                                        end
+                                        
+                                    when "bank_brasils"
+                                        @accounts[BankBrasil.find(method[1].to_i).bank] += transaction.monto_a_recibir
 
-                            case method[0]
-                                when "banks"
-                                    @accounts[Bank.find(method[1].to_i).banco] += transaction.monto_a_recibir
+                                    when "wallets"
+                                        @accounts[Wallet.find(method[1].to_i).wallet_name] += transaction.monto_a_recibir
 
-                                when "bank_brasils"
-                                    @accounts[BankBrasil.find(method[1].to_i).bank] += transaction.monto_a_recibir
+                                    when "wallet_with_users"
+                                        @accounts[WalletWithUser.find(method[1].to_i).wallet_name] += transaction.monto_a_recibir
 
-                                when "wallets"
-                                    @accounts[Wallet.find(method[1].to_i).wallet_name] += transaction.monto_a_recibir
+                                    when "digital_payments"
+                                        @accounts[DigitalPayment.find(method[1].to_i).payment_method] += transaction.monto_a_recibir
+                                    
+                                    when "mobile_payments"
+                                        
 
-                                when "wallet_with_users"
-                                    @accounts[WalletWithUser.find(method[1].to_i).wallet_name] += transaction.monto_a_recibir
-
-                                when "digital_payments"
-                                    @accounts[DigitalPayment.find(method[1].to_i).payment_method] += transaction.monto_a_recibir
-                                
-                                when "mobile_payments"
-                                    @accounts["Pago Movil"] += transaction.monto_a_recibir
+                                        if method_array.count > 1
+                                            if i === 1
+                                                monto_a_recibir = transaction.sub_monto_a_recibir_1 
+                                            elsif i === 2
+                                                monto_a_recibir = transaction.sub_monto_a_recibir_2
+                                            elsif i === 3
+                                                monto_a_recibir = transaction.sub_monto_a_recibir_3
+                                            end
+                                            monto_a_recibir.gsub!('.','')
+                                            monto_a_recibir.gsub!(',','.')
+                                            monto_a_recibir = monto_a_recibir.to_f
+                                            @accounts["Pago Movil"] += monto_a_recibir
+                                        else
+                                            @accounts["Pago Movil"] += transaction.monto_a_recibir
+                                        end
+                                end
+                                i+=1
                             end
                         end%>
                         <%country_img = ""%> 
@@ -431,7 +484,17 @@
 
                                     <td class="align-middle"><img src="/img/paises/<%=country_img%>.svg" class="img-fluid avatar" alt="<%=country_img%>" title="<%=country_img%>"/></td>
 
-                                    <td class="align-middle"><img src="/img/bancos/<%=llave%>.png" class="img-fluid avatar mr-2" alt="<%=llave%>" title="<%=llave%>"/><%=llave%></td>
+                                    <td class="align-middle"><img src="/img/bancos/<%=llave%>.png" class="img-fluid avatar mr-2" alt="<%=llave%>" title="<%=llave%>"/>
+                                    <%if country_img === "Venezuela"%>
+                                        <%array_banks = ["Banco De Venezuela","Banco Mercantil", "B.O.D", "Banco Banesco", "Pago Movil"]%>
+                                        <%if array_banks.include?(llave)%>
+                                            <%=llave%>
+                                        <%else%>
+                                            <%=@bancos[llave]%>
+                                        <%end%>
+                                    <%else%>     
+                                        <%=llave%>
+                                    <%end%></td>
                                     
                                     <%=render 'transactions/detectar-moneda', {country: country_img}%>
                                     <td class="align-middle"><span class=""><%=@moneda_destinity%> <%=number_with_precision(valor, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span></td>
@@ -522,6 +585,7 @@
     function refrescarNotifications() {
         $("#content-notify").load(window.location + '?randval='+ Math.random() + " #notify");
     }
+
 
     //REFRESCAR LAS NOTIFICACIONES EN EL MODAL
     function refrescarNotificationsModal(){

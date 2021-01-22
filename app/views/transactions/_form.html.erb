@@ -1026,7 +1026,7 @@
                     if ("<%=bank_user.country%>" === country){
                         <%admin.banks.each do |bank_admin| %>  
                             <%if bank_admin.status === "activo"%>
-                                <%if bank_admin.banco === bank_user.banco%>
+                                <%if bank_admin.banco === bank_user.banco || AvalaibleBank.where(bank: bank_user.banco).present?  %>
                                     //ENLACE
                                     var enlace = document.createElement("a");
                                     enlace.setAttribute("href","#");
@@ -1067,7 +1067,9 @@
                                     if (j===1){
                                         account += 1;
                                     }
-                                   
+                                    <%if AvalaibleBank.where(bank: bank_user.banco).present?%>
+                                        <%break%>
+                                    <%end%>
                                 <%end%>       
                             <%end%>
                         <%end%>

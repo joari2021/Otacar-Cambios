@@ -372,13 +372,17 @@
                                 <%end%>
                                 <%i+=1%>
                             <%end%>
-                            <%if method_array.count > 1%>
+                            
                                 
-                                <div class="text-center">
+                            <div class="text-center">
+                                <%if method_array.count > 1%>
                                     <label class="text-primary">Monto total a enviar</label><br>
-                                    <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
-                                </div>
-                            <%end%>
+                                <%else%>
+                                    <label class="text-primary">Monto a enviar</label><br>
+                                <%end%>
+                                <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            </div>
+                            
 
                             <button type="button" class="btn btn-copy-all" data-toggle="modal" data-target="#exampleModal">
                                 Ver perfil del usuario
@@ -592,13 +596,17 @@
                             </div>
 
                         <%end%>
-                        <%if method_array.count > 1%>
+                        
                                 
-                            <div class="text-center">
+                        <div class="text-center">
+                            <%if method_array.count > 1%>
                                 <label class="text-primary">Monto total a enviar</label><br>
-                                <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
-                            </div>
-                        <%end%>
+                            <%else%>
+                                <label class="text-primary">Monto a enviar</label><br>
+                            <%end%>
+                            <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                        </div>
+                        
                     </div>
                     <!--CUENTA DE OTACAR-->
                     <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
