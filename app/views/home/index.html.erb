@@ -111,9 +111,10 @@
                     <tr class="shadow-sm">
                         <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
 
-                        <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small></td>
+                        <td class="align-middle"><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small></td>
 
-                        <%method = transaction.account_destinity_usuario.split("-")
+                        <%method_array = transaction.account_destinity_usuario.split(",")
+                        method = method_array[0].split("-")
                         case method[0]
                             when "banks"
                                 account = Bank.find(method[1].to_i).name.capitalize + " " + Bank.find(method[1].to_i).last_name.capitalize
@@ -153,7 +154,7 @@
                         end%>
                         <td class="align-middle"><%=account%></td>
 
-                        <td class="align-middle"><img src="/img/<%=carpeta%>/<%=img%>.png" class="img-fluid avatar" alt="<%=title%>" title="<%=title%>"/></td>
+                        <td class="align-middle"><img src="/img/<%=carpeta%>/<%=img%>.png" class="img-fluid avatar" alt="<%=title%>" title="<%=title%>"/> <%if method_array.count > 1%><br> + <%=method_array.count-1%> Cta(s).<%end%></td>
                         
                         <%=render 'transactions/detectar-moneda', {country: transaction.country_destinity}%>
                         <td class="align-middle"><span class=""><%=@moneda_destinity%> <%=number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span></td>

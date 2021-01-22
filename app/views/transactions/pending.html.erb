@@ -154,7 +154,8 @@
                             <td><span class="d-block"><%=transaction.user.name%> <%=transaction.user.last_name%></span><small class="text-muted"><%=transaction.user.email%></small>
                             </td>
 
-                            <%method = transaction.account_destinity_usuario.split("-")%>
+                            <%method_array = transaction.account_destinity_usuario.split(",")%>
+                            <%method = method_array[0].split("-")%>
                             
                             <%case method[0]
                                 when "banks"
@@ -164,7 +165,7 @@
                                             part1 = bank.number_account[0, 4]
                                             part2 = bank.number_account[-4,4]%>
                                             <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
-                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                         <%end%>
                                     <%end%>
                                 <%when "bank_brasils"
@@ -175,7 +176,7 @@
                                             part2 = bank.number_account[-2,2]
                                         %>
                                             <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
-                                            <td class="align-middle"></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                         <%end%>
                                     <%end%>
                                 <%when "digital_payments"
@@ -186,7 +187,7 @@
                                             part2 = payment.number_phone[-4,4]
                                             %>
                                             <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
-                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                         <%end%>
                                     <%end%>
                                 <%when "mobile_payments"
@@ -197,9 +198,10 @@
                                             part2 = payment.number_phone[-4,4]
                                             %>
                                             <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=payment.bank%>" title="<%=payment.bank%>"/></td>
-                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                         <%end%>
                                     <%end%>
+                                    
                                 <%when "wallets"
                                     transaction.user.wallets.each do |wallet|
                                         
@@ -208,7 +210,7 @@
                                             part2 = wallet.email[-7,7]
                                             %>
                                             <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                         <%end%>
                                     <%end%>
                                 <%when "wallet_with_users"
@@ -220,7 +222,7 @@
 
                                             %>
                                             <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                            <td class="align-middle"><%=part1 + "****" + part2%></td>
+                                            <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                         <%end%>
                                     <%end%>
                             <%end%>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_11_164336) do
+ActiveRecord::Schema.define(version: 2021_01_21_174509) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -186,6 +186,11 @@ ActiveRecord::Schema.define(version: 2021_01_11_164336) do
     t.string "num_id", default: ""
     t.string "comprobante_pago_otacar"
     t.string "comprobante_pago_usuario"
+    t.string "sub_monto_a_recibir_1"
+    t.string "sub_monto_a_recibir_2"
+    t.string "sub_monto_a_recibir_3"
+    t.string "comprobante_pago_usuario2"
+    t.string "comprobante_pago_usuario3"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 

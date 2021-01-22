@@ -23,20 +23,51 @@
                 
                 <!--CUENTA DEL USUARIO--------------------------------------------------------------------->
                 <div class="tab-pane fade <%if @transaction.status != "presenta incidencia"%>show active<%end%>" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    
-                    <%@method = @transaction.account_destinity_usuario.split("-")%>
-                    <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
-                    
-                    <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
-                    <label class="text-primary">Monto a enviar</label><br>
-                    <%=@moneda_destinity%> <span id="monto_a_enviar"><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                    <%=render 'detectar-moneda', {:country => @transaction.country_destinity}%>
+                    <%method_array = @transaction.account_destinity_usuario.split(",")
+                    i = 1%>
+                    <%method_array.each do |method|%>
+                        <%@method = method.split("-")%>
+                        <%if @transaction.country_destinity === "Venezuela"%>
+                            <h6 class="text-center">Cuenta Nro <%=i%></h6>
+                        <%end%>
+                        <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
+                        <%if method_array.count > 1 && i === 1%>
+                            <label class="text-primary">Monto a recibir</label><br>
+                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                        <%elsif i === 2%>
+                            <label class="text-primary">Monto a recibir</label><br>
+                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                        <%elsif i === 3%>
+                            <label class="text-primary">Monto a recibir</label><br>
+                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                        <%end%>
+                        
 
-                    <label class="text-primary">Comprobante</label><br>
-                    <%if @transaction.status === "realizada"%>
-                        <%=render 'comprobante-pago', {identifier: "usuario", url: @transaction.comprobante_pago_usuario.url}%>
-                    <%else%>
-                        No hay ningun archivo...
+                        <label class="text-primary">Comprobante</label><br>
+                        <%if @transaction.status === "realizada"%>
+                            <%if i === 1%>
+                                <%imagen_url = @transaction.comprobante_pago_usuario.url%>
+                            <%elsif i === 2%>
+                                <%imagen_url = @transaction.comprobante_pago_usuario2.url%>
+                            <%elsif i === 3%>
+                                <%imagen_url = @transaction.comprobante_pago_usuario3.url%>
+                            <%end%>
+                            <%=render 'comprobante-pago', {identifier: "usuario", url: imagen_url}%>
+                        <%else%>
+                            No hay ningun archivo...<br><br>
+                        <%end%>
+                        <%i+=1%>
                     <%end%>
+
+                    <%if method_array.count > 1%>
+                        <hr>
+                        <div class="text-center">
+                            <label class="text-primary">Monto total a recibir</label><br>
+                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                        </div><br>
+                    <%end%>
+                    
                 </div>
                 <!--CUENTA DE OTACAR-->
                 <div class="tab-pane fade <%if @transaction.status === "presenta incidencia"%>show active<%end%>" id="home" role="tabpanel" aria-labelledby="home-tab">

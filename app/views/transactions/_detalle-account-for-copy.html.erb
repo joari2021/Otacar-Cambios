@@ -4,20 +4,20 @@
             
             if bank.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+                <span id="titular<%=i%>"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
                 <%if bank.country ==="Venezuela"%><%=bank.type_document%><%end%>
-                <span id="documento"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+                <span id="documento<%=i%>"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
-                <span id="banco"><%=bank.banco%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                <span id="banco<%=i%>"><%=bank.banco%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
                 
                 <label class="text-primary">Tipo de cuenta</label><br>
-                <span id="type-account"><%=bank.type_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('type-account','Tipo de cuenta')"></i><br><hr>
+                <span id="type-account<%=i%>"><%=bank.type_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('type-account<%=i%>','Tipo de cuenta')"></i><br><hr>
 
                 <label class="text-primary">Numero de cuenta</label><br>
-                <span id="number-account"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account','Numero de cuenta')"></i><br><hr>
+                <span id="number-account<%=i%>"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account<%=i%>','Numero de cuenta')"></i><br><hr>
             <%end%>
         <%end%>
     <%when "bank_brasils"
@@ -25,20 +25,20 @@
             
             if bank.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+                <span id="titular<%=i%>"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
-                <span id="documento">
-                <%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+                <span id="documento<%=i%>">
+                <%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
-                <span id="banco"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                <span id="banco<%=i%>"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
                 
                 <label class="text-primary">Nro de agencia</label><br>
-                <span id="number-agency"><%=bank.number_agency%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-agency','Nro de agencia')"></i><br><hr>
+                <span id="number-agency<%=i%>"><%=bank.number_agency%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-agency<%=i%>','Nro de agencia')"></i><br><hr>
 
                 <label class="text-primary">Numero de cuenta</label><br>
-                <span id="number-account"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account','Numero de cuenta')"></i><br><hr>
+                <span id="number-account<%=i%>"><%=bank.number_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-account<%=i%>','Numero de cuenta')"></i><br><hr>
             <%end%>
         <%end%>
     <%when "digital_payments"
@@ -46,13 +46,13 @@
             
             if payment.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+                <span id="titular<%=i%>"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label  class="text-primary">Pago digital</label><br>
-                <span id="payment-digital"><%=payment.payment_method%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('payment-digital','Pago digital')"></i><br><hr>
+                <span id="payment-digital<%=i%>"><%=payment.payment_method%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('payment-digital<%=i%>','Pago digital')"></i><br><hr>
 
                 <label class="text-primary">Numero de telefono</label><br>
-                <span id="number-phone"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
+                <span id="number-phone<%=i%>"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone<%=i%>','Numero de telefono')"></i><br><hr>
             <%end%>
         <%end%>
     <%when "mobile_payments"
@@ -60,16 +60,16 @@
             
             if payment.id.to_s === method[1]%>
                 <label class="text-primary">Nro Documento</label><br>
-                <span id="documento"><%=payment.document%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento','Nro documento')"></i><br><hr>
+                <span id="documento<%=i%>"><%=payment.document%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Nombre del banco</label><br>
-                <span id="banco"><%=@bancos[payment.bank]%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                <span id="banco<%=i%>"><%=@bancos[payment.bank]%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
 
                 <label class="text-primary">Codigo del banco</label><br>
-                <span id="banco"><%=payment.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco','Banco')"></i><br><hr>
+                <span id="banco<%=i%>"><%=payment.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
 
                 <label class="text-primary">Numero de telefono</label><br>
-                <span id="number-phone"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone','Numero de telefono')"></i><br><hr>
+                <span id="number-phone<%=i%>"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone<%=i%>','Numero de telefono')"></i><br><hr>
             <%end%>
         <%end%>
     <%when "wallets"
@@ -77,13 +77,13 @@
             
             if wallet.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+                <span id="titular<%=i%>"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Monedero</label><br>
-                <span id="monedero"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero','Monedero')"></i><br><hr>
+                <span id="monedero<%=i%>"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero<%=i%>','Monedero')"></i><br><hr>
 
                 <label class="text-primary">Correo Electronico</label><br>
-                <span id="email"><%=wallet.email%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('email','Correo Electrónico')"></i><br><hr>
+                <span id="email<%=i%>"><%=wallet.email%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('email<%=i%>','Correo Electrónico')"></i><br><hr>
             <%end%>
         <%end%>
     <%when "wallet_with_users"
@@ -91,13 +91,13 @@
             
             if wallet.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular','Titular de la cuenta')"></i><br><hr>
+                <span id="titular<%=i%>"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Monedero</label><br>
-                <span id="monedero"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero','Monedero')"></i><br><hr>
+                <span id="monedero<%=i%>"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero<%=i%>','Monedero')"></i><br><hr>
 
                 <label class="text-primary">Correo Electronico</label><br>
-                <span id="usuario"><%=wallet.usuario%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('usuario','Usuario')"></i><br><hr>
+                <span id="usuario<%=i%>"><%=wallet.usuario%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('usuario<%=i%>','Usuario')"></i><br><hr>
             <%end%>
         <%end%>
 <%end%>

@@ -21,19 +21,20 @@
                 </li>
             </ul>
             <div class="tab-content mt-3" id="myTabContent">
+                <!--CUENTAS DEL ADMIN-->
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <h5>Detalles de la transaccion<span class="float-right h5 <%if @minutos < 5%>text-danger<%else%>text-success<%end%>" id="td-time2"><i class="fas fa-history mr-1"></i><span id="minuto2"><%=@minutos%></span>:<span id="segundo2"><%=@segundos.to_s.rjust(2, '0')%></span></h5>
                     
                     <div class="mt-5">
 
                         <%@method = @transaction_pendiente.account_destinity_admin.split("-")%>
-                        <%= render 'detalle-account-for-copy', {transaction: @transaction_pendiente, user_account: @user_admin, method: @method} %>
+                        <%= render 'detalle-account-for-copy', {transaction: @transaction_pendiente, user_account: @user_admin, method: @method, i: 1} %>
                         
                         <%=render 'detectar-moneda', {:country => current_user.country}%>
                         <label class="text-primary">Monto a pagar</label><br>
                         <%=@moneda_destinity%> <span id="monto_pagar"><%= number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_pagar','Monto a pagar')"></i><br><hr>
 
-                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", :id => "form", multipart: true}) do |form| %>
+                        <%= form_with(model: @transaction, local: true, :html => { :class => "mb-5", :id => "form", multipart: true}) do |form| %>
                             <% if @transaction.errors.any? %>
                             <div id="error_explanation">
                                 <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -45,8 +46,28 @@
                                 </ul>
                             </div>
                             <% end %>
-                        
-                            <div class="custom-file mt-3">
+                            <%method_array = @transaction_pendiente.account_destinity_usuario.split(",")%>
+                            <%if method_array.count > 1%>
+                                <p>Ingresa el monto que deseas recibir en cada una de las cuentas de <%=@transaction_pendiente.country_destinity%> que seleccionaste.<p>
+                                <%i=1%>
+                                <div class="field">
+                                    <%method_array.each do |method|%>
+                                        <label for="validationMonto<%=i%>">Cuenta Nro <%=i%></label>
+                                        <input class="form-control is-invalid" id="validationMonto<%=i%>" type="text" name="transaction[sub_monto_a_recibir_<%=i%>]" oninput="monto(this),validarMonto(this,<%=i%>)" required>
+                                        <%i+=1%>
+                                    
+                                    <%end%>
+                                </div>
+
+                                <div class="mt-2">
+                                    <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
+                                    <span class="text-primary">Nota: </span> 
+                                   <span id="monto_total">Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: <%=@moneda_destinity%>  <%= number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></i></span><br><hr>
+                                </div>
+                            <%end%>
+
+
+                            <div class="custom-file mt-3 was-validated">
                                 <%=form.file_field :comprobante_pago_otacar, class:"custom-file-input", id:"validatedComprobante", required:"required", accept:"image/png, .jpeg, .jpg"%>
                                 <label class="custom-file-label" id="name-archivo" for="validatedComprobante" data-browse="Elegir">Comprobante de pago...</label>
                                 <div class="invalid-feedback">Solo puedes subir un archivo en formato jpg, jpeg o png</div>
@@ -67,17 +88,29 @@
                     
                     <div class="mt-5">
                         <%@user_account = current_user%>
-                        <%@method = @transaction_pendiente.account_destinity_usuario.split("-")%>
-                        <%= render 'detalle-account-for-view', {transaction: @transaction_pendiente, user_account: @user_account, method: @method} %>
+                        <%method_array = @transaction_pendiente.account_destinity_usuario.split(",")
+                        i = 1%>
+                        <%method_array.each do |method|%>
+                        <%@method = method.split("-")%>
+                            <%if @transaction_pendiente.country_destinity === "Venezuela"%>
+                                <h6 class="text-center">Cuenta Nro <%=i%></h6>
+                            <%end%>
+                            <%= render 'detalle-account-for-view', {transaction: @transaction_pendiente, user_account: @user_account, method: @method} %>
 
-                        <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
-                        <label class="text-primary">Monto a recibir</label><br>
-                        <%=@moneda_destinity%> <span><%= number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%i+=1%>
+                        <%end%>
+                        <%if method_array.count === 1%>
+                            <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
+                            <label class="text-primary">Monto a recibir</label><br>
+                            <%=@moneda_destinity%> <span><%= number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                        <%end%>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="/js/vistas/script-form-for-campos.js"></script>
     <script>
 
         spanMin2 = document.getElementById("minuto2");
@@ -134,6 +167,98 @@
             nameArchivo.innerHTML = this.files[0].name;
             $("#button").prop("disabled", this.files.length == 0);
         });
+
+        function validarMonto(input,nro_input){
+            <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
+            monto_total = <%=@transaction_pendiente.monto_a_recibir%>
+
+            inputs = document.getElementsByTagName("input")
+            span_monto_total = document.getElementById("monto_total")
+
+            for (i = 2; i<inputs.length-2; i++){
+                
+                valor = inputs[i].value.replace(/\D/g, "");
+                valor = valor.replace(/([0-9])([0-9]{2})$/, "$1.$2");
+                valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
+                
+                if(valor != ""){
+                    valor = parseFloat(valor)
+                    monto_total -= valor    
+                }
+                
+            }
+            
+            if (monto_total > 0){
+                valor = monto_total.toFixed(2).toString().replace(/\D/g, "");
+                valor = valor.replace(/([0-9])([0-9]{2})$/, "$1,$2");
+                valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+                
+                if (valor.length === 1){
+                    valor = "0,0".concat(valor);
+                }else if(valor.length === 2){
+                    if (valor === "00"){
+                        valor= "0,00";
+                    }else{
+                        valor = "0,".concat(valor);
+                    }
+                    
+                }else if(valor.length === 4){
+                    
+                    
+                }else if(valor.length === 5){
+                    if (valor[0] === "0") {
+                        valor= valor.slice(1);
+                    }else{
+                        
+                    }
+                    
+                }else{           
+                    limit = valor.length 
+                    for (i=0; i < limit; i++){
+                        if(valor[0] === "0" || valor[0] === "."){
+                            valor = valor.slice(1);
+                        }else{
+                            break;
+                        }  
+                    }
+                }
+                span_monto_total.innerHTML = "Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: <%=@moneda_destinity%> " + valor + "</i>"
+                for(i=2; i<inputs.length-2; i++){
+                    inputs[i].classList.remove("is-valid")
+                    inputs[i].classList.add("is-invalid")
+                }
+               
+            }else if(monto_total === 0){
+                input_vacio = false
+                for(i=2; i<inputs.length-2; i++){
+                    if (inputs[i].value === ""){
+                        input_vacio = true
+                    }
+                }
+                if (input_vacio === false){
+                    span_monto_total.innerHTML = "Los montos fueron ingresados correctamente. Carga el comprobante y presiona el boton continuar para enviar el pago."
+                    for(i=2; i<inputs.length-2; i++){
+                        inputs[i].classList.remove("is-invalid")
+                        inputs[i].classList.add("is-valid")
+                    }
+                }else{
+                    span_monto_total.innerHTML = "Debes distribuir el monto total en todas las cuentas sin excluir ninguna. Si entre las cuentas esta incluida una a la que no deseas enviar dinero cancela la transacción e inicia una nueva."
+                    for(i=2; i<inputs.length-2; i++){
+                        inputs[i].classList.remove("is-valid")
+                        inputs[i].classList.add("is-invalid")
+                    }
+                }
+                
+            }else if(monto_total < 0){
+                span_monto_total.innerHTML = "Los montos ingresados en conjunto exceden el monto disponible.<br><i>Monto Disponible: <%=@moneda_destinity%> <%=number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2)%>"+"</i>"
+
+                for(i=2; i<inputs.length-2; i++){
+                    inputs[i].classList.remove("is-valid")
+                    inputs[i].classList.add("is-invalid")
+                }
+            }
+            
+        }
     </script>
 <%else%> <!--VISTA DE ADMINISTRADOR ----------------------------------------------------------------------------------------->
     <%=render "partials/btn-back", link: url_for(pending_transactions_url)%>
@@ -225,13 +350,35 @@
 
                     <!--CUENTA DEL USUARIO--------------------------------------------------------------------->
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        
-                            <%@method = @transaction.account_destinity_usuario.split("-")%>
-                            <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
-                            
-                            <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
-                            <label class="text-primary">Monto a Enviar</label><br>
-                            <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%=render 'detectar-moneda', {:country => @transaction.country_destinity}%>
+                            <%method_array = @transaction.account_destinity_usuario.split(",")
+                            i = 1%>
+                            <%method_array.each do |method|%>
+                            <%@method = method.split("-")%>
+                                <%if @transaction.country_destinity === "Venezuela"%>
+                                    <h6 class="text-center">Cuenta Nro <%=i%></h6>
+                                <%end%>
+                                <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
+
+                                <%if method_array.count > 1 && i === 1%>
+                                    <label class="text-primary">Monto a enviar</label><br>
+                                    <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                                <%elsif i === 2%>
+                                    <label class="text-primary">Monto a enviar</label><br>
+                                    <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                                <%elsif i === 3%>
+                                    <label class="text-primary">Monto a enviar</label><br>
+                                    <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                                <%end%>
+                                <%i+=1%>
+                            <%end%>
+                            <%if method_array.count > 1%>
+                                
+                                <div class="text-center">
+                                    <label class="text-primary">Monto total a enviar</label><br>
+                                    <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                                </div>
+                            <%end%>
 
                             <button type="button" class="btn btn-copy-all" data-toggle="modal" data-target="#exampleModal">
                                 Ver perfil del usuario
@@ -359,67 +506,98 @@
                     <!--CUENTA DEL USUARIO--------------------------------------------------------------------->
                     <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         
-                        <%@method = @transaction.account_destinity_usuario.split("-")%>
-                        <%= render 'detalle-account-for-copy', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
                         
                         <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
-                        <label class="text-primary">Monto a enviar</label><br>
-                        <%=@moneda_destinity%> <span id="monto_a_enviar"><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar','Monto a enviar')"></i><br><hr>
-
-                        <button class="btn btn-copy-all" onclick="copyAll()">Copiar Todo</button>
-
+                        
                         <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", :id => "form"}) do |form| %>
                             <%if @transaction.errors.any?%>
-                            <div id="error_explanation">
-                                <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
-                            
-                                <ul>
-                                    <% @transaction.errors.full_messages.each do |message| %>
-                                    <li><%= message %></li>
-                                    <% end %>
-                                </ul>
-                            </div>
+                                <div id="error_explanation">
+                                    <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
+                                
+                                    <ul>
+                                        <% @transaction.errors.full_messages.each do |message| %>
+                                        <li><%= message %></li>
+                                        <% end %>
+                                    </ul>
+                                </div>
                             <%end%>
-                                <div class="custom-file mt-3">
-                                    <%=form.file_field :comprobante_pago_usuario, class:"custom-file-input", id:"validatedComprobante", required:"required", accept:"image/png, .jpeg, .jpg"%>
-                                    <label class="custom-file-label" id="name-archivo" for="validatedComprobante" data-browse="Elegir">Comprobante de pago...</label>
+                        <%method_array = @transaction.account_destinity_usuario.split(",")
+                            i = 1%>
+                            <%method_array.each do |method|%>
+                            <%@method = method.split("-")%>
+                                <%if @transaction.country_destinity === "Venezuela"%>
+                                    <h6 class="text-center mt-3">Cuenta Nro <%=i%></h6>
+                                <%end%>
+                                <%= render 'detalle-account-for-copy', {transaction: @transaction, user_account: @transaction.user, method: @method, i: i} %>
+
+                                <%if method_array.count > 1 && i === 1%>
+                                    <label class="text-primary">Monto a enviar</label><br>
+                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                <%elsif i === 2%>
+                                    <label class="text-primary">Monto a enviar</label><br>
+                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                <%elsif i === 3%>
+                                    <label class="text-primary">Monto a enviar</label><br>
+                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                <%end%>
+                            
+                                <a class="btn btn-copy-all" onclick="copyAll('monto_a_enviar<%=i%>')">Copiar Todo</a>
+
+                                <div class="custom-file my-4">
+                                    <%if i === 1%>
+                                        <%=form.file_field :comprobante_pago_usuario, class:"custom-file-input", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                    <%elsif i === 2%>
+                                        <%=form.file_field :comprobante_pago_usuario2, class:"custom-file-input", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                    <%elsif i === 3%>
+                                        <%=form.file_field :comprobante_pago_usuario3, class:"custom-file-input", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                    <%end%>
+                                    <label class="custom-file-label" id="name-archivo<%=i%>" for="validatedComprobante<%=i%>" data-browse="Elegir">Comprobante de pago...</label>
                                     <div class="invalid-feedback">Solo puedes subir un archivo en formato jpg, jpeg o png</div>
                                 </div>
+                                <%i+=1%>
+                            <%end%>
+                            
+                            <div class="actions mt-4">
+                                <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
+                                
+                                <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#staticBackdrop">
+                                    Rechazar
+                                </button>
 
-                                <div class="actions mt-4">
-                                    <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
-                                    
-                                    <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#staticBackdrop">
-                                        Rechazar
-                                    </button>
-
-                                    <!--MODAL-->
-                                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                    
-                                                <div class="modal-body text-center">
-                                                    Estas a punto de rechazar la transacción, especifica el motivo para que lo pueda ver el usuario.
-                                                    <div class="was-validated">
-                                                        <div class="mt-3">
-                                                            <label for="validationTextarea" class="text-primary">Motivo *</label>
-                                                            <textarea class="form-control" id="validationTextarea" name="transaction[motivo_rechazo]" required></textarea>
-                                                            <div class="invalid-feedback">
-                                                                Especifica el motivo.
-                                                            </div>
+                                <!--MODAL-->
+                                <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                
+                                            <div class="modal-body text-center">
+                                                Estas a punto de rechazar la transacción, especifica el motivo para que lo pueda ver el usuario.
+                                                <div class="was-validated">
+                                                    <div class="mt-3">
+                                                        <label for="validationTextarea" class="text-primary">Motivo *</label>
+                                                        <textarea class="form-control" id="validationTextarea" name="transaction[motivo_rechazo]" required></textarea>
+                                                        <div class="invalid-feedback">
+                                                            Especifica el motivo.
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="requerirComprobante">Cerrar</button>
-                                        
-                                                    <%= form.submit "Continuar", class:"btn btn-danger", id:"btnRechazar"%>
-                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="requerirComprobante">Cerrar</button>
+                                    
+                                                <%= form.submit "Continuar", class:"btn btn-danger", id:"btnRechazar"%>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
+                        <%end%>
+                        <%if method_array.count > 1%>
+                                
+                            <div class="text-center">
+                                <label class="text-primary">Monto total a enviar</label><br>
+                                <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            </div>
                         <%end%>
                     </div>
                     <!--CUENTA DE OTACAR-->
@@ -442,25 +620,50 @@
     
     <%end%>
     <script>
-        function copyAll(){
+        function copyAll(limit_span){
             divP = document.getElementById("profile");
             var textarea = document.createElement("textarea");
             var lista = document.createElement("ul");
         
             var spans = document.getElementsByTagName("span");
             var labels = document.getElementsByTagName("label");
-
+           
             for(i=0; i<spans.length; i++){
-                if (spans[i].id === "monto_a_enviar"){
+                if (spans[i].id === limit_span){
                     limit = i;
                     break;
                 }
             }
 
             textarea.value = "Datos"
-            for(i=1; i<=limit; i++){ 
+            if (limit_span === "monto_a_enviar1"){
+                inicio = 2
+            }else if (limit_span === "monto_a_enviar2"){
+                for(i=0; i<spans.length; i++){
+                    if (spans[i].id === "monto_a_enviar1"){
+                        inicio = i+1;
+                        break;
+                    }
+                }
+            }else if (limit_span === "monto_a_enviar3"){
+                for(i=0; i<spans.length; i++){
+                    if (spans[i].id === "monto_a_enviar2"){
+                        inicio = i+1;
+                        break;
+                    }
+                }
+            }
+
+            for(i=inicio; i<=limit; i++){ 
                 last_char = textarea.value.length;
-                textarea.value = textarea.value + "\\\n" + labels[i-1].innerText + ": " + spans[i].innerText;
+
+                //IDENTIFICAR EL NUMERO DEL LABEL PARA LOS DETALLES DE VARIAS CUENTAS DONDE ES NECESARIO DIFERENCIAR EL LABEL QUE PERTENECE AL INPUT_FILE DEL COMPROBANTE DE PAGO
+                if (inicio === 2){
+                    num_label = i-1
+                }else{
+                    num_label = i
+                }
+                textarea.value = textarea.value + "\\\n" + labels[num_label].innerText + ": " + spans[i].innerText;
                 textarea.value = textarea.value.slice(0,last_char) + textarea.value.slice(last_char+1);
             }
             
@@ -488,27 +691,50 @@
             }, 2000);
             
         }
+        
+        array_labels_file = [];
+        array_custom_file = [];
 
-        nameArchivo = document.getElementById("name-archivo");
-        comprobante = document.getElementById("validatedComprobante");
+        <%methods_array = @transaction.account_destinity_usuario.split(",")%>
+        for (i=1; i<= <%=method_array.count%>; i++){
+            array_labels_file.push(document.getElementById("name-archivo"+i));
+            array_custom_file.push(document.getElementById("validatedComprobante"+i));
+        }
+
         motivo = document.getElementById("validationTextarea");
         
-        $("#validatedComprobante").change(function(){
-            nameArchivo.innerHTML = this.files[0].name;
-            $("#button").prop("disabled", this.files.length == 0);
-        });
+        <%i = 0%>
+        <%method_array.each do |method|%>
+            $("#validatedComprobante<%=i+1%>").change(function(){
+                array_labels_file[<%=i%>].innerHTML = this.files[0].name;
 
+                validation = true
+                for(i=0; i < array_custom_file.length; i++){
+                    if (array_custom_file[i].files.length == 0){
+                        validation = false
+                    }
+                }
+                $("#button").prop("disabled", validation == false); 
+                
+            });
+            <%i+=1%>
+        <%end%>
+        
         $("#btnRechazar").click(function(){
-            nameArchivo.innerHTML = "Comprobante de pago...";
-            comprobante.value = "";
-            comprobante.removeAttribute("required");
+            for (i=0; i < <%=method_array.count%>; i++){
+                array_labels_file[i].innerHTML = "Comprobante de pago...";
+                array_custom_file[i].value = "";
+                array_custom_file[i].removeAttribute("required");
+            }
         });
         $("#button").click(function(){
             motivo.value = "";
             motivo.removeAttribute("required");
         });
         $("#requerirComprobante").click(function(){
-            comprobante.setAttribute("required","required");
+            for (i=0; i < <%=method_array.count%>; i++){
+               array_custom_file[i].setAttribute("required","required");
+            }
         });
     </script>
 <%end%>

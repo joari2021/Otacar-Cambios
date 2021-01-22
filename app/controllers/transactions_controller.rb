@@ -136,15 +136,15 @@ class TransactionsController < ApplicationController
             end
           end
       end
-    end
-    
-    @cupos_for_loterica = 0
-    if bancos_caixa.present?
-      bancos_caixa.each do |bank|
-        @cupos_for_loterica += bank.cupos_for_loterica
+
+      @cupos_for_loterica = 0
+      if bancos_caixa.present?
+        bancos_caixa.each do |bank|
+          @cupos_for_loterica += bank.cupos_for_loterica
+        end
       end
     end
-
+    
     @avalaible_banks = AvalaibleBank.all
   end
 
@@ -298,7 +298,9 @@ class TransactionsController < ApplicationController
             
             @transaction = current_user.transactions.create(transaction_params)
             
-            
+            @transaction.verify_methods
+=begin      
+            COMISION DEL PAGO MOVIL
             method_usuario = @transaction.account_destinity_usuario.split("-")
             if method_usuario[0] === "mobile_payments"
               bancos = ["0102", "0105", "0134", "0116"]
@@ -307,6 +309,7 @@ class TransactionsController < ApplicationController
                   monto_envio *= 1.003
                 end
             end
+=end
 
             @transaction.monto_envio = monto_envio
             @transaction.monto_a_recibir = resultado
@@ -433,16 +436,22 @@ class TransactionsController < ApplicationController
                   @transaction.account_destinity_admin = "bank_brasils-#{method_admin[1]}"
                 end
             end
+
+            #ENLAZAR LOS METODOS DE PAGO A LA TRANSACCION
+
             @transaction.num_id = 16.times.map { [*'0'..'9', *'A'..'Z'].sample }.join
             respond_to do |format|
                 if @transaction.save
-                   
-                    method_usuario = @transaction.account_destinity_usuario.split("-")
-                    model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
-                    num = model.transactions_in_process
-                    num += 1
-                    model.update(permit_delete:"denied",transactions_in_process:num)
                     
+                    method_usuario_array = @transaction.account_destinity_usuario.split(",")
+                    method_usuario_array.each do |method_usuario|
+                      sub_method_usuario = method_usuario.split("-")
+                      model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
+                      num = model.transactions_in_process
+                      num += 1
+                      model.update(permit_delete:"denied",transactions_in_process:num)
+                    end
+
                     method_admin = @transaction.account_destinity_admin.split("-")
                     model = find_method_for_id(method_admin[0],method_admin[1].to_i)
                     num = model.transactions_in_process
@@ -491,19 +500,72 @@ class TransactionsController < ApplicationController
   # PATCH/PUT /transactions/1.json
   def update
     unless  current_user.is_admin?
-      @transaction.update(transaction_params_user_edit)
-      @transaction.status = "por confirmar"
-    
-      respond_to do |format|
-        if @transaction.update(transaction_params_user_edit)
-          
-          @transaction.send_email()
-          format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }
-        else
-          format.html { render :edit }
-          format.json { render json: @transaction.errors, status: :unprocessable_entity }
+      validate_monto_total = true
+      
+      #MEJORAR EL CODIGO PARA VERIFICAR QUE LOS SUB MONTOS CONTENGAN CIFRAS QUE SEAN CORRECTAS Y NO INCLUYAN CARACTERES NO VALIDOS   ojooooooooooooooooooooooooooooooooooooo
+      if @transaction.country_destinity === "Venezuela"
+        parametros = transaction_params_user_edit
+        methods_array = @transaction.account_destinity_usuario.split(",")
+
+        if methods_array.count === 1
+          parametros["sub_monto_a_recibir_1"] = ""
+          parametros["sub_monto_a_recibir_2"] = ""
+          parametros["sub_monto_a_recibir_3"] = ""
+        elsif methods_array.count === 2
+          monto_1 = parametros["sub_monto_a_recibir_1"].gsub('.','')
+          monto_1.gsub!(',','.')
+          monto_1 = monto_1.to_f
+
+          monto_2 = parametros["sub_monto_a_recibir_2"].gsub('.','')
+          monto_2.gsub!(',','.')
+          monto_2 = monto_2.to_f
+
+          monto_total = @transaction.monto_a_recibir - monto_1 - monto_2
+
+          if monto_total != 0
+            validate_monto_total = false
+          else
+            parametros["sub_monto_a_recibir_3"] = ""
+          end
+
+        elsif methods_array.count === 3
+          monto_1 = parametros["sub_monto_a_recibir_1"].gsub('.','')
+          monto_1.gsub!(',','.')
+          monto_1 = monto_1.to_f
+
+          monto_2 = parametros["sub_monto_a_recibir_2"].gsub('.','')
+          monto_2.gsub!(',','.')
+          monto_2 = monto_2.to_f
+
+          monto_3 = parametros["sub_monto_a_recibir_3"].gsub('.','')
+          monto_3.gsub!(',','.')
+          monto_3 = monto_3.to_f
+
+          monto_total = @transaction.monto_a_recibir - monto_1 - monto_2 - monto_3
+
+          if monto_total != 0
+            validate_monto_total = false
+          end
+        end  
+      end
+
+      if validate_monto_total
+        respond_to do |format|
+          if @transaction.update(transaction_params_user_edit)
+            @transaction.update(status:"por confirmar")
+            
+            @transaction.send_email()
+            format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }
+          else
+            format.html { redirect_to edit_transaction_url(@transaction), alert: "El pago no se envio debido a un error en los datos ingresados, intentelo nuevamente." }
+          end
+        end
+      else
+        respond_to do |format| 
+          format.html { redirect_to edit_transaction_url(@transaction), alert: "Los montos ingresados no son válidos." }
         end
       end
+      
     else
       if @transaction.status === "por confirmar"
         @transaction.update(transaction_params_admin_edit)
@@ -526,9 +588,13 @@ class TransactionsController < ApplicationController
           respond_to do |format|
             if @transaction.update(status:"rechazada")
               notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción ID: #{@transaction.num_id}, fue rechazada",asunto:"Transacción rechazada")
-              method_usuario = @transaction.account_destinity_usuario.split("-")
-              model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
-              model.update(permit_delete:"only_user")
+
+              method_usuario_array = @transaction.account_destinity_usuario.split(",")
+              method_usuario_array.each do |method_usuario|
+                sub_method_usuario = method_usuario.split("-")
+                model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
+                model.update(permit_delete:"only_user")
+              end
               
               method_admin = @transaction.account_destinity_admin.split("-")
               model = find_method_for_id(method_admin[0],method_admin[1].to_i)
@@ -563,9 +629,14 @@ class TransactionsController < ApplicationController
           respond_to do |format|
             if @transaction.update(status:"realizada")
               notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio fue realizado con exito. Transacción ID: #{@transaction.num_id}.",asunto:"Envio realizado")
-              method_usuario = @transaction.account_destinity_usuario.split("-")
-              model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
-              model.update(permit_delete:"only_user")
+
+              method_usuario_array = @transaction.account_destinity_usuario.split(",")
+              method_usuario_array.each do |method_usuario|
+                sub_method_usuario = method_usuario.split("-")
+                model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
+                model.update(permit_delete:"only_user")
+              end
+              
               
               method_admin = @transaction.account_destinity_admin.split("-")
               model = find_method_for_id(method_admin[0],method_admin[1].to_i)
@@ -583,9 +654,13 @@ class TransactionsController < ApplicationController
           respond_to do |format|
             if @transaction.update(status:"presenta incidencia")
               notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio no fue realizado porque presenta una incidencia. ID Transacción: #{@transaction.num_id}",asunto:"Envio no realizado")
-              method_usuario = @transaction.account_destinity_usuario.split("-")
-              model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
-              model.update(permit_delete:"only_user")
+
+              method_usuario_array = @transaction.account_destinity_usuario.split(",")
+              method_usuario_array.each do |method_usuario|
+                sub_method_usuario = method_usuario.split("-")
+                model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
+                model.update(permit_delete:"only_user")
+              end
               
               method_admin = @transaction.account_destinity_admin.split("-")
               model = find_method_for_id(method_admin[0],method_admin[1].to_i)
@@ -607,19 +682,24 @@ class TransactionsController < ApplicationController
   # DELETE /transactions/1.json
   def destroy
     if @transaction.status === "rechazada" || @transaction.status === "en proceso" || @transaction.status === "presenta incidencia" || @transaction.status === "vencida" 
-      method_usuario = @transaction.account_destinity_usuario.split("-")
-      model = find_method_for_id(method_usuario[0],method_usuario[1].to_i)
-      num = model.transactions_in_process
-      num -= 1
-      model.update(transactions_in_process:num)
+      
+      method_usuario_array = @transaction.account_destinity_usuario.split(",")
+      method_usuario_array.each do |method_usuario|
+        sub_method_usuario = method_usuario.split("-")
+        model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
+        
+        num = model.transactions_in_process
+        num -= 1
+        model.update(transactions_in_process:num)
 
-      if model.view
-        if model.transactions_in_process <= 0
-          model.update(permit_delete:"permit")
-        end
-      else
-        if model.transactions_in_process <= 0
-          model.destroy
+        if model.view
+          if model.transactions_in_process <= 0
+            model.update(permit_delete:"permit")
+          end
+        else
+          if model.transactions_in_process <= 0
+            model.destroy
+          end
         end
       end
       
@@ -679,7 +759,12 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params_user_edit
-      params.require(:transaction).permit(:comprobante_pago_otacar)
+      if @transaction.country_destinity === "Venezuela"
+        params.require(:transaction).permit(:comprobante_pago_otacar, :sub_monto_a_recibir_1, :sub_monto_a_recibir_2, :sub_monto_a_recibir_3)
+      else
+        params.require(:transaction).permit(:comprobante_pago_otacar)
+      end
+      
     end
 
     def transaction_params_admin_edit
@@ -687,7 +772,7 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params_admin_process
-      params.require(:transaction).permit(:motivo_rechazo, :comprobante_pago_usuario)
+      params.require(:transaction).permit(:motivo_rechazo, :comprobante_pago_usuario, :comprobante_pago_usuario2, :comprobante_pago_usuario3)
     end
 
     #ENCONTRAR LOS METODOS DE PAGO POR ID

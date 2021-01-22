@@ -29,6 +29,7 @@ class NotificationsController < ApplicationController
     
     alert = false
     notice = false
+    info = ""
 
     #######  ENVIO A UN SOLO USUARIO #############
     if parametros["destinatarios"] === "uno"
