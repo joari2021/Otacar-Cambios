@@ -1901,7 +1901,7 @@
         <%admin.bank_brasils.where(view:true,status:"activo").each do |bank_admin|%>
             if ("<%=bank_admin.country%>" === country){
                 
-                <%if !caixaFind%>
+                <%unless caixaFind && bank_admin.bank === "Caixa"%>
                     //ENLACE
                     var enlace = document.createElement("a");
                     enlace.setAttribute("href","#");
