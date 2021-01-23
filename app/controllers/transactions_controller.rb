@@ -358,7 +358,7 @@ class TransactionsController < ApplicationController
                         if monto_envio <= 100  #PARA MONTOS MENORES A 100R$
                             
                             if config_deposit_loterica.count > 0
-                                config_deposit_loterica = ConfigLotericaDeposit.find(1)
+                                config_deposit_loterica = ConfigLotericaDeposit.find(2)
                                 
                                 if config_deposit_loterica.prioridad_min_1 > 0
                                     account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_1)
@@ -393,7 +393,7 @@ class TransactionsController < ApplicationController
                             end       
                         else    #PARA MONTOS MAYORES A 100R$
                             if config_deposit_loterica.count > 0
-                                config_deposit_loterica = ConfigLotericaDeposit.find(1)
+                                config_deposit_loterica = ConfigLotericaDeposit.find(2)
                                 
                                 if config_deposit_loterica.prioridad_min_1 > 0
                                     account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_1)
@@ -781,6 +781,8 @@ class TransactionsController < ApplicationController
         when "banks"
           model = Bank.find(id)
         when "bank_brasils"
+          model = BankBrasil.find(id)
+        when "caixa"
           model = BankBrasil.find(id)
         when "digital_payments"
           model = DigitalPayment.find(id)
