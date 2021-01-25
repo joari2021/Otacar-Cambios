@@ -17,7 +17,7 @@
             <tbody>
                 <%coincidencia = false%>
                 <%unless current_user.is_admin?%>
-                    <%current_user.transactions.each do |transaction|%>
+                    <%current_user.transactions.order("created_at DESC").each do |transaction|%>
                         <%if transaction.status === "realizada"%>
                             <%coincidencia = true%>
                             <tr class="shadow-sm">
