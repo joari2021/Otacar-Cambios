@@ -57,33 +57,37 @@ class RegistrationsController < Devise::RegistrationsController
 
   def destroy
   
-    usuario = User.find(params["usuario"]["id"].to_i)
+    usuario = User.find_by(id: params["usuario"]["id"].to_i)
 
-    unless usuario.is_admin?
-      usuario.notifications.destroy_all
-      usuario.transactions.destroy_all
-      usuario.banks.destroy_all
-      usuario.bank_brasils.destroy_all
-      usuario.wallets.destroy_all
-      usuario.wallet_with_users.destroy_all
-      usuario.digital_payments.destroy_all
-      usuario.mobile_payments.destroy_all
-
-      #DELETE DE NOTIFICATION DEL USUARIO
-      id = usuario.id * 4
-      notifications = Notification.where(dato_clave: id)
-      notifications.destroy_all 
-      #END
-      
-      respond_to do |format|
-        if usuario.destroy
-          format.html { redirect_to user_root_path, notice: "El usuario fue eliminado con exito." }
-        else
-          format.html { render edit_user_registration_path, alert: "El usuario no pudo ser eliminado, contacte con soporte para resolver el problema." }
+    if usuario.present?
+      unless  usuario.is_admin?
+        usuario.notifications.destroy_all
+        usuario.transactions.destroy_all
+        usuario.banks.destroy_all
+        usuario.bank_brasils.destroy_all
+        usuario.wallets.destroy_all
+        usuario.wallet_with_users.destroy_all
+        usuario.digital_payments.destroy_all
+        usuario.mobile_payments.destroy_all
+  
+        #DELETE DE NOTIFICATION DEL USUARIO
+        id = usuario.id * 4
+        notifications = Notification.where(dato_clave: id)
+        notifications.destroy_all 
+        #END
+        
+        respond_to do |format|
+          if usuario.destroy
+            format.html { redirect_to user_root_path, notice: "El usuario fue eliminado con exito." }
+          else
+            format.html { render edit_user_registration_path, alert: "El usuario no pudo ser eliminado, contacte con soporte para resolver el problema." }
+          end
         end
+      else
+        redirect_to user_root_path, alert: "Esta opcion no esta disponible para ti debido a que eres un administrador."
       end
     else
-      redirect_to edit_user_registration_path, alert: "Esta opción no esta disponible."
+      redirect_to user_root_path, alert: "El usuario es Invalido o esta opcion no esta disponible para ti."
     end
 
   end
