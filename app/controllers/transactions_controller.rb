@@ -9,9 +9,10 @@ class TransactionsController < ApplicationController
     @transactions = Transaction.order("created_at DESC").all
   end
 
+
   def status
 
-    ## IDENTIFICANDO TRANSACCIONES PENDIENTES ###############
+    ############# IDENTIFICANDO TRANSACCIONES PENDIENTES ###############
     current_user.transactions.each do |transaction|
       if transaction.status === "en proceso"
         segundos = (Time.now.utc - transaction.created_at).to_i
