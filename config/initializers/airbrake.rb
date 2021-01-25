@@ -72,4 +72,3 @@ Airbrake.configure do |c|
 # https://github.com/airbrake/airbrake#logger
 # Rails.logger = Airbrake::AirbrakeLogger.new(Rails.logger)
 end
-

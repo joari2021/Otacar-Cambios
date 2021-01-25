@@ -704,7 +704,7 @@
         array_custom_file = [];
 
         <%methods_array = @transaction.account_destinity_usuario.split(",")%>
-        for (i=1; i<= <%=method_array.count%>; i++){
+        for (i=1; i<= <%=methods_array.count%>; i++){
             array_labels_file.push(document.getElementById("name-archivo"+i));
             array_custom_file.push(document.getElementById("validatedComprobante"+i));
         }
