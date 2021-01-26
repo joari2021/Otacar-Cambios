@@ -1026,39 +1026,46 @@
                     if ("<%=bank_user.country%>" === country){
                         <%admin.banks.each do |bank_admin| %>  
                             <%if bank_admin.status === "activo"%>
-                                <%if bank_admin.banco === bank_user.banco || AvalaibleBank.where(bank: bank_user.banco).present?  %>
+                                <%if bank_admin.banco === bank_user.banco || AvalaibleBank.where(bank: bank_user.banco).present?%>
                                     //ENLACE
-                                    var enlace = document.createElement("a");
-                                    enlace.setAttribute("href","#");
-                                    enlace.setAttribute("id","banks-<%=bank_user.id%>");
+                                    var enlace = document.createElement("a")
+                                    enlace.setAttribute("href","#")
+                                    enlace.setAttribute("id","banks-<%=bank_user.id%>")
+                                    
                                     if (j === 1){
                                         enlace.setAttribute("onclick","activarEnlace(event)");
                                     }else{
                                         enlace.setAttribute("onclick","activarEnlace2(event,"+j+")");
                                     }
-                                    
                                     enlace.classList.add("opcion");
                                     
                                     //DIV PADRE
-                                    var divPadre = document.createElement("div");
+                                    divPadre = document.createElement("div");
                                     divPadre.classList.add("contenido-opcion");
                                     
                                     //IMAGEN
-                                    var img = document.createElement("img");
+                                    img = document.createElement("img");
                                     img.setAttribute("src","/img/bancos/<%=bank_user.banco%>.png");
 
+                                    //SPAN NOMBRE DEL TITULAR
+                                    spanTitular = document.createElement("span");
+                                    spanTitular.innerHTML = "<%=bank_user.name%> <%=bank_user.last_name%>";
+                                    spanTitular.classList.add("titulo","text-capitalize");
+
+
                                     //DIV HIJO
-                                    var divHijo = document.createElement("div");
-                                    divHijo.classList.add("textos");
+                                    divHijo = document.createElement("div");
+                                    divHijo.classList.add("textos","text-left");
 
                                     //H1
-                                    var h2 = document.createElement("h2");
+                                    h2 = document.createElement("h2");
                                     h2.classList.add("titulo","tam-h2");
                                     <%part1 = bank_user.number_account[0, 4]%>
                                     <%part2 = bank_user.number_account[-4,4]%>
                                     var content = document.createTextNode("<%=part1%>********<%=part2%>");
                                     
                                     h2.appendChild(content);
+                                    divHijo.appendChild(spanTitular);
                                     divHijo.appendChild(h2);
                                     divPadre.appendChild(img);
                                     divPadre.appendChild(divHijo);
@@ -1120,9 +1127,14 @@
                                     var img = document.createElement("img");
                                     img.setAttribute("src","/img/bancos/<%=bank_user.bank%>.png");
 
+                                   //SPAN NOMBRE DEL TITULAR
+                                    spanTitular = document.createElement("span");
+                                    spanTitular.innerHTML = "<%=bank_user.name%> <%=bank_user.last_name%>";
+                                    spanTitular.classList.add("titulo","text-capitalize");
+
                                     //DIV HIJO
-                                    var divHijo = document.createElement("div");
-                                    divHijo.classList.add("textos");
+                                    divHijo = document.createElement("div");
+                                    divHijo.classList.add("textos","text-left");
 
                                     //H1
                                     var h2 = document.createElement("h2");
@@ -1132,6 +1144,7 @@
                                     var content = document.createTextNode("<%=part1%>****<%=part2%>");
                                     
                                     h2.appendChild(content);
+                                    divHijo.appendChild(spanTitular);
                                     divHijo.appendChild(h2);
                                     divPadre.appendChild(img);
                                     divPadre.appendChild(divHijo);
@@ -1193,9 +1206,14 @@
                                     var img = document.createElement("img");
                                     img.setAttribute("src","/img/wallets/<%=wallet_user.wallet_name%>.png");
 
+                                    //SPAN NOMBRE DEL TITULAR
+                                    spanTitular = document.createElement("span");
+                                    spanTitular.innerHTML = "<%=wallet_user.name%> <%=wallet_user.last_name%>";
+                                    spanTitular.classList.add("titulo","text-capitalize");
+
                                     //DIV HIJO
-                                    var divHijo = document.createElement("div");
-                                    divHijo.classList.add("textos");
+                                    divHijo = document.createElement("div");
+                                    divHijo.classList.add("textos","text-left");
 
                                     //H1
                                     var h2 = document.createElement("h2");
@@ -1205,6 +1223,7 @@
                                     var content = document.createTextNode("<%=part1%>****<%=part2%>");
                                     
                                     h2.appendChild(content);
+                                    divHijo.appendChild(spanTitular);
                                     divHijo.appendChild(h2);
                                     divPadre.appendChild(img);
                                     divPadre.appendChild(divHijo);
@@ -1265,9 +1284,14 @@
                                     var img = document.createElement("img");
                                     img.setAttribute("src","/img/wallets/<%=wallet_user.wallet_name%>.png");
 
+                                    //SPAN NOMBRE DEL TITULAR
+                                    spanTitular = document.createElement("span");
+                                    spanTitular.innerHTML = "<%=wallet_user.name%> <%=wallet_user.last_name%>";
+                                    spanTitular.classList.add("titulo","text-capitalize");
+
                                     //DIV HIJO
-                                    var divHijo = document.createElement("div");
-                                    divHijo.classList.add("textos");
+                                    divHijo = document.createElement("div");
+                                    divHijo.classList.add("textos","text-left");
 
                                     //H1
                                     var h2 = document.createElement("h2");
@@ -1277,6 +1301,7 @@
                                     var content = document.createTextNode("<%=part1%>****<%=part2%>");
                                     
                                     h2.appendChild(content);
+                                    divHijo.appendChild(spanTitular);
                                     divHijo.appendChild(h2);
                                     divPadre.appendChild(img);
                                     divPadre.appendChild(divHijo);
@@ -1336,9 +1361,14 @@
                                     var img = document.createElement("img");
                                     img.setAttribute("src","/img/wallets/<%=payment_user.payment_method%>.png");
 
+                                    //SPAN NOMBRE DEL TITULAR
+                                    spanTitular = document.createElement("span");
+                                    spanTitular.innerHTML = "<%=payment_user.name%> <%=payment_user.last_name%>";
+                                    spanTitular.classList.add("titulo","text-capitalize");
+
                                     //DIV HIJO
-                                    var divHijo = document.createElement("div");
-                                    divHijo.classList.add("textos");
+                                    divHijo = document.createElement("div");
+                                    divHijo.classList.add("textos","text-left");
 
                                     //H1
                                     var h2 = document.createElement("h2");
@@ -1348,6 +1378,7 @@
                                     var content = document.createTextNode("<%=part1%>****<%=part2%>");
                                     
                                     h2.appendChild(content);
+                                    divHijo.appendChild(spanTitular);
                                     divHijo.appendChild(h2);
                                     divPadre.appendChild(img);
                                     divPadre.appendChild(divHijo);
@@ -1367,6 +1398,7 @@
         return account;
     }
     
+    /*INTEGRAR AQUI LA LECTURA DEL NOMBRE DEL TITULAR DEL PAGO MOVIL UNA VEZ SE AÑADAN LOS CAMPOS AL REGISTRO*/
     function optionMobilePayments(country){
         account = 0;
         j = 1;
