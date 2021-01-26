@@ -1,22 +1,57 @@
 <h4 class="text-center">Enviar Dinero</h4>
 
-<%if @rate.nil?%>
+<%if current_user.status_referencia === "confirmada"%>
+    <%if @rate.nil?%>
+        <div class="row justify-content-center mt-5">
+            <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+                <div class="alert alert-info text-justify" role="alert">
+                    Upsss!, lo sentimos, no esta disponible la opcion de enviar remesas desde <%=current_user.country%> hacia otros paises. Solo tenemos disponible la opcion de recibir dinero de los paises con los que trabajamos hacia <%=current_user.country%>. Si deseas recibir remesas de algun familiar, amigo, etc.. sugierele que se registre en nuestra pagina desde su pais y realice el envio desde allá.
+                </div>
+            </div>
+        </div>
+    <%elsif @transaction_pendiente%>
+        <div class="row justify-content-center mt-5">
+            <div class="col-12 col-sm-6 col-md-7 col-lg-6">
+                <div class="alert alert-warning text-center" role="alert">
+                    Hola <%=current_user.name.capitalize%>!. Tienes un pago pendiente que debes completar antes de poder iniciar otra transacción. Puedes acceder a ella si haces click en el siguiente enlace:<br><br>
+                    <a href="/transactions/<%=@transaction_pendiente.id%>/edit" class="text-warning special-link">Completar Pago.</a>
+                </div>
+            </div>
+        </div>
+    <%else%>
+        <%= render 'form', {transaction: @transaction, admin: @user_admin, rate: @rate} %>
+    <%end%>
+<%elsif current_user.status_referencia === "sin confirmar"%>
     <div class="row justify-content-center mt-5">
         <div class="col-12 col-sm-6 col-md-7 col-lg-6">
-            <div class="alert alert-info text-justify" role="alert">
-                Upsss!, lo sentimos, no esta disponible la opcion de enviar remesas desde <%=current_user.country%> hacia otros paises. Solo tenemos disponible la opcion de recibir dinero de los paises con los que trabajamos hacia <%=current_user.country%>. Si deseas recibir remesas de algun familiar, amigo, etc.. sugierele que se registre en nuestra pagina desde su pais y realice el envio desde allá.
+            <div class="alert alert-info" role="alert">
+                <p>Hola <%=current_user.name.capitalize%>!. Al momento de completar tu registro indicaste que quien te recomendo es el siguiente usuario:</p>
+                
+                <ul>
+                    <li>Numero de usuario: <span class="font-weight-bold"><%=current_user.num_referidor.to_s.rjust(9, '0')%></span></li>
+                    <%referidor = User.find_by(id: current_user.num_referidor.to_i/4)%>
+                    <li class="text-capitalize">Nombres: <span class="font-weight-bold"><%=referidor.name%> <%=referidor.second_name%> <%=referidor.last_name%> <%=referidor.second_surname%></span></li>
+                </ul>  
+
+                <p><span class="font-weight-bold"><%=referidor.name.capitalize%></span> aun no ha confirmado que te refirio y solo podrás enviar dinero despues de que confirme que efectivamente te recomendo. Cabe destacar que si rechaza la referencia no podras enviar dinero con esta cuenta de manera indefinida.</p>
+                
             </div>
         </div>
     </div>
-<%elsif @transaction_pendiente%>
+<%elsif current_user.status_referencia === "rechazada"%>
     <div class="row justify-content-center mt-5">
         <div class="col-12 col-sm-6 col-md-7 col-lg-6">
-            <div class="alert alert-warning text-center" role="alert">
-                Hola <%=current_user.name.capitalize%>!. Tienes un pago pendiente que debes completar antes de poder iniciar otra transacción. Puedes acceder a ella si haces click en el siguiente enlace:<br><br>
-                <a href="/transactions/<%=@transaction_pendiente.id%>/edit" class="text-warning special-link">Completar Pago.</a>
+            <div class="alert alert-danger" role="alert">
+                <p>Hola <%=current_user.name.capitalize%>!. Al momento de completar tu registro indicaste que quien te recomendo es el siguiente usuario:</p>
+                
+                <ul>
+                    <li>Numero de usuario: <span class="font-weight-bold"><%=current_user.num_referidor.to_s.rjust(9, '0')%></span></li>
+                    <%referidor = User.find_by(id: current_user.num_referidor.to_i/4)%>
+                    <li class="text-capitalize">Nombres: <span class="font-weight-bold"><%=referidor.name%> <%=referidor.second_name%> <%=referidor.last_name%> <%=referidor.second_surname%></span></li>
+                </ul>  
+
+                <p><span class="font-weight-bold"><%=referidor.name.capitalize%></span> rechazó la recomendación por lo que no podrás enviar dinero con esta cuenta. Si el usuario cometio un error al rechazar la referencia eligiendo una opcion no deseada indicale que se comunique con soporte para solventar el inconveniente.</p>
             </div>
         </div>
     </div>
-<%else%>
-    <%= render 'form', {transaction: @transaction, admin: @user_admin, rate: @rate} %>
 <%end%>
