@@ -43,7 +43,7 @@ class BankBrasilsController < ApplicationController
           end
         else
           @bank_brasil = current_user.bank_brasils.create(bank_brasil_params)
-          @bank_brasil.modify_cpf
+          @bank_brasil.modify_document
           respond_to do |format|
             if @bank_brasil.save
               format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
@@ -112,7 +112,7 @@ class BankBrasilsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def bank_brasil_params
-      params.require(:bank_brasil).permit(:name, :last_name, :country, :cpf, :bank, :number_agency, :number_account)
+      params.require(:bank_brasil).permit(:name, :second_name, :last_name, :country, :type_document, :document, :bank, :number_agency, :number_account)
     end
 
     def bank_brasil_edit_params

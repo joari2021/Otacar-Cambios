@@ -303,17 +303,19 @@ class TransactionsController < ApplicationController
               @transaction = current_user.transactions.create(transaction_params)
               
               @transaction.verify_methods
-=begin      
-            COMISION DEL PAGO MOVIL
-            method_usuario = @transaction.account_destinity_usuario.split("-")
-            if method_usuario[0] === "mobile_payments"
-              bancos = ["0102", "0105", "0134", "0116"]
-              bank_pago = MobilePayment.find(method_usuario[1].to_i).bank
-                if bancos.include?(bank_pago)
-                  monto_envio *= 1.003
+     
+              methods_usuario = @transaction.account_destinity_usuario.split(",")
+              if methods_usuario.length === 1
+                method_usuario = @transaction.account_destinity_usuario.split("-")
+                if method_usuario[0] === "mobile_payments"
+                  bancos = ["0102", "0105", "0134", "0116"]
+                  bank_pago = MobilePayment.find(method_usuario[1].to_i).bank
+                    if bancos.include?(bank_pago)
+                      comision = resultado - (resultado / 1.003)
+                      resultado -= comision
+                    end
                 end
-            end
-=end
+              end
 
               @transaction.monto_envio = monto_envio
               @transaction.monto_a_recibir = resultado

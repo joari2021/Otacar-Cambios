@@ -14,7 +14,7 @@
     <% end %>
         <div class="text-center">
             <div class="card bg-light my-3" style="max-width: 18rem;">
-                <div class="card-header text-capitalize"><%=bank.name%> <%=bank.last_name%></div>
+                <div class="card-header text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></div>
                 <div class="card-body">
                     <%
                         bancos = {
@@ -51,7 +51,7 @@
 <%else%>
     
     <div class="mt-3">
-        <%= form_with(model: bank, local: true, :html => {:id => "form"}) do |form| %>
+        <%= form_with(model: bank, local: true, :html => {:id => "form", :name => "formulario"}) do |form| %>
         <% if bank.errors.any? %>
         <div id="error_explanation" class="alert alert-danger">
         <h5 class="text-danger"><%if bank.errors.count > 1%><%=bank.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=bank.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
@@ -68,12 +68,12 @@
 
         <!--Nombre y Apellido-->
         <div class="form-row field my-3">
-            <div class="col-12 col-sm-4 mb-2">
+            <div class="col-12 col-sm-6 mb-2">
                 <label>Pais *</label>
                 <input class="form-control text-capitalize" value="<%=params[:country] || bank.country%>" name="bank[country]" readonly>
             </div>
 
-            <div class="col-12 col-sm-4 mb-2">
+            <div class="col-12 col-sm-6 mb-2">
                 <label for="validationName">Primer Nombre *</label>
 
                 <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="bank[name]" oninput="soloLetras(this)" onkeyup="habilitarSave()" autofocus="autofocus" maxlength="12" value="<%=bank.name%>" required>
@@ -82,7 +82,15 @@
                 </div>
             </div>
 
-            <div class="col-12 col-sm-4 mb-2">
+            <div class="col-12 col-sm-6 mb-2">
+                <label for="validationSecondName">Segundo Nombre</label>
+                <input type="text" class="form-control text-capitalize is-invalid" id="validationSecondName" name="bank[second_name]" oninput="soloLetras(this),habilitarSave()" maxlength="15" value="<%=bank.second_name%>">
+                <div class="invalid-feedback">
+                    Ingresa tu segundo nombre
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 mb-2">
                 <label for="validationLastName">Primer Apellido *</label>
 
                 <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="bank[last_name]" value="<%=bank.last_name%>" maxlength="12" oninput="soloLetras(this)" onkeyup="habilitarSave()" required>
@@ -94,7 +102,7 @@
 
         <!--DNI y Banco-->
         <div class="form-row field mb-3">
-            <%if params[:country] === "Venezuela"%>
+            <%if params[:country] === "Venezuela" || bank.country === "Venezuela"%>
                 <div class="col-3 col-md-3 col-lg-2 mb-2">
                     <label>Tipo *</label>
                     <select class="custom-select is-invalid" name="bank[type_document]" onchange="validarSelectDNI(this)" onkeyup="habilitarSave()" required>
@@ -107,7 +115,7 @@
                 </div>
                 <div class="col-9 col-md-4 col-lg-4 mb-2">
                     <label for="validationDNI">Nro Documento *</label>
-                    <input class="form-control is-invalid" id="validationDNI" type="text" name="bank[identidy]" value="<%=bank.identidy%>" disabled="disabled">
+                    <input class="form-control is-invalid" id="validationDNI" type="text" name="bank[identidy]" disabled="disabled">
                     <div class="invalid-feedback">
                         Ingrese un DNI valido
                     </div>
@@ -115,7 +123,7 @@
             <%else%>
                 <div class="col-12 col-md-7 col-lg-6 mb-2">
                     <label for="validationDNI">Nro Documento *</label>
-                    <input class="form-control is-invalid" id="validationDNI" maxlength="15" type="text" name="bank[identidy]" value="<%=bank.identidy%>" oninput="soloNumeros(this,6,15),habilitarSave()">
+                    <input class="form-control is-invalid" id="validationDNI" maxlength="15" type="text" name="bank[identidy]" oninput="soloNumeros(this,6,15),habilitarSave()">
                     <div class="invalid-feedback">
                         Ingrese un DNI valido
                     </div>
@@ -205,11 +213,39 @@
 
             <div class="col-12 col-sm-8 mb-2">
                 <label for="validationNumberAccount">Nro de Cuenta *</label>
-                <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,20,20)" onkeyup="habilitarSave()" name="bank[number_account]" value="<%=bank.number_account%>" required></input>
+                <%if params[:country] === "Venezuela" || bank.country === "Venezuela"%>
+                    <%min = 20%>
+                <%else%>
+                    <%min = 11%>
+                <%end%>
+                <input class="form-control is-invalid" id="validationNumberAccount" type="text" maxlength="20" oninput="soloNumeros(this,<%=min%>,20)" onkeyup="habilitarSave()" name="bank[number_account]" required>
                 <div class="invalid-feedback">
                     Ingrese un número de cuenta válido
                 </div>
             </div>
+        </div>
+        <%if params[:country] === "Venezuela" || bank.country === "Venezuela"%>
+        <div class="form-row field mb-3">        
+            <div class="col-12 col-sm-4 mb-2">
+                <div class="my-1">
+                    <div class="custom-control custom-checkbox mr-sm-2">
+                        <input type="checkbox" class="custom-control-input" id="customControlAutosizing" onclick="añadirNumero(this)">
+                        <label class="custom-control-label" for="customControlAutosizing">Añadir pago móvil (opcional)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%end%>
+
+        <div class="form-row field mb-3 d-none" id="caja_num_phone">  
+            <div class="col-12 col-sm-6">
+            
+                <label for="number_phone">Nro Telefono *</label>
+                <input class="is-invalid" oninput="formatNumberPhoneVzla(this),habilitarSave()" type="text" name="bank[number_phone]" maxlength="11" id="number_phone">
+                <div class="invalid-feedback">
+                    Ingresa el número afiliado al pago móvil
+                </div>
+            </div> 
         </div>
 
         <div class="actions">
@@ -222,35 +258,6 @@
 
     <script>
     
-        div = document.getElementsByTagName("div")[12];
-
-        var inputs = document.getElementsByTagName("input");
-        var select0 = document.getElementsByTagName("select")[0];
-        var select1 = document.getElementsByTagName("select")[1];
-        <%if params[:country] === "Venezuela"%>var select2 = document.getElementsByTagName("select")[2];<%end%>
-        if (div.id === "error_explanation"){
-            
-            soloLetras(input[2]);
-            soloLetras(input[3]);
-            soloNumeros(input[4],12);
-            validarSelect(select1);
-            <%if params[:country] === "Venezuela"%>validarSelect(select2);<%end%>
-            soloNumeros(input[5],20);
-        }
-
-        function habilitarSave() {
-            botonSave = document.getElementById("btn");
-            formulario = false
-            if (inputs[2].className.indexOf("is-valid") != -1 && inputs[3].className.indexOf("is-valid") != -1 && inputs[4].className.indexOf("is-valid") != -1 && inputs[5].className.indexOf("is-valid") != -1 && select0.className.indexOf("is-valid") != -1 && select1.className.indexOf("is-valid") != -1 <%if params[:country] === "Venezuela"%>&& select2.className.indexOf("is-valid") != -1<%end%>){
-                formulario = true;
-            }
-            if (formulario == true){
-                botonSave.removeAttribute("disabled");
-            }else{
-                botonSave.setAttribute("disabled","disabled");
-            }
-        }
-
         function validarSelectDNI(x) {
             select = x;
 
@@ -286,6 +293,20 @@
 
                 soloNumeros(input,9,9);
             }
+        }
+
+        number_phone = document.getElementById("number_phone")
+        caja_num_phone = document.getElementById("caja_num_phone")
+        function añadirNumero(checkbox){
+            
+            if (checkbox.checked === true){
+                caja_num_phone.classList.remove("d-none")
+                number_phone.setAttribute("required","required")
+            }else{
+                caja_num_phone.classList.add("d-none")
+                number_phone.removeAttribute("required")
+            }
+            habilitarSave()
         }
 
         

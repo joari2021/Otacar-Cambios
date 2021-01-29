@@ -1,10 +1,10 @@
-class EmailValidator < ActiveModel::EachValidator
-    def validate_each(record, attribute, value)
-        unless value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-        record.errors[attribute] << (options[:message] || " Es invalido")
-        end
-    end
-end
+#class EmailValidator < ActiveModel::EachValidator
+#    def validate_each(record, attribute, value)
+#        unless value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+#        record.errors[attribute] << (options[:message] || " Es invalido")
+#        end
+#    end
+#end
 
 class Wallet < ApplicationRecord
     belongs_to :user
@@ -15,6 +15,7 @@ class Wallet < ApplicationRecord
             if self.wallet_name != "Pix"
                 self.wallet_name = ""
             end
+            
         when "USA"
             if self.wallet_name != "Zelle"
                 self.wallet_name = ""
@@ -23,12 +24,9 @@ class Wallet < ApplicationRecord
         end
     end
     
-    validates :email, presence: true, email: true
+    validates :identificador, :name, :last_name, presence: {message: " Este campo no puede estar vacio"}
 
     validates :wallet_name, presence: {message: " La opción seleccionada es inválida"}
 
-    validates :name, :last_name, length: { maximum: 12, message: " El contenido es muy largo (caracteres maximos 12)" }
-
-    validates :name, :last_name, format: { with: /\A[a-zA-Z]+\z/,
-    message: " Este campo no puede estar vacio y solo acepta letras" }
+    validates :name, :second_name, :last_name, length: { maximum: 15, message: " (caracteres maximos 15)" }
 end

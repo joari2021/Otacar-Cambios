@@ -43,7 +43,27 @@ class BanksController < ApplicationController
           @bank = current_user.banks.create(bank_params)
           respond_to do |format|
             if @bank.save
-              format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito.' }
+              info_adicional = ""
+              if @bank.country === "Venezuela"
+                if @bank.number_phone.length === 11
+                  if @bank.banco === "Banco De Venezuela"
+                    banco = "0102"
+                  elsif @bank.banco === "Banco Banesco"
+                    banco = "0134"
+                  elsif @bank.banco === "B.O.D"
+                    banco = "0116"
+                  elsif @bank.banco === "Banco Mercantil"
+                    banco = "0105"
+                  else
+                    banco = @bank.banco
+                  end
+                  @mobile_payment = current_user.mobile_payments.create(country:@bank.country, bank:banco, number_phone:@bank.number_phone, document: @bank.type_document + "-" + @bank.identidy, name: @bank.name, second_name: @bank.second_name, last_name: @bank.last_name)
+                  info_adicional = "Pago Móvil registrado con exito"
+                else
+                  info_adicional = "El pago móvil no pudo ser registrado porque el número es invalido"
+                end
+              end
+              format.html { redirect_to payment_methods_path, notice: 'Cuenta bancaria registrada con exito. ' + info_adicional}
               format.json { render :show, status: :created, location: @bank }
             else
               format.html { render :new }
@@ -81,6 +101,7 @@ class BanksController < ApplicationController
   # DELETE /banks/1
   # DELETE /banks/1.json
   def destroy
+    #transactions = Transaction.where("account_destinity_usuario LIKE ?", "%banks-#{@bank.id}%")
     if @bank.permit_delete === "denied"
       respond_to do |format|
         format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción y debe terminar las transacciones que tenga en proceso para poder eliminarla.' }
@@ -109,7 +130,7 @@ class BanksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bank_params
-      params.require(:bank).permit(:name, :last_name, :identidy, :country, :banco, :number_account, :type_account, :type_document)
+      params.require(:bank).permit(:name, :second_name, :last_name, :identidy, :country, :banco, :number_account, :type_account, :type_document, :number_phone)
     end
 
     def bank_params2

@@ -1,5 +1,5 @@
 
-<%= form_with(model: config_loterica_deposit, local: true, :html => {:id => "form"}) do |form| %>
+<%= form_with(model: config_loterica_deposit, local: true, :html => {:id => "form", class:"text-capitalize"}) do |form| %>
 
   <%if params[:edit] === "less_than"%>
     <label for="ControlSelect1">Prioridad 1</label>
@@ -36,7 +36,7 @@
         option = document.createElement("option")
         option.setAttribute("value","<%=bank.id%>")
 
-        content = document.createTextNode("<%=bank.name.capitalize%> <%=bank.last_name.capitalize%>. Cta: <%=bank.number_account%>")
+        content = document.createTextNode("<%=bank.name%> <%=bank.second_name%> <%=bank.last_name%>. Cta: <%=bank.number_account%>")
         option.appendChild(content)
         selects[i].appendChild(option)
       <%end%>

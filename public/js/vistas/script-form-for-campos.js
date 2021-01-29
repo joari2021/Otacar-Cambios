@@ -11,8 +11,7 @@ function address(input) {
   }
 }
 
-function validarPassword(e) {
-  key = e.keyCode || e.which;
+function validarPassword() {
 
   password = document.getElementById("contraseña");
   confirmacionPassword = document.getElementById("confirmacion-contraseña");
@@ -34,6 +33,12 @@ function validarPassword(e) {
     icon1.classList.add("fa-check-circle");
 
     longitud = true;
+  } else {
+    art1.classList.remove("art-valid");
+    art1.classList.add("art-invalid");
+    icon1.classList.remove("fa-check-circle");
+    icon1.classList.add("fa-times-circle");
+    longitud = false;
   }
   if (valor == valorC && valor.length > 0) {
     art2.classList.remove("art-invalid");
@@ -50,25 +55,6 @@ function validarPassword(e) {
     coincidencia = false;
   }
 
-  if (key == 8) {
-    if (valor.length < 8) {
-      art1.classList.remove("art-valid");
-      art1.classList.add("art-invalid");
-      icon1.classList.remove("fa-check-circle");
-      icon1.classList.add("fa-times-circle");
-
-      longitud = false;
-    }
-    if (valor != valorC && valor.length > 0) {
-      art2.classList.remove("art-valid");
-      art2.classList.add("art-invalid");
-      icon2.classList.remove("fa-check-circle");
-      icon2.classList.add("fa-times-circle");
-
-      coincidencia = false;
-    }
-  }
-
   if (longitud && coincidencia) {
     password.classList.remove("is-invalid");
     password.classList.add("is-valid");
@@ -82,28 +68,23 @@ function validarPassword(e) {
   }
 }
 
-function validarCurrentPassword(e, input) {
-  key = e.keyCode || e.which;
-
+function validarCurrentPassword(input) {
+  
   password = input.value.toLowerCase();
 
-  var longitud = password.length;
+  longitud = password.length;
 
   if (longitud >= 8) {
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
-  }
-
-  if (key == 8) {
-    if (longitud < 8) {
-      input.classList.remove("is-valid");
-      input.classList.add("is-invalid");
-    }
+  }else{
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
   }
 }
 
 function soloLetras(input) {
-  var letras = "áéíóúabcdefghijklmnñopqrstuvwxyz";
+  var letras = "áéíóúabcdefghijklmnñopqrstuvwxyz ";
   newValor = "";
   for (i = 0; i < input.value.length; i++) {
     if (letras.indexOf(input.value[i].toLowerCase()) != -1) {
@@ -281,29 +262,6 @@ function validarUsuario(input) {
   }
 }
 
-function verifyBank(select){
-  campo_identidy = document.getElementById("validationCPF")
-  label_cp = document.getElementById("label-cp")
-  div_cp = document.getElementById("div-cp")
-  if (select.value === "Santander"){
-    campo_identidy.removeAttribute("oninput")
-    campo_identidy.setAttribute("oninput","habilitarSave(),inputCPNJ(this)")
-
-    label_cp.innerHTML = "Nro CPNJ *"
-    div_cp.innerHTML = "Ingrese un CPNJ válido"
-    
-  }else{
-    campo_identidy.removeAttribute("oninput")
-    campo_identidy.setAttribute("oninput","habilitarSave(),inputCPF(this)")
-
-    label_cp.innerHTML = "Nro CPF *"
-    div_cp.innerHTML = "Ingrese un CPF válido"
-  }
-  campo_identidy.value = ""
-  campo_identidy.classList.remove("is-valid")
-  campo_identidy.classList.add("is-invalid")
-}
-
 function inputCPNJ(input){
   valor = input.value.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
@@ -326,4 +284,111 @@ function inputCPNJ(input){
     input.classList.add("is-invalid")
   }
 }
+
+function formatCampoLlave(select){
+  inputIdentificador = document.getElementById("identificador")
+  msj = document.getElementById("msj_invalid_identificador")
+  if (select.value === "CPF"){
+    inputIdentificador.value = ""
+    inputIdentificador.classList.remove("is-valid")
+    inputIdentificador.classList.add("is-invalid")
+    inputIdentificador.setAttribute("oninput","inputCPF(this),habilitarSave()")
+    inputIdentificador.setAttribute("maxlength","14")
+    msj.innerHTML = "Ingresa un CPF válido"
+  }else if(select.value === "CPNJ"){
+    inputIdentificador.value = ""
+    inputIdentificador.classList.remove("is-valid")
+    inputIdentificador.classList.add("is-invalid")
+    inputIdentificador.setAttribute("oninput","inputCPNJ(this),habilitarSave()")
+    inputIdentificador.setAttribute("maxlength","18")
+    msj.innerHTML = "Ingresa un CPNJ válido"
+  }else if(select.value === "Celular"){
+    inputIdentificador.value = ""
+    inputIdentificador.classList.remove("is-valid")
+    inputIdentificador.classList.add("is-invalid")
+    inputIdentificador.setAttribute("oninput","soloNumeros(this,11,11),habilitarSave()")
+    inputIdentificador.setAttribute("maxlength","11")
+    msj.innerHTML = "Ingresa un número válido"
+  }else if(select.value === "Correo Electrónico"){
+    inputIdentificador.value = ""
+    inputIdentificador.classList.remove("is-valid")
+    inputIdentificador.classList.add("is-invalid")
+    inputIdentificador.setAttribute("oninput","validarEmail(this),habilitarSave()")
+    inputIdentificador.removeAttribute("maxlength")
+    msj.innerHTML = "Ingresa un email válido"
+  }
+}
+
+function habilitarSave() {
+  
+  botonSave = document.getElementById("btn");
+  elementosEnForm = document.forms['formulario'].elements;
+  elementInvalid = false
+  for (i=0; i< elementosEnForm.length; i++) {
+
+      if (elementosEnForm[i].type != 'hidden' && elementosEnForm[i].type != 'submit' && elementosEnForm[i].id != "country") {
+        if(elementosEnForm[i].required === true && elementosEnForm[i].classList.value.indexOf("is-invalid") != -1){
+          elementInvalid = true
+        }
+      }  
+  }
+  if (elementInvalid == false){
+    botonSave.removeAttribute("disabled");
+  }else{
+    botonSave.setAttribute("disabled", "disabled");
+  }
+    
+}
+
+function validarCampos(){
+  div = document.getElementsByTagName("div");
+
+  for (h=0; h<div.length; h++){
+    if (div[h].id === "error_explanation"){
+        
+      elementosEnForm = document.forms['formulario'].elements;
+      elementInvalid = false
+
+      for (k=0; k< elementosEnForm.length; k++) {
+          
+          for (j=0; j<elementosEnForm[k].attributes.length; j++){
+            
+            nameAttribute = elementosEnForm[k].attributes[j].name
+            stringAttributes = elementosEnForm[k].attributes[j].value
+          
+            if (nameAttribute === "oninput" || nameAttribute === "onchange") {
+              
+              if (stringAttributes.indexOf("address") != -1) {
+                
+                address(elementosEnForm[k])
+                break
+
+              }else if(stringAttributes.indexOf("soloLetras") != -1){
+
+                soloLetras(elementosEnForm[k])
+                break
+              }else if(stringAttributes.indexOf("formatNumberPhoneVzla") != -1){
+
+                formatNumberPhoneVzla(elementosEnForm[k])
+                break
+              }else if(stringAttributes.indexOf("formatDocumentoVzla") != -1){
+
+                formatDocumentoVzla(elementosEnForm[k])
+                break
+              }else if(stringAttributes.indexOf("validarSelect") != -1){
+
+                validarSelect(elementosEnForm[k])
+                break
+              }else if(stringAttributes.indexOf("validarEmail") != -1){
+
+                validarEmail(elementosEnForm[k])
+                break
+              }
+            }  
+          }
+      }
+    }
+  }
+}
+validarCampos()
 //VALIDACIONES

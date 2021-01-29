@@ -89,7 +89,7 @@
             Ingrese solo letras
         </div>
         <%else%>
-        <input class="form-control text-capitalize" value="<%=usuario.last_name%>" readonly>
+            <input class="form-control text-capitalize" value="<%=usuario.last_name%>" readonly>
         <%end%>
     </div>
 
@@ -135,7 +135,7 @@
 
     <div class="col-12 col-sm-5 mb-2">
         <label for="validationPhone">Telefono *</label>
-        <input class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationPhone" type="text" maxlength="15" oninput="return soloNumeros(this,5,15)" name="user[phone]" value="<%=usuario.phone%>" required>
+        <input class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationPhone" type="text" maxlength="12" oninput="return soloNumeros(this,10,12)" name="user[phone]" value="<%=usuario.phone%>" required>
         <div class="invalid-feedback">
             Ingrese solo numeros
         </div>
@@ -251,14 +251,12 @@
     <div class="form-row field mb-1">
         <div class="col-12 col-sm-6 mb-2">
             <%= f.label :password, "Contraseña **" %>
-            <%= f.password_field :password, autocomplete: "new-password", class:"form-control is-invalid", id:"contraseña",  onkeyup:"return validarPassword(event)" %>
-
+            <%= f.password_field :password, autocomplete: "new-password", class:"form-control is-invalid", id:"contraseña",  oninput:"validarPassword()" %>
         </div>
 
         <div class="col-12 col-sm-6">
             <%= f.label :password_confirmation, "Confirmar Contraseña **" %>
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control is-invalid", id:"confirmacion-contraseña", onkeyup:"return validarPassword(event)" %>
-
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control is-invalid", id:"confirmacion-contraseña", oninput:"validarPassword()" %>
         </div>
         <div class="validar-feedback ml-1">
             <article id="art-1" class="art-invalid"><i class="fas fa-times-circle" id="icon-1"></i> La contraseña debe tener minimo <%= @minimum_password_length %> caracteres</article>
@@ -313,7 +311,7 @@
 <%unless current_user.is_admin? && !usuario.is_admin?%>
 <div class="field my-3">
     <%= f.label :current_password, "Contraseña Actual" %>
-    <%= f.password_field :current_password, autocomplete: "current-password", class:"is-invalid", onkeyup:"return validarCurrentPassword(event, this)" %>
+    <%= f.password_field :current_password, autocomplete: "current-password", class:"is-invalid", oninput:"validarCurrentPassword(this)" %>
     <div class="invalid-feedback">
         Debes ingresar tu contraseña actual para confirmar los cambios
     </div>

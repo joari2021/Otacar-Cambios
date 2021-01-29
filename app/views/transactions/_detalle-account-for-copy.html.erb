@@ -4,7 +4,7 @@
             
             if bank.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular<%=i%>"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
+                <span id="titular_bank<%=i%>" class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular_bank<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
                 <%if bank.country ==="Venezuela"%><%=bank.type_document%><%end%>
@@ -26,10 +26,10 @@
             
             if bank.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular<%=i%>"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
+                <span id="titular_bank_brasil<%=i%>" class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular_bank_brasil<%=i%>','Titular de la cuenta')"></i><br><hr>
 
-                <label class="text-primary">Nro Documento</label><br>
-                <span id="documento<%=i%>"><%=bank.cpf%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
+                <label class="text-primary">Nro <%=bank.type_document%></label><br>
+                <span id="documento<%=i%>"><%=bank.document%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro <%=bank.type_document%>')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco<%=i%>"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
@@ -46,7 +46,7 @@
             
             if payment.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular<%=i%>"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
+                <span id="titular_digital_payment<%=i%>"><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular_digital_payment<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label  class="text-primary">Pago digital</label><br>
                 <span id="payment-digital<%=i%>"><%=payment.payment_method%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('payment-digital<%=i%>','Pago digital')"></i><br><hr>
@@ -59,6 +59,9 @@
         user_account.mobile_payments.each do |payment|
             
             if payment.id.to_s === method[1]%>
+                <label class="text-primary">Titular de la cuenta</label><br>
+                <span class="text-capitalize" id="titular_mobile_payment<%=i%>"><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular_mobile_payment<%=i%>','Titular de la cuenta')"></i><br><hr>
+
                 <label class="text-primary">Nro Documento</label><br>
                 <span id="documento<%=i%>"><%=payment.document%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
 
@@ -66,7 +69,7 @@
                 <span id="banco<%=i%>"><%=@bancos[payment.bank]%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
 
                 <label class="text-primary">Codigo del banco</label><br>
-                <span id="banco<%=i%>"><%=payment.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
+                <span id="cod_banco<%=i%>"><%=payment.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('cod_banco<%=i%>','Codigo del Banco')"></i><br><hr>
 
                 <label class="text-primary">Numero de telefono</label><br>
                 <span id="number-phone<%=i%>"><%=payment.number_phone%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-phone<%=i%>','Numero de telefono')"></i><br><hr>
@@ -77,13 +80,13 @@
             
             if wallet.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular<%=i%>"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
+                <span class="text-capitalize" id="titular_wallet<%=i%>"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular_wallet<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Monedero</label><br>
                 <span id="monedero<%=i%>"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero<%=i%>','Monedero')"></i><br><hr>
 
-                <label class="text-primary">Correo Electronico</label><br>
-                <span id="email<%=i%>"><%=wallet.email%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('email<%=i%>','Correo Electrónico')"></i><br><hr>
+                <label class="text-primary"><%=wallet.type_identificador%></label><br>
+                <span id="identificador<%=i%>"><%=wallet.identificador%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('identificador<%=i%>','<%=wallet.type_identificador%>')"></i><br><hr>
             <%end%>
         <%end%>
     <%when "wallet_with_users"
@@ -91,7 +94,7 @@
             
             if wallet.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="titular<%=i%>"><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular<%=i%>','Titular de la cuenta')"></i><br><hr>
+                <span class="text-capitalize" id="titular_wallet_users<%=i%>"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular_wallet_users<%=i%>','Titular de la cuenta')"></i><br><hr>
 
                 <label class="text-primary">Monedero</label><br>
                 <span id="monedero<%=i%>"><%=wallet.wallet_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monedero<%=i%>','Monedero')"></i><br><hr>

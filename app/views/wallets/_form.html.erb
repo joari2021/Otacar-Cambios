@@ -1,23 +1,27 @@
 <%if vista === "edit" && current_user.is_admin?%>
     <div class="form-row justify-content-center">
-    <%= form_with(model: wallet, local: true, :html => {:class => "was-validated", :id => "form"}) do |form| %>
-    <% if wallet.errors.any? %>
-    <div id="error_explanation" class="alert alert-danger">
-      <h5 class="text-danger"><%if wallet.errors.count > 1%><%=wallet.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=wallet.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
-      <ul class="list-style-square">
-        <% wallet.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+      <%= form_with(model: wallet, local: true, :html => {:class => "was-validated", :id => "form"}) do |form| %>
+        <% if wallet.errors.any? %>
+          <div id="error_explanation" class="alert alert-danger">
+            <h5 class="text-danger"><%if wallet.errors.count > 1%><%=wallet.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=wallet.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>
+            <ul class="list-style-square">
+              <% wallet.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
-    </div>
-    <% end %>
         <div class="text-center">
             <div class="card bg-light my-3" style="max-width: 18rem;">
-                <div class="card-header text-capitalize"><%=wallet.name%> <%=wallet.last_name%></div>
+                <div class="card-header text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></div>
                 <div class="card-body">
                     
-                    <%part1 = wallet.email[0, 4]%>
-                    <%part2 = wallet.email[-9,9]%> 
+                    <%part1 = wallet.identificador[0, 4]
+                    if wallet.type_identificador === "Correo Electrónico"
+                        part2 = wallet.identificador[-10,10]
+                    else
+                        part2 = wallet.identificador[-5,5]
+                    end%> 
                     <p class="card-text"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/> <span class=""><%=part1 + "****" + part2%></span></p>
                 </div>
             </div>
@@ -37,10 +41,10 @@
             <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5 mr-1", id:"btn" %>
             <%= link_to 'Volver', payment_methods_path, class:"btn btn-success mt-3 mb-5 ml-1 float-right" %>
         </div>
-    <%end%>
+      <%end%>
      </div>
 <%else%>
-<%= form_with(model: wallet, local: true, :html => {:id => "form"}) do |form| %>
+<%= form_with(model: wallet, local: true, :html => {:id => "form",:name => "formulario"}) do |form| %>
   <% if wallet.errors.any? %>
     <div id="error_explanation" class="alert alert-danger">
       <h5 class="text-danger"><%= pluralize(wallet.errors.count, "error")%><%if wallet.errors.count > 1%> han sido detectados en los siguientes campos:<%else%> ha sido detectado en el siguiente campo:<%end%></h5>
@@ -52,51 +56,80 @@
     </div>
   <% end %>
   <div class="field">
-        <h6>* : Campos Obligatorios</h6>
-    </div>
+      <h6>* : Campos Obligatorios</h6>
+  </div>
+
+  <!--NOMBRE DE LA WALLET-->
+  <%if params[:country] === "Brasil" || wallet.country === "Brasil"%>
+    <input type="hidden" value="Pix" name="wallet[wallet_name]">
+  <%elsif params[:country] === "USA" || wallet.country === "USA"%>
+    <input type="hidden" value="Zelle" name="wallet[wallet_name]">
+  <%end%>
+
   <div class="form-row field my-2">
-    <div class="col-12 col-sm-4 mb-2">
+    <div class="col-12 col-sm-5 mb-2">
       <label>Pais *</label>
-      <input class="form-control text-capitalize" value="<%=params[:country] || wallet.country%>" name="wallet[country]" readonly>
+      <input class="form-control text-capitalize" id="country" value="<%=params[:country] || wallet.country%>" name="wallet[country]" readonly>
     </div>
+
+    <div class="col-12 col-sm-7 mb-2">
+    <%if params[:country] === "Brasil" || wallet.country === "Brasil"%>
+      
+        <label for="validationBank">Banco *</label>
+        <input type="text" class="form-control text-capitalize is-invalid" autofocus="autofocus" id="validationBank" name="wallet[bank]" value="<%=wallet.bank%>" maxlength="20" oninput="address(this),habilitarSave()" required>
+        <div class="invalid-feedback">
+            Ingrese el nombre del banco
+        </div>
+      
+    <%elsif params[:country] === "USA" || wallet.country === "USA"%>
+        <label for="email">Correo Electrónico *</label>
+        <input class="is-invalid" autofocus="autofocus" oninput="validarEmail(this),habilitarSave()" type="text" name="wallet[identificador]" value="<%=wallet.identificador%>" id="email" required>
+        <div class="invalid-feedback">Ingresa un Correo válido</div>
+    <%end%>
+    </div>
+  </div>
+  <div class="form-row field mb-2">
     <div class="col-12 col-sm-4 mb-2">
       <label for="validationName">Primer Nombre *</label>
-      <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="wallet[name]" oninput="soloLetras(this)" onkeyup="habilitarSave()" autofocus="autofocus" maxlength="12" value="<%=wallet.name%>" required>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationName" name="wallet[name]" oninput="soloLetras(this),habilitarSave()" maxlength="15" value="<%=wallet.name%>" required>
+      <div class="invalid-feedback">
+        Ingresa solo letras
+      </div>
+    </div>
+    <div class="col-12 col-sm-4 mb-2">
+      <label for="validationSecondName">Segundo Nombre</label>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationSecondName" name="wallet[second_name]" oninput="soloLetras(this),habilitarSave()" maxlength="15" value="<%=wallet.second_name%>">
       <div class="invalid-feedback">
         Ingresa solo letras
       </div>
     </div>
     <div class="col-12 col-sm-4 mb-2">
       <label for="validationLastName">Primer Apellido *</label>
-      <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="wallet[last_name]" value="<%=wallet.last_name%>" maxlength="12" oninput="soloLetras(this)" onkeyup="habilitarSave()" required>
+      <input type="text" class="form-control text-capitalize is-invalid" id="validationLastName" name="wallet[last_name]" value="<%=wallet.last_name%>" maxlength="15" oninput="soloLetras(this),habilitarSave()" required>
       <div class="invalid-feedback">
         Ingresa solo letras
       </div>
     </div>
-  </div>
-  <div class="form-row field mb-2">
-    <div class="col-12 col-sm-5 mb-2">
-      <label>Monedero Digital *</label>
 
-      <select class="custom-select is-invalid" name="wallet[wallet_name]" onchange="validarSelect(this),habilitarSave()" required>
-          <option selected disabled value="">Elegir...</option>
-          <%country = params[:country] || wallet.country%>
-          <%case country%>
-          <%when "Brasil"%>
-            <option value="Pix" <%if wallet.wallet_name === "Pix"%>selected<%end%>>Pix</option>
-          <%when "USA"%>
-            <option value="Zelle" <%if wallet.wallet_name === "Zelle"%>selected<%end%>>Zelle</option>
-          <%end%>
-      </select>
-      <div class="invalid-feedback">Elige una opcion</div>
-    </div>
-    <div class="col-12 col-sm-7">
-        <label for="wallet_email">Correo Electronico *</label>
-        <input class="is-invalid" oninput="validarEmail(this)" onkeyup="habilitarSave()" type="text" value="<%=wallet.email%>" name="wallet[email]" id="wallet_email">
-        <div class="invalid-feedback">
-          Ingresa un correo valido
-        </div>
-    </div>
+    <%if params[:country] === "Brasil" || wallet.country === "Brasil"%>
+      <div class="col-12 col-sm-5 mb-2">
+        <label>Tipo *</label>
+
+        <select class="custom-select is-invalid" name="wallet[type_identificador]" onchange="validarSelect(this),formatCampoLlave(this),habilitarSave()" required>
+            <option selected disabled value="">Elegir...</option>
+            <option value="CPF">CPF</option>
+            <option value="CPNJ">CPNJ</option>
+            <option value="Celular">Celular</option>
+            <option value="Correo Electrónico">Correo Electrónico</option>
+        </select>
+        <div class="invalid-feedback">Elige una opción</div>
+      </div>
+      <div class="col-12 col-sm-7">
+          <label>Llave</label>
+          <input class="is-invalid" oninput="" type="text" name="wallet[identificador]" id="identificador" required>
+          <div class="invalid-feedback" id="msj_invalid_identificador"><!--Lo llena el Script--></div>
+      </div>
+    <%end%>
   </div>
   <div class="actions">
     <%= form.submit "Guardar", class:"btn btn-success mt-3 mb-5", id:"btn", disabled:"disabled" %>
@@ -105,32 +138,3 @@
 <%end%>
 <%end%>
 <script src="/js/vistas/script-form-for-campos.js"></script>
-
-<script>
-  
-  div = document.getElementsByTagName("div")[11];
-
-  var input = document.getElementsByTagName("input");
-  var select = document.getElementsByTagName("select")[0];
-
-  if (div.id === "error_explanation"){
-        
-    soloLetras(input[2]);
-    soloLetras(input[3]);
-    validarEmail(input[4]);
-    validarSelect(select);
-  } 
-
-  function habilitarSave() {
-    botonSave = document.getElementById("btn");
-    formulario = false
-    if (input[2].className.indexOf("is-valid") != -1 && input[3].className.indexOf("is-valid") != -1 && input[4].className.indexOf("is-valid") != -1 && select.className.indexOf("is-valid") != -1){
-      formulario = true;
-    }
-    if (formulario == true){
-      botonSave.removeAttribute("disabled");
-    }else{
-      botonSave.setAttribute("disabled", "disabled");
-    }
-  }
-</script>

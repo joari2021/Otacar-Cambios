@@ -65,7 +65,7 @@
     <div id="sidenav-overlay" style="opacity: 1;" class=""></div>
 
     <script>
-
+        
         window.onload = function() {
             var contenedor = document.getElementById("loader");
             contenedor.classList.add("efecto_desv")
@@ -92,6 +92,7 @@
             });
             
             $(document).ready(function(){
+               
                 if(typeof refresh === "undefined"){
                     refresh = setInterval(refrescarNotificaciones, 30000);
                     $.ajaxSetup({ cache: false });

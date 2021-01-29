@@ -79,9 +79,12 @@
                                         current_user.wallets.each do |wallet|
                                             
                                             if wallet.id.to_s === method[1]
-                                                part1 = wallet.email[0, 4]
-                                                part2 = wallet.email[-7,7]
-                                                %>
+                                                part1 = wallet.identificador[0, 4]
+                                                if wallet.type_identificador === "Correo Electrónico"
+                                                    part2 = wallet.identificador[-10,10]
+                                                else
+                                                    part2 = wallet.identificador[-5,5]
+                                                end%>
                                                 <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
                                                 <td class="align-middle"><%=part1 + "****" + part2%></td>
                                             <%end%>
@@ -206,9 +209,12 @@
                                     transaction.user.wallets.each do |wallet|
                                         
                                         if wallet.id.to_s === method[1]
-                                            part1 = wallet.email[0, 4]
-                                            part2 = wallet.email[-7,7]
-                                            %>
+                                            part1 = wallet.identificador[0, 4]
+                                            if wallet.type_identificador === "Correo Electrónico"
+                                                part2 = wallet.identificador[-10,10]
+                                            else
+                                                part2 = wallet.identificador[-5,5]
+                                            end%>
                                             <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
                                             <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                         <%end%>

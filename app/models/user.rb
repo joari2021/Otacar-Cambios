@@ -43,6 +43,8 @@ class User < ApplicationRecord
 
   validates :document, uniqueness: {message: " este documento ya esta registrado", on: :update}, presence: {message: " este campo no puede estar vacio", on: :update}, length: { in: 5..12, message: " El numero de digitos permitidos es minimo 5 y maximo 12", on: :update }
 
+  validates :phone, uniqueness: {message: " este telefono ya esta registrado", on: :update}, presence: {message: " este campo no puede estar vacio", on: :update}, length: { in: 10..12, message: " El numero de digitos permitidos es minimo 10 y maximo 12", on: :update }
+
   validates :day, :year, :document, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números", on: :update}
 
   #validates :num_referidor, format: {with: /\A[+-]?\d+\z/, message: " El numero de usuario que ingreso no pertenece a ninguno de los usuarios existentes", on: :update}, length: { maximum: 9, message: " El campo debe contener 9 números", on: :update }

@@ -15,12 +15,10 @@ import 'css/styles'
 
 import "@fortawesome/fontawesome-free/js/all";
 
-
 $(document).on('turbolinks:load', function() {
-    var contenedor = document.getElementById("loader");
+    let contenedor = document.getElementById("loader");
     contenedor.classList.add("efecto_desv")
 }); 
-
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)

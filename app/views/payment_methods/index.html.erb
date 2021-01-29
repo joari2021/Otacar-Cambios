@@ -33,7 +33,7 @@
                         <tr class="shadow-sm">
                             <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
 
-                            <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
+                            <td class="align-middle text-capitalize"><span><%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%></span></td>
                             
                             <%part2 = account_bank.identidy[0, 2]%>
                             <%part3 = account_bank.identidy[-3,3]%> 
@@ -80,7 +80,7 @@
                                                         </div>
                                                         <div class="col-5 text-right">Titular</div>
                                                         <div class="col-7 text-left text-capitalize">
-                                                            <%=account_bank.name%> <%=account_bank.last_name%>      
+                                                            <%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%>      
                                                         </div>
                                                         <div class="col-5 text-right">Identidad</div>
                                                         <div class="col-7 text-left">
@@ -136,10 +136,10 @@
                     <% current_user.bank_brasils.where(view:true).each do |account_bank| %>
                         <tr class="shadow-sm">
                             <td class="align-middle"><img src="/img/paises/Brasil.svg" class="img-fluid avatar" alt="Brasil" title="Brasil"/></td>
-                            <td class="align-middle"><span><%=account_bank.name.capitalize%> <%=account_bank.last_name.capitalize%></span></td>
+                            <td class="align-middle text-capitalize"><span><%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%></span></td>
                             
-                            <%part1 = account_bank.cpf[0, 2]%>
-                            <%part2 = account_bank.cpf[-2,2]%> 
+                            <%part1 = account_bank.document[0, 3]%>
+                            <%part2 = account_bank.document[-3,3]%> 
                             <td class="align-middle"><span class=""><%=part1 + "***" + part2%></span>
                             </td>
                             <td class="align-middle"><img src="/img/bancos/<%=account_bank.bank%>.png" class="img-fluid avatar" alt="<%=account_bank.bank%>" title="<%=account_bank.bank%>"/></td>
@@ -181,13 +181,13 @@
                                                             <%=account_bank.country%>    
                                                         </div>
                                                         <div class="col-5 text-right">Titular</div>
-                                                        <div class="col-7 text-left">
-                                                            <%=account_bank.name%> <%=account_bank.last_name%>   
+                                                        <div class="col-7 text-left text-capitalize">
+                                                            <%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%>   
                                                         </div>
-                                                        <div class="col-5 text-right"><%if account_bank.bank != "Santander"%>CPF<%else%>CPNJ<%end%></div>
+                                                        <div class="col-5 text-right"><%=account_bank.type_document%></div>
                                                         <div class="col-7 text-left">
                                                             
-                                                            <%=account_bank.cpf%> 
+                                                            <%=account_bank.document%> 
                                                             
                                                         </div>
                                                         <div class="col-5 text-right">Nro Agencia</div>
@@ -279,7 +279,7 @@
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
                         <th scope="col"><small class="font-weight-bold">Nombre<small></th>
                         <th scope="col"><small class="font-weight-bold">Monedero<small></th>
-                        <th scope="col"><small class="font-weight-bold">Correo<small></th>
+                        <th scope="col"><small class="font-weight-bold">Llave<small></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -287,10 +287,14 @@
                     <tr class="shadow-sm">
                         
                         <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country%>" title="<%=wallet.country%>"/></td>
-                        <td class="align-middle"><span><%=wallet.name%> <%=wallet.last_name%></span></td>
+                        <td class="align-middle text-capitalize"><span><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
                         <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>                        
-                        <%part1 = wallet.email[0, 4]%>
-                        <%part2 = wallet.email[-10,10]%> 
+                        <%part1 = wallet.identificador[0, 3]%>
+                        <%if wallet.type_identificador === "email"%>
+                            <%part2 = wallet.identificador[-10,10]%>
+                        <%else%>
+                            <%part2 = wallet.identificador[-5,5]%>
+                        <%end%> 
                         <td class="align-middle"><span class=""><%=part1 + "******" + part2%></span>
                         </td>
                         
@@ -324,13 +328,19 @@
                                                     <div class="col-7 text-left">
                                                         <%=wallet.country%>    
                                                     </div>
+                                                    <%if wallet.country === "Brasil"%>
+                                                        <div class="col-5 text-right">Banco</div>
+                                                        <div class="col-7 text-left text-capitalize">
+                                                            <%=wallet.bank%>    
+                                                        </div>
+                                                    <%end%>
                                                     <div class="col-5 text-right">Nombres</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=wallet.name%> <%=wallet.last_name%>   
+                                                    <div class="col-7 text-left text-capitalize">
+                                                        <%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%>   
                                                     </div>
-                                                    <div class="col-5 text-right">Correo Electrónico</div>
+                                                    <div class="col-5 text-right"><%=wallet.type_identificador%></div>
                                                     <div class="col-7 text-left">
-                                                        <%=wallet.email%> 
+                                                        <%=wallet.identificador%> 
                                                     </div>                                  
                                                 </div>                   
                                             </div>
@@ -481,7 +491,7 @@
                     <% current_user.wallet_with_users.where(view:true).each do |wallet| %>
                     <tr class="shadow-sm">
                         <td class="align-middle"><img src="/img/paises/<%=wallet.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=wallet.country.capitalize%>" title="<%=wallet.country.capitalize%>"/></td>
-                        <td class="align-middle"><span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                        <td class="align-middle text-capitalize"><span><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
                         
                         <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid rounded-circle avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
                         
@@ -521,8 +531,8 @@
                                                         <%=wallet.country%>    
                                                     </div>
                                                     <div class="col-5 text-right">Nombres</div>
-                                                    <div class="col-7 text-left">
-                                                        <%=wallet.name%> <%=wallet.last_name%>   
+                                                    <div class="col-7 text-left text-capitalize">
+                                                        <%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%>   
                                                     </div>
                                                     <div class="col-5 text-right">Usuario</div>
                                                     <div class="col-7 text-left">
@@ -580,6 +590,7 @@
                 <thead>
                     <tr>
                         <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                        <th scope="col"><small class="font-weight-bold">Nombre<small></th>
                         <th scope="col"><small class="font-weight-bold">Banco<small></th>
                         <th scope="col"><small class="font-weight-bold">Telefono<small></th>
                         <th scope="col"><small class="font-weight-bold">Documento<small></th>
@@ -591,20 +602,18 @@
                         
                         <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
 
+                        <td class="align-middle text-capitalize"><span><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
+
                         <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
 
                         <%part1 = payment.number_phone[0, 3]%>
                         <%part2 = payment.number_phone[-4,4]%>
                         <td class="align-middle"><span><%=part1 + "****"+ part2%></span></td>
                         
-                        <%part1 = payment.document[0, 2]%>
+                        <%part1 = payment.document[0, 4]%>
                         <%part2 = payment.document[-3,3]%> 
-                        <%if payment.document.to_i <= 80000000
-                            type_document = "V-"
-                        elsif payment.document.to_i > 80000000 && payment.document.to_i < 100000000
-                            type_document = "E-"
-                        end%>
-                        <td class="align-middle"><span><%=type_document + part1 + "***" + part2%></span></td>
+                        
+                        <td class="align-middle"><span><%=part1 + "***" + part2%></span></td>
                         
                         <%if current_user.is_admin?%>
                             <%if payment.status === "activo"%>
@@ -636,9 +645,21 @@
                                                     <div class="col-6 text-left">
                                                         <%=payment.country%>    
                                                     </div>
+                                                    <div class="col-6 text-right">Nombres</div>
+                                                    <div class="col-6 text-left text-capitalize">
+                                                        <%=payment.name%> <%=payment.second_name%> <%=payment.last_name%>    
+                                                    </div>
+                                                    <div class="col-6 text-right">Banco</div>
+                                                    <div class="col-6 text-left">
+                                                        <%=@bancos[payment.bank]%> 
+                                                    </div>
                                                     <div class="col-6 text-right">Cod. Banco</div>
                                                     <div class="col-6 text-left">
                                                         <%=payment.bank%>   
+                                                    </div>
+                                                    <div class="col-6 text-right">Documento</div>
+                                                    <div class="col-6 text-left">
+                                                        <%=payment.document%>   
                                                     </div>
                                                     <div class="col-6 text-right">Nro Telefono</div>
                                                     <div class="col-6 text-left">

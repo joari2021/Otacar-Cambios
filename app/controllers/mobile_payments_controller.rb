@@ -41,7 +41,7 @@ class MobilePaymentsController < ApplicationController
           end
         else
           @mobile_payment = current_user.mobile_payments.create(mobile_payment_params)
-          @mobile_payment.modifyDocument
+      
           respond_to do |format|
             if @mobile_payment.save
               format.html { redirect_to payment_methods_path, notice: 'Pago Movil registrado con exito.' }
@@ -110,7 +110,7 @@ class MobilePaymentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def mobile_payment_params
-      params.require(:mobile_payment).permit(:country, :bank, :number_phone, :document)
+      params.require(:mobile_payment).permit(:country, :name, :second_name, :last_name, :bank, :number_phone, :document)
     end
 
     def mobile_payment_edit_params

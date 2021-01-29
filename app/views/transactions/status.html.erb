@@ -27,7 +27,7 @@
                                 if bank.id.to_s === method[1]
                                     part1 = bank.number_account[0, 4]
                                     part2 = bank.number_account[-4,4]%>
-                                    <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                    <td class="align-middle"><span class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span></td>
                                     <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
                                     <td class="align-middle"><%=part1 + "****" + part2%></td>
                                 <%end%>
@@ -39,7 +39,7 @@
                                     part1 = bank.number_agency
                                     part2 = bank.number_account[-2,2]
                                    %>
-                                    <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                    <td class="align-middle"><span class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span></td>
                                     
                                     <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
                                     <td class="align-middle"><%=part1 + "****" + part2%></td>
@@ -73,10 +73,13 @@
                             @user_admin.wallets.each do |wallet|
                                 
                                 if wallet.id.to_s === method[1]
-                                    part1 = wallet.email[0, 4]
-                                    part2 = wallet.email[-7,7]
-                                    %>
-                                    <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                    part1 = wallet.identificador[0, 4]
+                                    if wallet.type_identificador === "Correo Electrónico"
+                                        part2 = wallet.identificador[-10,10]
+                                    else
+                                        part2 = wallet.identificador[-5,5]
+                                    end%>
+                                    <td class="align-middle"><span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
                                     <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
                                     <td class="align-middle"><%=part1 + "****" + part2%></td>
                                 <%end%>
@@ -88,7 +91,7 @@
                                     part1 = wallet.usuario[0, 3]
                                     part2 = wallet.usuario[-2,2]
                                     %>
-                                    <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                    <td class="align-middle"><span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
                                     <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
                                     <td class="align-middle"><%=part1 + "****" + part2%></td>
                                 <%end%>
@@ -168,7 +171,7 @@
                                             part3 = bank.identidy[0, 3]
                                             part4 = bank.identidy[-2,2]%>
                                             
-                                            <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                            <td class="align-middle"><span class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span></td>
                                             <td class="align-middle"><span class=""><%=bank.type_document%><%=part3 << "***" << part4%></span></td>
                                             <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
                                             <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
@@ -180,9 +183,9 @@
                                         if bank.id.to_s === method[1]
                                             part1 = bank.number_agency
                                             part2 = bank.number_account[-2,2]
-                                            part3 = bank.cpf[0, 2]
-                                            part4 = bank.cpf[-2,2]%>
-                                            <td class="align-middle"><span class=""><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span></td>
+                                            part3 = bank.document[0, 2]
+                                            part4 = bank.document[-2,2]%>
+                                            <td class="align-middle"><span class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span></td>
                                             <td class="align-middle"><span class=""><%=part3 + "***" + part4%></span></td>
                                             <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
                                             <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
@@ -207,11 +210,11 @@
                                         if payment.id.to_s === method[1]
                                             part1 = payment.number_phone[0, 3]
                                             part2 = payment.number_phone[-4,4]
-                                            part3 = payment.document[0,2]
+                                            part3 = payment.document[0,4]
                                             part4 = payment.document[-2,2]
                                             %>
                                             
-                                            <td class="align-middle"><span class="">N/A</span></td>
+                                            <td class="align-middle"><span class=""><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
                                             <td class="align-middle"><span class=""><%=part3 << "***" << part4%></span></td>
                                             <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
                                             <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
@@ -221,10 +224,13 @@
                                     current_user.wallets.each do |wallet|
                                         
                                         if wallet.id.to_s === method[1]
-                                            part1 = wallet.email[0, 4]
-                                            part2 = wallet.email[-7,7]
-                                            %>
-                                            <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                            part1 = wallet.identificador[0, 4]
+                                            if wallet.type_identificador === "Correo Electrónico"
+                                                part2 = wallet.identificador[-10,10]
+                                            else
+                                                part2 = wallet.identificador[-5,5]
+                                            end%>
+                                            <td class="align-middle"><span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
                                             <td class="align-middle"><span class="">N/A</span></td>
                                             <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
                                             <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
@@ -238,7 +244,7 @@
                                             part2 = wallet.usuario[-2,2]
                                             %>
                                             <script>console.log("<%=method[0]%>")</script>
-                                            <td class="align-middle"><span class=""><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span></td>
+                                            <td class="align-middle"><span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
                                             <td class="align-middle"><span class="">N/A</span></td>
                                             <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
                                             <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>

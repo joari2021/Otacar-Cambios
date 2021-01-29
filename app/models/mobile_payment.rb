@@ -18,21 +18,14 @@ class MobilePayment < ApplicationRecord
         end
     end
 
-    #VALIDAR DOCUMENT#
-    def modifyDocument        
-        self.document.gsub!('V','')
-        self.document.gsub!('E','')
-        self.document.gsub!('-','')
-    end
 
     validates :bank, presence: {message: " La opción seleccionada es inválida"}
+    validates :name, :last_name, presence: {message: " Este campo no puede estar vacio"}
 
     validates :number_phone, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
 
-    validates :number_phone, length: { is: 11, message: " El contenido es muy largo (caracteres maximos 11)" }
+    validates :number_phone, length: { is: 11, message: " (caracteres maximos 11)" }
     
-    validates :document, length: { in: 6..8, message: " El contenido debe contener entre 6 y 8 numeros" }
-
-    validates :document, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
+    validates :document, length: { in: 8..10, message: " El contenido debe contener entre 6 y 8 numeros" }
     
 end

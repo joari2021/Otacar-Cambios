@@ -45,10 +45,10 @@ class Bank < ApplicationRecord
             lista_bancos = ["0156","0172","0171","0175","0128","0114","0163","0115","0191","0138","0108","0104","0168","0177","0174","0157","0151","0169","0137"]
 
             lista_bancos.each do |codigo|
-                  if codigo === self.banco
-                     valido = true
-                     break;
-                  end
+               if codigo === self.banco
+                  valido = true
+                  break;
+               end
             end
 
             unless valido
@@ -80,12 +80,11 @@ class Bank < ApplicationRecord
       end
    end
 
-   validates :name, :last_name, :identidy, length: { maximum: 15, message: " El contenido es muy largo (caracteres maximos 12)" }
+   validates :name, :last_name, :identidy, length: { maximum: 15, message: " (caracteres maximos 12)" }
+
+   validates :name, :last_name, presence: { message:" Este campo no puede estar vacio" }
     
    validates :type_account, :banco, presence: { message:" La opción seleccionada es invalida" }
-
-   validates :name, :last_name, format: { with: /\A[a-zA-Z]+\z/,
-   message: " Este campo no puede estar vacio y solo acepta letras" }
    
    validates :number_account, :identidy, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
 

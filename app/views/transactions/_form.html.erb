@@ -365,10 +365,10 @@
 <div class="row justify-content-center d-none" id="accountUserDestinity">
     <div class="col-12 col-sm-9 col-lg-7">
         <h5 class="text-primary text-center">2.- Cuenta Credito <i class="fas fa-info-circle" onclick="mostrarInfo('infoCuentaDestino')"></i></h5>    
-        <div class="alert alert-info d-none" id="infoCuentaDestino" role="alert">
-            Elige la cuenta de <span id="spanPaisDestino"></span> donde deseas que sea acreditado el envio de tus remesas. En esta lista solo apareceran los metodos de pago que hayas registrado y a los que la empresa puede hacer envios en ese pais, por ello, si en esta lista no aparece un metodo de pago que tienes registrado es porque no estan disponibles los envios a esa cuenta por el momento.
+        <div class="alert alert-info" id="infoCuentaDestino" role="alert">
+            Elige la cuenta de <span id="spanPaisDestino"></span> donde deseas que sea acreditado el envio de tus remesas. En esta lista solo apareceran los metodos de pago que hayas registrado y a los que la empresa puede hacer envios en ese pais los cuales se muestran arriba.
             
-            <article id="info-comision-pago-movil"><!--<br>Si eliges un pago movil del Banco Mercantil, Banco B.O.D, Banco Banesco o del Banco de Venezuela para recibir el envio de tus remesas en Venezuela, deberas pagar una comisión del 0.30% adicional al monto que envies. Para evitar esto te recomendamos registrarlo en tus metodos de pago como cuenta bancaria ingresando todos los datos solicitados correctamente y si ya lo tienes registrado solo selecciona la cuenta en lugar del pago movil.--></article>
+            <article id="info-comision-pago-movil"><br>Si el pago móvil es para el Banco De Venezuela, Mercantil, Banesco y/o B.O.D se le debitara el 0.3% de comisión bancaria.</article>
         </div>
         <div class="contenedor">     
             <div class="selectbox">
@@ -516,7 +516,7 @@
                                     <span class="float-right font-weight-bold text-warning" id="detail-pais-destino"></span></li>
                                 <li class="list-group-item">
                                     <span class="float-left font-weight-bold">Cuenta credito</span><br>
-                                    <span class="float-right font-weight-bold text-warning" id="detail-cuenta-credito-usuario"></span>
+                                    <span class="float-right font-weight-bold text-warning text-capitalize" id="detail-cuenta-credito-usuario"></span>
                                     <div class="d-none" id="div-detail-account-usuario2"><br><span class="float-right font-weight-bold text-warning" id="detail-cuenta-credito-usuario2"></span></div>
                                     <div class="d-none" id="div-detail-account-usuario3"><br><span class="float-right font-weight-bold text-warning" id="detail-cuenta-credito-usuario3"></span></div></li>
                                 <li class="list-group-item">
@@ -531,15 +531,15 @@
                                 <li class="list-group-item">
                                     <span class="float-left font-weight-bold">Monto a pagar</span><br>
                                     <span class="float-right font-weight-bold text-warning" id="detail-monto-envio"></span></li>
-                                <li class="list-group-item d-none" id="list-comision">
-                                    <span class="float-left font-weight-bold">Comisión 0,30% (pago movil)</span><br>
-                                    <span class="float-right font-weight-bold text-warning" id="detail-comision"></span></li>
-                                <li class="list-group-item d-none" id="list-comision-2">
-                                    <span class="float-left font-weight-bold">Total a pagar</span><br>
-                                    <span class="float-right font-weight-bold text-warning" id="detail-monto-total"></span></li>
                                 <li class="list-group-item">
                                     <span class="float-left font-weight-bold">Monto a recibir</span><br>
                                     <span class="float-right font-weight-bold text-warning" id="detail-monto-a-recibir"></span></li>
+                                <li class="list-group-item d-none" id="list-comision">
+                                    <span class="float-left font-weight-bold">Comisión 0,3% (pago móvil)</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-comision"></span></li>
+                                <li class="list-group-item d-none" id="list-comision-2">
+                                    <span class="float-left font-weight-bold">Total a recibir</span><br>
+                                    <span class="float-right font-weight-bold text-warning" id="detail-monto-total"></span></li>
                             </ul>
                         </div>
                         <div class="modal-footer">
@@ -1022,21 +1022,28 @@
                 }
             }
             <%if current_user.banks.where(view:true).count > 0%>    
-                <%current_user.banks.where(view:true).each do |bank_user|%>
+                <%current_user.banks.order("banco DESC").where(view:true).each do |bank_user|%>
                     if ("<%=bank_user.country%>" === country){
-                        <%admin.banks.each do |bank_admin| %>  
+                        <%admin.banks.where(view:true).each do |bank_admin| %>  
                             <%if bank_admin.status === "activo"%>
                                 <%if bank_admin.banco === bank_user.banco || AvalaibleBank.where(bank: bank_user.banco).present?%>
                                     //ENLACE
                                     var enlace = document.createElement("a")
                                     enlace.setAttribute("href","#")
                                     enlace.setAttribute("id","banks-<%=bank_user.id%>")
-                                    
                                     if (j === 1){
                                         enlace.setAttribute("onclick","activarEnlace(event)");
                                     }else{
                                         enlace.setAttribute("onclick","activarEnlace2(event,"+j+")");
                                     }
+                                    
+                                    /*PARA CORREGIR ALTERACION DE VS-CODE EN EL CODIGO*/
+                                    switch(enlace){
+                                        case "asdasdasdasd":
+                 
+                                            break;
+                                    }
+                                    
                                     enlace.classList.add("opcion");
                                     
                                     //DIV PADRE
@@ -1049,7 +1056,7 @@
 
                                     //SPAN NOMBRE DEL TITULAR
                                     spanTitular = document.createElement("span");
-                                    spanTitular.innerHTML = "<%=bank_user.name%> <%=bank_user.last_name%>";
+                                    spanTitular.innerHTML = "<%=bank_user.name%> <%=bank_user.second_name%> <%=bank_user.last_name%>";
                                     spanTitular.classList.add("titulo","text-capitalize");
 
 
@@ -1074,9 +1081,9 @@
                                     if (j===1){
                                         account += 1;
                                     }
-                                    <%if AvalaibleBank.where(bank: bank_user.banco).present?%>
-                                        <%break%>
-                                    <%end%>
+                                   
+                                    <%break%>
+                                    
                                 <%end%>       
                             <%end%>
                         <%end%>
@@ -1103,9 +1110,9 @@
                 }
             }
             <%if current_user.bank_brasils.where(view:true).count > 0%>  
-                <%current_user.bank_brasils.where(view:true).each do |bank_user|%>
+                <%current_user.bank_brasils.order("bank DESC").where(view:true).each do |bank_user|%>
                     if ("<%=bank_user.country%>" === country){
-                        <%admin.bank_brasils.each do |bank_admin| %>
+                        <%admin.bank_brasils.where(view:true).each do |bank_admin| %>
                             <%if bank_admin.status === "activo"%>
                                 <%if bank_admin.bank === bank_user.bank%>
                                     //ENLACE
@@ -1129,7 +1136,7 @@
 
                                    //SPAN NOMBRE DEL TITULAR
                                     spanTitular = document.createElement("span");
-                                    spanTitular.innerHTML = "<%=bank_user.name%> <%=bank_user.last_name%>";
+                                    spanTitular.innerHTML = "<%=bank_user.name%> <%=bank_user.second_name%> <%=bank_user.last_name%>";
                                     spanTitular.classList.add("titulo","text-capitalize");
 
                                     //DIV HIJO
@@ -1153,6 +1160,7 @@
                                     if (j===1){
                                         account += 1;
                                     }
+                                    <%break%>
                                 <%end%>
                             <%end%>
                         <%end%>
@@ -1182,9 +1190,9 @@
                 }
             }
             <%if current_user.wallets.where(view:true).count > 0%>    
-                <%current_user.wallets.where(view:true).each do |wallet_user|%>
+                <%current_user.wallets.order("wallet_name DESC").where(view:true).each do |wallet_user|%>
                     if ("<%=wallet_user.country%>" === country){
-                        <%admin.wallets.each do |wallet_admin| %>
+                        <%admin.wallets.where(view:true).each do |wallet_admin| %>
                             <%if wallet_admin.status === "activo"%>
                                 <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
                                     //ENLACE
@@ -1208,7 +1216,7 @@
 
                                     //SPAN NOMBRE DEL TITULAR
                                     spanTitular = document.createElement("span");
-                                    spanTitular.innerHTML = "<%=wallet_user.name%> <%=wallet_user.last_name%>";
+                                    spanTitular.innerHTML = "<%=wallet_user.name%> <%=wallet_user.second_name%> <%=wallet_user.last_name%>";
                                     spanTitular.classList.add("titulo","text-capitalize");
 
                                     //DIV HIJO
@@ -1218,8 +1226,8 @@
                                     //H1
                                     var h2 = document.createElement("h2");
                                     h2.classList.add("titulo","tam-h2");
-                                    <%part1 = wallet_user.email[0, 4]%>
-                                    <%part2 = wallet_user.email[-8,8]%>
+                                    <%part1 = wallet_user.identificador[0, 4]%>
+                                    <%part2 = wallet_user.identificador[-8,8]%>
                                     var content = document.createTextNode("<%=part1%>****<%=part2%>");
                                     
                                     h2.appendChild(content);
@@ -1232,6 +1240,7 @@
                                     if (j===1){
                                         account += 1;
                                     }
+                                    <%break%>
                                 <%end%>
                             <%end%>
                         <%end%>
@@ -1260,9 +1269,9 @@
                 }
             }
             <%if current_user.wallet_with_users.where(view:true).count > 0%>    
-                <%current_user.wallet_with_users.where(view:true).each do |wallet_user|%>
+                <%current_user.wallet_with_users.order("wallet_name DESC").where(view:true).each do |wallet_user|%>
                     if ("<%=wallet_user.country%>" === country){
-                        <%admin.wallet_with_users.each do |wallet_admin| %>
+                        <%admin.wallet_with_users.where(view:true).each do |wallet_admin| %>
                             <%if wallet_admin.status === "activo"%>
                                 <%if wallet_admin.wallet_name === wallet_user.wallet_name%>
                                     //ENLACE
@@ -1286,7 +1295,7 @@
 
                                     //SPAN NOMBRE DEL TITULAR
                                     spanTitular = document.createElement("span");
-                                    spanTitular.innerHTML = "<%=wallet_user.name%> <%=wallet_user.last_name%>";
+                                    spanTitular.innerHTML = "<%=wallet_user.name%> <%=wallet_user.second_name%> <%=wallet_user.last_name%>";
                                     spanTitular.classList.add("titulo","text-capitalize");
 
                                     //DIV HIJO
@@ -1310,6 +1319,7 @@
                                     if (j===1){
                                         account += 1;
                                     }
+                                    <%break%>
                                 <%end%>
                             <%end%>
                         <%end%>
@@ -1337,9 +1347,9 @@
             }
 
             <%if current_user.digital_payments.where(view:true).count > 0%>    
-                <%current_user.digital_payments.where(view:true).each do |payment_user|%>
+                <%current_user.digital_payments.order("payment_method DESC").where(view:true).each do |payment_user|%>
                     if ("<%=payment_user.country%>" === country){
-                        <%admin.digital_payments.each do |payment_admin| %>
+                        <%admin.digital_payments.where(view:true).each do |payment_admin| %>
                             <%if payment_admin.status === "activo"%>
                                 <%if payment_admin.payment_method === payment_user.payment_method%>
                                     //ENLACE
@@ -1363,7 +1373,7 @@
 
                                     //SPAN NOMBRE DEL TITULAR
                                     spanTitular = document.createElement("span");
-                                    spanTitular.innerHTML = "<%=payment_user.name%> <%=payment_user.last_name%>";
+                                    spanTitular.innerHTML = "<%=payment_user.name%> <%=payment_user.second_name%> <%=payment_user.last_name%>";
                                     spanTitular.classList.add("titulo","text-capitalize");
 
                                     //DIV HIJO
@@ -1387,6 +1397,7 @@
                                     if (j===1){
                                         account += 1;
                                     }
+                                    <%break%>
                                 <%end%>
                             <%end%>
                         <%end%>
@@ -1398,7 +1409,6 @@
         return account;
     }
     
-    /*INTEGRAR AQUI LA LECTURA DEL NOMBRE DEL TITULAR DEL PAGO MOVIL UNA VEZ SE AÑADAN LOS CAMPOS AL REGISTRO*/
     function optionMobilePayments(country){
         account = 0;
         j = 1;
@@ -1406,7 +1416,7 @@
             var selectBox = document.getElementById("opcionesAccountUserDestino"+j);
             
             <%if current_user.mobile_payments.where(view:true).count > 0%>    
-                <%current_user.mobile_payments.where(view:true).each do |payment_user|%>
+                <%current_user.mobile_payments.order("bank DESC").where(view:true).each do |payment_user|%>
                     if ("<%=payment_user.country%>" === country){
                         <% if admin.mobile_payments.where(view:true,status:"activo").count > 0%>   
 
@@ -1431,9 +1441,14 @@
                             img.setAttribute("alt","<%=payment_user.bank%>")
                             img.setAttribute("id","img-bank-payment")
 
+                            //SPAN NOMBRE DEL TITULAR
+                            spanTitular = document.createElement("span");
+                            spanTitular.innerHTML = "<%=payment_user.name%> <%=payment_user.second_name%> <%=payment_user.last_name%>";
+                            spanTitular.classList.add("titulo","text-capitalize");
+
                             //DIV HIJO
                             var divHijo = document.createElement("div");
-                            divHijo.classList.add("textos");
+                            divHijo.classList.add("textos","text-left");
 
                             //H1
                             var h2 = document.createElement("h2");
@@ -1443,6 +1458,7 @@
                             var content = document.createTextNode("<%=part1%>****<%=part2%>");
                             
                             h2.appendChild(content);
+                            divHijo.appendChild(spanTitular);
                             divHijo.appendChild(h2);
                             divPadre.appendChild(img);
                             divPadre.appendChild(divHijo);
@@ -1451,7 +1467,6 @@
                             if (j===1){
                                 account += 1;
                             }
-                                
                         <%end%>
                     }
                 <%end%>
@@ -1674,7 +1689,7 @@
         selectAccountUserDestino.classList.toggle('active');
         opcionesAccountUserDestino.classList.toggle('active');
         hiddenInputAccountUserDestino.value = e.currentTarget.id;
-        document.getElementById("detail-cuenta-credito-usuario").innerHTML = e.currentTarget.querySelector('.titulo').innerText;
+        document.getElementById("detail-cuenta-credito-usuario").innerHTML = e.currentTarget.querySelector('.titulo').innerText + " / " + e.currentTarget.querySelector('.tam-h2').innerText;
         accountAdminDestino.classList.remove("d-none");
 
         if(document.getElementById("inputPais").value === "Venezuela"){
@@ -1723,7 +1738,7 @@
         
 
         if (opcion_num === 2){
-            document.getElementById("detail-cuenta-credito-usuario2").innerHTML = e.currentTarget.querySelector('.titulo').innerText;
+            document.getElementById("detail-cuenta-credito-usuario2").innerHTML = e.currentTarget.querySelector('.titulo').innerText + " / " + e.currentTarget.querySelector('.tam-h2').innerText;;
             document.getElementById("div-detail-account-usuario2").classList.remove("d-none")
             selectAccountUserDestino2.classList.toggle('active');
             opcionesAccountUserDestino2.classList.toggle('active');
@@ -1760,7 +1775,7 @@
                 }
             }
         }else if (opcion_num === 3){
-            document.getElementById("detail-cuenta-credito-usuario3").innerHTML = e.currentTarget.querySelector('.titulo').innerText;
+            document.getElementById("detail-cuenta-credito-usuario3").innerHTML = e.currentTarget.querySelector('.titulo').innerText + " / " + e.currentTarget.querySelector('.tam-h2').innerText;;
             document.getElementById("div-detail-account-usuario3").classList.remove("d-none")
             selectAccountUserDestino3.classList.toggle('active');
             opcionesAccountUserDestino3.classList.toggle('active');
@@ -2597,22 +2612,28 @@
         document.getElementById("detail-monto-envio").innerHTML = input_monto_envio + " <%=rate.moneda%>"
 
         //COMISION
-        /*
+        
         account_usuario = document.getElementById("inputAccountUserDestino").value
-        method = account_usuario.split("-")
-        if (method[0] === "mobile_payments"){
-            banks = ["0102","0116","0134","0105"]
-            if (banks.indexOf(document.getElementById("img-bank-payment").alt) != -1 ){
-                document.getElementById("list-comision").classList.remove("d-none")
-                document.getElementById("list-comision-2").classList.remove("d-none")
-                
-                //ESCRIBIR COMISIÓN
-                comision = monto_envio * 0.003
-                document.getElementById("detail-comision").innerHTML = formatearString(comision.toFixed(2)) + " <%=rate.moneda%>"
-                //ESCRIBIR TOTAL A PAGAR
-                total_a_pagar = monto_envio + comision
-                console.log(total_a_pagar)
-                document.getElementById("detail-monto-total").innerHTML = formatearString(total_a_pagar.toFixed(2)) + " <%=rate.moneda%>"
+        account_usuario2 = document.getElementById("inputAccountUserDestino2").value
+        
+        if(account_usuario2 === ""){
+            method = account_usuario.split("-")
+            if (method[0] === "mobile_payments"){
+                banks = ["0102","0116","0134","0105"]
+                if (banks.indexOf(document.getElementById("img-bank-payment").alt) != -1 ){
+                    document.getElementById("list-comision").classList.remove("d-none")
+                    document.getElementById("list-comision-2").classList.remove("d-none")
+                    
+                    //ESCRIBIR COMISIÓN
+                    comision = monto_a_recibir - (monto_a_recibir / 1.003)
+                    document.getElementById("detail-comision").innerHTML = formatearString(comision.toFixed(2)) + " " + monedaPaisD
+                    //ESCRIBIR TOTAL A PAGAR
+                    total_a_recibir = monto_a_recibir - comision
+                    document.getElementById("detail-monto-total").innerHTML = formatearString(total_a_recibir.toFixed(2)) + " " + monedaPaisD
+                }else{
+                    document.getElementById("list-comision").classList.add("d-none")
+                    document.getElementById("list-comision-2").classList.add("d-none")
+                }
             }else{
                 document.getElementById("list-comision").classList.add("d-none")
                 document.getElementById("list-comision-2").classList.add("d-none")
@@ -2620,7 +2641,7 @@
         }else{
             document.getElementById("list-comision").classList.add("d-none")
             document.getElementById("list-comision-2").classList.add("d-none")
-        }*/
+        }
     }
 
     //FORMATEAR MONTOS PARA GUARDARLOS EN LA BASE DE DATOS

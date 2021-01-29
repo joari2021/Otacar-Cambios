@@ -55,10 +55,27 @@ class RatesController < ApplicationController
   # DELETE /rates/1
   # DELETE /rates/1.json
   def destroy
-    @rate.destroy
-    respond_to do |format|
-      format.html { redirect_to rates_url, notice: 'Registro de tasas eliminado con exito.' }
-      format.json { head :no_content }
+    transactions = Transaction.all
+
+    transaction_finded = false
+    transactions.each do |transaction|
+      if transaction.user.country === @rate.country
+        transaction_finded = true
+        break
+      end
+    end
+
+    if transaction_finded
+      respond_to do |format|
+        format.html { redirect_to rates_url, notice: 'Este registro no puede ser eliminado ya que existen transacciones solicitadas en este Pais, esto provocaria fallos criticos en la pagina y experiencia de los usuarios.' }
+      end
+  
+    else
+      @rate.destroy
+      respond_to do |format|
+        format.html { redirect_to rates_url, notice: 'Registro de tasas eliminado con exito.' }
+        format.json { head :no_content }
+      end
     end
   end
 

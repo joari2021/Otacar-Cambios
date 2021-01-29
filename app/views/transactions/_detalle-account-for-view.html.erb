@@ -6,7 +6,7 @@
             
             if bank.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
+                <span id="nombres" class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span><br><hr>
 
                 <label class="text-primary">Nro Documento</label><br>
                 <%if bank.country === "Venezuela"%><%=bank.type_document%><%end%><span id="document"><%=bank.identidy%></span><br><hr>
@@ -34,10 +34,10 @@
             
             if bank.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="nombres"><%=bank.name.capitalize%> <%=bank.last_name.capitalize%></span><br><hr>
+                <span id="nombres" class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span><br><hr>
 
-                <label class="text-primary">Nro Documento</label><br>
-                <span id="document"><%=bank.cpf%></span><br><hr>
+                <label class="text-primary">Nro <%=bank.type_document%></label><br>
+                <span id="document"><%=bank.document%></span><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco"><%=bank.bank%></span><br><hr>
@@ -68,6 +68,8 @@
         user_account.mobile_payments.each do |payment|
             
             if payment.id.to_s === method[1]%>
+                <label  class="text-primary">Titular de la cuenta</label><br>
+                <span class="text-capitalize"><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span><br><hr>
 
                 <label class="text-primary">Nombre del banco</label><br>
                 <span><%=@bancos[payment.bank]%></span><br><hr>
@@ -87,13 +89,13 @@
             
             if wallet.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><br><hr>
+                <span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span><br><hr>
 
                 <label class="text-primary">Monedero</label><br>
                 <span><%=wallet.wallet_name%></span><br><hr>
 
-                <label class="text-primary">Correo Electronico</label><br>
-                <span><%=wallet.email%></span><br><hr>
+                <label class="text-primary"><%=wallet.type_identificador%></label><br>
+                <span><%=wallet.identificador%></span><br><hr>
             <%end%>
         <%end%>
     <%when "wallet_with_users"
@@ -101,7 +103,7 @@
             
             if wallet.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span><%=wallet.name.capitalize%> <%=wallet.last_name.capitalize%></span><br><hr>
+                <span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span><br><hr>
 
                 <label class="text-primary">Monedero</label><br>
                 <span><%=wallet.wallet_name%></span><br><hr>
