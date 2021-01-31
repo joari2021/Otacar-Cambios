@@ -10,7 +10,11 @@
     </ul>
 </div>
 <% end %>
-
+<div class="custom-control custom-switch">
+    <input type="hidden" id="input_checkbox" name="rate[status_envio]" value="<%=rate.status_envio%>">
+    <input type="checkbox" class="custom-control-input" id="customSwitch1" oninput="cambiarValor(this)">
+    <label class="custom-control-label font-weight-bold" for="customSwitch1">Habiltar Envios</label>
+</div>
 <div class="row field">
     <%if @vista === "new"%>
     <div class="col-12 col-sm-4 mt-2">
@@ -315,4 +319,26 @@
 <script src="/js/vistas/script-form-for-campos.js"></script>
 <script>
     <%= render 'partials/script-preloader'%>
+
+    function cambiarValor(checkbox) {
+        input_checkbox = document.getElementById("input_checkbox")
+        if (checkbox.checked === true){
+            input_checkbox.value = "true"
+        }else{
+            input_checkbox.value = "false"
+        }
+    }
+    function comprobarStatusEnvio() {
+        checkbox = document.getElementById("customSwitch1")
+
+        status_envio = <%=rate.status_envio%>
+
+        if (status_envio === true){
+            checkbox.checked = true
+        }else{
+            checkbox.checked = false
+        }
+
+    }
+    comprobarStatusEnvio()
 </script>

@@ -8,6 +8,11 @@
             <div class="card-header bg-transparent border-success"><%if rate.country === "USA"%><%=rate.country.upcase%><%else%><%=rate.country.capitalize%><%end%> </div>
             <div class="card-body text-success">
                 <h5 class="card-title"><%=rate.moneda%></h5>
+                <%if rate.status_envio%>
+                    <span class="badge badge-pill badge-success">Envios disponibles</span>
+                <%else%>
+                    <span class="badge badge-pill badge-secondary">Envios no disponibles</span>
+                <%end%>
             </div>
             <div class="card-footer bg-transparent border-success">
                 
@@ -56,4 +61,4 @@
 </div>
 <br>
 
-<%= link_to 'Registrar Tasas', new_rate_path, class:"btn btn-success mb-2" %>
+<%= link_to 'Registrar Tasas', new_rate_path, class:"btn btn-success mb-5" %>

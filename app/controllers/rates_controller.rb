@@ -87,6 +87,6 @@ class RatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def rate_params
-      params.require(:rate).permit(:country, :moneda, :monto_oferta, :rate_argentina, :rate_argentina_min, :rate_brasil, :rate_brasil_min, :rate_chile, :rate_chile_min, :rate_colombia, :rate_colombia_min, :rate_ecuador, :rate_ecuador_min, :rate_españa, :rate_españa_min, :rate_panama, :rate_panama_min, :rate_peru, :rate_peru_min, :rate_portugal, :rate_portugal_min, :rate_usa, :rate_usa_min, :rate_venezuela, :rate_venezuela_min, :monto_min_argentina, :monto_min_brasil, :monto_min_chile, :monto_min_colombia, :monto_min_ecuador, :monto_min_españa,:monto_min_peru, :monto_min_portugal, :monto_min_usa, :monto_min_venezuela) 
+      params.require(:rate).permit(:country, :moneda, :monto_oferta, :rate_argentina, :rate_argentina_min, :rate_brasil, :rate_brasil_min, :rate_chile, :rate_chile_min, :rate_colombia, :rate_colombia_min, :rate_ecuador, :rate_ecuador_min, :rate_españa, :rate_españa_min, :rate_panama, :rate_panama_min, :rate_peru, :rate_peru_min, :rate_portugal, :rate_portugal_min, :rate_usa, :rate_usa_min, :rate_venezuela, :rate_venezuela_min, :monto_min_argentina, :monto_min_brasil, :monto_min_chile, :monto_min_colombia, :monto_min_ecuador, :monto_min_españa, :monto_min_peru, :monto_min_portugal, :monto_min_usa, :monto_min_venezuela, :monto_min_panama , :status_envio) 
     end
 end

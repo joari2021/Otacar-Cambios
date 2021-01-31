@@ -17,15 +17,18 @@
                     <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
 
                         <div class="card-header text-success text-center">
-                            <% @rates.each do |rate| %>
-
-                            <%if current_user.country === rate.country%>
-
-                            <%@rate = rate%>
-                            <%= render "partials/tasas", collection: @rate %>
+                            <% @rates.where(country: current_user.country).each do |rate| %>
+    
+                                <%if !rate.status_envio%>
+                                    Información no disponible
+                                    ===================
+                                <%else%>
+                                    <%@rate = rate%>
+                                    <%= render "partials/tasas", collection: @rate %>
+                                <%end%>
 
                             <%end%>
-                            <%end%>
+                            
                         </div>
                     </div>
                 </div>
@@ -46,11 +49,12 @@
         <div class="px-2">
             <select class="custom-select" id="pais" required>
                 <option selected disabled value="">Elegir...</option>
-                <%@rates.each do |rate|%>
-                <%if rate.country === current_user.country%>
+                <%@rates.where(country: current_user.country, status_envio: true).each do |rate|%>
 
+                <%if current_user.country != "Argentina" && rate.rate_argentina != "0,00"%><option value="Argentina">Argentina</option><%end%>
                 <%if current_user.country != "Brasil" && rate.rate_brasil != "0,00"%><option value="Brasil">Brasil</option><%end%>
                 <%if current_user.country != "Chile" && rate.rate_chile != "0,00"%><option value="Chile">Chile</option><%end%>
+                <%if current_user.country != "Colombia" && rate.rate_colombia != "0,00"%><option value="Colombia">Colombia</option><%end%>
                 <%if current_user.country != "Ecuador" && rate.rate_ecuador != "0,00"%><option value="Ecuador">Ecuador</option><%end%>
                 <%if current_user.country != "España" && rate.rate_españa != "0,00"%><option value="España">España</option><%end%>
                 <%if current_user.country != "Panama" && rate.rate_panama != "0,00"%><option value="Panama">Panama</option><%end%>
@@ -59,7 +63,7 @@
                 <%if current_user.country != "USA" && rate.rate_usa != "0,00"%><option value="USA">USA</option><%end%>
                 <%if current_user.country != "Venezuela" && rate.rate_venezuela != "0,00"%><option value="Venezuela">Venezuela</option><%end%>
                 <%end%>
-                <%end%>
+                
             </select>
         </div>
     </div>

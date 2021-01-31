@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_29_141856) do
+ActiveRecord::Schema.define(version: 2021_01_30_001557) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(version: 2021_01_29_141856) do
     t.string "monto_min_portugal", default: "0,00"
     t.string "monto_min_usa", default: "0,00"
     t.string "monto_min_venezuela", default: "0,00"
+    t.boolean "status_envio", default: false
   end
 
   create_table "transactions", force: :cascade do |t|

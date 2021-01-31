@@ -102,7 +102,7 @@
 
     var modificarSpanAndReturn = function (span,resultado,monedaV) {
         var inputs = document.getElementsByTagName("input");
-        for (i = 1; i < span.length; i += 2){
+        for (i = 2; i < span.length; i += 2){
             span[i].innerHTML = " " + resultado;
             span[i + 1].innerHTML = " " + monedaV
             inputs[i + <%=@digit%>].removeAttribute("disabled");
@@ -141,7 +141,7 @@
         var inputs = document.getElementsByTagName("input");
 
         for (i = 1; i < elementosSpan.length; i += 2) {
-            if (monto.value == "0,00"){
+            if (montoOferta.value == "0,00"){
                 elementosSpan[i].innerHTML = "";
                 elementosSpan[i + 1].innerHTML = "";
                 inputs[i + <%=@digit%>].setAttribute("disabled", "disabled");
