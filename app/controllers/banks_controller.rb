@@ -101,22 +101,81 @@ class BanksController < ApplicationController
   # DELETE /banks/1
   # DELETE /banks/1.json
   def destroy
-    #transactions = Transaction.where("account_destinity_usuario LIKE ?", "%banks-#{@bank.id}%")
-    if @bank.permit_delete === "denied"
-      respond_to do |format|
-        format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción y debe terminar las transacciones que tenga en proceso para poder eliminarla.' }
-        format.json { head :no_content }
+    
+    if @bank.user.id === current_user.id
+      if current_user.is_admin?
+        
+        transactions = Transaction.where(account_destinity_admin: "banks-#{@bank.id}")
+        if transactions.count > 0
+          permit_delete = "only_user"
+        else
+          permit_delete = "permit"
+        end
+      
+      else
+        transactions = current_user.transactions.where("status LIKE ? OR status LIKE ? OR status LIKE ?", "en proceso", "envio en proceso", "por confirmar")
+        permit_delete = ""
+        transactions.each do |transaction|
+          array_account = transaction.account_destinity_usuario.split(",")
+          array_account.each do |account|
+            if account === "banks-#{@bank.id}"
+              permit_delete = "denied"
+              break  
+            end
+          end
+  
+          if permit_delete === "denied"
+            break
+          end
+        end
+  
+        if permit_delete != "denied"
+          
+          current_user.transactions.each do |transaction|
+            array_account = transaction.account_destinity_usuario.split(",")
+            array_account.each do |account|
+              if account === "banks-#{@bank.id}"
+                permit_delete = "only_user"
+                break  
+              end
+            end
+  
+            if permit_delete === "only_user"
+              break
+            end
+          end
+  
+          if permit_delete != "only_user"
+            permit_delete = "permit"
+          end
+        end
+  
       end
-    elsif @bank.permit_delete === "only_user"
-      @bank.update(view:"false")
-      respond_to do |format|
-        format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
-        format.json { head :no_content }
+  
+      if permit_delete === "denied"
+        respond_to do |format|
+          format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción en proceso.' }
+          format.json { head :no_content }
+        end
+      elsif permit_delete === "only_user"
+        @bank.update(view:"false")
+        respond_to do |format|
+          format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
+          format.json { head :no_content }
+        end
+      elsif permit_delete === "permit"
+        @bank.destroy
+        respond_to do |format|
+          format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
+          format.json { head :no_content }
+        end
       end
+    
+    
+
     else
-      @bank.destroy
       respond_to do |format|
-        format.html { redirect_to payment_methods_path, notice: 'Cuenta Bancaria eliminada con exito.' }
+        format.html { redirect_to payment_methods_path, alert: 'Acción no permitida.' }
         format.json { head :no_content }
       end
     end

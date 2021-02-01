@@ -82,21 +82,78 @@ class MobilePaymentsController < ApplicationController
   # DELETE /mobile_payments/1
   # DELETE /mobile_payments/1.json
   def destroy
-    if @mobile_payment.permit_delete === "denied"
-      respond_to do |format|
-        format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción y debe terminar las transacciones que tenga en proceso para poder eliminarla.' }
-        format.json { head :no_content }
+    if @mobile_payment.user.id === current_user.id
+      if current_user.is_admin?
+        
+        transactions = Transaction.where(account_destinity_admin: "mobile_payments-#{@mobile_payment.id}")
+        if transactions.count > 0
+          permit_delete = "only_user"
+        else
+          permit_delete = "permit"
+        end
+      
+      else
+        transactions = current_user.transactions.where("status LIKE ? OR status LIKE ? OR status LIKE ?", "en proceso", "envio en proceso", "por confirmar")
+        permit_delete = ""
+        transactions.each do |transaction|
+          array_account = transaction.account_destinity_usuario.split(",")
+          array_account.each do |account|
+            if account === "mobile_payments-#{@mobile_payment.id}"
+              permit_delete = "denied"
+              break  
+            end
+          end
+  
+          if permit_delete === "denied"
+            break
+          end
+        end
+  
+        if permit_delete != "denied"
+          
+          current_user.transactions.each do |transaction|
+            array_account = transaction.account_destinity_usuario.split(",")
+            array_account.each do |account|
+              if account === "mobile_payments-#{@mobile_payment.id}"
+                permit_delete = "only_user"
+                break  
+              end
+            end
+  
+            if permit_delete === "only_user"
+              break
+            end
+          end
+  
+          if permit_delete != "only_user"
+            permit_delete = "permit"
+          end
+        end
+  
       end
-    elsif @mobile_payment.permit_delete === "only_user"
-      @mobile_payment.update(view:"false")
-      respond_to do |format|
-        format.html { redirect_to payment_methods_path, notice: 'Pago Movil eliminado con exito.' }
-        format.json { head :no_content }
+  
+      if permit_delete === "denied"
+        respond_to do |format|
+          format.html { redirect_to payment_methods_path, alert: 'Esta cuenta no puede ser eliminada debido a que esta siendo usada en una transacción en proceso.' }
+          format.json { head :no_content }
+        end
+      elsif permit_delete === "only_user"
+        @mobile_payment.update(view:"false")
+        respond_to do |format|
+          format.html { redirect_to payment_methods_path, notice: 'Pago Móvil eliminado con exito.' }
+          format.json { head :no_content }
+        end
+      elsif permit_delete === "permit"
+        @mobile_payment.destroy
+        respond_to do |format|
+          format.html { redirect_to payment_methods_path, notice: 'Pago Móvil eliminado con exito.' }
+          format.json { head :no_content }
+        end
       end
+  
     else
-      @mobile_payment.destroy
       respond_to do |format|
-        format.html { redirect_to payment_methods_path, notice: 'Pago Movil eliminado con exito.' }
+        format.html { redirect_to payment_methods_path, alert: 'Acción no permitida.' }
         format.json { head :no_content }
       end
     end

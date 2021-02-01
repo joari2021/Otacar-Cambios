@@ -444,22 +444,7 @@ class TransactionsController < ApplicationController
                 @transaction.num_id = 16.times.map { [*'0'..'9', *'A'..'Z'].sample }.join
                 respond_to do |format|
                     if @transaction.save
-                        
-                        method_usuario_array = @transaction.account_destinity_usuario.split(",")
-                        method_usuario_array.each do |method_usuario|
-                          sub_method_usuario = method_usuario.split("-")
-                          model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
-                          num = model.transactions_in_process
-                          num += 1
-                          model.update(permit_delete:"denied",transactions_in_process:num)
-                        end
-  
-                        method_admin = @transaction.account_destinity_admin.split("-")
-                        model = find_method_for_id(method_admin[0],method_admin[1].to_i)
-                        num = model.transactions_in_process
-                        num += 1 
-                        model.update(permit_delete:"denied",transactions_in_process:num)
-  
+                 
                         #actualizar cupos de la cuenta caixa utilizada si la forma de pago fue deposito por loterica
                         if @transaction.metodo === "Deposito Por Loterica"
                             cupos_actuales = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
@@ -601,17 +586,6 @@ class TransactionsController < ApplicationController
           respond_to do |format|
             if @transaction.update(status:"rechazada")
               notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"La transacción ID: #{@transaction.num_id}, fue rechazada",asunto:"Transacción rechazada")
-
-              method_usuario_array = @transaction.account_destinity_usuario.split(",")
-              method_usuario_array.each do |method_usuario|
-                sub_method_usuario = method_usuario.split("-")
-                model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
-                model.update(permit_delete:"only_user")
-              end
-              
-              method_admin = @transaction.account_destinity_admin.split("-")
-              model = find_method_for_id(method_admin[0],method_admin[1].to_i)
-              model.update(permit_delete:"only_user")
               
               #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION ES RECHAZADA EL MISMO DIA
               if @transaction.metodo === "Deposito Por Loterica"
@@ -643,18 +617,6 @@ class TransactionsController < ApplicationController
             if @transaction.update(status:"realizada")
               notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio fue realizado con exito. Transacción ID: #{@transaction.num_id}.",asunto:"Envio realizado")
 
-              method_usuario_array = @transaction.account_destinity_usuario.split(",")
-              method_usuario_array.each do |method_usuario|
-                sub_method_usuario = method_usuario.split("-")
-                model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
-                model.update(permit_delete:"only_user")
-              end
-              
-              
-              method_admin = @transaction.account_destinity_admin.split("-")
-              model = find_method_for_id(method_admin[0],method_admin[1].to_i)
-              model.update(permit_delete:"only_user")
-
               format.html { redirect_to pending_transactions_path, notice: 'Transaccion realizada con exito.' }
               format.json { render :show, status: :ok, location: @transaction }
             else
@@ -667,17 +629,6 @@ class TransactionsController < ApplicationController
           respond_to do |format|
             if @transaction.update(status:"presenta incidencia")
               notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio no fue realizado porque presenta una incidencia. ID Transacción: #{@transaction.num_id}",asunto:"Envio no realizado")
-
-              method_usuario_array = @transaction.account_destinity_usuario.split(",")
-              method_usuario_array.each do |method_usuario|
-                sub_method_usuario = method_usuario.split("-")
-                model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
-                model.update(permit_delete:"only_user")
-              end
-              
-              method_admin = @transaction.account_destinity_admin.split("-")
-              model = find_method_for_id(method_admin[0],method_admin[1].to_i)
-              model.update(permit_delete:"only_user")
 
               format.html { redirect_to pending_transactions_path, notice: 'Transaccion rechazada con exito.' }
               format.json { render :show, status: :ok, location: @transaction }
@@ -696,41 +647,6 @@ class TransactionsController < ApplicationController
   def destroy
     if @transaction.status === "rechazada" || @transaction.status === "en proceso" || @transaction.status === "presenta incidencia" || @transaction.status === "vencida" 
       
-      method_usuario_array = @transaction.account_destinity_usuario.split(",")
-      method_usuario_array.each do |method_usuario|
-        sub_method_usuario = method_usuario.split("-")
-        model = find_method_for_id(sub_method_usuario[0],sub_method_usuario[1].to_i)
-        
-        num = model.transactions_in_process
-        num -= 1
-        model.update(transactions_in_process:num)
-
-        if model.view
-          if model.transactions_in_process <= 0
-            model.update(permit_delete:"permit")
-          end
-        else
-          if model.transactions_in_process <= 0
-            model.destroy
-          end
-        end
-      end
-      
-      method_admin = @transaction.account_destinity_admin.split("-")
-      model = find_method_for_id(method_admin[0],method_admin[1].to_i)
-      num = model.transactions_in_process
-      num -= 1
-      model.update(transactions_in_process:num)
-      
-      if model.view
-        if model.transactions_in_process <= 0
-          model.update(permit_delete:"permit")
-        end
-      else
-        if model.transactions_in_process <= 0
-          model.destroy
-        end
-      end
 
       if @transaction.metodo === "Deposito Por Loterica"
         #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION CON ESTADO EN PROCESO ES ELIMINADA
@@ -746,6 +662,7 @@ class TransactionsController < ApplicationController
           
         end
       end
+      
       @transaction.destroy
       respond_to do |format|
         format.html { redirect_to status_transactions_path, notice: 'Transacción eliminada con exito.' }
