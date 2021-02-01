@@ -104,7 +104,23 @@
     </div>
 </div>
 
+<script src="/js/jquery.min.js"></script>
 <script>
+    $(document).ready(function(){
+               
+        if(typeof refresh === "undefined"){
+            refresh = setInterval(refrescarFormularios, 1800000);
+            $.ajaxSetup({ cache: false });
+        }
+    });
+    
+    function refrescarFormularios() {
+        //$("#salastatus").css('opacity', 0.4);
+        $(".forms-container").load(window.location + '?randval='+ Math.random() + " .signin-signup", function(){
+            //aquí puedes meter más código si necesitas;
+        // $("#salastatus").css('opacity', 1);
+        });
+    }
 
     <%if alert%>
     var campoAlerta = document.getElementById("alert");
@@ -141,23 +157,6 @@
         container.classList.remove("sign-up-mode");
     });
 
-    function soloNumeros(e, input) {
-        key = e.keyCode || e.which;
-        tecla = String.fromCharCode(key).toLowerCase();
-        letras = "1234567890";
-        especiales = [];
-
-        if (letras.indexOf(tecla) == -1) {
-
-            return false;
-
-        } else {
-
-            valor = input.value.toLowerCase();
-            valor = valor.concat("", tecla);
-
-            return true;
-        }
-    }
+    
     <%=render "partials/script-preloader-js"%>
 </script>
