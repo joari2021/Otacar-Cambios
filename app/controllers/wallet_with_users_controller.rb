@@ -2,6 +2,7 @@ class WalletWithUsersController < ApplicationController
   before_action :set_wallet_with_user, only: [:edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:edit, :update]
   before_action :authenticate_user!
+  before_action :authenticate_normal_user!
 
   # GET /wallet_with_users
   # GET /wallet_with_users.json

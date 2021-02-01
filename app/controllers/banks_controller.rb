@@ -2,6 +2,7 @@ class BanksController < ApplicationController
   before_action :set_bank, only: [:destroy, :edit, :update]
   before_action :authenticate_admin!, only: [:edit, :update]
   before_action :authenticate_user!
+  before_action :authenticate_normal_user!
 
   # GET /banks
   # GET /banks.json

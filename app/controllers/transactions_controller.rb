@@ -645,32 +645,38 @@ class TransactionsController < ApplicationController
   # DELETE /transactions/1
   # DELETE /transactions/1.json
   def destroy
-    if @transaction.status === "rechazada" || @transaction.status === "en proceso" || @transaction.status === "presenta incidencia" || @transaction.status === "vencida" 
-      
+    if @transaction.user.id === current_user.id
+      if @transaction.status === "rechazada" || @transaction.status === "en proceso" || @transaction.status === "presenta incidencia" || @transaction.status === "vencida" 
+        
+        if @transaction.metodo === "Deposito Por Loterica"
+          #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION CON ESTADO EN PROCESO ES ELIMINADA
+          if @transaction.status === "en proceso"
+            day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+            date_transaction = @transaction.created_at.in_time_zone("Brasilia").strftime("%Y-%m-%d")
 
-      if @transaction.metodo === "Deposito Por Loterica"
-        #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION CON ESTADO EN PROCESO ES ELIMINADA
-        if @transaction.status === "en proceso"
-          day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
-          date_transaction = @transaction.created_at.in_time_zone("Brasilia").strftime("%Y-%m-%d")
-
-          if day_actual === date_transaction
-            cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
-            cupos += 1
-            BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos)
+            if day_actual === date_transaction
+              cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
+              cupos += 1
+              BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos)
+            end
+            
           end
-          
         end
-      end
-      
-      @transaction.destroy
-      respond_to do |format|
-        format.html { redirect_to status_transactions_path, notice: 'Transacción eliminada con exito.' }
-        format.json { head :no_content }
+        
+        @transaction.destroy
+        respond_to do |format|
+          format.html { redirect_to status_transactions_path, notice: 'Transacción eliminada con exito.' }
+          format.json { head :no_content }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to status_transactions_path, alert: 'Esta transacción no puede ser eliminada.' }
+          format.json { head :no_content }
+        end
       end
     else
       respond_to do |format|
-        format.html { redirect_to status_transactions_path, alert: 'Esta transacción no puede ser eliminada.' }
+        format.html { redirect_to status_transactions_path, alert: 'Acción invalida.' }
         format.json { head :no_content }
       end
     end

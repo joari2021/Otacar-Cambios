@@ -1,6 +1,7 @@
 class AvalaibleBanksController < ApplicationController
   before_action :set_avalaible_bank, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
+  before_action :authenticate_admin!
 
   # GET /avalaible_banks
   # GET /avalaible_banks.json

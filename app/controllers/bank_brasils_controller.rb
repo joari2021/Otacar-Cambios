@@ -2,6 +2,7 @@ class BankBrasilsController < ApplicationController
   before_action :set_bank_brasil, only: [:edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:edit, :update]
   before_action :authenticate_user!
+  before_action :authenticate_normal_user!
 
   # GET /bank_brasils
   # GET /bank_brasils.json
