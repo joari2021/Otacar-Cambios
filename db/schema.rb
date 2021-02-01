@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_30_001557) do
+ActiveRecord::Schema.define(version: 2021_02_01_181408) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -51,9 +51,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_001557) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
     t.string "status", default: "activo"
-    t.string "permit_delete", default: "permit"
     t.boolean "view", default: true
-    t.integer "transactions_in_process", default: 0
     t.boolean "deposit_for_loterica", default: false
     t.integer "cupos_for_loterica", default: 3
     t.string "second_name"
@@ -74,9 +72,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_001557) do
     t.string "banco"
     t.string "type_document"
     t.string "status", default: "activo"
-    t.string "permit_delete", default: "permit"
     t.boolean "view", default: true
-    t.integer "transactions_in_process", default: 0
     t.string "second_name"
     t.string "number_phone"
     t.index ["user_id"], name: "index_banks_on_user_id"
@@ -101,9 +97,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_001557) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
     t.string "status", default: "activo"
-    t.string "permit_delete", default: "permit"
     t.boolean "view", default: true
-    t.integer "transactions_in_process", default: 0
     t.string "second_name"
     t.index ["user_id"], name: "index_digital_payments_on_user_id"
   end
@@ -117,9 +111,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_001557) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
     t.string "status", default: "activo"
-    t.string "permit_delete", default: "permit"
     t.boolean "view", default: true
-    t.integer "transactions_in_process", default: 0
     t.string "second_name"
     t.string "name"
     t.string "last_name"
@@ -242,9 +234,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_001557) do
     t.integer "user_id", null: false
     t.string "usuario"
     t.string "status", default: "activo"
-    t.string "permit_delete", default: "permit"
     t.boolean "view", default: true
-    t.integer "transactions_in_process", default: 0
     t.string "second_name"
     t.index ["user_id"], name: "index_wallet_with_users_on_user_id"
   end
@@ -259,9 +249,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_001557) do
     t.string "wallet_name"
     t.integer "user_id", null: false
     t.string "status", default: "activo"
-    t.string "permit_delete", default: "permit"
     t.boolean "view", default: true
-    t.integer "transactions_in_process", default: 0
     t.string "bank"
     t.string "second_name"
     t.string "type_identificador", default: "Correo Electrónico"

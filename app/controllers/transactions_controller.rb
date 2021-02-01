@@ -704,25 +704,5 @@ class TransactionsController < ApplicationController
     def transaction_params_admin_process
       params.require(:transaction).permit(:motivo_rechazo, :comprobante_pago_usuario, :comprobante_pago_usuario2, :comprobante_pago_usuario3)
     end
-
-    #ENCONTRAR LOS METODOS DE PAGO POR ID
-    def find_method_for_id(method,id)
-      case method
-        when "banks"
-          model = Bank.find(id)
-        when "bank_brasils"
-          model = BankBrasil.find(id)
-        when "caixa"
-          model = BankBrasil.find(id)
-        when "digital_payments"
-          model = DigitalPayment.find(id)
-        when "mobile_payments"
-          model = MobilePayment.find(id)
-        when "wallets"
-          model = Wallet.find(id)
-        when "wallet_with_users"
-          model = WalletWithUser.find(id)
-      end
-      return model
-    end
+    
 end
