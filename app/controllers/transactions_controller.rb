@@ -77,6 +77,14 @@ class TransactionsController < ApplicationController
   end
 
   def show
+
+    unless current_user.is_admin?
+      if @transaction.user.id != current_user.id
+        respond_to do |format|
+          format.html { redirect_to user_root_path }
+        end
+      end
+    end
     users = User.all
     users.each do |user|
       if user.is_admin?
@@ -153,7 +161,14 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/1/edit
   def edit
-    
+    unless current_user.is_admin?
+      if @transaction.user.id != current_user.id
+        respond_to do |format|
+          format.html { redirect_to user_root_path }
+        end
+      end
+    end
+
     current_user.transactions.each do |transaction|
       if transaction.status === "en proceso"
         segundos = (Time.now.utc - transaction.created_at).to_i
@@ -497,73 +512,80 @@ class TransactionsController < ApplicationController
   # PATCH/PUT /transactions/1
   # PATCH/PUT /transactions/1.json
   def update
-    unless  current_user.is_admin?
-      validate_monto_total = true
+    unless current_user.is_admin?
       
-      #MEJORAR EL CODIGO PARA VERIFICAR QUE LOS SUB MONTOS CONTENGAN CIFRAS QUE SEAN CORRECTAS Y NO INCLUYAN CARACTERES NO VALIDOS   ojooooooooooooooooooooooooooooooooooooo
-      if @transaction.country_destinity === "Venezuela"
-        parametros = transaction_params_user_edit
-        methods_array = @transaction.account_destinity_usuario.split(",")
-
-        if methods_array.count === 1
-          parametros["sub_monto_a_recibir_1"] = ""
-          parametros["sub_monto_a_recibir_2"] = ""
-          parametros["sub_monto_a_recibir_3"] = ""
-        elsif methods_array.count === 2
-          monto_1 = parametros["sub_monto_a_recibir_1"].gsub('.','')
-          monto_1.gsub!(',','.')
-          monto_1 = monto_1.to_f
-
-          monto_2 = parametros["sub_monto_a_recibir_2"].gsub('.','')
-          monto_2.gsub!(',','.')
-          monto_2 = monto_2.to_f
-
-          monto_total = @transaction.monto_a_recibir - monto_1 - monto_2
-
-          if monto_total != 0
-            validate_monto_total = false
-          else
-            parametros["sub_monto_a_recibir_3"] = ""
-          end
-
-        elsif methods_array.count === 3
-          monto_1 = parametros["sub_monto_a_recibir_1"].gsub('.','')
-          monto_1.gsub!(',','.')
-          monto_1 = monto_1.to_f
-
-          monto_2 = parametros["sub_monto_a_recibir_2"].gsub('.','')
-          monto_2.gsub!(',','.')
-          monto_2 = monto_2.to_f
-
-          monto_3 = parametros["sub_monto_a_recibir_3"].gsub('.','')
-          monto_3.gsub!(',','.')
-          monto_3 = monto_3.to_f
-
-          monto_total = @transaction.monto_a_recibir - monto_1 - monto_2 - monto_3
-
-          if monto_total != 0
-            validate_monto_total = false
-          end
-        end  
-      end
-
-      if validate_monto_total
+      if @transaction.user.id != current_user.id
         respond_to do |format|
-          if @transaction.update(transaction_params_user_edit)
-            @transaction.update(status:"por confirmar")
-            
-            @transaction.send_email()
-            format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }
-          else
-            format.html { redirect_to edit_transaction_url(@transaction), alert: "El pago no se envio debido a un error en los datos ingresados, intentelo nuevamente." }
-          end
+          format.html { redirect_to user_root_path }
         end
       else
-        respond_to do |format| 
-          format.html { redirect_to edit_transaction_url(@transaction), alert: "Los montos ingresados no son válidos." }
-        end
-      end
       
+        validate_monto_total = true
+        
+        #MEJORAR EL CODIGO PARA VERIFICAR QUE LOS SUB MONTOS CONTENGAN CIFRAS QUE SEAN CORRECTAS Y NO INCLUYAN CARACTERES NO VALIDOS   ojooooooooooooooooooooooooooooooooooooo
+        if @transaction.country_destinity === "Venezuela"
+          parametros = transaction_params_user_edit
+          methods_array = @transaction.account_destinity_usuario.split(",")
+
+          if methods_array.count === 1
+            parametros["sub_monto_a_recibir_1"] = ""
+            parametros["sub_monto_a_recibir_2"] = ""
+            parametros["sub_monto_a_recibir_3"] = ""
+          elsif methods_array.count === 2
+            monto_1 = parametros["sub_monto_a_recibir_1"].gsub('.','')
+            monto_1.gsub!(',','.')
+            monto_1 = monto_1.to_f
+
+            monto_2 = parametros["sub_monto_a_recibir_2"].gsub('.','')
+            monto_2.gsub!(',','.')
+            monto_2 = monto_2.to_f
+
+            monto_total = @transaction.monto_a_recibir - monto_1 - monto_2
+
+            if monto_total != 0
+              validate_monto_total = false
+            else
+              parametros["sub_monto_a_recibir_3"] = ""
+            end
+
+          elsif methods_array.count === 3
+            monto_1 = parametros["sub_monto_a_recibir_1"].gsub('.','')
+            monto_1.gsub!(',','.')
+            monto_1 = monto_1.to_f
+
+            monto_2 = parametros["sub_monto_a_recibir_2"].gsub('.','')
+            monto_2.gsub!(',','.')
+            monto_2 = monto_2.to_f
+
+            monto_3 = parametros["sub_monto_a_recibir_3"].gsub('.','')
+            monto_3.gsub!(',','.')
+            monto_3 = monto_3.to_f
+
+            monto_total = @transaction.monto_a_recibir - monto_1 - monto_2 - monto_3
+
+            if monto_total != 0
+              validate_monto_total = false
+            end
+          end  
+        end
+
+        if validate_monto_total
+          respond_to do |format|
+            if @transaction.update(transaction_params_user_edit)
+              @transaction.update(status:"por confirmar")
+              
+              @transaction.send_email()
+              format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }
+            else
+              format.html { redirect_to edit_transaction_url(@transaction), alert: "El pago no se envio debido a un error en los datos ingresados, intentelo nuevamente." }
+            end
+          end
+        else
+          respond_to do |format| 
+            format.html { redirect_to edit_transaction_url(@transaction), alert: "Los montos ingresados no son válidos." }
+          end
+        end
+      end 
     else
       if @transaction.status === "por confirmar"
         @transaction.update(transaction_params_admin_edit)
