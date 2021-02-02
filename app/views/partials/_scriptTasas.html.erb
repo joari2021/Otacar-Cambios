@@ -133,12 +133,12 @@
     var moneda = document.getElementById('moneda');
 
     <%if @vista === "new"%>
-    country.addEventListener("change", caja);
+        country.addEventListener("change", caja);
     <%end%>
 
     function disabledCamposPriceMin() {
-        var elementosSpan = document.getElementsByTagName("span");
-        var inputs = document.getElementsByTagName("input");
+        elementosSpan = document.getElementsByTagName("span");
+        inputs = document.getElementsByTagName("input");
 
         for (i = 1; i < elementosSpan.length; i += 2) {
             if (montoOferta.value == "0,00"){

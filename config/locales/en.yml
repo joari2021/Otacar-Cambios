@@ -106,3 +106,20 @@ en:
         country: "Pais:"
         email: "Correo Electronico:"
         wallet_name: "Monedero Digital:"
+
+    errors: 
+      models: 
+        user: 
+          attributes: 
+            email: 
+              blank: "Este campo es requerido"
+              invalid: "Es invalido"
+              taken: "El correo ingresado ya esta registrado. Por favor ingrese otro."
+            password:
+              too_short: "Es muy corta (carecteres minimos: 8)"
+            current_password:
+              invalid: "Es invalida"
+
+            
+
+

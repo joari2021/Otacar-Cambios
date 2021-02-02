@@ -42,7 +42,6 @@
                             <label class="text-primary">Monto a recibir</label><br>
                             <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
                         <%end%>
-                        
 
                         <label class="text-primary">Comprobante</label><br>
                         <%if @transaction.status === "realizada"%>

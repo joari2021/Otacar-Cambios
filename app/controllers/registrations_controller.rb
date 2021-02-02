@@ -42,6 +42,7 @@ class RegistrationsController < Devise::RegistrationsController
       
       if usuario_edit.is_admin?
         super
+        
       else
         respond_to do |format|
           if usuario_edit.update(account_update_params_user)

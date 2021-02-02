@@ -11,7 +11,13 @@
 -->
     <ul>
       <% resource.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <li>
+          <%if message === "Confirmar Contraseña:  doesn't match Contraseña: "%>
+            Confirmar Contraseña: La confirmación no coincide
+          <%else%>
+            <%= message %>
+          <%end%>
+        </li>
       <% end %>
     </ul>
   </div>

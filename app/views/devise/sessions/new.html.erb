@@ -22,7 +22,7 @@
                                             font-size: 24px;
                                             text-align: center;
                                             text-decoration: none;
-                                            width: 150px;
+                                            width: 120px;
                                             height: auto;
                                             margin: auto;
                                             position:relative;
@@ -50,7 +50,7 @@
                                             font-size: 24px;
                                             text-align: center;
                                             text-decoration: none;
-                                            width: 150px;
+                                            width: 120px;
                                             height: auto;
                                             margin: auto;">
             <h2 class="title">Registro</h2>
@@ -109,14 +109,14 @@
     $(document).ready(function(){
                
         if(typeof refresh === "undefined"){
-            refresh = setInterval(refrescarFormularios, 1800000);
+            refresh = setInterval(refrescarFormularios, 180000);
             $.ajaxSetup({ cache: false });
         }
     });
     
     function refrescarFormularios() {
         //$("#salastatus").css('opacity', 0.4);
-        $(".forms-container").load(window.location + '?randval='+ Math.random() + " .signin-signup", function(){
+        $(".forms-container").load(window.location + " .signin-signup", function(){
             //aquí puedes meter más código si necesitas;
         // $("#salastatus").css('opacity', 1);
         });
