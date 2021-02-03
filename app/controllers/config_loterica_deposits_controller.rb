@@ -14,7 +14,7 @@ class ConfigLotericaDepositsController < ApplicationController
       end
     end
 
-    day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+    day_actual = Time.now.utc.in_time_zone("Brasilia").strftime("%Y-%m-%d")
     parsed_date = Date.parse(day_actual)
 
     deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
@@ -25,7 +25,7 @@ class ConfigLotericaDepositsController < ApplicationController
         bancos_caixa.update_all(cupos_for_loterica:3)
     else
         deposit_for_loterica.where(status:"en proceso").each do |transaction|
-          segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+          segundos = (Time.now.utc.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
           if segundos > 1200
               Transaction.find(transaction.id).update(status:"vencida")
               method = transaction.account_destinity_admin.split("-")

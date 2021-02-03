@@ -23,6 +23,10 @@ class TransactionsController < ApplicationController
           @segundos = segundos - (@minutos * 60)
         else
           Transaction.find(transaction.id).update(status:"vencida")
+          method = transaction.account_destinity_admin.split("-")
+          cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
+          cupos += 1
+          BankBrasil.find(method[1].to_i).update(cupos_for_loterica: cupos)
         end
       end
     end
@@ -43,7 +47,7 @@ class TransactionsController < ApplicationController
 
     #COMPROBAR CUPOS DE LOTERICA Y RESETEAR
     if current_user.country === "Brasil"
-      day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+      day_actual = Time.now.utc.in_time_zone("Brasilia").strftime("%Y-%m-%d")
       parsed_date = Date.parse(day_actual)
 
       deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
@@ -54,7 +58,7 @@ class TransactionsController < ApplicationController
           bancos_caixa.update_all(cupos_for_loterica:3)
       else  #REDEFINIR EL ESTADO DE LAS TRANSACCIONES EN PROCESO SI ESTAN VENCIDAS
           deposit_for_loterica.where(status:"en proceso").each do |transaction|
-            segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+            segundos = (Time.now.utc.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
             if segundos > 1200
                 Transaction.find(transaction.id).update(status:"vencida")
                 method = transaction.account_destinity_admin.split("-")
@@ -125,7 +129,7 @@ class TransactionsController < ApplicationController
     
       #COMPROBAR CUPOS DE LOTERICA Y RESETEAR
       if current_user.country === "Brasil"
-        day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+        day_actual = Time.now.utc.in_time_zone("Brasilia").strftime("%Y-%m-%d")
         parsed_date = Date.parse(day_actual)
 
         deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
@@ -136,7 +140,7 @@ class TransactionsController < ApplicationController
             bancos_caixa.update_all(cupos_for_loterica:3)
         else  #REDEFINIR EL ESTADO DE LAS TRANSACCIONES EN PROCESO SI ESTAN VENCIDAS
             deposit_for_loterica.where(status:"en proceso").each do |transaction|
-              segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+              segundos = (Time.now.utc.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
               if segundos > 1200
                   Transaction.find(transaction.id).update(status:"vencida")
                   method = transaction.account_destinity_admin.split("-")
@@ -335,7 +339,7 @@ class TransactionsController < ApplicationController
   
                 if method_admin[0] === "caixa"
                     if @transaction.metodo === "Deposito Por Loterica"
-                        day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+                        day_actual = Time.now.utc.in_time_zone("Brasilia").strftime("%Y-%m-%d")
                         parsed_date = Date.parse(day_actual)
   
                         deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
@@ -349,7 +353,7 @@ class TransactionsController < ApplicationController
                             bancos_caixa.update_all(cupos_for_loterica:3)
                         else
                             deposit_for_loterica.where(status:"en proceso").each do |transaction|
-                                segundos = (Time.now.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
+                                segundos = (Time.now.utc.in_time_zone("Brasilia") - transaction.created_at.in_time_zone("Brasilia")).to_i
                                 if segundos > 1200
                                     method = transaction.account_destinity_admin.split("-")
                                     cupos = BankBrasil.find(method[1].to_i).cupos_for_loterica
@@ -450,18 +454,20 @@ class TransactionsController < ApplicationController
                 end
   
                 #ENLAZAR LOS METODOS DE PAGO A LA TRANSACCION
-  
+                
                 @transaction.num_id = 16.times.map { [*'0'..'9', *'A'..'Z'].sample }.join
                 respond_to do |format|
                     if @transaction.save
-                 
+
                         #actualizar cupos de la cuenta caixa utilizada si la forma de pago fue deposito por loterica
+                        
                         if @transaction.metodo === "Deposito Por Loterica"
+                            method_admin = @transaction.account_destinity_admin.split("-")
                             cupos_actuales = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
                             cupos_actuales -= 1
                             BankBrasil.find(method_admin[1].to_i).update(cupos_for_loterica: cupos_actuales)
                         end
-  
+                        
                         format.html { redirect_to status_transactions_path, notice: "Transacción iniciada con exito. Tiene 20 minutos para hacer el pago" }
                         format.json { render :show, status: :created, location: @transaction }
                     else
@@ -606,8 +612,9 @@ class TransactionsController < ApplicationController
               
               #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION ES RECHAZADA EL MISMO DIA
               if @transaction.metodo === "Deposito Por Loterica"
-                day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+                day_actual = Time.now.utc.in_time_zone("Brasilia").strftime("%Y-%m-%d")
                 date_transaction = @transaction.created_at.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+                method_admin = @transaction.account_destinity_admin.split("-")
 
                 if day_actual === date_transaction
                   cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
@@ -668,9 +675,10 @@ class TransactionsController < ApplicationController
         if @transaction.metodo === "Deposito Por Loterica"
           #RESTABLECER CUPO DE LOTERICA SI LA TRANSACCION CON ESTADO EN PROCESO ES ELIMINADA
           if @transaction.status === "en proceso"
-            day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
+            day_actual = Time.now.utc.in_time_zone("Brasilia").strftime("%Y-%m-%d")
             date_transaction = @transaction.created_at.in_time_zone("Brasilia").strftime("%Y-%m-%d")
             method_admin = @transaction.account_destinity_admin.split("-")
+
             if day_actual === date_transaction
               cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
               cupos += 1
