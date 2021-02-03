@@ -412,8 +412,8 @@ class TransactionsController < ApplicationController
                                 if config_deposit_loterica.count > 0
                                     config_deposit_loterica = ConfigLotericaDeposit.find(2)
                                     
-                                    if config_deposit_loterica.prioridad_min_1 > 0
-                                        account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_1)
+                                    if config_deposit_loterica.prioridad_max_1 > 0
+                                        account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_max_1)
   
                                         if account_caixa.cupos_for_loterica > 0
                                             @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
@@ -422,8 +422,8 @@ class TransactionsController < ApplicationController
                                     end
   
                                     unless find_account
-                                        if config_deposit_loterica.prioridad_min_2 > 0
-                                            account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_2)
+                                        if config_deposit_loterica.prioridad_max_2 > 0
+                                            account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_max_2)
   
                                             if account_caixa.cupos_for_loterica > 0
                                                 @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
@@ -433,8 +433,8 @@ class TransactionsController < ApplicationController
                                     end
   
                                     unless find_account
-                                        if config_deposit_loterica.prioridad_min_3 > 0
-                                            account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_min_3)
+                                        if config_deposit_loterica.prioridad_max_3 > 0
+                                            account_caixa = BankBrasil.find(config_deposit_loterica.prioridad_max_3)
   
                                             if account_caixa.cupos_for_loterica > 0
                                                 @transaction.account_destinity_admin = "bank_brasils-#{account_caixa.id}"
