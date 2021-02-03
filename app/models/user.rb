@@ -27,7 +27,7 @@ class User < ApplicationRecord
     #User.where("id LIKE ?", "%#{id}%")
   end
   
-  validates :name, :last_name, length: { maximum: 15, message: " El contenido es muy largo (caracteres minimos 15)" }, format: { with: /\A[a-zA-Z]+\z/, message: " Este campo no puede estar vacio y solo acepta letras", on: :update }
+  validates :name, :last_name, length: { maximum: 15, message: " El contenido es muy largo (caracteres minimos 15)" }
 
   validates :day, length: { maximum: 2, message: " El contenido es muy largo (caracteres minimos 2)" }, presence: {message: " este campo no puede estar vacio", on: :update} 
 

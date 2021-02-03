@@ -28,7 +28,7 @@ class RegistrationsController < Devise::RegistrationsController
     unless current_user.is_admin?
       super
 
-      if @user.is_normal_user? && @user.status_referencia === "indefinido"
+      if resource.errors.count === 0 && @user.status_referencia === "indefinido"
           num_referidor = @user.num_referidor.to_i
           @user.update(num_referidor:"#{num_referidor}",status_referencia:"sin confirmar")
           num_referidor /= 4
@@ -36,6 +36,7 @@ class RegistrationsController < Devise::RegistrationsController
           notification = usuario.notifications.create(emisor:"#{@user.name.capitalize} #{@user.last_name.capitalize}",content:"Gracias por recomendar nuestra pagina a este usuario, ahora debes confirmar que es tu referido.",asunto:"Referencia de usuario",dato_clave:"#{@user.id*4}")
           notification.save
       end
+      
     else
       parametros = account_update_params_user
       usuario_edit = User.find(parametros["id"])
