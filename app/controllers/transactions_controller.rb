@@ -675,7 +675,7 @@ class TransactionsController < ApplicationController
           if @transaction.status === "en proceso"
             day_actual = Time.now.in_time_zone("Brasilia").strftime("%Y-%m-%d")
             date_transaction = @transaction.created_at.in_time_zone("Brasilia").strftime("%Y-%m-%d")
-
+            method_admin = @transaction.account_destinity_admin.split("-")
             if day_actual === date_transaction
               cupos = BankBrasil.find(method_admin[1].to_i).cupos_for_loterica
               cupos += 1
