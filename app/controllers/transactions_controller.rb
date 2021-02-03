@@ -340,13 +340,8 @@ class TransactionsController < ApplicationController
   
                         deposit_for_loterica = Transaction.where(metodo: "Deposito Por Loterica", created_at: parsed_date.midnight..parsed_date.end_of_day)
   
-                        users = User.all
-                        users.each do |user|
-                          if user.is_admin?
-                            @user_admin = user
-                          end
-                        end
-  
+                        
+                        @user_admin = User.find_by(permission_level:3)
                         count = deposit_for_loterica.count
                         
                         bancos_caixa = @user_admin.bank_brasils.where(bank:"Caixa",view:"true",status:"activo",deposit_for_loterica:true)
