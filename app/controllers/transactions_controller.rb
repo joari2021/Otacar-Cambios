@@ -520,7 +520,7 @@ class TransactionsController < ApplicationController
           format.html { redirect_to user_root_path }
         end
       else
-      
+       
         validate_monto_total = true
         
         #MEJORAR EL CODIGO PARA VERIFICAR QUE LOS SUB MONTOS CONTENGAN CIFRAS QUE SEAN CORRECTAS Y NO INCLUYAN CARACTERES NO VALIDOS   ojooooooooooooooooooooooooooooooooooooo
@@ -588,6 +588,7 @@ class TransactionsController < ApplicationController
         end
       end 
     else
+      
       if @transaction.status === "por confirmar"
         @transaction.update(transaction_params_admin_edit)
 

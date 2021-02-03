@@ -32,7 +32,10 @@
                             <h6 class="text-center">Cuenta Nro <%=i%></h6>
                         <%end%>
                         <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
-                        <%if method_array.count > 1 && i === 1%>
+                        <%if method_array.count === 1%>
+                            <label class="text-primary">Monto a recibir</label><br>
+                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                        <%elsif method_array.count > 1 && i === 1%>
                             <label class="text-primary">Monto a recibir</label><br>
                             <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
                         <%elsif i === 2%>
