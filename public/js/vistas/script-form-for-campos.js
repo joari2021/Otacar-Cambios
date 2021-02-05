@@ -285,6 +285,47 @@ function inputCPNJ(input){
   }
 }
 
+function formatearNumeros(numero){
+  valor = numero.replace(/\D/g, "");
+  valor = valor.replace(/([0-9])([0-9]{2})$/, "$1.$2");
+  valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
+  numeroF = parseFloat(valor);
+  return numeroF;
+}
+
+function formatearString(numero){
+  valor = numero.toString()
+  valor = valor.replace(/\D/g, "");
+  valor = valor.replace(/([0-9])([0-9]{2})$/, "$1,$2");
+  valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+
+  if (valor.length === 1){
+      valor = "0,0".concat(valor);
+  }else if(valor.length === 2){
+      
+      valor = "0,".concat(valor);
+       
+  }else if(valor.length === 4){
+
+  }
+  else if(valor.length === 5){
+      if (valor[0] === "0") {
+          valor = valor.slice(1);
+      }
+      
+  }else{           
+      limit = valor.length 
+      for (m=0; m < limit; m++){
+          if(valor[0] === "0" || valor[0] === "."){
+              valor = valor.slice(1);
+          }else{
+              break;
+          }  
+      }   
+  }  
+  return valor;
+}
+
 function formatCampoLlave(select){
   inputIdentificador = document.getElementById("identificador")
   msj = document.getElementById("msj_invalid_identificador")
@@ -391,4 +432,6 @@ function validarCampos(){
   }
 }
 validarCampos()
+
+
 //VALIDACIONES

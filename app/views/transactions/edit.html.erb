@@ -518,7 +518,7 @@
                         
                         <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
                         
-                        <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", :id => "form"}) do |form| %>
+                        <%= form_with(model: @transaction, local: true, :html => { :class => "mb-5", :id => "form"}) do |form| %>
                             <%if @transaction.errors.any?%>
                                 <div id="error_explanation">
                                     <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -541,33 +541,62 @@
 
                                 <%if method_array.count === 1%>
                                     <label class="text-primary">Monto a enviar</label><br>
-                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                                    
+                                    <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_<%=i%>"></small>
+
+                                    <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                    
                                 <%elsif method_array.count > 1 && i === 1%>
                                     <label class="text-primary">Monto a enviar</label><br>
-                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+
+                                    <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_<%=i%>">Monto actualizado</small>
+
+                                    <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
                                 <%elsif i === 2%>
                                     <label class="text-primary">Monto a enviar</label><br>
-                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                                    <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_<%=i%>">Monto actualizado</small>
+
+                                    <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
                                 <%elsif i === 3%>
                                     <label class="text-primary">Monto a enviar</label><br>
-                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
+                                    <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+
+                                    <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_<%=i%>">Monto actualizado</small>
+
+                                    <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
                                 <%end%>
                             
                                 <a class="btn btn-copy-all" onclick="copyAll('monto_a_enviar<%=i%>')">Copiar Todo</a>
 
                                 <div class="custom-file my-4">
                                     <%if i === 1%>
-                                        <%=form.file_field :comprobante_pago_usuario, class:"custom-file-input", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                        <%=form.file_field :comprobante_pago_usuario, class:"custom-file-input is-invalid", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
                                     <%elsif i === 2%>
-                                        <%=form.file_field :comprobante_pago_usuario2, class:"custom-file-input", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                        <%=form.file_field :comprobante_pago_usuario2, class:"custom-file-input is-invalid", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
                                     <%elsif i === 3%>
-                                        <%=form.file_field :comprobante_pago_usuario3, class:"custom-file-input", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
+                                        <%=form.file_field :comprobante_pago_usuario3, class:"custom-file-input is-invalid", id:"validatedComprobante#{i}", required:"required", accept:"image/png, .jpeg, .jpg"%>
                                     <%end%>
                                     <label class="custom-file-label" id="name-archivo<%=i%>" for="validatedComprobante<%=i%>" data-browse="Elegir">Comprobante de pago...</label>
                                     <div class="invalid-feedback">Solo puedes subir un archivo en formato jpg, jpeg o png</div>
                                 </div>
                                 <%i+=1%>
                             <%end%>
+                            <hr>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1" oninput="mostrar_opciones(this)" name="transaction[actualizacion_monto_envio]">
+                                <label class="custom-control-label font-weight-bold text-primary" for="customSwitch1" style="cursor:pointer !important;" title="Actualizar monto(s) según la tasa actual" >Actualizar Monto(s)</label>
+                            </div>
+
+                            <div class="mt-2 d-none" id="div_btn_modify">
+                                <a class="btn btn-modify-monto" title="Actualizar monto(s) según la tasa actual" onclick="modifyTasaActual(this)" id="btn_act_aut">Act. T.A</a>
+
+                                <a class="btn btn-modify-monto float-right disabled" title="Restablecer Monto(s)" onclick="restablecerMonto(this)" id="btn_restablecer">Restablecer</a>
+
+                                <hr>
+                            </div>
                             
                             <div class="actions mt-4">
                                 <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
@@ -609,7 +638,8 @@
                             <div class="text-center">
                             
                                 <label class="text-primary">Monto total a enviar</label><br>
-                                <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                                <%=@moneda_destinity%> <span id="monto_a_enviar4"><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br>
+                                <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_4">Monto actualizado</small><hr>
                                 
                             </div>
                         <%end%>
@@ -634,7 +664,107 @@
         </div>
     
     <%end%>
+    <script src="/js/vistas/script-form-for-campos.js"></script>
     <script>
+        btn_reset = document.getElementById("btn_restablecer")
+        function mostrar_opciones(check) {
+            div_btn = document.getElementById("div_btn_modify")
+
+            if (check.checked === true){
+                //div_btn.classList.remove("d-none")
+                modifyTasaActual()
+            }else{
+                //div_btn.classList.add("d-none")
+                restablecerMonto()
+            }
+        }
+
+        function modifyTasaActual() {
+
+            /*Datos para la tasa*/
+            monto_oferta_tasa = formatearNumeros("<%=@rate.monto_oferta%>")
+            switch ("<%=@transaction.country_destinity%>"){
+                case "Argentina":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_argentina%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_argentina_min%>")
+                    }
+                    break;
+
+                case "Venezuela":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_venezuela%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_venezuela_min%>")
+                    }
+                    break;
+            }
+            tasa_anterior = <%=@transaction.monto_a_recibir%> / <%=@transaction.monto_envio%>
+
+            <%method_user = @transaction.account_destinity_usuario.split(",")%>
+            cuentas_user = <%=method_user.count%>
+            if (cuentas_user === 3){
+                cuentas_user += 1
+            }
+
+            for(i=1; i <= cuentas_user; i++){
+                if (cuentas_user === 1 || i === 4){
+                    monto_inicial = <%=@transaction.monto_a_recibir%>
+                }else if(i === 1){
+                    monto_inicial = formatearNumeros("<%=@transaction.sub_monto_a_recibir_1%>")
+                }else if(i === 2){
+                    monto_inicial = formatearNumeros("<%=@transaction.sub_monto_a_recibir_2%>")
+                }else if(i === 3){
+                    monto_inicial = formatearNumeros("<%=@transaction.sub_monto_a_recibir_3%>")
+                }
+                
+                monto_a_recibir_to_usuario = monto_inicial
+                monto_a_recibir_to_usuario /= tasa_anterior
+                monto_a_recibir_to_usuario *= monto_tasa_actual
+                
+                span_monto = document.getElementById("monto_a_enviar"+i)
+                span_monto.innerHTML = formatearString(monto_a_recibir_to_usuario.toFixed(2))
+                small = document.getElementById("small_"+i)
+                small.classList.remove("d-none")
+
+            }
+
+            //btn.classList.add("disabled")
+            //btn_reset.classList.remove("disabled")
+            
+        }
+
+        function restablecerMonto(btn) {
+            //btn_act_aut = document.getElementById("btn_act_aut")
+
+            <%method_user = @transaction.account_destinity_usuario.split(",")%>
+            cuentas_user = <%=method_user.count%>
+            if (cuentas_user === 3){
+                cuentas_user += 1
+            }
+
+            for(i=1; i <= cuentas_user; i++){
+                if (cuentas_user === 1 || i === 4){
+                    monto_inicial = formatearString(<%=@transaction.monto_a_recibir%>.toFixed(2))
+                }else if(i === 1){
+                    monto_inicial = "<%=@transaction.sub_monto_a_recibir_1%>"
+                }else if(i === 2){
+                    monto_inicial = "<%=@transaction.sub_monto_a_recibir_2%>"
+                }else if(i === 3){
+                    monto_inicial = "<%=@transaction.sub_monto_a_recibir_3%>"
+                }
+                span_monto = document.getElementById("monto_a_enviar"+i)
+
+                span_monto.innerHTML = monto_inicial
+                small = document.getElementById("small_"+i)
+                small.classList.add("d-none")
+            }
+            //btn.classList.add("disabled")
+            //btn_act_aut.classList.remove("disabled")
+        }
+
         function copyAll(limit_span){
             divP = document.getElementById("profile");
             var textarea = document.createElement("textarea");
@@ -726,6 +856,8 @@
         <%methods_array.each do |method|%>
             $("#validatedComprobante<%=i+1%>").change(function(){
                 array_labels_file[<%=i%>].innerHTML = this.files[0].name;
+                array_custom_file[<%=i%>].classList.remove("is-invalid")
+                array_custom_file[<%=i%>].classList.add("is-valid")
 
                 validation = true
                 for(i=0; i < array_custom_file.length; i++){
@@ -744,6 +876,8 @@
                 array_labels_file[i].innerHTML = "Comprobante de pago...";
                 array_custom_file[i].value = "";
                 array_custom_file[i].removeAttribute("required");
+                array_custom_file[i].classList.remove("is-valid");
+                array_custom_file[i].classList.remove("is-invalid");
             }
         });
         $("#button").click(function(){

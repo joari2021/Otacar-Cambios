@@ -190,19 +190,15 @@ class TransactionsController < ApplicationController
     if current_user.is_admin?
       @users = users
     end
+
     users.each do |user|
       if user.is_admin?
         @user_admin = user
       end
     end
 
-    rates = Rate.all
-    rates.each do |rate|
-      if rate.country === current_user.country
-        @rate = rate
-      end
-    end
-
+    @rate = Rate.find_by(country: @transaction.user.country)
+    
     unless current_user.is_admin?
       unless @transaction_pendiente
         respond_to do |format|
