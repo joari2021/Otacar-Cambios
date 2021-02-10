@@ -9,7 +9,6 @@
 #
 # Configuration details:
 # https://github.com/airbrake/airbrake-ruby#configuration
-
 Airbrake.configure do |c|
   # You must set both project_id & project_key. To find your project_id and
   # project_key navigate to your project's General Settings and copy the values
@@ -53,6 +52,7 @@ Airbrake.configure do |c|
   # Alternatively, you can integrate with Rails' filter_parameters.
   # Read more: https://goo.gl/gqQ1xS
   # c.blocklist_keys = Rails.application.config.filter_parameters
+end
 
 # A filter that collects request body information. Enable it if you are sure you
 # don't send sensitive information to Airbrake in your body (such as passwords).
@@ -70,6 +70,3 @@ Airbrake.configure do |c|
 # integration with the Logger class from stdlib.
 # https://github.com/airbrake/airbrake#logger
 # Rails.logger = Airbrake::AirbrakeLogger.new(Rails.logger)
-
-end
-
