@@ -34,16 +34,48 @@
                         <%= render 'detalle-account-for-view', {transaction: @transaction, user_account: @transaction.user, method: @method} %>
                         <%if method_array.count === 1%>
                             <label class="text-primary">Monto a recibir</label><br>
-                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%if @transaction.actualizacion_monto_envio%>
+                                 <span class="font-weight-bold"><%=@moneda_destinity%> <%=number_with_precision(@transaction.new_monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><br>
+                                 <div class="alert alert-primary" role="alert">
+                                    <span class="font-italic font-weight-bold">Monto Anterior: <%=@moneda_destinity%> <%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                                </div>
+                                <hr>
+                            <%else%>
+                                <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%end%>
                         <%elsif method_array.count > 1 && i === 1%>
                             <label class="text-primary">Monto a recibir</label><br>
-                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%if @transaction.actualizacion_monto_envio%>
+                                 <span class="font-weight-bold"><%=@moneda_destinity%> <%=number_with_precision(@transaction.new_sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><br>
+                                 <div class="alert alert-primary" role="alert">
+                                    <span class="font-italic font-weight-bold">Monto Anterior: <%=@moneda_destinity%> <%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                                </div>
+                                <hr>
+                            <%else%>
+                                <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%end%>
                         <%elsif i === 2%>
                             <label class="text-primary">Monto a recibir</label><br>
-                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%if @transaction.actualizacion_monto_envio%>
+                                 <span class="font-weight-bold"><%=@moneda_destinity%> <%=number_with_precision(@transaction.new_sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><br>
+                                 <div class="alert alert-primary" role="alert">
+                                    <span class="font-italic font-weight-bold">Monto Anterior: <%=@moneda_destinity%> <%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                                </div>
+                                <hr>
+                            <%else%>
+                                <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%end%>
                         <%elsif i === 3%>
                             <label class="text-primary">Monto a recibir</label><br>
-                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%if @transaction.actualizacion_monto_envio%>
+                                 <span class="font-weight-bold"><%=@moneda_destinity%> <%=number_with_precision(@transaction.new_sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><br>
+                                 <div class="alert alert-primary" role="alert">
+                                    <span class="font-italic font-weight-bold">Monto Anterior: <%=@moneda_destinity%> <%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                                </div>
+                                <hr>
+                            <%else%>
+                                <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%end%>
                         <%end%>
 
                         <label class="text-primary">Comprobante</label><br>
@@ -66,8 +98,26 @@
                         <hr>
                         <div class="text-center">
                             <label class="text-primary">Monto total a recibir</label><br>
-                            <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                            <%if @transaction.actualizacion_monto_envio%>
+                                 <span class="font-weight-bold"><%=@moneda_destinity%> <%=number_with_precision(@transaction.new_monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><br>
+                                 <div class="alert alert-primary" role="alert">
+                                    <span class="font-italic font-weight-bold">Monto Anterior: <%=@moneda_destinity%> <%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
+                                </div>
+
+                            <%else%>
+                                <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
+                            <%end%>
                         </div><br>
+                    <%end%>
+
+                    <%if @transaction.actualizacion_monto_envio%>
+                        <div class="alert alert-primary mt-3 font-italic" role="alert">
+                            <%if method_array.count === 1%>
+                                Nota: El monto fue actualizado en base a la ultima actualizacion de la tasa de envio como compensación por el retraso en el pago.
+                            <%else%>
+                                Nota: Los montos fueron actualizados en base a la ultima actualizacion de la tasa de envio como compensación por el retraso en los pagos.
+                            <%end%>
+                        </div>
                     <%end%>
                     
                 </div>

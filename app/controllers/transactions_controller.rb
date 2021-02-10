@@ -219,94 +219,30 @@ class TransactionsController < ApplicationController
           transaction_inicial = Transaction.new(transaction_params)
   
           monto_envio = transaction_inicial.monto_envio.to_f
-        
+          
           if monto_envio > 0
-            case transaction_inicial.country_destinity
+            @tasaMin = ""
+            @tasaOf = ""
+            @montoMin = ""
+            @barrera_1 = false
+            obtener_tasas(transaction_inicial.country_destinity)
             
-              when "Argentina"
-                tasaMin = @rate.rate_argentina
-                tasaOf = @rate.rate_argentina_min
-                montoMin = @rate.monto_min_argentina
-                barrera_1 = true
-              when "Brasil"
-                tasaMin = @rate.rate_brasil
-                tasaOf = @rate.rate_brasil_min
-                montoMin = @rate.monto_min_brasil
-                barrera_1 = true
-              when "Chile"
-                tasaMin = @rate.rate_chile
-                tasaOf = @rate.rate_chile_min
-                montoMin = @rate.monto_min_chile
-                barrera_1 = true
-              when "Colombia"
-                tasaMin = @rate.rate_colombia
-                tasaOf = @rate.rate_colombia_min
-                montoMin = @rate.monto_min_colombia
-                barrera_1 = true
-              when "Ecuador"
-                tasaMin = @rate.rate_ecuador
-                tasaOf = @rate.rate_ecuador_min
-                montoMin = @rate.monto_min_ecuador
-                barrera_1 = true
-              when "España"
-                tasaMin = @rate.rate_españa
-                tasaOf = @rate.rate_españa_min
-                montoMin = @rate.monto_min_españa
-                barrera_1 = true
-              when "Panama"
-                tasaMin = @rate.rate_panama
-                tasaOf = @rate.rate_panama_min
-                montoMin = @rate.monto_min_panama
-                barrera_1 = true
-              when "Peru"
-                tasaMin = @rate.rate_peru
-                tasaOf = @rate.rate_peru_min
-                montoMin = @rate.monto_min_peru
-                barrera_1 = true
-              when "USA"
-                tasaMin = @rate.rate_usa
-                tasaOf = @rate.rate_usa_min
-                montoMin = @rate.monto_min_usa
-                barrera_1 = true
-              when "Venezuela"
-                tasaMin = @rate.rate_venezuela
-                tasaOf = @rate.rate_venezuela_min
-                montoMin = @rate.monto_min_venezuela
-                barrera_1 = true
-              else
-                barrera_1 = false
-            end
-  
-            if barrera_1
-              monto_oferta = @rate.monto_oferta.gsub('.','')
-              monto_oferta.gsub!(',','.')
-              monto_oferta = monto_oferta.to_f
-        
-              tasaMin.gsub!('.','')
-              tasaMin.gsub!(',','.')
-              tasaMin = tasaMin.to_f
-        
-              tasaOf.gsub!('.','')
-              tasaOf.gsub!(',','.')
-              tasaOf = tasaOf.to_f
+            if @barrera_1
+              monto_oferta = formatear_tasas()
               
-              montoMin.gsub!('.','')
-              montoMin.gsub!(',','.')
-              montoMin = montoMin.to_f
-        
-              if monto_envio >= montoMin
+              if monto_envio >= @montoMin
                 if monto_oferta > 0
                   if monto_envio < monto_oferta
-                    tasa_definitiva = tasaMin
+                    tasa_definitiva = @tasaMin
                   else
-                    if tasaOf > 0
-                      tasa_definitiva = tasaOf
+                    if @tasaOf > 0
+                      tasa_definitiva = @tasaOf
                     else 
-                      tasa_definitiva = tasaMin
+                      tasa_definitiva = @tasaMin
                     end
                   end  
                 else
-                  tasa_definitiva = tasaMin
+                  tasa_definitiva = @tasaMin
                 end
                 
                 resultado = monto_envio * tasa_definitiva
@@ -584,7 +520,7 @@ class TransactionsController < ApplicationController
         end
       end 
     else
-      
+      @rate = Rate.find_by(country: @transaction.user.country)
       if @transaction.status === "por confirmar"
         @transaction.update(transaction_params_admin_edit)
 
@@ -636,6 +572,56 @@ class TransactionsController < ApplicationController
 
           respond_to do |format|
             if @transaction.update(status:"realizada")
+              if @transaction.actualizacion_monto_envio
+                methods_usuario = @transaction.account_destinity_usuario.split(",")
+                
+                @tasaMin = ""
+                @tasaOf = ""
+                @montoMin = ""
+                obtener_tasas(@transaction.country_destinity)
+                
+                monto_oferta = formatear_tasas()
+                @monto_envio = @transaction.monto_envio.to_f
+                
+                if monto_oferta > 0
+                  if @monto_envio < monto_oferta
+                    tasa_definitiva = @tasaMin
+                  else
+                    if @tasaOf > 0
+                      tasa_definitiva = @tasaOf
+                    else 
+                      tasa_definitiva = @tasaMin
+                    end
+                  end  
+                else
+                  tasa_definitiva = @tasaMin
+                end
+                
+                resultado = @monto_envio * tasa_definitiva
+                @transaction.new_monto_a_recibir = resultado
+                
+                def actuality_sub_montos(monto,tasa_definitiva)
+                  monto = monto.gsub('.','')
+                  monto = monto.gsub(',','.')
+                  monto = monto.to_f
+
+                  tasa_anterior = @transaction.monto_a_recibir / @monto_envio
+                  monto /= tasa_anterior
+                  return resultado = monto * tasa_definitiva
+                end
+
+                if methods_usuario.count >= 2
+                  
+                  @transaction.new_sub_monto_a_recibir_1 = actuality_sub_montos(@transaction.sub_monto_a_recibir_1,tasa_definitiva)
+                  @transaction.new_sub_monto_a_recibir_2 = actuality_sub_montos(@transaction.sub_monto_a_recibir_2,tasa_definitiva)
+                end
+
+                if methods_usuario.count === 3
+                  @transaction.new_sub_monto_a_recibir_3 = actuality_sub_montos(@transaction.sub_monto_a_recibir_3,tasa_definitiva)
+                end
+              
+                @transaction.save
+              end
               notification = @transaction.user.notifications.create(emisor:"Otacar Cambios",content:"El envio fue realizado con exito. Transacción ID: #{@transaction.num_id}.",asunto:"Envio realizado")
 
               format.html { redirect_to pending_transactions_path, notice: 'Transaccion realizada con exito.' }
@@ -730,7 +716,84 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params_admin_process
-      params.require(:transaction).permit(:motivo_rechazo, :comprobante_pago_usuario, :comprobante_pago_usuario2, :comprobante_pago_usuario3)
+      params.require(:transaction).permit(:motivo_rechazo, :comprobante_pago_usuario, :comprobante_pago_usuario2, :comprobante_pago_usuario3, :actualizacion_monto_envio)
+    end
+
+    def obtener_tasas(country)
+      case country
+            
+        when "Argentina"
+          @tasaMin = @rate.rate_argentina
+          @tasaOf = @rate.rate_argentina_min
+          @montoMin = @rate.monto_min_argentina
+          @barrera_1 = true
+        when "Brasil"
+          @tasaMin = @rate.rate_brasil
+          @tasaOf = @rate.rate_brasil_min
+          @montoMin = @rate.monto_min_brasil
+          @barrera_1 = true
+        when "Chile"
+          @tasaMin = @rate.rate_chile
+          @tasaOf = @rate.rate_chile_min
+          @montoMin = @rate.monto_min_chile
+          @barrera_1 = true
+        when "Colombia"
+          @tasaMin = @rate.rate_colombia
+          @tasaOf = @rate.rate_colombia_min
+          @montoMin = @rate.monto_min_colombia
+          @barrera_1 = true
+        when "Ecuador"
+          @tasaMin = @rate.rate_ecuador
+          @tasaOf = @rate.rate_ecuador_min
+          @montoMin = @rate.monto_min_ecuador
+          @barrera_1 = true
+        when "España"
+          @tasaMin = @rate.rate_españa
+          @tasaOf = @rate.rate_españa_min
+          @montoMin = @rate.monto_min_españa
+          @barrera_1 = true
+        when "Panama"
+          @tasaMin = @rate.rate_panama
+          @tasaOf = @rate.rate_panama_min
+          @montoMin = @rate.monto_min_panama
+          @barrera_1 = true
+        when "Peru"
+          @tasaMin = @rate.rate_peru
+          @tasaOf = @rate.rate_peru_min
+          @montoMin = @rate.monto_min_peru
+          @barrera_1 = true
+        when "USA"
+          @tasaMin = @rate.rate_usa
+          @tasaOf = @rate.rate_usa_min
+          @montoMin = @rate.monto_min_usa
+          @barrera_1 = true
+        when "Venezuela"
+          @tasaMin = @rate.rate_venezuela
+          @tasaOf = @rate.rate_venezuela_min
+          @montoMin = @rate.monto_min_venezuela
+          @barrera_1 = true
+  
+      end
+    end
+
+    def formatear_tasas
+      monto_oferta = @rate.monto_oferta.gsub('.','')
+      monto_oferta.gsub!(',','.')
+      monto_oferta = monto_oferta.to_f
+
+      @tasaMin.gsub!('.','')
+      @tasaMin.gsub!(',','.')
+      @tasaMin = @tasaMin.to_f
+
+      @tasaOf.gsub!('.','')
+      @tasaOf.gsub!(',','.')
+      @tasaOf = @tasaOf.to_f
+      
+      @montoMin.gsub!('.','')
+      @montoMin.gsub!(',','.')
+      @montoMin = @montoMin.to_f
+
+      return monto_oferta
     end
     
 end

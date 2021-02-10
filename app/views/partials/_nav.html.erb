@@ -7,7 +7,7 @@
         <div class="menu">
             <%if current_user.is_normal_user?%>
                 <span id="reload-link">
-                <a href="/dhasboard" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" id="link-dashboard" onclick="show_preloader()"><i class="fas fa-house-user icono mr-3"></i>Dhasboard <%if current_user.notifications.where(view:false).count > 0%><span class="ml-2 mat-badge-content badge-menu bg-info"><%=current_user.notifications.where(view:false).count%></span><%end%></a></span>
+                <a href="/dhasboard" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0 special-link" id="link-dashboard" onclick="show_preloader()"><i class="fas fa-house-user icono mr-3"></i>Dhasboard <%if current_user.notifications.where(view:false).count > 0%><small class="ml-2 mat-badge-content badge-menu bg-info"><%=current_user.notifications.where(view:false).count%></small><%end%></a></span>
     
                 
             <%unless current_user.is_admin?%>

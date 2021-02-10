@@ -469,6 +469,11 @@
                                                                 Ningun usuario
                                                             <%end%>
                                                         </div> 
+                                                        
+                                                        <div class="col-6 text-right">Estado de la referencia</div>
+                                                        <div class="col-6 text-left">
+                                                            <%=@transaction.user.status_referencia%>      
+                                                        </div> 
                                                                             
                                                     </div> 
                                                 </div>        
@@ -543,7 +548,7 @@
                                     <label class="text-primary">Monto a enviar</label><br>
                                     <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%=number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
                                     
-                                    <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_<%=i%>"></small>
+                                    <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_<%=i%>">Monto actualizado</small>
 
                                     <i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_a_enviar<%=i%>','Monto a enviar')"></i><br><hr>
                                     
@@ -585,11 +590,12 @@
                                 <%i+=1%>
                             <%end%>
                             <hr>
-                            <div class="custom-control custom-switch">
+                            <div class="custom-control custom-switch div-switch">
                                 <input type="checkbox" class="custom-control-input" id="customSwitch1" oninput="mostrar_opciones(this)" name="transaction[actualizacion_monto_envio]">
-                                <label class="custom-control-label font-weight-bold text-primary" for="customSwitch1" style="cursor:pointer !important;" title="Actualizar monto(s) según la tasa actual" >Actualizar Monto(s)</label>
+                                <label class="custom-control-label font-weight-bold text-primary" id="label_switch" for="customSwitch1" title="Actualizar monto(s) según la tasa actual" >Actualizar Monto(s)</label>
                             </div>
 
+                            <!--
                             <div class="mt-2 d-none" id="div_btn_modify">
                                 <a class="btn btn-modify-monto" title="Actualizar monto(s) según la tasa actual" onclick="modifyTasaActual(this)" id="btn_act_aut">Act. T.A</a>
 
@@ -597,6 +603,7 @@
 
                                 <hr>
                             </div>
+                            -->
                             
                             <div class="actions mt-4">
                                 <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
@@ -638,8 +645,8 @@
                             <div class="text-center">
                             
                                 <label class="text-primary">Monto total a enviar</label><br>
-                                <%=@moneda_destinity%> <span id="monto_a_enviar4"><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br>
-                                <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_4">Monto actualizado</small><hr>
+                                <%=@moneda_destinity%> <span id="monto_a_enviar<%=i%>"><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br>
+                                <small class="d-none ml-2 badge badge-pill badge-secondary" id="small_<%=i%>">Monto actualizado</small><hr>
                                 
                             </div>
                         <%end%>
@@ -666,6 +673,7 @@
     <%end%>
     <script src="/js/vistas/script-form-for-campos.js"></script>
     <script>
+      
         btn_reset = document.getElementById("btn_restablecer")
         function mostrar_opciones(check) {
             div_btn = document.getElementById("div_btn_modify")
@@ -679,10 +687,11 @@
             }
         }
 
-        function modifyTasaActual() {
-
+        function obtener_tasa() {
             /*Datos para la tasa*/
+            
             monto_oferta_tasa = formatearNumeros("<%=@rate.monto_oferta%>")
+
             switch ("<%=@transaction.country_destinity%>"){
                 case "Argentina":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
@@ -690,6 +699,78 @@
                         monto_tasa_actual = formatearNumeros("<%=@rate.rate_argentina%>")
                     }else{
                         monto_tasa_actual = formatearNumeros("<%=@rate.rate_argentina_min%>")
+                    }
+                    break;
+                
+                case "Brasil":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_brasil%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_brasil_min%>")
+                    }
+                    break;
+
+                case "Chile":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_chile%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_chile_min%>")
+                    }
+                    break;
+
+                case "Colombia":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_colombia%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_colombia_min%>")
+                    }
+                    break;
+
+                case "Ecuador":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_ecuador%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_ecuador_min%>")
+                    }
+                    break;
+
+                case "España":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_españa%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_españa_min%>")
+                    }
+                    break;
+
+                case "Panama":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_panama%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_panama_min%>")
+                    }
+                    break;
+
+                case "Peru":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_peru%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_peru_min%>")
+                    }
+                    break;
+
+                case "USA":
+                    if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
+
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_usa%>")
+                    }else{
+                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_usa_min%>")
                     }
                     break;
 
@@ -701,16 +782,22 @@
                     }
                     break;
             }
-            tasa_anterior = <%=@transaction.monto_a_recibir%> / <%=@transaction.monto_envio%>
+            return monto_tasa_actual
+        }
 
+        function modifyTasaActual() {
+
+            tasa_anterior = <%=@transaction.monto_a_recibir%> / <%=@transaction.monto_envio%>
+            monto_tasa_actual = obtener_tasa()
             <%method_user = @transaction.account_destinity_usuario.split(",")%>
             cuentas_user = <%=method_user.count%>
-            if (cuentas_user === 3){
+            if (cuentas_user > 1){
                 cuentas_user += 1
             }
 
             for(i=1; i <= cuentas_user; i++){
-                if (cuentas_user === 1 || i === 4){
+                
+                if (cuentas_user === 1 || i === cuentas_user){
                     monto_inicial = <%=@transaction.monto_a_recibir%>
                 }else if(i === 1){
                     monto_inicial = formatearNumeros("<%=@transaction.sub_monto_a_recibir_1%>")
@@ -723,12 +810,17 @@
                 monto_a_recibir_to_usuario = monto_inicial
                 monto_a_recibir_to_usuario /= tasa_anterior
                 monto_a_recibir_to_usuario *= monto_tasa_actual
-                
+
                 span_monto = document.getElementById("monto_a_enviar"+i)
                 span_monto.innerHTML = formatearString(monto_a_recibir_to_usuario.toFixed(2))
+                if (monto_inicial < monto_a_recibir_to_usuario){
+                    span_monto.classList.add("text-primary")
+                }else if (monto_inicial > monto_a_recibir_to_usuario){
+                    span_monto.classList.add("text-danger")
+                }
+                
                 small = document.getElementById("small_"+i)
                 small.classList.remove("d-none")
-
             }
 
             //btn.classList.add("disabled")
@@ -741,12 +833,12 @@
 
             <%method_user = @transaction.account_destinity_usuario.split(",")%>
             cuentas_user = <%=method_user.count%>
-            if (cuentas_user === 3){
+            if (cuentas_user > 1){
                 cuentas_user += 1
             }
 
             for(i=1; i <= cuentas_user; i++){
-                if (cuentas_user === 1 || i === 4){
+                if (cuentas_user === 1 || i === cuentas_user){
                     monto_inicial = formatearString(<%=@transaction.monto_a_recibir%>.toFixed(2))
                 }else if(i === 1){
                     monto_inicial = "<%=@transaction.sub_monto_a_recibir_1%>"
@@ -758,12 +850,35 @@
                 span_monto = document.getElementById("monto_a_enviar"+i)
 
                 span_monto.innerHTML = monto_inicial
+                span_monto.classList.remove("text-primary")
+                span_monto.classList.remove("text-danger")
                 small = document.getElementById("small_"+i)
                 small.classList.add("d-none")
             }
             //btn.classList.add("disabled")
             //btn_act_aut.classList.remove("disabled")
         }
+
+        //FUNCION PARA HABILITAR EL BOTON DE ACTUALIZAR MONTOS
+        function refrescar(){
+            window.location.href = window.location.href;
+        }
+        
+        function verify_actualitation_montos() {
+            if (typeof formatearNumeros === "undefined"){
+                refrescar()
+            }
+            tasa_anterior = <%=@transaction.monto_a_recibir%> / <%=@transaction.monto_envio%>
+            monto_tasa_actual = obtener_tasa()
+
+            if(tasa_anterior === monto_tasa_actual){
+                document.getElementById("customSwitch1").setAttribute("disabled","disabled")
+                document.getElementById("label_switch").classList.remove("text-primary")
+                document.getElementById("label_switch").classList.add("text-secondary")
+            }
+        }
+        verify_actualitation_montos()
+        ////////////////////////////////////////////////////
 
         function copyAll(limit_span){
             divP = document.getElementById("profile");
@@ -841,6 +956,7 @@
             
         }
         
+       
         array_labels_file = [];
         array_custom_file = [];
 

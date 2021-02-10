@@ -1,3 +1,21 @@
+<%if @rate.country.capitalize != "Argentina" && @rate.rate_argentina != "0,00"%>
+<h5>Argentina</h5>
+<div class="row">    
+    <div class="<%if @rate.monto_oferta != "0,00" && @rate.rate_argentina_min != "0,00"%>col-5<%else%>col-12<%end%>">
+        <h6>Tasa</h6>
+        <span>1 <%=@rate.moneda%> = <%=@rate.rate_argentina%> R$</span> 
+    </div>
+    <%if @rate.monto_oferta != "0,00" && @rate.rate_argentina_min != "0,00"%>
+    <div class="col-7">
+        <h6>Mas de <%=@rate.monto_oferta%> <%=@rate.moneda%> </h6>
+        <span>1 <%=@rate.moneda%> = <%=@rate.rate_argentina_min%> R$</span>  
+    </div>
+    <%end%>
+</div>
+<hr>
+<%end%>
+
+
 <%if @rate.country.capitalize != "Brasil" && @rate.rate_brasil != "0,00"%>
 <h5>Brasil</h5>
 <div class="row">    
@@ -26,6 +44,23 @@
     <div class="col-7">
         <h6>Mas de <%=@rate.monto_oferta%> <%=@rate.moneda%> </h6>
         <span>1 <%=@rate.moneda%> = <%=@rate.rate_chile_min%> CLP</span>  
+    </div>
+    <%end%>
+</div>
+<hr>
+<%end%>
+
+<%if @rate.country.capitalize != "Colombia" && @rate.rate_colombia != "0,00"%>
+<h5>Colombia</h5>
+<div class="row">    
+    <div class="<%if @rate.monto_oferta != "0,00" && @rate.rate_colombia_min != "0,00"%>col-5<%else%>col-12<%end%>">
+        <h6>Tasa</h6>
+        <span>1 <%=@rate.moneda%> = <%=@rate.rate_colombia%> R$</span> 
+    </div>
+    <%if @rate.monto_oferta != "0,00" && @rate.rate_colombia_min != "0,00"%>
+    <div class="col-7">
+        <h6>Mas de <%=@rate.monto_oferta%> <%=@rate.moneda%> </h6>
+        <span>1 <%=@rate.moneda%> = <%=@rate.rate_colombia_min%> R$</span>  
     </div>
     <%end%>
 </div>

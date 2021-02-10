@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_01_181408) do
+ActiveRecord::Schema.define(version: 2021_02_09_151204) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -192,6 +192,11 @@ ActiveRecord::Schema.define(version: 2021_02_01_181408) do
     t.string "sub_monto_a_recibir_3"
     t.string "comprobante_pago_usuario2"
     t.string "comprobante_pago_usuario3"
+    t.boolean "actualizacion_monto_envio", default: false
+    t.decimal "new_monto_a_recibir", precision: 18, scale: 2
+    t.decimal "new_sub_monto_a_recibir_1", precision: 18, scale: 2
+    t.decimal "new_sub_monto_a_recibir_2", precision: 18, scale: 2
+    t.decimal "new_sub_monto_a_recibir_3", precision: 18, scale: 2
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 

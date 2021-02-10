@@ -71,7 +71,7 @@
                                                 part1 = payment.number_phone[0, 3]
                                                 part2 = payment.number_phone[-4,4]
                                                 %>
-                                                <td class="align-middle"><span class="">N/A</span></td>
+                                                <td class="align-middle"><span class="text-capitalize"><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
                                                 <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
                                                 <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             <%end%>
@@ -169,7 +169,7 @@
                                                 part1 = payment.number_phone[0, 3]
                                                 part2 = payment.number_phone[-4,4]
                                                 %>
-                                                <td class="align-middle"><span class="">N/A</span></td>
+                                                <td class="align-middle"><span class="text-capitalize"><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
                                                 <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
                                                 <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             <%end%>

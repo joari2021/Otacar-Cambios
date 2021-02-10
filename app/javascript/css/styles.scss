@@ -866,12 +866,17 @@ a {
 		width: 100%;
 	}
 }
+div.div-switch:hover,
+div.div-switch:hover input,
+div.div-switch:hover label{
+  cursor: pointer !important;
+}
 
 /*ETIQUETA TITLE*/
 
 [data-title]:hover:after {
   opacity: 1;
-  transition: all 0.1s ease 0.5s;
+  //transition: all 0.1s ease 0.5s;
   visibility: visible;
 }
 
