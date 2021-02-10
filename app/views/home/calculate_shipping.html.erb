@@ -251,7 +251,7 @@
             <%if current_user.country != "Argentina"%>
             case "Argentina":
                 
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_argentina%>","<%=rate.rate_argentina_min%>","<%=rate.moneda%>","R$","enviar");
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_argentina%>","<%=rate.rate_argentina_min%>","<%=rate.moneda%>","$","enviar");
                               
                 break;
             <%end%>
@@ -275,7 +275,7 @@
             <%if current_user.country != "Colombia"%>
             case "Colombia":
                 
-                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_colombia%>","<%=rate.rate_colombia_min%>","<%=rate.moneda%>","R$","enviar");
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_colombia%>","<%=rate.rate_colombia_min%>","<%=rate.moneda%>","$","enviar");
                               
                 break;
             <%end%>
@@ -354,7 +354,14 @@
         <%if current_user.country === rate.country%>
         var paisV = pais.value
         switch (paisV) {
-            
+            <%if current_user.country != "Argentina"%>
+            case "Argentina":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_argentina%>","<%=rate.rate_argentina_min%>","<%=rate.moneda%>","$","recibir");
+                              
+                break;
+            <%end%>
+
             <%if current_user.country != "Brasil"%>
             case "Brasil":
                 
@@ -367,6 +374,14 @@
             case "Chile":
                 
                 convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_chile%>","<%=rate.rate_chile_min%>","<%=rate.moneda%>","CLP","recibir");
+                              
+                break;
+            <%end%>
+
+            <%if current_user.country != "Colombia"%>
+            case "Colombia":
+                
+                convertAmount("<%=rate.monto_oferta%>","<%=rate.rate_colombia%>","<%=rate.rate_colombia_min%>","<%=rate.moneda%>","$","recibir");
                               
                 break;
             <%end%>
