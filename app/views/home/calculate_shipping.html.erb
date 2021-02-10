@@ -53,7 +53,7 @@
 
                 <%if current_user.country != "Argentina" && rate.rate_argentina != "0,00"%><option value="Argentina">Argentina</option><%end%>
                 <%if current_user.country != "Brasil" && rate.rate_brasil != "0,00"%><option value="Brasil">Brasil</option><%end%>
-                <%if rate.nombre === "hola" && current_user.country != "Chile" && rate.rate_chile != "0,00"%><option value="Chile">Chile</option><%end%>
+                <%if current_user.country != "Chile" && rate.rate_chile != "0,00"%><option value="Chile">Chile</option><%end%>
                 <%if current_user.country != "Colombia" && rate.rate_colombia != "0,00"%><option value="Colombia">Colombia</option><%end%>
                 <%if current_user.country != "Ecuador" && rate.rate_ecuador != "0,00"%><option value="Ecuador">Ecuador</option><%end%>
                 <%if current_user.country != "España" && rate.rate_españa != "0,00"%><option value="España">España</option><%end%>
