@@ -459,12 +459,9 @@ class TransactionsController < ApplicationController
         if @transaction.country_destinity === "Venezuela"
           parametros = transaction_params_user_edit
           methods_array = @transaction.account_destinity_usuario.split(",")
+          monto_work = ""
 
-          if methods_array.count === 1
-            parametros["sub_monto_a_recibir_1"] = ""
-            parametros["sub_monto_a_recibir_2"] = ""
-            parametros["sub_monto_a_recibir_3"] = ""
-          elsif methods_array.count === 2
+          if methods_array.count === 2
             monto_1 = parametros["sub_monto_a_recibir_1"].gsub('.','')
             monto_1.gsub!(',','.')
             monto_1 = monto_1.to_f
@@ -473,12 +470,17 @@ class TransactionsController < ApplicationController
             monto_2.gsub!(',','.')
             monto_2 = monto_2.to_f
 
-            monto_total = @transaction.monto_a_recibir - monto_1 - monto_2
+            monto_envio_total = @transaction.monto_envio - monto_1 - monto_2
+            monto_recibir_total = @transaction.monto_a_recibir - monto_1 - monto_2
 
-            if monto_total != 0
-              validate_monto_total = false
+            if monto_envio_total != 0
+              if monto_recibir_total != 0
+                validate_monto_total = false
+              else
+                monto_work = "recibir"
+              end
             else
-              parametros["sub_monto_a_recibir_3"] = ""
+              monto_work = "envio"
             end
 
           elsif methods_array.count === 3
@@ -494,18 +496,49 @@ class TransactionsController < ApplicationController
             monto_3.gsub!(',','.')
             monto_3 = monto_3.to_f
 
-            monto_total = @transaction.monto_a_recibir - monto_1 - monto_2 - monto_3
+            monto_envio_total = @transaction.monto_envio - monto_1 - monto_2 - monto_3
+            monto_recibir_total = @transaction.monto_a_recibir - monto_1 - monto_2 - monto_3
 
-            if monto_total != 0
-              validate_monto_total = false
+            if monto_envio_total != 0
+              if monto_recibir_total != 0
+                validate_monto_total = false
+              else
+                monto_work = "recibir"
+              end
+            else
+              monto_work = "envio"
             end
+
           end  
         end
 
         if validate_monto_total
+
           respond_to do |format|
+            
             if @transaction.update(transaction_params_user_edit)
               @transaction.update(status:"por confirmar")
+              if @transaction.country_destinity === "Venezuela"
+                if monto_work === "envio"
+                  tasa = @transaction.monto_a_recibir / @transaction.monto_envio
+                  if methods_array.count >= 2
+                    monto_1 *= tasa
+                    monto_2 *= tasa
+                    @transaction.update(sub_monto_a_recibir_1: monto_1, sub_monto_a_recibir_2: monto_2)
+                  end
+                  if methods_array.count === 3
+                    monto_3 *= tasa
+                    @transaction.update(sub_monto_a_recibir_3: monto_3)
+                  end
+                else
+                  if methods_array.count >= 2
+                    @transaction.update(sub_monto_a_recibir_1: monto_1, sub_monto_a_recibir_2: monto_2)
+                  end
+                  if methods_array.count === 3
+                    @transaction.update(sub_monto_a_recibir_3: monto_3)
+                  end
+                end
+              end
               
               @transaction.send_email()
               format.html { redirect_to status_transactions_path, notice: 'Su pago fue enviado con exito, por favor espere que sea confirmado.' }

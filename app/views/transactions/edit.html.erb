@@ -53,16 +53,18 @@
                                 <div class="field">
                                     <%method_array.each do |method|%>
                                         <label for="validationMonto<%=i%>">Cuenta Nro <%=i%></label>
-                                        <input class="form-control is-invalid" id="validationMonto<%=i%>" type="text" name="transaction[sub_monto_a_recibir_<%=i%>]" oninput="monto(this),validarMonto(this,<%=i%>)" required>
+                                        <input class="form-control is-invalid" id="validationMonto<%=i%>" type="text" name="transaction[sub_monto_a_recibir_<%=i%>]" oninput="monto(this),validarMonto(this,<%=i%>,'moneda_origen')" required>
                                         <%i+=1%>
                                     
                                     <%end%>
                                 </div>
 
                                 <div class="mt-2">
-                                    <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
+                                    <%=render 'detectar-moneda', {:country => @transaction_pendiente.user.country}%>
                                     <span class="text-primary">Nota: </span> 
-                                   <span id="monto_total">Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: <%=@moneda_destinity%>  <%= number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></i></span><br><hr>
+                                    <span id="monto_total">Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: <%=@moneda_destinity%>  <%= number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></i></span>
+
+                                    <span class="float-right" id="span_cambio" title="Cambiar a la moneda de <%=@transaction_pendiente.country_destinity%>" onclick="cambiar_moneda(this,'moneda_destino')"><img src="/img/transferir.png" style="width:30px;cursor:pointer;"/></span><br><hr>
                                 </div>
                             <%end%>
 
@@ -168,10 +170,20 @@
             $("#button").prop("disabled", this.files.length == 0);
         });
 
-        function validarMonto(input,nro_input){
-            <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
-            monto_total = <%=@transaction_pendiente.monto_a_recibir%>
-
+        function validarMonto(input,nro_input,base_calculo){
+            if (base_calculo === "moneda_origen"){
+                <%=render 'detectar-moneda', {:country => @transaction_pendiente.user.country}%>
+                moneda = "<%=@moneda_destinity%>"
+                monto_total = <%=@transaction_pendiente.monto_envio%>
+                
+            }else if(base_calculo === "moneda_destino"){
+                <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
+                moneda = "<%=@moneda_destinity%>"
+                monto_total = <%=@transaction_pendiente.monto_a_recibir%>
+            }else{
+                return false
+            }
+            
             inputs = document.getElementsByTagName("input")
             span_monto_total = document.getElementById("monto_total")
 
@@ -222,7 +234,7 @@
                         }  
                     }
                 }
-                span_monto_total.innerHTML = "Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: <%=@moneda_destinity%> " + valor + "</i>"
+                span_monto_total.innerHTML = "Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: " + moneda +  " " + valor + "</i>"
                 for(i=2; i<inputs.length-2; i++){
                     inputs[i].classList.remove("is-valid")
                     inputs[i].classList.add("is-invalid")
@@ -236,7 +248,7 @@
                     valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
                     valor = parseFloat(valor)
 
-                    if (valor <= 0){
+                    if (valor <= 0 || inputs[i].value === ""){
                         input_vacio = true
                     }
                 }
@@ -255,7 +267,13 @@
                 }
                 
             }else if(monto_total < 0){
-                span_monto_total.innerHTML = "Los montos ingresados en conjunto exceden el monto disponible.<br><i>Monto Disponible: <%=@moneda_destinity%> <%=number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2)%>"+"</i>"
+        
+                if(base_calculo === "moneda_origen"){
+                    span_monto_total.innerHTML = "Los montos ingresados en conjunto exceden el monto disponible.<br><i>Monto Disponible: " + moneda + " <%=number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2)%></i>"
+                }else if(base_calculo === "moneda_destino"){
+                    span_monto_total.innerHTML = "Los montos ingresados en conjunto exceden el monto disponible.<br><i>Monto Disponible: " + moneda + " <%=number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2)%></i>"
+                }
+                
 
                 for(i=2; i<inputs.length-2; i++){
                     inputs[i].classList.remove("is-valid")
@@ -263,6 +281,51 @@
                 }
             }
             
+        }
+
+        function cambiar_moneda(span,base_calculo) {
+            span_monto_total = document.getElementById("monto_total")
+            if (base_calculo === "moneda_destino"){
+                for(i=1; i<=3; i++){
+                    input = document.getElementById("validationMonto"+i)
+                    if (typeof input === "undefined"){
+                        break
+                    }
+                    input.value = ""
+                    input.classList.remove("is-valid")
+                    input.classList.add("is-invalid")
+                    input.removeAttribute("oninput")
+                    input.setAttribute("oninput","monto(this),validarMonto(this,<%=i%>,'moneda_destino')")
+                    
+                    span.removeAttribute("title")
+                    span.setAttribute("title","Cambiar a la moneda de <%=@transaction_pendiente.user.country%>")
+                    span.removeAttribute("onclick")
+                    span.setAttribute("onclick","cambiar_moneda(this,'moneda_origen')")
+
+                    <%=render 'detectar-moneda', {:country => @transaction_pendiente.country_destinity}%>
+                    span_monto_total.innerHTML = "Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: <%=@moneda_destinity%>  <%= number_with_precision(@transaction_pendiente.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></i>"
+                }
+            }else if (base_calculo === "moneda_origen"){
+                for(i=1; i<=3; i++){
+                    input = document.getElementById("validationMonto"+i)
+                    if (typeof input === "undefined"){
+                        break
+                    }
+                    input.value = ""
+                    input.classList.remove("is-valid")
+                    input.classList.add("is-invalid")
+                    input.removeAttribute("oninput")
+                    input.setAttribute("oninput","monto(this),validarMonto(this,<%=i%>,'moneda_origen')")
+                    
+                    span.removeAttribute("title")
+                    span.setAttribute("title","Cambiar a la moneda de <%=@transaction_pendiente.country_destinity%>")
+                    span.removeAttribute("onclick")
+                    span.setAttribute("onclick","cambiar_moneda(this,'moneda_destino')")
+
+                    <%=render 'detectar-moneda', {:country => @transaction_pendiente.user.country}%>
+                    span_monto_total.innerHTML = "Distribuye el monto disponible en todas las cuentas sin excluir ninguna:<br> <i>Monto Disponible: <%=@moneda_destinity%>  <%= number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></i>"
+                }
+            }
         }
     </script>
 <%else%> <!--VISTA DE ADMINISTRADOR ----------------------------------------------------------------------------------------->
@@ -800,11 +863,11 @@
                 if (cuentas_user === 1 || i === cuentas_user){
                     monto_inicial = <%=@transaction.monto_a_recibir%>
                 }else if(i === 1){
-                    monto_inicial = formatearNumeros("<%=@transaction.sub_monto_a_recibir_1%>")
+                    monto_inicial = <%=@transaction.sub_monto_a_recibir_1%>
                 }else if(i === 2){
-                    monto_inicial = formatearNumeros("<%=@transaction.sub_monto_a_recibir_2%>")
+                    monto_inicial = <%=@transaction.sub_monto_a_recibir_2%>
                 }else if(i === 3){
-                    monto_inicial = formatearNumeros("<%=@transaction.sub_monto_a_recibir_3%>")
+                    monto_inicial = <%=@transaction.sub_monto_a_recibir_3%>
                 }
                 
                 monto_a_recibir_to_usuario = monto_inicial
@@ -841,11 +904,11 @@
                 if (cuentas_user === 1 || i === cuentas_user){
                     monto_inicial = formatearString(<%=@transaction.monto_a_recibir%>.toFixed(2))
                 }else if(i === 1){
-                    monto_inicial = "<%=@transaction.sub_monto_a_recibir_1%>"
+                    monto_inicial = "<%=number_with_precision(@transaction.sub_monto_a_recibir_1, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2)%>"
                 }else if(i === 2){
-                    monto_inicial = "<%=@transaction.sub_monto_a_recibir_2%>"
+                    monto_inicial = "<%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2)%>"
                 }else if(i === 3){
-                    monto_inicial = "<%=@transaction.sub_monto_a_recibir_3%>"
+                    monto_inicial = "<%=number_with_precision(@transaction.sub_monto_a_recibir_3, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2)%>"
                 }
                 span_monto = document.getElementById("monto_a_enviar"+i)
 

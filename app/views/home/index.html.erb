@@ -432,9 +432,7 @@
                                             elsif i === 3
                                                 monto_a_recibir = transaction.sub_monto_a_recibir_3
                                             end
-                                            monto_a_recibir.gsub!('.','')
-                                            monto_a_recibir.gsub!(',','.')
-                                            monto_a_recibir = monto_a_recibir.to_f
+                                            
                                             @accounts[Bank.find(method[1].to_i).banco] += monto_a_recibir
                                         else
                                             @accounts[Bank.find(method[1].to_i).banco] += transaction.monto_a_recibir
@@ -463,9 +461,7 @@
                                             elsif i === 3
                                                 monto_a_recibir = transaction.sub_monto_a_recibir_3
                                             end
-                                            monto_a_recibir.gsub!('.','')
-                                            monto_a_recibir.gsub!(',','.')
-                                            monto_a_recibir = monto_a_recibir.to_f
+                                            
                                             @accounts["Pago Movil"] += monto_a_recibir
                                         else
                                             @accounts["Pago Movil"] += transaction.monto_a_recibir
