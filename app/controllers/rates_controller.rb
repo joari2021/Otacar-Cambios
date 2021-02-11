@@ -26,7 +26,7 @@ class RatesController < ApplicationController
   # POST /rates.json
   def create
     @rate = Rate.new(rate_params)
-
+    
     respond_to do |format|
       if @rate.save
         format.html { redirect_to rates_path, notice: 'Registro de tasas creado con exito.' }

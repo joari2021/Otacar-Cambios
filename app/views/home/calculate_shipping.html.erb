@@ -20,7 +20,7 @@
                             <% @rates.where(country: current_user.country).each do |rate| %>
     
                                 <%if !rate.status_envio%>
-                                    Información no disponible
+                                    Información no disponible<br>
                                     ===================
                                 <%else%>
                                     <%@rate = rate%>

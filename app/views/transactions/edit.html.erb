@@ -863,11 +863,17 @@
                 if (cuentas_user === 1 || i === cuentas_user){
                     monto_inicial = <%=@transaction.monto_a_recibir%>
                 }else if(i === 1){
-                    monto_inicial = <%=@transaction.sub_monto_a_recibir_1%>
+                    <%if method_user.count >= 2%>
+                        monto_inicial = <%=@transaction.sub_monto_a_recibir_1%>
+                    <%end%>
                 }else if(i === 2){
-                    monto_inicial = <%=@transaction.sub_monto_a_recibir_2%>
+                    <%if method_user.count >= 2%>
+                        monto_inicial = <%=@transaction.sub_monto_a_recibir_2%>
+                    <%end%>
                 }else if(i === 3){
-                    monto_inicial = <%=@transaction.sub_monto_a_recibir_3%>
+                    <%if method_user.count === 3%>
+                        monto_inicial = <%=@transaction.sub_monto_a_recibir_3%>
+                    <%end%>
                 }
                 
                 monto_a_recibir_to_usuario = monto_inicial
