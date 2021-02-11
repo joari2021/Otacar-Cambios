@@ -154,13 +154,17 @@
         montoOf = parseFloat(montoOf);
 
         //Formatear Tasa
-        tasa = tasa.replace(/\D/g, "");                
-        tasa = tasa.replace(/([0-9])([0-9]{2})$/, '$1.$2');
+        re = /\./g;
+        tasa = tasa.replace(re, '')
+        re = /,/i;
+        tasa = tasa.replace(re, '.')
         tasa = parseFloat(tasa);
 
         //Formatear Tasa Oferta
-        tasaO = tasaOferta.replace(/\D/g, "");                
-        tasaO = tasaO.replace(/([0-9])([0-9]{2})$/, '$1.$2');
+        re = /\./g;
+        tasaO = tasaO.replace(re, '')
+        re = /,/i;
+        tasaO = tasaO.replace(re, '.')
         tasaO = parseFloat(tasaO);
 
         monedaE = " ".concat(monedaE);

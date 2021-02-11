@@ -69,7 +69,9 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_argentina_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_argentina_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_argentina_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_argentina_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_argentina_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -87,12 +89,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_brasil, "Tasa" %>
-                <%= form.text_field :rate_brasil, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_brasil, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_brasil')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_brasil')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_brasil_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_brasil_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_brasil_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_brasil_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_brasil_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -110,12 +116,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_chile, "Tasa" %>
-                <%= form.text_field :rate_chile, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_chile, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_chile')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_chile')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_chile_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_chile_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_chile_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_chile_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_chile_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -133,12 +143,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_colombia, "Tasa" %>
-                <%= form.text_field :rate_colombia, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_colombia, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_colombia')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_colombia')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_colombia_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_colombia_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_colombia_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_colombia_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_colombia_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -156,12 +170,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_ecuador, "Tasa" %>
-                <%= form.text_field :rate_ecuador, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_ecuador, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_ecuador')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_ecuador')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_ecuador_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_ecuador_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_ecuador_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_ecuador_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_ecuador_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -179,12 +197,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_españa, "Tasa" %>
-                <%= form.text_field :rate_españa, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_españa, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_españa')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_españa')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_españa_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_españa_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_españa_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_españa_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_españa_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -202,12 +224,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_panama, "Tasa" %>
-                <%= form.text_field :rate_panama, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_panama, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_panama')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_panama')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_panama_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_panama_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_panama_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_panama_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_panama_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -225,12 +251,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_peru, "Tasa" %>
-                <%= form.text_field :rate_peru, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_peru, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_peru')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_peru')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_peru_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_peru_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_peru_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_peru_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_peru_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -248,12 +278,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_portugal, "Tasa" %>
-                <%= form.text_field :rate_portugal, required: :required, oninput:"monto(this)"%>
+                <%= form.text_field :rate_portugal, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_portugal')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_portugal')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_portugal_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_portugal_min, oninput:"monto(this)" %>            
+                <%= form.text_field :rate_portugal_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_portugal_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_portugal_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>            
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -271,13 +305,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_usa, "Tasa" %>
-                <%= form.text_field :rate_usa, required: :required, oninput:"monto(this)"%>
-                
+                <%= form.text_field :rate_usa, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_usa')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_usa')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_usa_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_usa_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_usa_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_usa_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_usa_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
@@ -295,13 +332,16 @@
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_venezuela, "Tasa" %>
-                <%= form.text_field :rate_venezuela, required: :required, oninput:"monto(this)"%>
-                
+                <%= form.text_field :rate_venezuela, required: :required, oninput:"format_monto_tasa(this,2)"%>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_venezuela')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_venezuela')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">
                 <%= form.label :rate_venezuela_min, "+ " %><span class="text-primary font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%= rate.monto_oferta %> <%end%></span><span class="text-primary  font-weight-bold"><%if rate.monto_oferta != "0,00"%> <%=rate.moneda%><%end%></span>
-                <%= form.text_field :rate_venezuela_min, oninput:"monto(this)" %>
+                <%= form.text_field :rate_venezuela_min, oninput:"format_monto_tasa(this,2)" %>
+                <a href="#" class="font-weight-bold ml-2 special-link" onclick="remove_cero(event,'rate_rate_venezuela_min')">0.0<i class="fas fa-caret-left ml-1"></i></a>
+                <a href="#" class="font-weight-bold ml-4 special-link" onclick="add_cero(event,'rate_rate_venezuela_min')">0.00 <i class="fas fa-caret-right ml-1"></i></a>
             </div>
 
             <div class="col-12 col-sm-4 mt-2">

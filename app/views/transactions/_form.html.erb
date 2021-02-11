@@ -2398,6 +2398,17 @@
         numeroF = parseFloat(valor);
         return numeroF;
     }
+
+    function formatTasa(numero) {
+        //Formatear Tasa
+        re = /\./g;
+        valor = numero.replace(re, '')
+        re = /,/i;
+        valor = valor.replace(re, '.')
+        valor = parseFloat(valor);
+        return valor
+    }
+
     function formatearString(numero){
         valor = numero.toString()
         valor = valor.replace(/\D/g, "");
@@ -2444,14 +2455,14 @@
         imgPaisD.setAttribute("alt",paisDestino);
         
         tasa.innerHTML = montoTasa + " " + monedaPaisD;
-        tasa_minima = formatearNumeros(montoTasa)
+        tasa_minima = formatTasa(montoTasa)
         tasaOf.innerHTML = "";
         tasaOf2.innerHTML = "";
         if ("<%=rate.monto_oferta%>" != "0,00" && montoTasaOferta != "0,00"){
             tasaOf.innerHTML = "<br><br>Más de <%=rate.monto_oferta%> <%=rate.moneda%><br>"
             monto_oferta = formatearNumeros("<%=rate.monto_oferta%>")
             tasaOf2.innerHTML = montoTasaOferta + " " + monedaPaisD;
-            tasa_oferta = formatearNumeros(montoTasaOferta)
+            tasa_oferta = formatTasa(montoTasaOferta)
         }
 
         inputMonto.setAttribute("oninput","monto(this),validarMonto(this,'"+montoMinimo+"')");

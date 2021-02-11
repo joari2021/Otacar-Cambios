@@ -192,10 +192,13 @@
                 valor = inputs[i].value.replace(/\D/g, "");
                 valor = valor.replace(/([0-9])([0-9]{2})$/, "$1.$2");
                 valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
-                
                 if(valor != ""){
                     valor = parseFloat(valor)
-                    monto_total -= valor    
+
+                    monto_total -= valor
+                    monto_total = monto_total.toFixed(2)
+                    monto_total = parseFloat(monto_total) 
+                    //codigo para limpiar los digitos decimales que aparecen por error en calculos de montos con decimales
                 }
                 
             }
@@ -759,89 +762,89 @@
                 case "Argentina":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_argentina%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_argentina%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_argentina_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_argentina_min%>")
                     }
                     break;
                 
                 case "Brasil":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_brasil%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_brasil%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_brasil_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_brasil_min%>")
                     }
                     break;
 
                 case "Chile":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_chile%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_chile%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_chile_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_chile_min%>")
                     }
                     break;
 
                 case "Colombia":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_colombia%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_colombia%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_colombia_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_colombia_min%>")
                     }
                     break;
 
                 case "Ecuador":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_ecuador%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_ecuador%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_ecuador_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_ecuador_min%>")
                     }
                     break;
 
                 case "España":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_españa%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_españa%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_españa_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_españa_min%>")
                     }
                     break;
 
                 case "Panama":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_panama%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_panama%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_panama_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_panama_min%>")
                     }
                     break;
 
                 case "Peru":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_peru%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_peru%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_peru_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_peru_min%>")
                     }
                     break;
 
                 case "USA":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
 
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_usa%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_usa%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_usa_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_usa_min%>")
                     }
                     break;
 
                 case "Venezuela":
                     if(<%=@transaction.monto_envio%> < monto_oferta_tasa){
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_venezuela%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_venezuela%>")
                     }else{
-                        monto_tasa_actual = formatearNumeros("<%=@rate.rate_venezuela_min%>")
+                        monto_tasa_actual = formatTasa("<%=@rate.rate_venezuela_min%>")
                     }
                     break;
             }

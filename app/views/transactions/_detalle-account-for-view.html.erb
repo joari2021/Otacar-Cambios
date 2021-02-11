@@ -14,7 +14,7 @@
                 <label class="text-primary">Banco</label><br>
                 <span id="banco">
                     <%array_banks = ["Banco De Venezuela","Banco Mercantil", "B.O.D", "Banco Banesco"]%>
-                    <%if array_banks.include?(bank.banco)%>
+                    <%if array_banks.include?(bank.banco) || bank.country != "Venezuela"%>
                         <%=bank.banco%>
                     <%else%>
                         <%=@bancos[bank.banco]%>

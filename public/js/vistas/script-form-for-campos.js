@@ -293,6 +293,15 @@ function formatearNumeros(numero){
   return numeroF;
 }
 
+function formatTasa(numero) {
+    re = /\./g;
+    valor = numero.replace(re, '')
+    re = /,/i;
+    valor = valor.replace(re, '.')
+    valor = parseFloat(valor);
+    return valor
+}
+
 function formatearString(numero){
   valor = numero.toString()
   valor = valor.replace(/\D/g, "");
