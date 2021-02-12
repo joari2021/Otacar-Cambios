@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%@users.where.not(id:1).each do |usuario|%>
+                    <%@users.where.not(id:1).order(name: :asc, email: :asc).each do |usuario|%>
                     <tr class="shadow-sm">
                         <%if usuario.is_normal_user?%>
                             <td class="align-middle text-capitalize"><%=usuario.name%> <%=usuario.second_name%> <%=usuario.last_name%> <%=usuario.second_surname%></td>
