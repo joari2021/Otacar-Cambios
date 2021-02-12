@@ -33,10 +33,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%@users.each do |usuario|%>
+                    <%@users.where.not(id:1).each do |usuario|%>
                     <tr class="shadow-sm">
                         <%if usuario.is_normal_user?%>
-                            <td class="align-middle"><%=usuario.name.capitalize%> <%=usuario.second_name.capitalize if present?%> <%=usuario.last_name.capitalize%> <%=usuario.second_surname.capitalize if present?%></td>
+                            <td class="align-middle text-capitalize"><%=usuario.name%> <%=usuario.second_name%> <%=usuario.last_name%> <%=usuario.second_surname%></td>
                         <%else%>
                             <td class="align-middle"><%=usuario.email%></td>
                         <%end%>

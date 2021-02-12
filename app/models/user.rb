@@ -16,15 +16,45 @@ class User < ApplicationRecord
   include PermissionsConcern
 
   def self.buscador(termino)
-    unless termino.to_i % 2 === 0
-      id = ""
+    if termino.to_i > 0
+      unless termino.to_i % 2 === 0
+        id = 0
+      else
+        id = termino.to_i / 4
+      end
+  
+      User.where(id: id)
+
+    elsif termino.downcase === "completo" || termino.downcase === "incompleto"
+      if termino.downcase === "completo"
+        User.where.not(status_referencia: "indefinido")
+      else
+        User.where(status_referencia: "indefinido")
+      end
     else
-      id = termino.to_i / 4
+      users = User.all
+      array_ids_users = []
+
+      users.each do |user|
+        nombres = "#{user.name} #{user.second_name} #{user.last_name} #{user.second_surname}"
+        nombres.downcase!
+        
+        array_termino = termino.split(" ")
+        find_termino = true
+        array_termino.each do |sub_termino|
+          unless nombres.include?(sub_termino.downcase)  
+            find_termino = false
+          end
+        end
+
+        if find_termino
+          array_ids_users.push(user.id)
+        end
+      end
+
+      User.where(id: array_ids_users)
     end
 
-    User.where(id: id)
-
-    #User.where("id LIKE ?", "%#{id}%")
   end
   
   validates :name, :last_name, length: { maximum: 15, message: " El contenido es muy largo (caracteres minimos 15)" }
