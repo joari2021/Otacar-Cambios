@@ -45,7 +45,7 @@ class BankBrasil < ApplicationRecord
     end
      validates :name, :last_name, :second_name, length: { maximum: 15, message: " (caracteres maximos 15)" }
       
-     validates :bank, presence: { message:" La opción seleccionada es invalida" }
+     validates :bank, :type_account, presence: { message:" La opción seleccionada es invalida" }
      validates :document, presence: { message:" El número ingresado es invalido" }
   
      validates :name, :last_name, presence: { message:" Este campo no puede estar vacio" }

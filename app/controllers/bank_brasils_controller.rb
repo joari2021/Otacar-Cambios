@@ -182,7 +182,7 @@ class BankBrasilsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def bank_brasil_params
-      params.require(:bank_brasil).permit(:name, :second_name, :last_name, :country, :type_document, :document, :bank, :number_agency, :number_account)
+      params.require(:bank_brasil).permit(:name, :second_name, :last_name, :country, :type_document, :document, :bank, :number_agency, :number_account, :type_account, :operation)
     end
 
     def bank_brasil_edit_params

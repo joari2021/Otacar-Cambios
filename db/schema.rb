@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_10_210821) do
+ActiveRecord::Schema.define(version: 2021_02_12_141950) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 2021_02_10_210821) do
     t.integer "cupos_for_loterica", default: 3
     t.string "second_name"
     t.string "type_document"
+    t.string "type_account", default: "Sin Definir"
+    t.string "operation", default: "Sin Definir"
     t.index ["user_id"], name: "index_bank_brasils_on_user_id"
   end
 

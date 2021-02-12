@@ -169,6 +169,16 @@
                                                             <%=account_bank.document%> 
                                                             
                                                         </div>
+                                                        <div class="col-5 text-right">Tipo de Cuenta</div>
+                                                        <div class="col-7 text-left">
+                                                            <%=account_bank.type_account%>   
+                                                        </div> 
+                                                        <%if account_bank.bank === "Caixa"%>
+                                                            <div class="col-5 text-right">Operación</div>
+                                                            <div class="col-7 text-left">    
+                                                                <%=account_bank.operation%>    
+                                                            </div> 
+                                                        <%end%>  
                                                         <div class="col-5 text-right">Nro Agencia</div>
                                                         <div class="col-7 text-left">
                                                             <%=account_bank.number_agency%>   

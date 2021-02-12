@@ -34,6 +34,14 @@
                 <label class="text-primary">Banco</label><br>
                 <span id="banco<%=i%>"><%=bank.bank%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('banco<%=i%>','Banco')"></i><br><hr>
                 
+                <label class="text-primary">Tipo de cuenta</label><br>
+                <span id="type-account<%=i%>"><%=bank.type_account%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('type-account<%=i%>','Tipo de cuenta')"></i><br><hr>
+
+                <%if bank.bank === "Caixa"%>
+                    <label class="text-primary">Operación</label><br>
+                    <span id="operation<%=i%>"><%=bank.operation%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('operation<%=i%>','Operación')"></i><br><hr>
+                <%end%>
+                
                 <label class="text-primary">Nro de agencia</label><br>
                 <span id="number-agency<%=i%>"><%=bank.number_agency%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('number-agency<%=i%>','Nro de agencia')"></i><br><hr>
 

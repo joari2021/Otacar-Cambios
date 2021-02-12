@@ -63,7 +63,7 @@
       </div>
       <div class="col-12 col-sm-7 mb-2">
         <label>Banco *</label>
-        <select class="custom-select is-invalid" name="bank_brasil[bank]" onchange="validarSelect(this),habilitarSave()" required>
+        <select class="custom-select is-invalid" name="bank_brasil[bank]" onchange="validarSelect(this),habilitarSave(),verifybank(this)" required>
           <option selected disabled value="">Elegir...</option>
           <option value="Banco Do Brasil" <%if bank_brasil.bank === "Banco Do Brasil"%>selected<%end%>>Banco Do Brasil</option>
           <option value="Bradesco" <%if bank_brasil.bank === "Bradesco"%>selected<%end%>>Bradesco</option>
@@ -125,6 +125,27 @@
     </div>
 
     <!--Banco-->
+    <div class="form-row field mb-2">
+      
+      <div class="col-12 col-sm-5 mb-2">
+        <label>Tipo Cuenta *</label>
+
+        <select class="custom-select is-invalid" name="bank_brasil[type_account]" onchange="validarSelect(this),habilitarSave()" required>
+            <option selected disabled value="">Elegir...</option>
+            <option value="Ahorro">Ahorro</option>
+            <option value="Corriente">Corriente</option>
+            <option value="Juridica">Juridica</option>
+        </select>
+        <div class="invalid-feedback">Elige una opción</div>
+      </div>
+      <div class="col-12 col-sm-7 mb-2">
+        <label for="operacion">Operación (* solo para cuentas Caixa)</label>
+        <input class="" oninput="soloNumeros(this,4,6),habilitarSave()" type="text" name="bank_brasil[operation]" id="operacion" maxlength="6" disabled>
+        <div class="invalid-feedback">Ingresa solo números</div>
+      </div>
+    </div>
+
+
     <div class="form-row field mb-3">
       <div class="col-12 col-sm-4 mb-2">
         <label for="validationAgencia">Nro Agencia *</label>
@@ -149,3 +170,20 @@
 </div>
 <%end%>
 <script src="/js/vistas/script-form-for-campos.js"></script>
+<script>
+  function verifybank(select) {
+    input_operation = document.getElementById("operacion")
+    if (select.value === "Caixa"){
+      input_operation.removeAttribute("disabled")
+      input_operation.setAttribute("required","required")
+      input_operation.classList.add("is-invalid")
+      habilitarSave()
+    }else{
+      input_operation.value = ""
+      input_operation.setAttribute("disabled","disabled")
+      input_operation.removeAttribute("required")
+      input_operation.className = ""
+      habilitarSave()
+    }
+  }
+</script>

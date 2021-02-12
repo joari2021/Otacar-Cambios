@@ -34,19 +34,27 @@
             
             if bank.id.to_s === method[1]%>
                 <label  class="text-primary">Titular de la cuenta</label><br>
-                <span id="nombres" class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span><br><hr>
+                <span class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span><br><hr>
 
                 <label class="text-primary">Nro <%=bank.type_document%></label><br>
-                <span id="document"><%=bank.document%></span><br><hr>
+                <span><%=bank.document%></span><br><hr>
 
                 <label class="text-primary">Banco</label><br>
-                <span id="banco"><%=bank.bank%></span><br><hr>
+                <span><%=bank.bank%></span><br><hr>
+
+                <label class="text-primary">Tipo de Cuenta</label><br>
+                <span><%=bank.type_account%></span><br><hr>
+
+                <%if bank.bank === "Caixa"%>
+                    <label class="text-primary">Operación</label><br>
+                    <span><%=bank.operation%></span><br><hr>
+                <%end%>
                 
                 <label class="text-primary">Nro de Agencia</label><br>
-                <span id="type-account"><%=bank.number_agency%></span><br><hr>
+                <span><%=bank.number_agency%></span><br><hr>
 
                 <label class="text-primary">Numero de cuenta</label><br>
-                <span id="number-account"><%=bank.number_account%></span><br><hr>
+                <span><%=bank.number_account%></span><br><hr>
 
             <%end%>
         <%end%>
