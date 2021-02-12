@@ -9,7 +9,7 @@
             <div class="float-right">
                 <%= form_tag( '/search_users', options = { class: "d-none d-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search", name: "formulario1", id: "form"}) do %>
                     <div class="mt-3 input-group">
-                    <%= text_field_tag("termino", value = nil, options = { class: "form-control bg-light border-0 small", placeholder: "Nro Usuario...", id: "text_field"}) %>
+                    <%= text_field_tag("termino", value = nil, options = { class: "form-control bg-light border-0 small", placeholder: "Nro Usuario, Nombres...", id: "text_field"}) %>
                         <div class="input-group-append">
                             <%= submit_tag(value = "Buscar", options = { class: "btn btn-info" }) do %>
                                 <i class="fas fa-search fa-sm"></i>
@@ -33,6 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <%usuario_exist = false%>
                     <%@users.where.not(id:1).order(name: :asc, email: :asc).each do |usuario|%>
                     <tr class="shadow-sm">
                         <%if usuario.is_normal_user?%>
@@ -49,10 +50,17 @@
                         <%end%>
                         
                         <td class="align-middle"><a href="/users/edit?id=<%=usuario.id%>" class="badge badge-secondary" id="td-ver"><i class="far fa-eye"></i></a></td>
+                        <%usuario_exist = true%>
                     </tr>
                     <%end%>
                 </tbody>
+                
             </table>
+            <%unless usuario_exist%>
+                <div class="alert alert-warning text-center" role="alert">
+                    No se encontro una coincidencia...
+                </div>
+            <%end%>
         
         </div>
     </div>
