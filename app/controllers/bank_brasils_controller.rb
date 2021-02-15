@@ -89,10 +89,29 @@ class BankBrasilsController < ApplicationController
       if current_user.is_admin?
 
         if @bank_brasil.bank === "Caixa"
-          deposit_for_loterica = ConfigLotericaDeposit.where("prioridad_min_1 LIKE ? OR prioridad_min_2 LIKE ? OR prioridad_min_3 LIKE ? OR prioridad_max_1 LIKE ? OR prioridad_max_2 LIKE ? OR prioridad_max_3 LIKE ?", @bank_brasil.id, @bank_brasil.id, @bank_brasil.id, @bank_brasil.id, @bank_brasil.id, @bank_brasil.id)
+          
+          config_deposit_Loterica = ConfigLotericaDeposit.find(2)
+
+          case @bank_brasil.id
+          when config_deposit_Loterica.prioridad_min_1
+            deposit_for_loterica = true
+          when config_deposit_Loterica.prioridad_min_2
+            deposit_for_loterica = true
+          when config_deposit_Loterica.prioridad_min_3
+            deposit_for_loterica = true
+          when config_deposit_Loterica.prioridad_max_1
+            deposit_for_loterica = true
+          when config_deposit_Loterica.prioridad_max_2
+            deposit_for_loterica = true
+          when config_deposit_Loterica.prioridad_max_3
+            deposit_for_loterica = true
+          else
+            deposit_for_loterica = false
+          end
+          
         end
 
-        if @bank_brasil.bank === "Caixa" && deposit_for_loterica.count > 0
+        if @bank_brasil.bank === "Caixa" && deposit_for_loterica
           permit_delete = "denied"
         else
           transactions = Transaction.where(account_destinity_admin: "bank_brasils-#{@bank_brasil.id}")
