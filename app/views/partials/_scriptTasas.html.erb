@@ -24,10 +24,22 @@
         it.innerHTML = num;
     }
     */
+    //ACTUALIZAR ESTE NUMERO CADA VEZ QUE SE AÑADA UN PAIS O UN CAMPO ADICIONAL POR PAIS
+    //CONSTANTES
+    <%if @vista === "new"%>
+        limit_inputs = 32
+    <%else%>
+        limit_inputs = 29 
+    <%end%>
+    elementosSpan = document.getElementsByTagName("span");
+    elementosDiv = document.getElementsByTagName("div");
+    montoOferta = document.getElementById("montoOferta");
+    inputs = document.getElementsByTagName("input");
+    moneda = document.getElementById('moneda');
+    country = document.getElementById('rate_country');
 
     var caja = function() {
-        var elementosDiv = document.getElementsByTagName("div");
-
+        
         for (i = 0; i < elementosDiv.length; i++) {
             if (elementosDiv[i].className == "d-none") {
                 elementosDiv[i].className = "";
@@ -87,12 +99,12 @@
                 break;
             
         }
-        elementosSpan = document.getElementsByTagName("span");
-        montoOferta = document.getElementById("montoOferta");
+        
         for (i = 2; i < elementosSpan.length; i += 2) {
 
             if (montoOferta.value != "0,00") {
-                elementosSpan[i].innerHTML = " " + moneda.value;
+                elementosSpan[i].innerHTML = " " + montoOferta.value
+                elementosSpan[i+1].innerHTML = " " + moneda.value;
             } else {
                 elementosSpan[i].innerHTML = "";
             }
@@ -100,52 +112,47 @@
 
     }
 
-    var modificarSpanAndReturn = function (span,resultado,monedaV) {
-        var inputs = document.getElementsByTagName("input");
-        for (i = 2; i < span.length; i += 2){
-            span[i].innerHTML = " " + resultado;
-            span[i + 1].innerHTML = " " + monedaV
+    var modificarSpanAndReturn = function () {
+        
+        for (i = 2; i <= limit_inputs; i += 3){
             inputs[i + <%=@digit%>].removeAttribute("disabled");
-        }   
+        }
+
+        for (i = 2; i < elementosSpan.length; i += 2){
+            elementosSpan[i].innerHTML = " " + montoOferta.value
+            elementosSpan[i + 1].innerHTML = " " + moneda.value
+        }     
     }
 
     function añadirMonto(input) {
-       
-        var elementosSpan = document.getElementsByTagName("span");
-        var inputs = document.getElementsByTagName("input");
-        var moneda = document.getElementById('moneda');
             
-            if (input.value != "") {
+        if (input.value != "" && input.value != "0,00") {
+        
+            modificarSpanAndReturn();
             
-                modificarSpanAndReturn(elementosSpan, input.value, moneda.value);
-                
-            } else {
-                for (i = 1; i < elementosSpan.length; i += 2){
-                    elementosSpan[i].innerHTML = "";
-                    elementosSpan[i + 1].innerHTML = "";
-                    inputs[i + <%=@digit%>].setAttribute("disabled", "disabled");
-                }
-            }
+        } else {
+            disabledCamposPriceMin()
+        }
         
     }
-
-    var country = document.getElementById('rate_country');
-    var moneda = document.getElementById('moneda');
 
     <%if @vista === "new"%>
         country.addEventListener("change", caja);
     <%end%>
 
     function disabledCamposPriceMin() {
-        elementosSpan = document.getElementsByTagName("span");
-        inputs = document.getElementsByTagName("input");
 
-        for (i = 1; i < elementosSpan.length; i += 2) {
-            if (montoOferta.value == "0,00"){
-                elementosSpan[i].innerHTML = "";
-                elementosSpan[i + 1].innerHTML = "";
+        if (montoOferta.value == "0,00" || nontoOferta.value == ""){
+                //elementosSpan[i].innerHTML = "";
+                //elementosSpan[i + 1].innerHTML = "";
+            for (i = 2; i <= limit_inputs; i += 3) {
                 inputs[i + <%=@digit%>].setAttribute("disabled", "disabled");
             }
+
+            for (i = 2; i < elementosSpan.length; i += 2){
+                elementosSpan[i].innerHTML = "" 
+                elementosSpan[i + 1].innerHTML = ""
+            } 
         }        
     }
     disabledCamposPriceMin();
