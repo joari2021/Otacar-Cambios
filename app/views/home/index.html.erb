@@ -203,8 +203,7 @@
                     <div class="card-body">
                        
                         <%=render 'partials/notification', limit: 3%>
-                        
-   
+                
                         <hr>
                         <div class="text-center text-primary pt-3">
                             <%if @notifications.count > 0%>
@@ -230,9 +229,17 @@
                         </div>
                         <div class="modal-body">
                             
-                            <%=render 'partials/notification', limit: 20%>
-                            
-                            
+                            <div id="modal_body_notify">
+                                <%=render 'partials/notification', limit: 20%>
+                            </div>
+                            <div id="div_will_paginate">
+                                <%= will_paginate @notifications, class:"pagination d-none" %>
+                                <div class="w-100 text-center">
+                                    <a href="#" class="special-link" id="link_mostrar_mas" style="color:#5878ca;" onclick="mostrar_mas(event)">Mostrar Más</a>
+                                </div>
+                                <%=render 'partials/progress-bar', modelo: "Notification"%>
+                            </div>
+                    
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-modal">Cerrar</button>
