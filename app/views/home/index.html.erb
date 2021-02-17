@@ -601,12 +601,15 @@
         $("#modal_body_notify").addClass("d-none");
         $("#link_mostrar_mas").addClass("d-none");
         $("#content-modal").load(window.location + '?randval='+ Math.random() + " #content-reload", function(){
-    
+            
+            console.log("Entres");
             <% if @notifications.next_page%>
                 $("#modal_body_notify").removeClass("d-none");
                 $("#link_mostrar_mas").removeClass("d-none");
                 $(".progress").addClass("d-none")
-                
+            
+            <% else %>
+                $("#link_mostrar_mas").addClass("d-none");
             <% end %>
         });
         
