@@ -88,13 +88,12 @@ class TransactionsController < ApplicationController
           format.html { redirect_to user_root_path }
         end
       end
+    else
+      @users = User.all
     end
-    users = User.all
-    users.each do |user|
-      if user.is_admin?
-        @user_admin = user
-      end
-    end
+    
+    @user_admin = User.find_by(permission_level:3)
+      
   end
 
   # GET /transactions/new

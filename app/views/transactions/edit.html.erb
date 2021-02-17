@@ -454,103 +454,7 @@
                                 <%=@moneda_destinity%> <span><%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
                             </div>
                             
-
-                            <button type="button" class="btn btn-copy-all" data-toggle="modal" data-target="#exampleModal">
-                                Ver perfil del usuario
-                            </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable">
-                                    <div class="modal-content">
-
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-primary" id="exampleModalLabel">Perfil del usuario</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body bg-light-blue">
-                                            <div class="card border-primary mb-3 m-auto" style="max-width: 36rem;">
-
-                                                <div class="card-header text-primary">
-                                                    <div class="row">
-                                                        <div class="col-6 text-right">ID Usuario</div>
-                                                        
-                                                        <div class="col-6 text-left text-capitalize">
-                                                            <%=(@transaction.user.id*4).to_s.rjust(9, '0')%>   
-                                                        </div>
-
-                                                        <div class="col-6 text-right">Nombre y Apellido</div>
-                                                        <div class="col-6 text-left text-capitalize">
-                                                            <%=@transaction.user.name%> <%=@transaction.user.last_name%>   
-                                                        </div>
-                                                       
-                                                        <div class="col-6 text-right">Nro DNI</div>
-                                                        <div class="col-6 text-left text-capitalize">
-                                                            <%=@transaction.user.document%>   
-                                                        </div>
-                                                        <div class="col-6 text-right">Sexo</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.gender%>   
-                                                        </div>
-                                                        <div class="col-6 text-right">Nro Telefono</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.phone%>  
-                                                        </div> 
-                                                        <div class="col-6 text-right">Fecha de nacimiento</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.day%>/<%=@transaction.user.month%>/<%=@transaction.user.year%>      
-                                                        </div> 
-                                                        <div class="col-6 text-right">Pais</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.country%>      
-                                                        </div>
-                                                        <div class="col-6 text-right">Estado</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.state%>      
-                                                        </div>
-                                                        <div class="col-6 text-right">Ciudad</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.city%>      
-                                                        </div>
-                                                        <div class="col-6 text-right">Dirección</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.address%>      
-                                                        </div>  
-                                                        <div class="col-6 text-right">Correo Electrónico</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.email%>      
-                                                        </div> 
-
-                                                        <%coincidencia = false%>
-                                                        
-                                                        <div class="col-6 text-right">Referido Por</div>
-                                                        <div class="col-6 text-left">
-
-                                                            <%id = @transaction.user.num_referidor.to_i / 4%>
-                                                            <%usuario = @users.find_by(id: id)%>
-                                                            <% if usuario.present?%>
-                                                                <%=usuario.name.capitalize%> <%=usuario.last_name.capitalize%>
-                                                            <%else%>
-                                                                Ningun usuario
-                                                            <%end%>
-                                                        </div> 
-                                                        
-                                                        <div class="col-6 text-right">Estado de la referencia</div>
-                                                        <div class="col-6 text-left">
-                                                            <%=@transaction.user.status_referencia%>      
-                                                        </div> 
-                                                                            
-                                                    </div> 
-                                                </div>        
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <%=render 'partials/modal_perfil_usuario'%>
                     </div>
                 </div> 
             </div>
@@ -671,6 +575,7 @@
                             </div>
                             -->
                             
+                            
                             <div class="actions mt-4">
                                 <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
                                 
@@ -716,6 +621,7 @@
                                 
                             </div>
                         <%end%>
+                        <%=render 'partials/modal_perfil_usuario'%>
                         
                     </div>
                     <!--CUENTA DE OTACAR-->

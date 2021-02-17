@@ -8,9 +8,9 @@
             <thead>
                 <tr>
                     <th scope="col"><small class="font-weight-bold">Fecha<small></th>
-                    <th scope="col"><small class="font-weight-bold">Nombre<small></th>
-                    <th colspan="2"><small class="font-weight-bold">Resumen de Cuenta<small></th>
                     <th scope="col"><small class="font-weight-bold">Pais<small></th>
+                    <th scope="col"><small class="font-weight-bold">Usuario<small></th>
+                    <th colspan="2"><small class="font-weight-bold">Resumen de Cuenta<small></th>
                     <th scope="col"><small class="font-weight-bold">Monto<small></th>
                 </tr>
             </thead>
@@ -121,89 +121,72 @@
                             <tr class="shadow-sm">
                                 <td><span class="d-block"><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
                                 </td>
-        
+
+                                <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
+
+                                <td class="align-middle"><span class="text-capitalize"><%=transaction.user.name%> <%transaction.user.second_name%> <%=transaction.user.last_name%> <%=transaction.user.second_surname%></span></td>
                                 <%method_array = transaction.account_destinity_usuario.split(",")%>
                                 <%method = method_array[0].split("-")%>
                                 
                                 <%case method[0]
                                     when "banks"
-                                        transaction.user.banks.each do |bank|
+                                        bank = Bank.find(method[1].to_i)
+                                              
+                                        part1 = bank.number_account[0, 4]
+                                        part2 = bank.number_account[-4,4]%>
+                                        
+                                        <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
+                                        <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             
-                                            if bank.id.to_s === method[1]
-                                                part1 = bank.number_account[0, 4]
-                                                part2 = bank.number_account[-4,4]%>
-                                                <td class="align-middle"><span class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span></td>
-                                                <td class="align-middle"><img src="/img/bancos/<%=bank.banco%>.png" class="img-fluid avatar" alt="<%=bank.banco%>" title="<%=bank.banco%>"/></td>
-                                                <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
-                                            <%end%>
-                                        <%end%>
                                     <%when "bank_brasils"
-                                        transaction.user.bank_brasils.each do |bank|
+                                        bank = BankBrasil.find(method[1].to_i)
+                                        part1 = bank.number_agency
+                                        part2 = bank.number_account[-2,2]
+                                        %>
+                                        
+                                        <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
+                                        <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             
-                                            if bank.id.to_s === method[1]
-                                                part1 = bank.number_agency
-                                                part2 = bank.number_account[-2,2]
-                                            %>
-                                                <td class="align-middle"><span class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span></td>
-                                                
-                                                <td class="align-middle"><img src="/img/bancos/<%=bank.bank%>.png" class="img-fluid avatar" alt="<%=bank.bank%>" title="<%=bank.bank%>"/></td>
-                                                <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
-                                            <%end%>
-                                        <%end%>
                                     <%when "digital_payments"
-                                        transaction.user.digital_payments.each do |payment|
+                                        payment = DigitalPayment.find(method[1].to_i)
+                                        part1 = payment.number_phone[0, 3]
+                                        part2 = payment.number_phone[-4,4]
+                                        %>
+                                        
+                                        <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
+                                        <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             
-                                            if payment.id.to_s === method[1]
-                                                part1 = payment.number_phone[0, 3]
-                                                part2 = payment.number_phone[-4,4]
-                                                %>
-                                                <td class="align-middle"><span class=""><%=payment.name.capitalize%> <%=payment.last_name.capitalize%></span></td>
-                                                <td class="align-middle"><img src="/img/wallets/<%=payment.payment_method%>.png" class="img-fluid avatar" alt="<%=payment.payment_method%>" title="<%=payment.payment_method%>"/></td>
-                                                <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
-                                            <%end%>
-                                        <%end%>
                                     <%when "mobile_payments"
-                                        transaction.user.mobile_payments.each do |payment|
+                                        payment = MobilePayment.find(method[1].to_i)
+                                        part1 = payment.number_phone[0, 3]
+                                        part2 = payment.number_phone[-4,4]
+                                        %>
+                                        
+                                        <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
+                                        <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             
-                                            if payment.id.to_s === method[1]
-                                                part1 = payment.number_phone[0, 3]
-                                                part2 = payment.number_phone[-4,4]
-                                                %>
-                                                <td class="align-middle"><span class="text-capitalize"><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
-                                                <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
-                                                <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
-                                            <%end%>
-                                        <%end%>
                                     <%when "wallets"
-                                        transaction.user.wallets.each do |wallet|
+                                        wallet = Wallet.find(method[1].to_i)
+                                        part1 = wallet.identificador[0, 4]
+                                        if wallet.type_identificador === "Correo Electrónico"
+                                            part2 = wallet.identificador[-10,10]
+                                        else
+                                            part2 = wallet.identificador[-5,5]
+                                        end%>
+                                       
+                                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                        <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             
-                                            if wallet.id.to_s === method[1]
-                                                part1 = wallet.identificador[0, 4]
-                                                if wallet.type_identificador === "Correo Electrónico"
-                                                    part2 = wallet.identificador[-10,10]
-                                                else
-                                                    part2 = wallet.identificador[-5,5]
-                                                end%>
-                                                <td class="align-middle"><span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
-                                                <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                                <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
-                                            <%end%>
-                                        <%end%>
                                     <%when "wallet_with_users"
-                                        transaction.user.wallets.each do |wallet|
+                                        wallet = WalletWithUser.find(method[1].to_i)
+                                        part1 = wallet.usuario[0, 3]
+                                        part2 = wallet.usuario[-2,2]
+                                        %>
+                                        
+                                        <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
+                                        <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
                                             
-                                            if wallet.id.to_s === method[1]
-                                                part1 = wallet.usuario[0, 3]
-                                                part2 = wallet.usuario[-2,2]
-                                                %>
-                                                <td class="align-middle"><span class="text-capitalize"><%=wallet.name%> <%=wallet.second_name%> <%=wallet.last_name%></span></td>
-                                                <td class="align-middle"><img src="/img/wallets/<%=wallet.wallet_name%>.png" class="img-fluid avatar" alt="<%=wallet.wallet_name%>" title="<%=wallet.wallet_name%>"/></td>
-                                                <td class="align-middle"><%=part1 + "****" + part2%> <%if method_array.count > 1%> + <%=method_array.count-1%> Cta(s).<%end%></td>
-                                            <%end%>
-                                        <%end%>
                                 <%end%>
-                
-                                <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
         
                                 <%=render "detectar-moneda", {country: transaction.country_destinity}%>
                                 <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>

@@ -119,6 +119,9 @@
                             <%end%>
                         </div>
                     <%end%>
+                    <%if current_user.is_admin?%>
+                        <%=render 'partials/modal_perfil_usuario'%>
+                    <%end%>
                     
                 </div>
                 
