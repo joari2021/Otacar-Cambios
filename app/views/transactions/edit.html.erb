@@ -575,7 +575,6 @@
                             </div>
                             -->
                             
-                            
                             <div class="actions mt-4">
                                 <%= form.submit "Continuar", class:"btn btn-success", id:"button", disabled:"disabled"%>
                                 
@@ -899,13 +898,26 @@
 
                 //IDENTIFICAR EL NUMERO DEL LABEL PARA LOS DETALLES DE VARIAS CUENTAS DONDE ES NECESARIO DIFERENCIAR EL LABEL QUE PERTENECE AL INPUT_FILE DEL COMPROBANTE DE PAGO
 
-                //UBICAR EL LABEL EN LAS TERCERAS CUENTA DE PAGO MOVIL
+                //UBICAR EL LABEL EN LAS TERCERAS CUENTA
                 if (inicio === 2){
                     num_label = i-1
                 }else{
                     num_label = i + incremento
                 }
-                textarea.value = textarea.value + "\\\n" + labels[num_label].innerText + ": " + spans[i].innerText;
+
+                //IDENTIFICAR SI LA LINEA A COPIAR ES UN DOCUMENTO DE VENEZUELA PARA AÑADIR EL TIPO DE DOCUMENTO
+                partition_label = labels[num_label].id.split("/")
+                if (partition_label.length === 2){
+                    if (partition_label[0] === "document_vzla" ){
+                    content_span = partition_label[1] + "-" + spans[i].innerText
+                    }else{
+                        content_span = spans[i].innerText
+                    }
+                }else{
+                    content_span = spans[i].innerText
+                }
+                
+                textarea.value = textarea.value + "\\\n" + labels[num_label].innerText + ": " + content_span;
                 textarea.value = textarea.value.slice(0,last_char) + textarea.value.slice(last_char+1);
             }
             

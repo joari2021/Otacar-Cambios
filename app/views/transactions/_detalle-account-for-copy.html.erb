@@ -6,9 +6,9 @@
                 <label  class="text-primary">Titular de la cuenta</label><br>
                 <span id="titular_bank<%=i%>" class="text-capitalize"><%=bank.name%> <%=bank.second_name%> <%=bank.last_name%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('titular_bank<%=i%>','Titular de la cuenta')"></i><br><hr>
 
-                <label class="text-primary">Nro Documento</label><br>
-                <%if bank.country ==="Venezuela"%><%=bank.type_document%><%end%>
-                <span id="documento<%=i%>"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
+                <label class="text-primary" <%if bank.country === "Venezuela"%>id="document_vzla/<%=bank.type_document%>"<%end%>>Nro Documento</label><br>
+                
+                <%if bank.country ==="Venezuela"%><%=bank.type_document%>-<%end%><span id="documento<%=i%>"><%=bank.identidy%></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('documento<%=i%>','Nro documento')"></i><br><hr>
 
                 <label class="text-primary">Banco</label><br>
                 <span id="banco<%=i%>"><%array_banks = ["Banco De Venezuela","Banco Mercantil", "B.O.D", "Banco Banesco"]%><%if array_banks.include?(bank.banco)%><%=bank.banco%><%else%><%=@bancos[bank.banco]%><%end%></span>
