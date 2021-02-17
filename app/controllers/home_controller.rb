@@ -21,7 +21,7 @@ class HomeController < ApplicationController
                                   .where status: "realizada"
     end
     
-    @notifications = current_user.notifications.order("created_at DESC")
+    @notifications = current_user.notifications.paginate(:page => params[:page], :per_page => 20).order("created_at DESC")
 
     #ACTUALIZAR LAS NOTIFICACIONES VISTAS
     notifications = @notifications.where(view:false)
@@ -31,8 +31,8 @@ class HomeController < ApplicationController
 
     #REFERIDOS
     num_usuario = current_user.id * 4
-    @referidos = User.where(num_referidor: num_usuario.to_s,status_referencia: "confirmada").count
-    @referidos_sin_confirmar = User.where(num_referidor: num_usuario.to_s,status_referencia: "sin confirmar").count
+    @referidos = User.where(num_referidor: num_usuario.to_s,status_referencia: "confirmada")
+    @referidos_sin_confirmar = User.where(num_referidor: num_usuario.to_s,status_referencia: "sin confirmar")
   end
   
   def calculate_shipping

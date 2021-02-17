@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="align-self-center">
-                            <h6 class="mb-0"><%=@referidos%></h6>
+                            <h6 class="mb-0"><%=@referidos.count%></h6>
                             <small class="text-muted">Referidos confirmados</small>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="align-self-center">
-                            <h6 class="mb-0"><%=@referidos_sin_confirmar%></h6>
+                            <h6 class="mb-0"><%=@referidos_sin_confirmar.count%></h6>
                             <small class="text-muted">Referidos sin confirmar</small>
                         </div>
                     </div>
@@ -117,31 +117,31 @@
                         method = method_array[0].split("-")
                         case method[0]
                             when "banks"
-                                account = Bank.find(method[1].to_i).name.capitalize + " " + Bank.find(method[1].to_i).last_name.capitalize
+                                account = Bank.find(method[1].to_i).name + " " + Bank.find(method[1].to_i).last_name
                                 carpeta = "bancos"
                                 img = Bank.find(method[1].to_i).banco
                                 title = Bank.find(method[1].to_i).banco
 
                             when "bank_brasils"
-                                account = BankBrasil.find(method[1].to_i).name.capitalize + " " + BankBrasil.find(method[1].to_i).last_name.capitalize
+                                account = BankBrasil.find(method[1].to_i).name + " " + BankBrasil.find(method[1].to_i).last_name
                                 carpeta = "bancos"
                                 img = BankBrasil.find(method[1].to_i).bank
                                 title = BankBrasil.find(method[1].to_i).bank
 
                             when "wallets"
-                                account = Wallet.find(method[1].to_i).name.capitalize + " " + Wallet.find(method[1].to_i).last_name.capitalize
+                                account = Wallet.find(method[1].to_i).name + " " + Wallet.find(method[1].to_i).last_name
                                 carpeta = "wallets"
                                 img = Wallet.find(method[1].to_i).wallet_name
                                 title = Wallet.find(method[1].to_i).wallet_name
 
                             when "wallet_with_users"
-                                account = WalletWithUser.find(method[1].to_i).name.capitalize + " " + WalletWithUser.find(method[1].to_i).last_name.capitalize
+                                account = WalletWithUser.find(method[1].to_i).name + " " + WalletWithUser.find(method[1].to_i).last_name
                                 carpeta = "wallets"
                                 img = WalletWithUser.find(method[1].to_i).wallet_name
                                 title = WalletWithUser.find(method[1].to_i).wallet_name
 
                             when "digital_payments"
-                                account = DigitalPayment.find(method[1].to_i).name.capitalize + " " + DigitalPayment.find(method[1].to_i).last_name.capitalize
+                                account = DigitalPayment.find(method[1].to_i).name + " " + DigitalPayment.find(method[1].to_i).last_name
                                 carpeta = "wallets"
                                 img = DigitalPayment.find(method[1].to_i).payment_method
                                 title = DigitalPayment.find(method[1].to_i).payment_method
@@ -152,7 +152,7 @@
                                 img = MobilePayment.find(method[1].to_i).bank
                                 title = @bancos[MobilePayment.find(method[1].to_i).bank]
                         end%>
-                        <td class="align-middle"><%=account%></td>
+                        <td class="align-middle text-capitalize"><%=account%></td>
 
                         <td class="align-middle"><img src="/img/<%=carpeta%>/<%=img%>.png" class="img-fluid avatar" alt="<%=title%>" title="<%=title%>"/> <%if method_array.count > 1%><br> + <%=method_array.count-1%> Cta(s).<%end%></td>
                         
@@ -232,6 +232,7 @@
                             <%@notifications.each do |notification|%>
                                 <%=render 'partials/notification', notification: notification%>
                             <%end%>
+                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-modal">Cerrar</button>
@@ -301,7 +302,7 @@
                             </div>
                         </div>
                         <div class="align-self-center">
-                            <h6 class="mb-0"><%=@referidos%></h6>
+                            <h6 class="mb-0"><%=@referidos.count%></h6>
                             <small class="text-muted">Referidos</small>
                         </div>
                     </div>
@@ -527,9 +528,9 @@
                         <h6 class="mb-0">Notificaciones</h6>
                     </div>
                     <div class="card-body">
-                        <%@notifications.limit(3).each do |notification|%>
-                            <%=render 'partials/notification', notification: notification%>
-                        <%end%>
+                        
+                        <%=render 'partials/notification', limit: 3%>
+                        
                         <hr>
                         <div class="text-primary pt-3">
                             <a href="/notifications/new" class="d-inline-block float-left small" onclick="show_preloader()">Enviar notificación</a>
@@ -554,11 +555,18 @@
                         <div class="modal-header text-center d-inline-block">
                             <h5 class="modal-title" id="staticBackdropLabel">Notificaciones</h5>
                         </div>
-                        <div class="modal-body">
-                            <%@notifications.each do |notification|%>
-                                <%=render 'partials/notification', notification: notification%>
-                            <%end%>
+                        <div class="modal-body" >
+                            
+                            <div id="modal_body_notify">
+                                <%=render 'partials/notification', limit: 20%>
+                            </div>
+                            <div id="div_will_paginate">
+                            <%= will_paginate @notifications, class:"pagination d-none" %>
+                            <div class="w-100 text-center"><a href="#" class="special-link" style="color:#5878ca;" onclick="mostrar_mas(event)">Mostrar Más</a></div>
+                                <%=render 'partials/progress-bar', modelo: "Notification"%>
+                            </div>
                         </div>
+                        
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-modal">Cerrar</button>
                         </div>
@@ -584,8 +592,23 @@
 
 
     //REFRESCAR LAS NOTIFICACIONES EN EL MODAL
+    
+
     function refrescarNotificationsModal(){
+        
         $("#content-modal").load(window.location + '?randval='+ Math.random() + " #content-reload");
+        
+    }
+
+    function mostrar_mas(e) {
+        e.preventDefault()
+        console.log($(".pagination").length);
+        if ($(".pagination").length) {
+            
+            console.log("entre");
+            url = $(".pagination .next_page").attr('href');
+            $.getScript(url);  
+        };
     }
 
     cajaMsj = document.getElementById("copy");

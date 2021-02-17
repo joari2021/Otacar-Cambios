@@ -1,0 +1,7 @@
+$('#modal_body_notify').append('<%= j render 'partials/notification', limit:20%>')
+
+<% if @notifications.next_page%>
+    $('.pagination').replaceWith('<%= j will_paginate @notifications, class:"pagination d-none"%>')
+<%else%>
+    $('#div_will_paginate').remove()
+<%end%>
