@@ -1,25 +1,38 @@
-<h2>Change your password</h2>
+<div class="contenedor2">
+    <div class="contenedor">
+        <h2>Cambiar Contraseña</h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, :id => "form" }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
-  </div>
+        <%= f.hidden_field :reset_password_token %>
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+        <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <%= f.password_field :password, autofocus:"autofocus", autocomplete: "new-password", required: :required, id:"contraseña", placeholder:" Contraseña", minlength: "8"%>
+        </div>
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
+        <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: " Confirmar Contraseña", minlength: "8"%>
+        </div>
 
-<%= render "devise/shared/links" %>
+        <%= f.submit "Continuar", class:"btn transparent",style:"color:#fff" %>
+
+        <% end %>
+        <div class="contenedor3" style="margin-top:40px">
+            <div class="cajaenlaces" style="padding:20px;border-radius:20px">
+                <%= render "devise/shared/links" %>
+                <div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var cuerpo = document.getElementById('bodys');
+
+    cuerpo.classList.add('body_fondo');
+
+    <%=render "partials/script-preloader-js"%>
+</script>
