@@ -1,0 +1,11 @@
+
+$('#body_users').append('<%= j render 'partials/user-resumen'%>')
+
+$(".progress").addClass("d-none")
+<% if @users.next_page%>
+    $('.pagination').replaceWith('<%= j will_paginate @users, class:"pagination d-none"%>')
+    $("#link_mostrar_mas").removeClass("d-none")
+    
+<%else%>
+    $('#div_will_paginate').remove()
+<%end%>

@@ -443,4 +443,16 @@ function validarCampos(){
 validarCampos()
 
 
+function mostrar_mas(e) {
+  e.preventDefault()
+  
+  if ($(".pagination").length) {
+      
+      $("#link_mostrar_mas").addClass("d-none")
+      $(".progress").removeClass("d-none")
+      url = $(".pagination .next_page").attr('href');
+
+      $.getScript(url);  
+  };
+}
 //VALIDACIONES

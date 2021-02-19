@@ -32,36 +32,37 @@
                         <th scope="col"><small class="font-weight-bold">Registro<small></th> 
                     </tr>
                 </thead>
-                <tbody>
-                    <%usuario_exist = false%>
-                    <%@users.where.not(id:1).order(name: :asc, email: :asc).each do |usuario|%>
-                    <tr class="shadow-sm">
-                        <%if usuario.is_normal_user?%>
-                            <td class="align-middle text-capitalize"><%=usuario.name%> <%=usuario.second_name%> <%=usuario.last_name%> <%=usuario.second_surname%></td>
-                        <%else%>
-                            <td class="align-middle"><%=usuario.email%></td>
-                        <%end%>
-                        <td class="align-middle"><%=(usuario.id * 4).to_s.rjust(9, '0')%></td>
-                        
-                        <%if usuario.is_normal_user?%>
-                            <td class="align-middle"><span class="badge badge-pill badge-info">Completo</span></td>
-                        <%else%>
-                            <td class="align-middle"><span class="badge badge-pill badge-warning text-white">Incompleto</span></td>
-                        <%end%>
-                        
-                        <td class="align-middle"><a href="/users/edit?id=<%=usuario.id%>" class="badge badge-secondary" id="td-ver"><i class="far fa-eye"></i></a></td>
-                        <%usuario_exist = true%>
-                    </tr>
-                    <%end%>
+                <tbody id="body_users">
+                    <%@usuario_exist = false%>
+                    <%=render 'partials/user-resumen'%>
+                    
                 </tbody>
                 
             </table>
-            <%unless usuario_exist%>
+            <%unless @usuario_exist%>
                 <div class="alert alert-warning text-center" role="alert">
                     No se encontro una coincidencia...
                 </div>
             <%end%>
         
         </div>
+        <div id="div_will_paginate">
+            <%= will_paginate @users, class:"pagination d-none" %>
+            <div class="w-100 text-center">
+                <a href="#" class="special-link d-none" id="link_mostrar_mas" style="color:#17a2b8;" onclick="mostrar_mas(event,'<%=params[:termino]%>')">Mostrar Más</a>
+            </div>
+            <%=render 'partials/progress-bar', modelo: "User"%>
+        </div>
     </div>
 </div>
+<script src="/js/vistas/script-form-for-campos.js"></script>
+<script>
+    <%if @users.next_page%>
+        $(document).ready(function() {
+            url_definid = false
+            $('#link_mostrar_mas').removeClass("d-none")
+        })
+        
+    <% end %>
+</script>
+

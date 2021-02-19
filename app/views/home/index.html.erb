@@ -586,6 +586,7 @@
     </section>
 <%end%>
 
+<script src="/js/vistas/script-form-for-campos.js"></script>
 <script>
     
     $(document).ready(function(){
@@ -602,14 +603,12 @@
 
     //REFRESCAR LAS NOTIFICACIONES EN EL MODAL
     
-
     function refrescarNotificationsModal(){
         $(".progress").removeClass("d-none")
         $("#modal_body_notify").addClass("d-none");
         $("#link_mostrar_mas").addClass("d-none");
         $("#content-modal").load(window.location + '?randval='+ Math.random() + " #content-reload", function(){
             
-            console.log("Entres");
             <% if @notifications.next_page%>
                 $("#modal_body_notify").removeClass("d-none");
                 $("#link_mostrar_mas").removeClass("d-none");
@@ -619,18 +618,6 @@
                 $("#link_mostrar_mas").addClass("d-none");
             <% end %>
         });
-        
-    }
-
-    function mostrar_mas(e) {
-        e.preventDefault()
-        
-        if ($(".pagination").length) {
-            $("#link_mostrar_mas").addClass("d-none")
-            $(".progress").removeClass("d-none")
-            url = $(".pagination .next_page").attr('href');
-            $.getScript(url);  
-        };
     }
 
     cajaMsj = document.getElementById("copy");

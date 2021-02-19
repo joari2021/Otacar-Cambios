@@ -1,0 +1,12 @@
+
+$('#table_reality_transactions').append('<%= j render 'partials/reality_transactions', ultima_page:false%>')
+
+$(".progress").addClass("d-none")
+<% if @transactions.next_page%>
+    
+    $('.pagination').replaceWith('<%= j will_paginate @transactions, class:"pagination d-none"%>')
+    $("#link_mostrar_mas").removeClass("d-none")
+    
+<%else%>
+    $('#div_will_paginate').remove()
+<%end%>

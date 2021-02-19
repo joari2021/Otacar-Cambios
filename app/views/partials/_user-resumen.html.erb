@@ -1,0 +1,19 @@
+<%@users.where.not(id:1).order(name: :asc, email: :asc).each do |usuario|%>
+<tr class="shadow-sm">
+    <%if usuario.is_normal_user?%>
+        <td class="align-middle text-capitalize"><%=usuario.name%> <%=usuario.second_name%> <%=usuario.last_name%> <%=usuario.second_surname%></td>
+    <%else%>
+        <td class="align-middle"><%=usuario.email%></td>
+    <%end%>
+    <td class="align-middle"><%=(usuario.id * 4).to_s.rjust(9, '0')%></td>
+    
+    <%if usuario.is_normal_user?%>
+        <td class="align-middle"><span class="badge badge-pill badge-info">Completo</span></td>
+    <%else%>
+        <td class="align-middle"><span class="badge badge-pill badge-warning text-white">Incompleto</span></td>
+    <%end%>
+    
+    <td class="align-middle"><a href="/users/edit?id=<%=usuario.id%>" class="badge badge-secondary" id="td-ver"><i class="far fa-eye"></i></a></td>
+    <%@usuario_exist = true%>
+</tr>
+<%end%>

@@ -6,7 +6,30 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.order("created_at DESC").all
+    limit_items_for_page = 20
+    if current_user.is_admin?
+      @transactions = Transaction.paginate(page: params[:page],per_page: limit_items_for_page).where(status:"realizada").order("created_at DESC")
+    else
+      @transactions = current_user.transactions.paginate(page: params[:page],per_page: limit_items_for_page).where(status:"realizada").order("created_at DESC")
+    end
+    count_transactions = @transactions.count
+    if count_transactions % limit_items_for_page != 0
+      @paginas = count_transactions / limit_items_for_page
+      transactions_paginadas = @paginas.to_i * limit_items_for_page
+      #transactions_not_paginate = count_transactions - transactions_paginadas
+      array_transactions_not_paginate = []
+      var = 1
+      transactions_all = Transaction.where(status:"realizada").order("created_at DESC")
+      transactions_all.each do |transaction|
+        if var > transactions_paginadas
+          array_transactions_not_paginate.push(transaction.id)
+        end
+        var = var + 1
+      end
+      
+      @transactions_not_paginate = transactions_all.where(id: array_transactions_not_paginate)
+    end
+    
   end
 
 
