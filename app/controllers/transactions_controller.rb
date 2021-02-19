@@ -16,6 +16,7 @@ class TransactionsController < ApplicationController
                                                .where(status:"realizada")
                                                .order("created_at DESC")
     end
+
     count_transactions = @transactions.count
     if count_transactions % limit_items_for_page != 0
       @paginas = count_transactions / limit_items_for_page
@@ -31,7 +32,7 @@ class TransactionsController < ApplicationController
         var = var + 1
       end
       
-      @transactions_not_paginate = transactions_all.where(id: array_transactions_not_paginate)
+      @transactions_not_paginate = transactions_all.where(id: array_transactions_not_paginate)     
     end
     
   end

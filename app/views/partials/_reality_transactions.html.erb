@@ -1,11 +1,11 @@
 <%=render 'partials/zone-time'%>
 <%if ultima_page%>
-    <%transactions = @transactions_not_paginate%> 
+    <%@transactions_def = @transactions_not_paginate%> 
 <%else%>
-    <%transactions = @transactions%>
+    <%@transactions_def = @transactions%>
 <%end%>
 
-<%transactions.each do |transaction|%>
+<%@transactions_def.each do |transaction|%>
 
 <%@coincidencia = true%>
 <tr class="shadow-sm">
