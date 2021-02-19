@@ -1,5 +1,9 @@
 <%=render 'partials/name-and-cod-of-banks'%>
-<h4>Transacciones realizadas</h4>
+<%if current_user.is_admin?%>
+    <h4>Historial de Transacciones</h4>
+<%else%>
+    <h4>Transacciones realizadas</h4>
+<%end%>
 
 <div class="col-12 mb-5">
     <div class="table-responsive mt-5">

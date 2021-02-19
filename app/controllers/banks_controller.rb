@@ -27,6 +27,7 @@ class BanksController < ApplicationController
   # POST /banks
   # POST /banks.json
   def create
+    fsdfsdf
     @banco = Bank.new(bank_params)
     @banco.verify_data_saved
 

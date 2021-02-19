@@ -52,6 +52,7 @@
     
     <div class="mt-3">
         <%= form_with(model: bank, local: true, :html => {:id => "form", :name => "formulario"}) do |form| %>
+        
         <% if bank.errors.any? %>
         <div id="error_explanation" class="alert alert-danger">
         <h5 class="text-danger"><%if bank.errors.count > 1%><%=bank.errors.count%> errores han sido detectados en los siguientes campos:<%else%><%=bank.errors.count%> error ha sido detectado en el siguiente campo:<%end%></h5>

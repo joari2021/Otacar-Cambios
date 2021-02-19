@@ -5,7 +5,7 @@
     <title>Otacar Cambios</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <link  rel="shorcut icon"   href="/img/logo/Logo.ico" type="image/x-icon" />
+    <link  rel="shorcut icon" href="/img/logo/Logo.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Jorge Ochoa">
     <meta name="description" content="Envio de remesas a otros paises">
@@ -134,7 +134,11 @@
                 campoAlerta.classList.add("d-none");
             }, 6000);
         <%end%>
-
+        
+        if (window.location.href.indexOf("https") === -1 && window.location.href.indexOf("otacarcambios") != -1){
+            console.log(typeof window.location.href);
+             window.location.href = "https" + window.location.href.slice(4);
+        }
     </script>
 </body>
 

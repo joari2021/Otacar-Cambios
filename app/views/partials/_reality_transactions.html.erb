@@ -1,5 +1,5 @@
 <%=render 'partials/zone-time'%>
-<%unless ultima_page === true%>
+<%unless ultima_page%>
     <%@transactions.each do |transaction|%>
         <%@transaction = transaction%>
         <%=render 'partials/transaction', collection: @transaction%>

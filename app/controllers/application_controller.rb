@@ -33,4 +33,5 @@ class ApplicationController < ActionController::Base
     def params_referido
         params.require(:user).permit(:num_referidor)
     end
+        
 end

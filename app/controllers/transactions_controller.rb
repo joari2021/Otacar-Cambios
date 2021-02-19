@@ -7,6 +7,7 @@ class TransactionsController < ApplicationController
   # GET /transactions.json
   def index
     limit_items_for_page = 20
+    
     if current_user.is_admin?
       @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
                                 .where(status:"realizada")
@@ -32,7 +33,7 @@ class TransactionsController < ApplicationController
         var = var + 1
       end
       
-      @transactions_not_paginate = transactions_all.where(id: array_transactions_not_paginate)     
+      @transactions_not_paginate = transactions_all.where(id: array_transactions_not_paginate) 
     end
     
   end

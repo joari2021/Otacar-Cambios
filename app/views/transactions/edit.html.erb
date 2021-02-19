@@ -35,6 +35,7 @@
                         <%=@moneda_destinity%> <span id="monto_pagar"><%= number_with_precision(@transaction_pendiente.monto_envio, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><i class="far fa-copy float-right" onclick="copiarAlPortapapeles('monto_pagar','Monto a pagar')"></i><br><hr>
 
                         <%= form_with(model: @transaction, local: true, :html => { :class => "mb-5", :id => "form", multipart: true}) do |form| %>
+                            
                             <% if @transaction.errors.any? %>
                             <div id="error_explanation">
                                 <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -372,6 +373,7 @@
                        <%=render 'comprobante-pago', {identifier: "otacar", url: @transaction.comprobante_pago_otacar.url}%>
                         
                         <%= form_with(model: @transaction, local: true, :html => { :class => "was-validated mb-5", :id => "form"}) do |form| %>
+                        
                             <%if @transaction.errors.any?%>
                             <div id="error_explanation">
                                 <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
@@ -494,6 +496,7 @@
                         <%=render 'detectar-moneda', {country: @transaction.country_destinity}%>
                         
                         <%= form_with(model: @transaction, local: true, :html => { :class => "mb-5", :id => "form"}) do |form| %>
+                            
                             <%if @transaction.errors.any?%>
                                 <div id="error_explanation">
                                     <h2><%= pluralize(@transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
