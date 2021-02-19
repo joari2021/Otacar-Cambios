@@ -8,9 +8,13 @@ class TransactionsController < ApplicationController
   def index
     limit_items_for_page = 20
     if current_user.is_admin?
-      @transactions = Transaction.paginate(page: params[:page],per_page: limit_items_for_page).where(status:"realizada").order("created_at DESC")
+      @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
+                                .where(status:"realizada")
+                                .order("created_at DESC")
     else
-      @transactions = current_user.transactions.paginate(page: params[:page],per_page: limit_items_for_page).where(status:"realizada").order("created_at DESC")
+      @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
+                                               .where(status:"realizada")
+                                               .order("created_at DESC")
     end
     count_transactions = @transactions.count
     if count_transactions % limit_items_for_page != 0
