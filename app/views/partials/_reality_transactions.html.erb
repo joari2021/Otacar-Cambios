@@ -1,8 +1,14 @@
 <%=render 'partials/zone-time'%>
-<%if ultima_page%>
+<%if ultima_page === true%>
     <%@transactions_def = @transactions_not_paginate%> 
+    <script>
+        console.log("true");
+    </script>
 <%else%>
     <%@transactions_def = @transactions%>
+    <script>
+        console.log("false");
+    </script>
 <%end%>
 
 <%@transactions_def.each do |transaction|%>
