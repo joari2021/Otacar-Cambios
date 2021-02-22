@@ -22,7 +22,6 @@ class TransactionsController < ApplicationController
     if count_transactions % limit_items_for_page != 0
       @paginas = count_transactions / limit_items_for_page
       transactions_paginadas = @paginas.to_i * limit_items_for_page
-      #transactions_not_paginate = count_transactions - transactions_paginadas
       array_transactions_not_paginate = []
       var = 1
       transactions_all = Transaction.where(status:"realizada").order("created_at DESC")

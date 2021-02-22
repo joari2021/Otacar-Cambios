@@ -292,6 +292,11 @@ function formatearNumeros(numero){
   numeroF = parseFloat(valor);
   return numeroF;
 }
+function formatearNumerosEnteros(numero){
+  valor = numero.replace(/\D/g, "");
+  valor = parseInt(valor);
+  return valor;
+}
 
 function formatTasa(numero) {
     re = /\./g;

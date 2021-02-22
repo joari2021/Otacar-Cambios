@@ -9,8 +9,10 @@ require("@rails/activestorage").start()
 require("channels")
 require('jquery')
 
+import 'channels/calendario'
 import 'bootstrap'
 import 'css/styles'
+import 'css/calendario'
 
 
 import "@fortawesome/fontawesome-free/js/all";
