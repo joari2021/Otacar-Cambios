@@ -49,7 +49,7 @@ class TransactionsController < ApplicationController
         end
       else 
         @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
-                                   .where(status:"realdfizada")
+                                   .where(status:"realizada")
                                    .order("created_at DESC")
       end
       
