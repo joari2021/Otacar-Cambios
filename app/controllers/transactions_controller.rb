@@ -49,7 +49,7 @@ class TransactionsController < ApplicationController
         end
       else 
         @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
-                                   .where(status:"realizada")
+                                   .where(status:"realdfizada")
                                    .order("created_at DESC")
       end
       
@@ -58,8 +58,8 @@ class TransactionsController < ApplicationController
         if params["termino"] === "fecha"
           
           @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
-                                     .where(status:"realizada", created_at: parsed_date_inicial.midnight..parsed_date_final.end_of_day)
-                                     .order("created_at DESC")
+                                      .where(status:"realizada", created_at: parsed_date_inicial.midnight..parsed_date_final.end_of_day)
+                                      .order("created_at DESC")
         elsif params["termino"] === "ID"
           @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
                                      .where(status:"realizada", num_id: params["ID"])
