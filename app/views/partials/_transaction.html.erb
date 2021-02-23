@@ -1,16 +1,16 @@
 <%@coincidencia = true%>
 <tr class="shadow-sm">
     
-    <td><span class="d-block"><%=@transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=@transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
+    <td><span class="d-block"><%transaction.created_at.in_time_zone(@zona_horaria).strftime("%d/%m/%Y")%></span><small><%=transaction.created_at.in_time_zone(@zona_horaria).strftime("%H:%M:%S")%></small>
     </td>
 
-    <td class="align-middle"><img src="/img/paises/<%=@transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=@transaction.country_destinity%>" title="<%=@transaction.country_destinity%>"/></td>
+    <td class="align-middle"><img src="/img/paises/<%=transaction.country_destinity%>.svg" class="img-fluid avatar" alt="<%=transaction.country_destinity%>" title="<%=transaction.country_destinity%>"/></td>
 
     <%if current_user.is_admin?%>
-        <td class="align-middle"><span class="text-capitalize"><%=@transaction.user.name%> <%@transaction.user.second_name%> <%=@transaction.user.last_name%> <%=@transaction.user.second_surname%></span></td>
+        <td class="align-middle"><span class="text-capitalize"><%=transaction.user.name%> <%transaction.user.second_name%> <%=transaction.user.last_name%> <%=transaction.user.second_surname%></span></td>
     <%end%>
 
-    <%method_array = @transaction.account_destinity_usuario.split(",")%>
+    <%method_array = transaction.account_destinity_usuario.split(",")%>
     <%method = method_array[0].split("-")%>
     
     <%case method[0]
@@ -86,8 +86,8 @@
                 
     <%end%>
 
-    <%=render "detectar-moneda", {country: @transaction.country_destinity}%>
-    <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(@transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
+    <%=render "detectar-moneda", {country: transaction.country_destinity}%>
+    <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
 
-    <td class="align-middle"><a href="/transactions/<%=@transaction.id%>" class="badge badge-secondary" id="td-ver" onclick="show_preloader()">Ver Detalles<i class="far fa-eye ml-2"></i></a></td>
+    <td class="align-middle"><a href="/transactions/<%=transaction.id%>" class="badge badge-secondary" id="td-ver" onclick="show_preloader()">Ver Detalles<i class="far fa-eye ml-2"></i></a></td>
 </tr>

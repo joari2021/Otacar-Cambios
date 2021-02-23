@@ -7,7 +7,7 @@ class TransactionsController < ApplicationController
   # GET /transactions.json
   def index
     #sdsdsdsd
-    limit_items_for_page = 20
+    limit_items_for_page = 5
 
     if params["termino"].present?
       if params["termino"] === "fecha"
