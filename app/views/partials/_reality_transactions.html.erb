@@ -1,4 +1,5 @@
 <%=render 'partials/zone-time'%>
+<%=render 'partials/name-and-cod-of-banks'%>
 <%unless ultima_page%>
     <%@transactions.each do |transaction|%>
         <%=render 'partials/transaction', transaction: transaction%>
