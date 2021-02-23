@@ -1,14 +1,12 @@
 <%=render 'partials/zone-time'%>
 <%unless ultima_page%>
     <%@transactions.each do |transaction|%>
-        <%@transaction = transaction%>
-        <%=render 'partials/transaction', collection: @transaction%>
+        <%=render 'partials/transaction', transaction: transaction%>
     <%end%>
 <%else%>
     <%if @transactions_not_paginate.present?%>
         <%@transactions_not_paginate.each do |transaction|%>
-            <%@transaction = transaction%>
-            <%=render 'partials/transaction', collection: @transaction%>
+            <%=render 'partials/transaction', transaction: transaction%>
         <%end%>
     <%end%>
 <%end%>
