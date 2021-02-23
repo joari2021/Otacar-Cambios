@@ -4,59 +4,102 @@
 <%else%>
     <h4>Transacciones realizadas</h4>
 <%end%>
-
-<div class="row d-none">
-    <div class="col-6 text-center">
-        <label>Desde:</label>
-        <p id="date_inicial">-- / ------ / ----</p>
-        <a rel="nofollow" href="#" title="Borrar" class="badge badge-secondary" onclick="borrar_fecha(event,'date_inicial')"><i class="fas fa-trash-alt"></i></a>
-        <hr>
-    </div>
-    <div class="col-6 text-center">
-        <label>Hasta:</label>
-        <p id="date_final">-- / ------ / ----</p>
-        <a rel="nofollow" href="#" title="Borrar" class="badge badge-secondary" onclick="borrar_fecha(event,'date_final')"><i class="fas fa-trash-alt"></i></a>
-        <hr>
+<div class="row justify-content-center mt-5">
+    <div class="col-6 col-sm-5 text-center">
+        <label for="select_option">Buscar por:</label> 
+        <select class="custom-select" id="select_option" onchange="mostrar_captacion(this)">
+            <option value="" selected>Elige una opción</option>
+            <option value="ID">ID Transacción</option>
+            <option value="Fecha">Rango de fechas</option>
+        </select>
     </div>
 </div>
 
-<div class="text-center d-none">
-    <p class="" id="msj_calendario">Escoge la fecha de inicio</p>
-</div>
+<!-------------------------------------------------- CALENDARIO ----------------------------------------------------->
+<div class="d-none mt-4" id="caja_calendario">
+    <div class="row">
+        <div class="col-6 text-center">
+            <label>Desde:</label>
+            <p id="date_inicial">-- / ------ / ----</p>
+            <a rel="nofollow" href="#" title="Borrar" class="badge badge-secondary" onclick="borrar_fecha(event,'date_inicial')"><i class="fas fa-trash-alt"></i></a>
+            <hr>
+        </div>
+        <div class="col-6 text-center">
+            <label>Hasta:</label>
+            <p id="date_final">-- / ------ / ----</p>
+            <a rel="nofollow" href="#" title="Borrar" class="badge badge-secondary" onclick="borrar_fecha(event,'date_final')"><i class="fas fa-trash-alt"></i></a>
+            <hr>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <p class="" id="msj_calendario">Escoge la fecha de inicio</p>
+    </div>
 
-<div id="cal" class="d-none"> 
-    <div class="header"> 
-        <span class="left button" id="prev"> &lang; </span> 
-        <span class="left hook"></span> 
-        <span class="month-year" id="label"> Junio 20&0 </span> 
-        <span class="right hook"></span> 
-        <span class="right button" id="next"> &rang; </span>
-    </div> 
-    <table id="days"> 
-        <td>dom</td> 
-        <td>lun</td> 
-        <td>mar</td> 
-        <td>mie</td> 
-        <td>jue</td> 
-        <td>vie</td> 
-        <td>sab</td>
- 
-    </table> 
-    <div id="cal-frame"> 
-        <table class="curr"> 
-            <tbody> 
-                <tr><td class="nil"></td><td class="nil"></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr> 
-                <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td class="today">11</td><td>12</td></tr> 
-                <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr> 
-                <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr> 
-                <tr><td>27</td><td>28</td><td>29</td><td>30</td><td class="nil"></td><td class="nil"></td><td class="nil"></td></tr> 
-            </tbody> 
-        </table>
-    </div> 
+    <div class="d-none" id="caja_boton_buscar">
+        <button class="btn btn-info d-block m-auto" onclick="buscar()">Buscar</button>
+    </div>
+    
+    <div id="cal" class=""> 
+        <div class="header"> 
+            <span class="left button" id="prev"> &lang; </span> 
+            <span class="left hook"></span> 
+            <span class="month-year" id="label"> Junio 20&0 </span> 
+            <span class="right hook"></span> 
+            <span class="right button" id="next"> &rang; </span>
+        </div> 
+        <table id="days"> 
+            <td>dom</td> 
+            <td>lun</td> 
+            <td>mar</td> 
+            <td>mie</td> 
+            <td>jue</td> 
+            <td>vie</td> 
+            <td>sab</td>
+     
+        </table> 
+        <div id="cal-frame"> 
+            <table class="curr"> 
+                <tbody> 
+                    <tr><td class="nil"></td><td class="nil"></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr> 
+                    <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td class="today">11</td><td>12</td></tr> 
+                    <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr> 
+                    <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr> 
+                    <tr><td>27</td><td>28</td><td>29</td><td>30</td><td class="nil"></td><td class="nil"></td><td class="nil"></td></tr> 
+                </tbody> 
+            </table>
+        </div> 
+        
+    </div>
     
 </div>
 
+<!---------------------------------------------- CAMPO ID -------------------------------------------------------------->
 
+<div class="d-none" id="caja_id">
+    <div class="row justify-content-center mt-5">
+        <div class="col-6 col-sm-5 text-center">
+            <input type="text" class="form-control is-invalid text-uppercase" id="validationID" oninput="soloLetrasYNumeros(this,16,16),mostrar_btn_buscar(this)" maxlength="16" autofocus="autofocus">
+            <div class="invalid-feedback">
+                Ingresa el ID de la transacción
+            </div>
+        </div>
+        
+    </div>
+    <div class="d-none mt-4" id="caja_boton_buscar_2">
+        <button class="btn btn-info d-block m-auto" onclick="buscar()">Buscar</button>
+    </div>
+</div>
+
+
+<!---------------------------------- MOSTRAR TODAS ------------------------------------------------------>
+<%if params[:termino].present?%>
+    <div class="mt-4" id="caja_boton_buscar_3">
+        <button class="btn btn-info d-block m-auto" onclick="buscar()">Mostrar todas</button>
+    </div>
+<%end%>
+
+<!-------------------------------------------- TABLA DE TRANSACCIONES ------------------------------------------------>
 <div class="col-12 mb-5">
     <div class="table-responsive mt-5">
         <table class="table">
@@ -91,7 +134,9 @@
         </div>
     <%end%>
     <div id="div_will_paginate">
-        <%= will_paginate @transactions, class:"pagination d-none" %>
+        
+        <%= will_paginate @transactions, class:"pagination d-none"%>
+        
         <div class="w-100 text-center">
             <a href="#" class="special-link d-none" id="link_mostrar_mas" style="color:#0b254b;" onclick="mostrar_mas(event)">Mostrar Más</a>
         </div>
@@ -110,8 +155,33 @@
         
     <% end %>
     msj_calendario = document.getElementById("msj_calendario")
+    caja_boton_buscar = document.getElementById("caja_boton_buscar")
+    select_option = document.getElementById("select_option")
     exist_fecha_inicial = false
     exist_fecha_final = false
+    
+    function buscar() {
+        if(select_option.value === "ID"){
+            id = document.getElementById("validationID")
+            window.location.href = "<%=url_for(transactions_path)%>?termino=ID&ID=" + id.value.toUpperCase()
+
+        }else if(select_option.value === "Fecha"){
+            array_months_letters = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"]
+            date_inicial = date_inicial.innerText
+            date_inicial = date_inicial.replace(/\s+/g, '')
+            date_inicial = date_inicial.split("/")
+            date_inicial[1] = array_months_letters.indexOf(date_inicial[1]) + 1
+
+            date_final = date_final.innerText
+            date_final = date_final.replace(/\s+/g, '') 
+            date_final = date_final.split("/")
+            date_final[1] = array_months_letters.indexOf(date_final[1]) + 1
+            
+            window.location.href = "<%=url_for(transactions_path)%>?termino=fecha&fecha_inicial=" + date_inicial + "&fecha_final=" + date_final
+        }else{
+            window.location.href = "<%=url_for(transactions_path)%>"
+        }
+    }
 
     function borrar_fecha(e,fecha_id) {
         e.preventDefault()
@@ -127,11 +197,14 @@
         }else{
             exist_fecha_final = false
             msj_calendario.classList.remove("d-none")
-            msj_calendario.innerText = "Escoge la fecha final"
+            if (exist_fecha_inicial){
+                msj_calendario.innerText = "Escoge la fecha final"
+            }
             msj_calendario.classList.remove("text-danger")
         }
-
+        caja_boton_buscar.classList.add("d-none")
     }
+
     function comparar_fechas(day,month,year,other_date,fecha_ingress) {
         fecha_valid = false
         
@@ -195,9 +268,14 @@
         }
         /////////////////////////
         if (!exist_fecha_work){
-            console.log("entre");
+            
             if (fecha_valid){
-                fecha_work.innerText = td_day.innerText + " / " + array_month_year[0] + " / " + array_month_year[1]
+                if (td_day.innerText.length === 1){
+                    day = "0" + td_day.innerText
+                }else{
+                    day = td_day.innerText
+                }
+                fecha_work.innerText = day + " / " + array_month_year[0] + " / " + array_month_year[1]
 
                 if(fecha_ingress === "fecha inicial"){
                     exist_fecha_inicial = true
@@ -212,6 +290,7 @@
                     msj_calendario.innerText = "Escoge la fecha final"
                 }else{
                     msj_calendario.classList.add("d-none")
+                    caja_boton_buscar.classList.remove("d-none")
                 }
                 
             }else{
@@ -229,16 +308,45 @@
 
     }
 
+    function mostrar_captacion(select) {
+        caja_calendario = document.getElementById("caja_calendario")
+        caja_id = document.getElementById("caja_id")
+        <%if params[:termino].present?%>
+            caja_todas = document.getElementById("caja_boton_buscar_3")
+        <%end%>
+        
+        if (select.value === "ID") {
+            caja_calendario.classList.add("d-none")
+            caja_id.classList.remove("d-none")
+            <%if params[:termino].present?%>
+                caja_todas.classList.add("d-none")
+            <%end%>
+        }else if(select.value === "Fecha"){ 
+            caja_id.classList.add("d-none")
+            caja_calendario.classList.remove("d-none")
+            <%if params[:termino].present?%>
+                caja_todas.classList.add("d-none")
+            <%end%>
+        } else {
+            <%if params[:termino].present?%>
+                caja_todas.classList.remove("d-none")
+            <%end%>
+            caja_id.classList.add("d-none")
+            caja_calendario.classList.add("d-none")
+        }
+    }
+
     function mostrar_mas(e) {
         e.preventDefault()
         
         if ($(".pagination").length) {
-            
+            console.log($(".pagination").length); 
             $("#link_mostrar_mas").addClass("d-none")
             $(".progress").removeClass("d-none")
             url = $(".pagination .next_page").attr('href');
 
             pagina += 1
+            <%if @paginas.present?%>
             if (pagina > <%=@paginas%>){
                 
                 $('#table_reality_transactions').append('<%=j render 'partials/reality_transactions', ultima_page: true%>')
@@ -246,6 +354,36 @@
             }else{
                 $.getScript(url);  
             } 
+            <%end%>
         };
+    }
+
+    function soloLetrasYNumeros(input,car_min,car_max) {
+        var letras_num = "áéíóúabcdefghijklmnñopqrstuvwxyz0123456789";
+        newValor = "";
+        for (i = 0; i < input.value.length; i++) {
+            if (letras_num.indexOf(input.value[i].toLowerCase()) != -1) {
+            newValor = newValor.concat(input.value[i].toLowerCase());
+            }
+        }
+
+        input.value = newValor;
+        if (newValor.length >= car_min && newValor.length <= car_max) {
+            
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+        } else {
+            input.classList.remove("is-valid");
+            input.classList.add("is-invalid");
+        }
+    }
+
+    function mostrar_btn_buscar(input) {
+        btn_buscar = document.getElementById("caja_boton_buscar_2")
+        if(input.value.length === 16){
+            btn_buscar.classList.remove("d-none")
+        }else{
+            btn_buscar.classList.add("d-none")
+        }
     }
 </script>

@@ -6,16 +6,74 @@ class TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
+    #sdsdsdsd
     limit_items_for_page = 20
+
+    if params["termino"].present?
+      if params["termino"] === "fecha"
+        fecha_inicial = params["fecha_inicial"] if present?
+        fecha_final = params["fecha_final"] if present?
+
+        array_fecha_inicial = params["fecha_inicial"].split(",")
+        day_inicial = array_fecha_inicial[0].to_i
+        month_inicial = array_fecha_inicial[1].to_i
+        year_inicial = array_fecha_inicial[2].to_i
+        fecha_inicial_d = "#{year_inicial}-#{month_inicial}-#{day_inicial}"
+        parsed_date_inicial = Date.parse(fecha_inicial_d)
+
+        array_fecha_final = params["fecha_final"].split(",")
+        day_final = array_fecha_final[0].to_i
+        month_final = array_fecha_final[1].to_i
+        year_final = array_fecha_final[2].to_i
+        fecha_final_d = "#{year_final}-#{month_final}-#{day_final}"
+        parsed_date_final = Date.parse(fecha_final_d)
+      end
+    end
     
     if current_user.is_admin?
-      @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
-                                .where(status:"realizada")
-                                .order("created_at DESC")
+      
+      if params["termino"].present?
+        if params["termino"] === "fecha"
+          
+          @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
+                                     .where(status:"realizada", created_at: parsed_date_inicial.midnight..parsed_date_final.end_of_day)
+                                     .order("created_at DESC")
+        elsif params["termino"] === "ID"
+          @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
+                                     .where(status:"realizada", num_id: params["ID"])
+                                     .order("created_at DESC")
+        else
+          @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
+                                   .where(status:"realizada")
+                                   .order("created_at DESC")
+        end
+      else 
+        @transactions = Transaction.paginate(page: params[:page],per_page:limit_items_for_page)
+                                   .where(status:"realizada")
+                                   .order("created_at DESC")
+      end
+      
     else
-      @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
-                                               .where(status:"realizada")
-                                               .order("created_at DESC")
+      if params["termino"].present?
+        if params["termino"] === "fecha"
+          
+          @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
+                                     .where(status:"realizada", created_at: parsed_date_inicial.midnight..parsed_date_final.end_of_day)
+                                     .order("created_at DESC")
+        elsif params["termino"] === "ID"
+          @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
+                                     .where(status:"realizada", num_id: params["ID"])
+                                     .order("created_at DESC")
+        else
+          @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
+                                   .where(status:"realizada")
+                                   .order("created_at DESC")
+        end
+      else 
+        @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
+                                   .where(status:"realizada")
+                                   .order("created_at DESC")
+      end
     end
 
     count_transactions = @transactions.count

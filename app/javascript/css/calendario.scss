@@ -8,9 +8,9 @@
 
 #cal .header { 
     cursor:default; 
-    background: #cd310d; 
-    background: -moz-linear-gradient(top, #b32b0c, #cd310d); 
-    background: -webkit-gradient(linear, left top, left bottom, from(#b32b0c), to(#cd310d)); 
+    background: #ffc107; 
+    background: -moz-linear-gradient(top, #e6af09, #ffc107); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#e6af09), to(#ffc107)); 
     height: 34px; 
     position: relative; 
     color:#fff; 
@@ -21,7 +21,7 @@
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px; 
     font-weight:bold; 
-    text-shadow:0px -1px 0 #87260C; 
+    text-shadow:0px -1px 0 #ffb907; 
     text-transform: uppercase; 
 } 
 #cal .header span { 
@@ -30,8 +30,8 @@
 }
 
 #cal .header .hook { 
-    width: 13.5px; 
-    height: 35px; 
+    width: 9px; 
+    height: 28px; 
     position: absolute; 
     bottom:60%; 
     border-radius:10px; 
@@ -61,19 +61,22 @@
     -webkit-border-top-left-radius: 5px; 
     -moz-border-radius-topleft: 5px; 
     border-top-left-radius: 5px; 
-    border-right:1px solid #ae2a0c; 
+    border-right:1px solid #ffa600; 
 } 
 #cal .header .right.button { 
     right:0; 
     top:0; 
-    border-left:1px solid #ae2a0c; 
+    border-left:1px solid #ffb700; 
     -webkit-border-top-right-radius: 5px; 
     -moz-border-radius-topright: 5px; 
     border-top-right-radius: 5px; 
 } 
 #cal .header .button:hover { 
-    background: -moz-linear-gradient(top, #d94215, #bb330f); 
-    background: -webkit-gradient(linear, left top, left bottom, from(#d94215), to(#bb330f)); 
+    //background: -moz-linear-gradient(top, #d94215, #bb330f); 
+    //background: -webkit-gradient(linear, left top, left bottom, from(#d94215), to(#bb330f)); 
+
+    background: -moz-linear-gradient(top, #e6af09, #ffc107); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#e6af09), to(#ffc107)); 
     cursor: pointer !important;
 }
 #cal .header .month-year { 
@@ -113,10 +116,13 @@
 } 
 #cal #cal-frame td:not(.nil):hover { 
     color:#fff; 
-    text-shadow: #6C1A07 0px -1px; 
-    background:#CD310D; 
-    background: -moz-linear-gradient(top, #b32b0c, #cd310d); 
-    background: -webkit-gradient(linear, left top, left bottom, from(#b32b0c), to(#cd310d)); 
+    text-shadow: #bf9005 0px -1px; 
+    background:#ffc107; 
+    //background: -moz-linear-gradient(top, #b32b0c, #cd310d); 
+    //background: -webkit-gradient(linear, left top, left bottom, from(#b32b0c), to(#cd310d)); 
+
+    background: -moz-linear-gradient(top, #e6af09, #ffc107); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#e6af09), to(#ffc107)); 
     box-shadow:0px 0px 0px; 
     -webkit-box-shadow:0px 0px 0px; 
     cursor:pointer !important; 

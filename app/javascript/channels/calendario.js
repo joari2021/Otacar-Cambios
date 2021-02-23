@@ -30,12 +30,14 @@ CALENDAR = function () {
         calendar =  createCal(year, month); 
         $("#cal-frame", wrap) 
             .find(".curr") 
+                
                 .removeClass("curr") 
                 .addClass("temp") 
             .end() 
             .prepend(calendar.calendar()) 
             .find(".temp") 
-                .fadeOut("slow", function () { $(this).remove(); }); 
+                .remove();
+                //.fadeOut("slow", function () { $(this).remove(); }); 
         
         $('#label').text(calendar.label);
         tr = document.querySelectorAll(".curr td")
@@ -77,6 +79,7 @@ CALENDAR = function () {
             } 
             i++; 
         }
+        /* ######################### CODIGO PARA SOBREPONER LOS ULTIMOS DIAS (28,29,30,31) SOBRE CUADROS DE ANTERIOR COLUMNA##########
         if (calendar[5]) { 
             for (i = 0; i < calendar[5].length; i++) { 
                 if (calendar[5][i] !== "") { 
@@ -84,7 +87,7 @@ CALENDAR = function () {
                 } 
             } 
             calendar = calendar.slice(0, 5); 
-        }
+        }*/
         for (i = 0; i < calendar.length; i++) { 
             calendar[i] = "<tr><td>" + calendar[i].join("</td><td>") + "</td></tr>"; 
         } 
