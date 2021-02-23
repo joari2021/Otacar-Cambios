@@ -82,11 +82,8 @@ class TransactionsController < ApplicationController
       transactions_paginadas = @paginas.to_i * limit_items_for_page
       array_transactions_not_paginate = []
       var = 1
-      if current_user.is_admin?
-        transactions_all = Transaction.where(status:"realizada").order("created_at DESC")
-      else
-        transactions_all = current_user.transactions.where(status:"realizada").order("created_at DESC")
-      end
+      
+      transactions_all = @transactions
       
       transactions_all.each do |transaction|
         if var > transactions_paginadas
