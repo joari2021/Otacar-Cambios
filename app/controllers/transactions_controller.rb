@@ -7,7 +7,7 @@ class TransactionsController < ApplicationController
   # GET /transactions.json
   def index
     #sdsdsdsd
-    limit_items_for_page = 5
+    limit_items_for_page = 20
 
     if params["termino"].present?
       if params["termino"] === "fecha"
@@ -71,8 +71,8 @@ class TransactionsController < ApplicationController
         end
       else 
         @transactions = current_user.transactions.paginate(page: params[:page],per_page:limit_items_for_page)
-                                   .where(status:"realizada")
-                                   .order("created_at DESC")
+                                                 .where(status:"realizada")
+                                                 .order("created_at DESC")
       end
     end
 
@@ -82,7 +82,12 @@ class TransactionsController < ApplicationController
       transactions_paginadas = @paginas.to_i * limit_items_for_page
       array_transactions_not_paginate = []
       var = 1
-      transactions_all = Transaction.where(status:"realizada").order("created_at DESC")
+      if current_user.is_admin?
+        transactions_all = Transaction.where(status:"realizada").order("created_at DESC")
+      else
+        transactions_all = current_user.transactions.where(status:"realizada").order("created_at DESC")
+      end
+      
       transactions_all.each do |transaction|
         if var > transactions_paginadas
           array_transactions_not_paginate.push(transaction.id)
