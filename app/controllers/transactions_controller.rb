@@ -263,9 +263,9 @@ class TransactionsController < ApplicationController
     current_user.transactions.each do |transaction|
       if transaction.status === "en proceso"
         segundos = (Time.now.utc - transaction.created_at).to_i
-        if segundos < 1200000
+        if segundos < 1200
           @transaction_pendiente = transaction
-          segundos = 1200000 - segundos
+          segundos = 1200 - segundos
           @minutos = segundos / 60
           @segundos = segundos - (@minutos * 60)
           break
