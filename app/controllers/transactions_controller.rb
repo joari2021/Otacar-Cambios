@@ -390,7 +390,7 @@ class TransactionsController < ApplicationController
                         config_deposit_loterica = ConfigLotericaDeposit.all
                         find_account = false
                         if cupos_for_loterica > 0
-                            if monto_envio <= 100  #PARA MONTOS MENORES A 100R$
+                            if monto_envio < 100  #PARA MONTOS MENORES A 100R$
                                 
                                 if config_deposit_loterica.count > 0
                                     config_deposit_loterica = ConfigLotericaDeposit.find(2)
@@ -426,7 +426,7 @@ class TransactionsController < ApplicationController
                                       end
                                     end
                                 end       
-                            else    #PARA MONTOS MAYORES A 100R$
+                            else    #PARA MONTOS IGUAL O MAYORES A 100R$
                                 if config_deposit_loterica.count > 0
                                     config_deposit_loterica = ConfigLotericaDeposit.find(2)
                                     
