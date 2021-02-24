@@ -88,6 +88,6 @@ class Bank < ApplicationRecord
    
    validates :number_account, :identidy, format: {with: /\A[+-]?\d+\z/, message: " Este campo no puede estar vacio y solo acepta números"}
 
-   validates :number_account, length: { is: 20, message: " Este campo debe contener 20 numeros" }
+   validates :number_account, length: { in: 11..20, message: " El numero de cuenta es invalido" }
 
 end
