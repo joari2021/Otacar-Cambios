@@ -87,7 +87,7 @@
                             <%elsif i === 3%>
                                 <%imagen_url = @transaction.comprobante_pago_usuario3.url%>
                             <%end%>
-                            <%=render 'comprobante-pago', {identifier: "usuario", url: imagen_url}%>
+                            <%=render 'comprobante-pago', {identifier: "account_usuario_#{i}", url: imagen_url}%>
                         <%else%>
                             No hay ningun archivo...<br><br>
                         <%end%>

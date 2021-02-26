@@ -88,5 +88,5 @@
     <%=render "detectar-moneda", {country: transaction.country_destinity}%>
     <td class="align-middle"><%=@moneda_destinity%> <%= number_with_precision(transaction.monto_a_recibir, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></td>
 
-    <td class="align-middle"><a href="/transactions/<%=transaction.id%>" class="badge badge-secondary" id="td-ver" onclick="show_preloader()">Ver Detalles<i class="far fa-eye ml-2"></i></a></td>
+    <td class="align-middle"><a href="/transactions/<%=transaction.id%>" class="badge badge-secondary" id="td-ver" onclick="show_preloader()">Ver<i class="far fa-eye ml-2"></i></a></td>
 </tr>
