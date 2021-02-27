@@ -16,7 +16,7 @@
 </div>
 
 <!-------------------------------------------------- CALENDARIO ----------------------------------------------------->
-<div class="d-none mt-4" id="caja_calendario">
+<div class="mt-4" id="caja_calendario" style="display:none;">
     <div class="row">
         <div class="col-6 text-center">
             <label>Desde:</label>
@@ -36,7 +36,7 @@
         <p class="" id="msj_calendario">Escoge la fecha de inicio</p>
     </div>
 
-    <div class="d-none" id="caja_boton_buscar">
+    <div id="caja_boton_buscar" style="display:none;">
         <button class="btn btn-info d-block m-auto" onclick="buscar()">Buscar</button>
     </div>
     
@@ -76,7 +76,7 @@
 
 <!---------------------------------------------- CAMPO ID -------------------------------------------------------------->
 
-<div class="d-none" id="caja_id">
+<div id="caja_id" style="display:none;">
     <div class="row justify-content-center mt-5">
         <div class="col-6 col-sm-5 text-center">
             <input type="text" class="form-control is-invalid text-uppercase" id="validationID" oninput="soloLetrasYNumeros(this,16,16),mostrar_btn_buscar(this)" maxlength="16" autofocus="autofocus">
@@ -86,7 +86,7 @@
         </div>
         
     </div>
-    <div class="d-none mt-4" id="caja_boton_buscar_2">
+    <div class="mt-4" id="caja_boton_buscar_2" style="display:none;">
         <button class="btn btn-info d-block m-auto" onclick="buscar()">Buscar</button>
     </div>
 </div>
@@ -191,24 +191,31 @@
 
     function borrar_fecha(e,fecha_id) {
         e.preventDefault()
+        $("#msj_calendario").css({'display':'none'})
+
         fecha = document.getElementById(fecha_id)
+        $(fecha).css({'display':'none'})
         fecha.innerText = "-- / ------ / ----"
+        $(fecha).fadeIn(1000)
+
+        $("#caja_boton_buscar").css({'display':'none'})
 
         if (fecha_id === "date_inicial"){
             exist_fecha_inicial = false
-            msj_calendario.classList.remove("d-none")
             msj_calendario.innerText = "Escoge la fecha inicial"
             msj_calendario.classList.remove("text-danger")
             
         }else{
             exist_fecha_final = false
-            msj_calendario.classList.remove("d-none")
             if (exist_fecha_inicial){
                 msj_calendario.innerText = "Escoge la fecha final"
             }
             msj_calendario.classList.remove("text-danger")
+            
         }
-        caja_boton_buscar.classList.add("d-none")
+        
+        $("#msj_calendario").fadeIn(1000)
+        
     }
 
     function comparar_fechas(day,month,year,other_date,fecha_ingress) {
@@ -281,7 +288,9 @@
                 }else{
                     day = td_day.innerText
                 }
+                $(fecha_work).css({"display":"none"})
                 fecha_work.innerText = day + " / " + array_month_year[0] + " / " + array_month_year[1]
+                $(fecha_work).fadeIn(1000)
 
                 if(fecha_ingress === "fecha inicial"){
                     exist_fecha_inicial = true
@@ -290,23 +299,24 @@
                 }
 
                 msj_calendario.classList.remove("text-danger")
-
+                $("#msj_calendario").css({'display':'none'})
                 if (!exist_fecha_final){
-                    msj_calendario.classList.remove("d-none")
                     msj_calendario.innerText = "Escoge la fecha final"
+                    $("#msj_calendario").fadeIn(1000)
                 }else{
-                    msj_calendario.classList.add("d-none")
-                    caja_boton_buscar.classList.remove("d-none")
+                    $("#caja_boton_buscar").fadeIn(1000)
                 }
                 
-            }else{
-                msj_calendario.classList.remove("d-none")
+            }else{ 
+                $("#msj_calendario").css({'display':'none'})
                 msj_calendario.classList.add("text-danger")
+                
                 if (fecha_ingress === "fecha inicial"){
                     msj_calendario.innerText = "Fecha Invalida. Debe ser menor o igual a la fecha final" 
                 }else{
                     msj_calendario.innerText = "Fecha Invalida. Debe ser mayor o igual a la fecha inicial" 
                 }
+                $("#msj_calendario").fadeIn(1000)
                 
             }
         }
@@ -315,30 +325,25 @@
     }
 
     function mostrar_captacion(select) {
-        caja_calendario = document.getElementById("caja_calendario")
-        caja_id = document.getElementById("caja_id")
-        <%if params[:termino].present?%>
-            caja_todas = document.getElementById("caja_boton_buscar_3")
-        <%end%>
         
         if (select.value === "ID") {
-            caja_calendario.classList.add("d-none")
-            caja_id.classList.remove("d-none")
+            $("#caja_calendario").fadeOut()
+            $("#caja_id").fadeIn(1000)
             <%if params[:termino].present?%>
-                caja_todas.classList.add("d-none")
+                $("#caja_boton_buscar_3").fadeOut();
             <%end%>
         }else if(select.value === "Fecha"){ 
-            caja_id.classList.add("d-none")
-            caja_calendario.classList.remove("d-none")
+            $("#caja_id").fadeOut()
+            $("#caja_calendario").fadeIn(1000);
             <%if params[:termino].present?%>
-                caja_todas.classList.add("d-none")
+                $("#caja_boton_buscar_3").fadeOut();
             <%end%>
         } else {
             <%if params[:termino].present?%>
-                caja_todas.classList.remove("d-none")
+                $("#caja_boton_buscar_3").fadeIn(1000);
             <%end%>
-            caja_id.classList.add("d-none")
-            caja_calendario.classList.add("d-none")
+            $("#caja_id").fadeOut()
+            $("#caja_calendario").fadeOut()
         }
     }
 
@@ -384,11 +389,10 @@
     }
 
     function mostrar_btn_buscar(input) {
-        btn_buscar = document.getElementById("caja_boton_buscar_2")
         if(input.value.length === 16){
-            btn_buscar.classList.remove("d-none")
+            $("#caja_boton_buscar_2").fadeIn(1000);
         }else{
-            btn_buscar.classList.add("d-none")
+            $("#caja_boton_buscar_2").fadeOut();
         }
     }
 </script>

@@ -1,7 +1,9 @@
 $('#form').submit(function() {
-    $('#loader').removeClass('efecto_desv');
+    //$('#loader').removeClass('efecto_desv');
+    $("#loader").fadeIn(2000)
 });
 
 function show_preloader(){
-    document.getElementById("loader").classList.remove("efecto_desv")
+    //document.getElementById("loader").classList.remove("efecto_desv")
+    $("#loader").fadeIn(2000)
 }

@@ -67,8 +67,7 @@
     <script>
         
         window.onload = function() {
-            var contenedor = document.getElementById("loader");
-            contenedor.classList.add("efecto_desv")
+            $('#loader').fadeOut(2000)
         }
         <%if user_signed_in?%>
             <%=render "partials/script-preloader"%>
@@ -135,8 +134,7 @@
             }, 6000);
         <%end%>
         
-        if (window.location.href.indexOf("https") === -1 && window.location.href.indexOf("otacarcambios") != -1){
-            console.log(typeof window.location.href);
+        if(window.location.href.indexOf("https") === -1 && window.location.href.indexOf("otacarcambios") != -1){
              window.location.href = "https" + window.location.href.slice(4);
         }
     </script>

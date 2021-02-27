@@ -1,13 +1,17 @@
 form = document.getElementById("form")
+
+function mostrar_preloader(){
+    $("#loader").fadeIn(2000)
+}
 form.addEventListener("submit",function(){
-    document.getElementById("loader").classList.remove("efecto_desv")
+    mostrar_preloader()
 })
 
 form2 = document.getElementById("form2")
 form2.addEventListener("submit",function(){
-    document.getElementById("loader").classList.remove("efecto_desv")
+    mostrar_preloader()
 })
 
 function show_preloader(){
-    document.getElementById("loader").classList.remove("efecto_desv")
+    mostrar_preloader()
 }

@@ -30,7 +30,6 @@ CALENDAR = function () {
         calendar =  createCal(year, month); 
         $("#cal-frame", wrap) 
             .find(".curr") 
-                
                 .removeClass("curr") 
                 .addClass("temp") 
             .end() 
@@ -38,7 +37,8 @@ CALENDAR = function () {
             .find(".temp") 
                 .remove();
                 //.fadeOut("slow", function () { $(this).remove(); }); 
-        
+        $(".curr").css({"display":"none"})
+        $(".curr").fadeIn()
         $('#label').text(calendar.label);
         tr = document.querySelectorAll(".curr td")
         añadirFuncionTd(tr)

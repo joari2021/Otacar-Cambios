@@ -18,8 +18,7 @@ import 'css/calendario'
 import "@fortawesome/fontawesome-free/js/all";
 
 $(document).on('turbolinks:load', function() {
-    let contenedor = document.getElementById("loader");
-    contenedor.classList.add("efecto_desv")
+    $("#loader").fadeOut(2000,0)
 }); 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
