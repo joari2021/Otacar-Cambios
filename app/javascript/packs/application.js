@@ -18,7 +18,7 @@ import 'css/calendario'
 import "@fortawesome/fontawesome-free/js/all";
 
 $(document).on('turbolinks:load', function() {
-    $("#loader").fadeOut(2000,0)
+    $("#loader").fadeOut(2000)
 }); 
 
 // Uncomment to copy all static images under ../images to the output folder and reference

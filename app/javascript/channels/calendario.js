@@ -37,11 +37,14 @@ CALENDAR = function () {
             .find(".temp") 
                 .remove();
                 //.fadeOut("slow", function () { $(this).remove(); }); 
-        $(".curr").css({"display":"none"})
-        $(".curr").fadeIn()
+        
         $('#label').text(calendar.label);
         tr = document.querySelectorAll(".curr td")
         añadirFuncionTd(tr)
+        t_body = document.getElementsByTagName("tbody")[1]
+        t_body.setAttribute("id","t_body")
+        $("#t_body").css({"display":"none"})
+        $("#t_body").fadeIn(1000)
     } 
  
     function createCal(year, month) { 
@@ -107,6 +110,4 @@ CALENDAR = function () {
         switchMonth : switchMonth, 
         createCal   : createCal 
     }; 
-
-    
 };
