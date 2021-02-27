@@ -327,11 +327,12 @@
     function mostrar_captacion(select) {
         
         if (select.value === "ID") {
-            $("#caja_calendario").fadeOut()
-            $("#caja_id").fadeIn(1000)
             <%if params[:termino].present?%>
-                $("#caja_boton_buscar_3").fadeOut();
+                $("#caja_boton_buscar_3").css({"display":"none"});
             <%end%>
+            $("#caja_calendario").css({"display":"none"});
+            $("#caja_id").fadeIn(1000)
+            
         }else if(select.value === "Fecha"){ 
             $("#caja_id").fadeOut()
             $("#caja_calendario").fadeIn(1000);
@@ -339,11 +340,16 @@
                 $("#caja_boton_buscar_3").fadeOut();
             <%end%>
         } else {
+           
             <%if params[:termino].present?%>
+                $("#caja_id").css({"display":"none"});
+                $("#caja_calendario").css({"display":"none"});
                 $("#caja_boton_buscar_3").fadeIn(1000);
+            <%else%>
+                $("#caja_id").fadeOut();
+                $("#caja_calendario").fadeOut();
             <%end%>
-            $("#caja_id").fadeOut()
-            $("#caja_calendario").fadeOut()
+            
         }
     }
 
