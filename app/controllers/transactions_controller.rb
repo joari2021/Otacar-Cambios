@@ -721,9 +721,6 @@ class TransactionsController < ApplicationController
                 @transaction.new_monto_a_recibir = resultado
                 
                 def actuality_sub_montos(monto,tasa_definitiva)
-                  monto = monto.gsub('.','')
-                  monto = monto.gsub(',','.')
-                  monto = monto.to_f
 
                   tasa_anterior = @transaction.monto_a_recibir / @monto_envio
                   monto /= tasa_anterior
