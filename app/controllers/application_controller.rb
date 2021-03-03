@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::Base
     protected
+    def handle_unverified_request
+        redirect_back(fallback_location: user_root_path, alert: "Ha ocurrido un error al guardar los datos. Esto se debe a un conflicto con el cache de tu navegador. Por favor intenta de nuevo sin minimizar el navegador.")
+    end
 
     def authenticate_normal_user!
         redirect_to edit_user_registration_path unless user_signed_in? && current_user.is_normal_user?
