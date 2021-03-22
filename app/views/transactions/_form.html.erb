@@ -1008,7 +1008,7 @@
     }
     
     function optionBanks(country){
-        
+        console.log(country);
         account = 0;
         j = 1;
         do {
@@ -1337,12 +1337,15 @@
         j = 1;
         do {
             var selectBox = document.getElementById("opcionesAccountUserDestino"+j);
-            options = selectBox.childNodes;
 
-            if (options.length > 0){
-                limit = options.length
-                for (i=0; i < limit; i++){
-                    selectBox.removeChild(options[0]);   
+            if(country != "Colombia"){
+                options = selectBox.childNodes;
+
+                if (options.length > 0){
+                    limit = options.length
+                    for (i=0; i < limit; i++){
+                        selectBox.removeChild(options[0]);   
+                    }
                 }
             }
 

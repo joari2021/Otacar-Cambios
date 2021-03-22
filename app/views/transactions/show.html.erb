@@ -1,10 +1,6 @@
 <%=render 'partials/name-and-cod-of-banks'%>
 <%=render "partials/btn-back", link: :back%>
-    <%if current_user.is_admin?%>
-        <%clases1 = ""%>
-    <%else%>
-
-    <%end%>
+    
     <div class="row justify-content-center mt-3">
         <div class="col-10 col-md-9 col-lg-6 p-3 mb-5 fondo" style="border-radius:12px;">
             <p class="text-center">
@@ -19,6 +15,7 @@
                     <a class="nav-link <%if @transaction.status === 'presenta incidencia'%>active<%end%>" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cuenta Crédito Otacar</a>
                 </li>
             </ul>
+
             <div class="tab-content mt-4" id="myTabContent">
                 
                 <!--CUENTA DEL USUARIO--------------------------------------------------------------------->
@@ -61,6 +58,7 @@
                                  <div class="alert alert-primary" role="alert">
                                     <span class="font-italic font-weight-bold">Monto Anterior: <%=@moneda_destinity%> <%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
                                 </div>
+                                <span class="badge badge-pill badge-special d-none">Monto Anterior: <%=@moneda_destinity%> <%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span>
                                 <hr>
                             <%else%>
                                 <%=@moneda_destinity%> <span><%=number_with_precision(@transaction.sub_monto_a_recibir_2, :precision => 2, :delimiter => '.', :separator => ',', :scale => 2) %></span><br><hr>
@@ -143,6 +141,7 @@
                         No hay ningun archivo...
                     <%end%>
                 </div>
+                
             </div> 
         </div>
     </div>

@@ -37,7 +37,7 @@
     </div>
 
     <div id="caja_boton_buscar" style="display:none;">
-        <button class="btn btn-info d-block m-auto" onclick="buscar()">Buscar</button>
+        <button class="btn btn-info d-block m-auto" onclick="buscar(),show_preloader()">Buscar</button>
     </div>
     
     <div id="cal" class=""> 
@@ -48,6 +48,7 @@
             <span class="right hook"></span> 
             <span class="right button" id="next"> &rang; </span>
         </div> 
+
         <table id="days"> 
             <td>dom</td> 
             <td>lun</td> 
@@ -58,6 +59,7 @@
             <td>sab</td>
      
         </table> 
+
         <div id="cal-frame"> 
             <table class="curr"> 
                 <tbody id="t_body"> 
@@ -69,7 +71,6 @@
                 </tbody> 
             </table>
         </div> 
-        
     </div>
     
 </div>
@@ -87,7 +88,7 @@
         
     </div>
     <div class="mt-4" id="caja_boton_buscar_2" style="display:none;">
-        <button class="btn btn-info d-block m-auto" onclick="buscar()">Buscar</button>
+        <button class="btn btn-info d-block m-auto" onclick="buscar(),show_preloader()">Buscar</button>
     </div>
 </div>
 
@@ -95,7 +96,7 @@
 <!---------------------------------- MOSTRAR TODAS ------------------------------------------------------>
 <%if params[:termino].present?%>
     <div class="mt-4" id="caja_boton_buscar_3">
-        <button class="btn btn-info d-block m-auto" onclick="buscar()">Mostrar todas</button>
+        <button class="btn btn-info d-block m-auto" onclick="buscar(),show_preloader()">Mostrar todas</button>
     </div>
 <%end%>
 
