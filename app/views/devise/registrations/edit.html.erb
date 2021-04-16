@@ -33,7 +33,7 @@
 <h2 class="text-primary font-weight-bold">Editar Perfil 
 <%if current_user.is_admin? && !usuario.is_admin?%><%= button_to "Eliminar usuario", registration_path(resource_name), data: { confirm: "Esta seguro de eliminar este usuario, esta opción es irreversible?" }, method: :delete, class:"btn btn-danger float-right" %><%end%></h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, :id => "form" }) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, :id => "form", name: "formulario" }) do |f| %>
 <%= render "devise/shared/error_messages", resource: resource %>
 
 <div class="field">
@@ -59,7 +59,7 @@
     <div class="col-6 col-md-3 mb-2">
         <label for="validationFirstName">Primer Nombre*</label>
         <%if !current_user.is_normal_user? || current_user.is_admin?%>
-        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationFirstName" name="user[name]" value="<%=usuario.name%>" oninput="return soloLetras(this)" maxlength="15" autofocus="autofocus" required>
+        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationFirstName" name="user[name]" value="<%=usuario.name%>" oninput="soloLetras(this),habilitarSave()" maxlength="15" autofocus="autofocus" required>
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
@@ -84,7 +84,7 @@
     <div class="col-6 col-md-3 mb-2">
         <label for="validationLastName">Primer Apellido *</label>
         <%if !current_user.is_normal_user? || current_user.is_admin?%>
-        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationLastName" name="user[last_name]" value="<%=usuario.last_name%>" maxlength="15" oninput="return soloLetras(this)" required>
+        <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationLastName" name="user[last_name]" value="<%=usuario.last_name%>" maxlength="15" oninput="soloLetras(this),habilitarSave()" required>
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
@@ -106,14 +106,56 @@
     </div>
 </div>
 
-<!--DNI, Sexo y Phone-->
+<!-- Ubicacion -->
 <div class="form-row field mb-3">
 
-    
-    <div class="col-7 col-sm-4 mb-3">
-        <label for="validationDNI">DNI *</label>
+    <div class="col-sm-4 mb-3">
+        <label for="validationCountry">Pais *</label>
         <%if !current_user.is_normal_user? || current_user.is_admin?%>
-            <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDNI" name="user[document]" value="<%=usuario.document%>" oninput="return soloNumeros(this,5,12)" maxlength="12" required>
+            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationCountry" name="user[country]" value="<%=usuario.country%>" onChange="validarSelect(this),habilitarSave(),change_campo_dni(this)" required><option selected disabled value="">Elegir...</option><option value="Argentina">Argentina</option><option value="Brasil">Brasil</option><option value="Chile">Chile</option><option value="Chile">Colombia</option><option value="Ecuador">Ecuador</option><option value="España">España</option><option value="Panama">Panama</option><option value="Peru">Peru</option><option value="Usa">USA</option><option value="Venezuela">Venezuela</option></select>
+            <div class="invalid-feedback">Seleccione una opcion</div>
+        <%else%>
+            <input class="form-control text-capitalize" value="<%=usuario.country%>" readonly>
+        <%end%>
+    </div>
+    <div class="col-sm-4 mb-3">
+        <label for="validationState">Estado *</label>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%> text-capitalize" id="validationState" name="user[state]" value="<%=usuario.state%>" maxlength="20" oninput="address(this),habilitarSave()" required>
+        <div class="invalid-feedback">
+            Ingrese solo letras
+        </div>
+        <%else%>
+        <input class="form-control text-capitalize" value="<%=usuario.state%>" readonly>
+        <%end%>
+    </div>
+
+    <div class="col-sm-4 mb-3">
+        <label for="validationCity">Ciudad *</label>
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%> text-capitalize" id="validationCity" name="user[city]" value="<%=usuario.city%>" maxlength="20" oninput="address(this),habilitarSave()" required>
+        <div class="invalid-feedback">
+            Ingrese solo letras
+        </div>
+        <%else%>
+        <input class="form-control text-capitalize" value="<%=usuario.city%>" readonly>
+        <%end%>
+    </div>
+</div>
+
+<!--DNI, Sexo y Phone-->
+<div class="form-row field mb-3">
+    <div class="col-7 col-sm-4 mb-3">
+        <%if usuario.country === "Brasil"%>
+            <%type_dni = "CPF"%>
+        <%else%>
+            <%type_dni = "DNI"%>
+        <%end%>
+        
+        <label for="validationDNI" id="label_dni"><%=type_dni%> *</label>
+
+        <%if !current_user.is_normal_user? || current_user.is_admin?%>
+            <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDNI" name="user[document]" value="<%=usuario.document%>" oninput="soloNumeros(this,5,14),habilitarSave()" maxlength="14" required>
         <div class="invalid-feedback">
             Ingrese solo numeros
         </div>
@@ -125,7 +167,7 @@
     <div class="col-5 col-sm-3 mb-2">
         <label>Sexo *</label>
         <%if !current_user.is_normal_user? || current_user.is_admin?%>
-            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" name="user[gender]" value="<%=usuario.gender%>" onchange="validarSelect(this)" required><option selected disabled value="">Elegir...</option><option value="Femenino">Femenino</option><option value="Masculino">Masculino</option></select>
+            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" name="user[gender]" value="<%=usuario.gender%>" onchange="validarSelect(this),habilitarSave()" required><option selected disabled value="">Elegir...</option><option value="Femenino">Femenino</option><option value="Masculino">Masculino</option></select>
             
             <div class="invalid-feedback">Seleccione una opcion</div>
         <%else%>
@@ -135,7 +177,7 @@
 
     <div class="col-12 col-sm-5 mb-2">
         <label for="validationPhone">Telefono *</label>
-        <input class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationPhone" type="text" maxlength="12" oninput="return soloNumeros(this,10,12)" name="user[phone]" value="<%=usuario.phone%>" required>
+        <input class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationPhone" type="text" maxlength="12" oninput="soloNumeros(this,10,12),habilitarSave()" name="user[phone]" value="<%=usuario.phone%>" required>
         <div class="invalid-feedback">
             Ingrese solo numeros
         </div>
@@ -150,7 +192,7 @@
     <div class="col-4 mb-3">
         <label for="validationDefaultDia">Dia *</label>
         <%if !current_user.is_normal_user? || current_user.is_admin?%>
-        <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultDia" onChange="validarSelect(this)" name="user[day]" value="<%=usuario.day%>"  required>
+        <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultDia" onChange="validarSelect(this),habilitarSave()" name="user[day]" value="<%=usuario.day%>"  required>
             <option selected disabled value="">Elegir...</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
         <div class="invalid-feedback">Seleccione una opcion</div>
         <%else%>
@@ -161,7 +203,7 @@
     <div class="col-5 mb-3">
         <label for="validationDefaultMes">Mes *</label>
         <%if !current_user.is_normal_user? || current_user.is_admin?%>
-            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultMes" onChange="validarSelect(this)" name="user[month]" value="<%=usuario.month%>" required>
+            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultMes" onChange="validarSelect(this),habilitarSave()" name="user[month]" value="<%=usuario.month%>" required>
                 <option selected disabled value="">Elegir...</option><option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option><option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option><option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option></select>
             <div class="invalid-feedback">Seleccione una opcion</div>
         <%else%>
@@ -172,7 +214,7 @@
     <div class="col-3 mb-3">
         <label for="validationDefaultAño">Año *</label>
         <%if !current_user.is_normal_user? || current_user.is_admin?%>
-        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultAño" name="user[year]" value="<%=usuario.year%>" oninput="return soloNumeros(this,4,4)"  maxlength="4" required>
+        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationDefaultAño" name="user[year]" value="<%=usuario.year%>" oninput="soloNumeros(this,4,4),habilitarSave()"  maxlength="4" required>
         <div class="invalid-feedback">
             Ingrese solo numeros
         </div>
@@ -182,47 +224,10 @@
     </div>
 </div>
 
-<!-- Ubicacion -->
-<div class="form-row field mb-3">
-
-    <div class="col-sm-4 mb-3">
-        <label for="validationCountry">Pais *</label>
-        <%if !current_user.is_normal_user? || current_user.is_admin?%>
-            <select class="custom-select <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationCountry" name="user[country]" value="<%=usuario.country%>" onChange="validarSelect(this)" required><option selected disabled value="">Elegir...</option><option value="Argentina">Argentina</option><option value="Brasil">Brasil</option><option value="Chile">Chile</option><option value="Chile">Colombia</option><option value="Ecuador">Ecuador</option><option value="España">España</option><option value="Panama">Panama</option><option value="Peru">Peru</option><option value="Usa">USA</option><option value="Venezuela">Venezuela</option></select>
-            <div class="invalid-feedback">Seleccione una opcion</div>
-        <%else%>
-            <input class="form-control text-capitalize" value="<%=usuario.country%>" readonly>
-        <%end%>
-    </div>
-    <div class="col-sm-4 mb-3">
-        <label for="validationState">Estado *</label>
-        <%if !current_user.is_normal_user? || current_user.is_admin?%>
-        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%> text-capitalize" id="validationState" name="user[state]" value="<%=usuario.state%>" maxlength="20" oninput="return address(this)" required>
-        <div class="invalid-feedback">
-            Ingrese solo letras
-        </div>
-        <%else%>
-        <input class="form-control text-capitalize" value="<%=usuario.state%>" readonly>
-        <%end%>
-    </div>
-
-    <div class="col-sm-4 mb-3">
-        <label for="validationCity">Ciudad *</label>
-        <%if !current_user.is_normal_user? || current_user.is_admin?%>
-        <input type="text" class="form-control <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%> text-capitalize" id="validationCity" name="user[city]" value="<%=usuario.city%>" maxlength="20" oninput="return address(this)" required>
-        <div class="invalid-feedback">
-            Ingrese solo letras
-        </div>
-        <%else%>
-        <input class="form-control text-capitalize" value="<%=usuario.city%>" readonly>
-        <%end%>
-    </div>
-</div>
-
 <!--Direccion-->
 <div class="field mb-3">
-    <label for="validationAddress">Dirección</label>
-    <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationAddress" name="user[address]" maxlength="100" oninput="return address(this)" value="<%=usuario.address%>" required>
+    <label for="validationAddress">Dirección *</label>
+    <input type="text" class="form-control text-capitalize <%unless usuario.is_normal_user?%>is-invalid<%else%>is-valid<%end%>" id="validationAddress" name="user[address]" maxlength="100" oninput="address(this),habilitarSave()" value="<%=usuario.address%>" required>
 
     <div class="invalid-feedback">
         El campo no puede estar vacio
@@ -233,7 +238,7 @@
 <div class="field mb-3">
     <label>Correo Electronico *</label>
     <%if current_user.is_admin?%>
-        <input type="text" class="form-control is-valid text-lowercase" name="user[email]" value="<%=usuario.email%>" oninput="return validarEmail(this)" required>
+        <input type="text" class="form-control is-valid text-lowercase" name="user[email]" value="<%=usuario.email%>" oninput="validarEmail(this),habilitarSave()" required>
         <div class="invalid-feedback">
             Ingrese solo letras
         </div>
@@ -271,7 +276,7 @@
     <div class="form-row field mt-3">
         <div class="col-12">
             <label for="validationReferencia">Referencia</label>
-            <input class="form-control <%if current_user.num_referidor.nil? || current_user.num_referidor === ""%>is-invalid<%else%>is-valid<%end%>" id="validationReferencia" type="text" maxlength="9" oninput="return soloNumeros(this,9,9)" name="user[num_referidor]" <%unless current_user.num_referidor.nil? || current_user.num_referidor === ""%>value="<%=usuario.num_referidor.to_s.rjust(9, '0')%>"<%end%> required>
+            <input class="form-control <%if current_user.num_referidor.nil? || current_user.num_referidor === ""%>is-invalid<%else%>is-valid<%end%>" id="validationReferencia" type="text" maxlength="9" oninput="return soloNumeros(this,9,9),habilitarSave()" name="user[num_referidor]" <%unless current_user.num_referidor.nil? || current_user.num_referidor === ""%>value="<%=usuario.num_referidor.to_s.rjust(9, '0')%>"<%end%> required>
             <div class="invalid-feedback">
                 Ingrese el número del usuario que le recomendo esta página. El campo debe contener 9 caracteres numericos
             </div>
@@ -311,7 +316,7 @@
 <%unless current_user.is_admin? && !usuario.is_admin?%>
 <div class="field my-3">
     <%= f.label :current_password, "Contraseña Actual" %>
-    <%= f.password_field :current_password, autocomplete: "current-password", class:"is-invalid", oninput:"validarCurrentPassword(this)" %>
+    <%= f.password_field :current_password, autocomplete: "current-password", class:"is-invalid", oninput:"validarCurrentPassword(this),habilitarSave()", required:"required" %>
     <div class="invalid-feedback">
         Debes ingresar tu contraseña actual para confirmar los cambios
     </div>
@@ -319,7 +324,7 @@
 <%end%>
 
 <div class="actions">
-    <%= f.submit "Guardar", class:"btn btn-success mt-2 mb-5", id:"btn-form"%>
+    <%= f.submit "Guardar", class:"btn btn-success mt-2 mb-5", id:"btn"%>
     
 </div>
 <% end %>
@@ -364,5 +369,21 @@
     formulario.appendChild(inputHidden)
 
     <%= render 'partials/script-preloader'%>
+
+    function change_campo_dni(select){
+        $("#validationDNI").val("")
+        $("#validationDNI").removeAttr("oninput")
+        $("#validationDNI").removeClass("is-valid")
+        $("#validationDNI").addClass("is-invalid")
+
+        if (select.value === "Brasil"){
+            $("#label_dni").text("CPF *")
+            $("#validationDNI").attr("oninput","inputCPF(this)")
+        }else{
+            $("#label_dni").text("DNI *")
+            $("#validationDNI").attr("oninput","soloNumeros(this,5,14)")
+        }
+
+    }
     
 </script>  

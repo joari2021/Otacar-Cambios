@@ -51,9 +51,13 @@
             
             <div id="content" class="bg-grey w-100">
                 
-                <%if user_signed_in?%><div class="pt-4 px-3 pb-5"><%end%>
-                    <%= yield %>
-                <%if user_signed_in?%></div><%end%>
+                <%if user_signed_in?%>
+                    <div class="pt-4 px-3 pb-5">
+                        <%= yield %>
+                    </div>
+                <%else%>
+                    <div><%=yield%></div>
+                <%end%>
                 
             </div>
         
