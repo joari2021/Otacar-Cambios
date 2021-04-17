@@ -12,7 +12,6 @@ function address(input) {
 }
 
 function validarPassword() {
-
   password = document.getElementById("contraseña");
   confirmacionPassword = document.getElementById("confirmacion-contraseña");
   valor = password.value.toLowerCase();
@@ -69,7 +68,6 @@ function validarPassword() {
 }
 
 function validarCurrentPassword(input) {
-  
   password = input.value.toLowerCase();
 
   longitud = password.length;
@@ -77,7 +75,7 @@ function validarCurrentPassword(input) {
   if (longitud >= 8) {
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
-  }else{
+  } else {
     input.classList.remove("is-valid");
     input.classList.add("is-invalid");
   }
@@ -125,17 +123,17 @@ function formatDocumentoVzla(input) {
 
   var numericaInt = parseInt(valor);
 
-  if (numericaInt <= 80000000){
-    type_document = "V-"
+  if (numericaInt <= 80000000) {
+    type_document = "V-";
     input.value = type_document.concat(valor);
-  }else if(numericaInt > 80000000){
-    type_document = "E-"
+  } else if (numericaInt > 80000000) {
+    type_document = "E-";
     input.value = type_document.concat(valor);
-  }else{
+  } else {
     input.value = "";
   }
 
-  if (valor.length > 5 && valor.length < 9 ) {
+  if (valor.length > 5 && valor.length < 9) {
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
   } else {
@@ -149,12 +147,12 @@ function formatNumberPhoneVzla(input) {
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
   codArea = "0414 0424 0416 0426 0412";
-  num = valor.slice(0,4);
+  num = valor.slice(0, 4);
   codigo = false;
-  if (codArea.indexOf(num) != -1){
+  if (codArea.indexOf(num) != -1) {
     codigo = true;
   }
-  if (valor.length === 11 && codigo === true ) {
+  if (valor.length === 11 && codigo === true) {
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
   } else {
@@ -169,7 +167,7 @@ function validarSelect(x) {
   if (select.value != "" && select.value != undefined) {
     select.classList.remove("is-invalid");
     select.classList.add("is-valid");
-  }else {
+  } else {
     select.classList.remove("is-valid");
     select.classList.add("is-invalid");
   }
@@ -208,51 +206,45 @@ function inputCPF(input) {
 }
 
 function monto(input) {
-        
   valor = input.value.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1,$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
-  
-  if (valor.length === 1){
-      input.value = "0,0".concat(valor);
-  }else if(valor.length === 2){
-      if (valor === "00"){
-          input.value= "0,00";
-      }else{
-          input.value = "0,".concat(valor);
-      }
-      
-  }else if(valor.length === 4){
-      
+
+  if (valor.length === 1) {
+    input.value = "0,0".concat(valor);
+  } else if (valor.length === 2) {
+    if (valor === "00") {
+      input.value = "0,00";
+    } else {
+      input.value = "0,".concat(valor);
+    }
+  } else if (valor.length === 4) {
+    input.value = valor;
+  } else if (valor.length === 5) {
+    if (valor[0] === "0") {
+      input.value = valor.slice(1);
+    } else {
       input.value = valor;
-      
-  }else if(valor.length === 5){
-      if (valor[0] === "0") {
-          input.value= valor.slice(1);
-      }else{
-          input.value= valor;
+    }
+  } else {
+    limit = valor.length;
+    for (i = 0; i < limit; i++) {
+      if (valor[0] === "0" || valor[0] === ".") {
+        valor = valor.slice(1);
+      } else {
+        break;
       }
-      
-  }else{           
-      limit = valor.length 
-      for (i=0; i < limit; i++){
-          if(valor[0] === "0" || valor[0] === "."){
-              valor = valor.slice(1);
-          }else{
-              break;
-          }  
-      }   
-      input.value = valor;
-  }              
+    }
+    input.value = valor;
+  }
 }
 
 function validarUsuario(input) {
-
   var re = / /g;
   var resultado = input.value.replace(re, "");
 
   if (resultado != "") {
-    input.value = resultado
+    input.value = resultado;
     input.classList.remove("is-invalid");
     input.classList.add("is-valid");
   } else {
@@ -262,202 +254,201 @@ function validarUsuario(input) {
   }
 }
 
-function inputCPNJ(input){
+function inputCPNJ(input) {
   valor = input.value.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
 
-  if (valor.length === 14){
-    aux = valor.slice(0,12)
+  if (valor.length === 14) {
+    aux = valor.slice(0, 12);
     valor2 = aux.replace(/\D/g, "");
     valor2 = valor2.replace(/([0-9])([0-9]{4})$/, "$1/$2");
     valor2 = valor2.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
-    valor3 = valor2 + "-" + valor.slice(12)
-    valor4 = valor3.slice(0,12) + valor3.slice(13)
-    input.value = valor4
-    input.classList.remove("is-invalid")
-    input.classList.add("is-valid")
-
-  }else{
-    input.value = valor
-    input.classList.remove("is-valid")
-    input.classList.add("is-invalid")
+    valor3 = valor2 + "-" + valor.slice(12);
+    valor4 = valor3.slice(0, 12) + valor3.slice(13);
+    input.value = valor4;
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
+  } else {
+    input.value = valor;
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
   }
 }
 
-function formatearNumeros(numero){
+function formatearNumeros(numero) {
   valor = numero.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1.$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "");
   numeroF = parseFloat(valor);
   return numeroF;
 }
-function formatearNumerosEnteros(numero){
+function formatearNumerosEnteros(numero) {
   valor = numero.replace(/\D/g, "");
   valor = parseInt(valor);
   return valor;
 }
 
 function formatTasa(numero) {
-    re = /\./g;
-    valor = numero.replace(re, '')
-    re = /,/i;
-    valor = valor.replace(re, '.')
-    valor = parseFloat(valor);
-    return valor
+  re = /\./g;
+  valor = numero.replace(re, "");
+  re = /,/i;
+  valor = valor.replace(re, ".");
+  valor = parseFloat(valor);
+  return valor;
 }
 
-function formatearString(numero){
-  valor = numero.toString()
+function formatearString(numero) {
+  valor = numero.toString();
   valor = valor.replace(/\D/g, "");
   valor = valor.replace(/([0-9])([0-9]{2})$/, "$1,$2");
   valor = valor.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
 
-  if (valor.length === 1){
-      valor = "0,0".concat(valor);
-  }else if(valor.length === 2){
-      
-      valor = "0,".concat(valor);
-       
-  }else if(valor.length === 4){
-
-  }
-  else if(valor.length === 5){
-      if (valor[0] === "0") {
-          valor = valor.slice(1);
+  if (valor.length === 1) {
+    valor = "0,0".concat(valor);
+  } else if (valor.length === 2) {
+    valor = "0,".concat(valor);
+  } else if (valor.length === 4) {
+  } else if (valor.length === 5) {
+    if (valor[0] === "0") {
+      valor = valor.slice(1);
+    }
+  } else {
+    limit = valor.length;
+    for (m = 0; m < limit; m++) {
+      if (valor[0] === "0" || valor[0] === ".") {
+        valor = valor.slice(1);
+      } else {
+        break;
       }
-      
-  }else{           
-      limit = valor.length 
-      for (m=0; m < limit; m++){
-          if(valor[0] === "0" || valor[0] === "."){
-              valor = valor.slice(1);
-          }else{
-              break;
-          }  
-      }   
-  }  
+    }
+  }
   return valor;
 }
 
-function formatCampoLlave(select){
-  inputIdentificador = document.getElementById("identificador")
-  msj = document.getElementById("msj_invalid_identificador")
-  if (select.value === "CPF"){
-    inputIdentificador.value = ""
-    inputIdentificador.classList.remove("is-valid")
-    inputIdentificador.classList.add("is-invalid")
-    inputIdentificador.setAttribute("oninput","inputCPF(this),habilitarSave()")
-    inputIdentificador.setAttribute("maxlength","14")
-    msj.innerHTML = "Ingresa un CPF válido"
-  }else if(select.value === "CPNJ"){
-    inputIdentificador.value = ""
-    inputIdentificador.classList.remove("is-valid")
-    inputIdentificador.classList.add("is-invalid")
-    inputIdentificador.setAttribute("oninput","inputCPNJ(this),habilitarSave()")
-    inputIdentificador.setAttribute("maxlength","18")
-    msj.innerHTML = "Ingresa un CPNJ válido"
-  }else if(select.value === "Celular"){
-    inputIdentificador.value = ""
-    inputIdentificador.classList.remove("is-valid")
-    inputIdentificador.classList.add("is-invalid")
-    inputIdentificador.setAttribute("oninput","soloNumeros(this,11,11),habilitarSave()")
-    inputIdentificador.setAttribute("maxlength","11")
-    msj.innerHTML = "Ingresa un número válido"
-  }else if(select.value === "Correo Electrónico"){
-    inputIdentificador.value = ""
-    inputIdentificador.classList.remove("is-valid")
-    inputIdentificador.classList.add("is-invalid")
-    inputIdentificador.setAttribute("oninput","validarEmail(this),habilitarSave()")
-    inputIdentificador.removeAttribute("maxlength")
-    msj.innerHTML = "Ingresa un email válido"
+function formatCampoLlave(select) {
+  inputIdentificador = document.getElementById("identificador");
+  msj = document.getElementById("msj_invalid_identificador");
+  if (select.value === "CPF") {
+    inputIdentificador.value = "";
+    inputIdentificador.classList.remove("is-valid");
+    inputIdentificador.classList.add("is-invalid");
+    inputIdentificador.setAttribute(
+      "oninput",
+      "inputCPF(this),habilitarSave()"
+    );
+    inputIdentificador.setAttribute("maxlength", "14");
+    msj.innerHTML = "Ingresa un CPF válido";
+  } else if (select.value === "CPNJ") {
+    inputIdentificador.value = "";
+    inputIdentificador.classList.remove("is-valid");
+    inputIdentificador.classList.add("is-invalid");
+    inputIdentificador.setAttribute(
+      "oninput",
+      "inputCPNJ(this),habilitarSave()"
+    );
+    inputIdentificador.setAttribute("maxlength", "18");
+    msj.innerHTML = "Ingresa un CPNJ válido";
+  } else if (select.value === "Celular") {
+    inputIdentificador.value = "";
+    inputIdentificador.classList.remove("is-valid");
+    inputIdentificador.classList.add("is-invalid");
+    inputIdentificador.setAttribute(
+      "oninput",
+      "soloNumeros(this,11,11),habilitarSave()"
+    );
+    inputIdentificador.setAttribute("maxlength", "11");
+    msj.innerHTML = "Ingresa un número válido";
+  } else if (select.value === "Correo Electrónico") {
+    inputIdentificador.value = "";
+    inputIdentificador.classList.remove("is-valid");
+    inputIdentificador.classList.add("is-invalid");
+    inputIdentificador.setAttribute(
+      "oninput",
+      "validarEmail(this),habilitarSave()"
+    );
+    inputIdentificador.removeAttribute("maxlength");
+    msj.innerHTML = "Ingresa un email válido";
   }
 }
 
 function habilitarSave() {
-  
   botonSave = document.getElementById("btn");
-  elementosEnForm = document.forms['formulario'].elements;
-  elementInvalid = false
-  for (i=0; i< elementosEnForm.length; i++) {
-
-      if (elementosEnForm[i].type != 'hidden' && elementosEnForm[i].type != 'submit' && elementosEnForm[i].id != "country") {
-        if(elementosEnForm[i].required === true && elementosEnForm[i].classList.value.indexOf("is-invalid") != -1){
-          elementInvalid = true
-        }
-      }  
+  elementosEnForm = document.forms["formulario"].elements;
+  elementInvalid = false;
+  for (i = 0; i < elementosEnForm.length; i++) {
+    if (
+      elementosEnForm[i].type != "hidden" &&
+      elementosEnForm[i].type != "submit" &&
+      elementosEnForm[i].id != "country"
+    ) {
+      if (
+        elementosEnForm[i].required === true &&
+        elementosEnForm[i].classList.value.indexOf("is-invalid") != -1
+      ) {
+        elementInvalid = true;
+      }
+    }
   }
-  if (elementInvalid == false){
+  if (elementInvalid == false) {
     botonSave.removeAttribute("disabled");
-  }else{
+  } else {
     botonSave.setAttribute("disabled", "disabled");
   }
-    
 }
 
-function validarCampos(){
+function validarCampos() {
   div = document.getElementsByTagName("div");
 
-  for (h=0; h<div.length; h++){
-    if (div[h].id === "error_explanation"){
-        
-      elementosEnForm = document.forms['formulario'].elements;
-      elementInvalid = false
+  for (h = 0; h < div.length; h++) {
+    if (div[h].id === "error_explanation") {
+      elementosEnForm = document.forms["formulario"].elements;
+      elementInvalid = false;
 
-      for (k=0; k< elementosEnForm.length; k++) {
-          
-          for (j=0; j<elementosEnForm[k].attributes.length; j++){
-            
-            nameAttribute = elementosEnForm[k].attributes[j].name
-            stringAttributes = elementosEnForm[k].attributes[j].value
-          
-            if (nameAttribute === "oninput" || nameAttribute === "onchange") {
-              
-              if (stringAttributes.indexOf("address") != -1) {
-                
-                address(elementosEnForm[k])
-                break
+      for (k = 0; k < elementosEnForm.length; k++) {
+        for (j = 0; j < elementosEnForm[k].attributes.length; j++) {
+          nameAttribute = elementosEnForm[k].attributes[j].name;
+          stringAttributes = elementosEnForm[k].attributes[j].value;
 
-              }else if(stringAttributes.indexOf("soloLetras") != -1){
-
-                soloLetras(elementosEnForm[k])
-                break
-              }else if(stringAttributes.indexOf("formatNumberPhoneVzla") != -1){
-
-                formatNumberPhoneVzla(elementosEnForm[k])
-                break
-              }else if(stringAttributes.indexOf("formatDocumentoVzla") != -1){
-
-                formatDocumentoVzla(elementosEnForm[k])
-                break
-              }else if(stringAttributes.indexOf("validarSelect") != -1){
-
-                validarSelect(elementosEnForm[k])
-                break
-              }else if(stringAttributes.indexOf("validarEmail") != -1){
-
-                validarEmail(elementosEnForm[k])
-                break
-              }
-            }  
+          if (nameAttribute === "oninput" || nameAttribute === "onchange") {
+            if (stringAttributes.indexOf("address") != -1) {
+              address(elementosEnForm[k]);
+              break;
+            } else if (stringAttributes.indexOf("soloLetras") != -1) {
+              soloLetras(elementosEnForm[k]);
+              break;
+            } else if (
+              stringAttributes.indexOf("formatNumberPhoneVzla") != -1
+            ) {
+              formatNumberPhoneVzla(elementosEnForm[k]);
+              break;
+            } else if (stringAttributes.indexOf("formatDocumentoVzla") != -1) {
+              formatDocumentoVzla(elementosEnForm[k]);
+              break;
+            } else if (stringAttributes.indexOf("validarSelect") != -1) {
+              validarSelect(elementosEnForm[k]);
+              break;
+            } else if (stringAttributes.indexOf("validarEmail") != -1) {
+              validarEmail(elementosEnForm[k]);
+              break;
+            }
           }
+        }
       }
     }
   }
 }
-validarCampos()
-
+validarCampos();
 
 function mostrar_mas(e) {
-  e.preventDefault()
-  
-  if ($(".pagination").length) {
-      
-      $("#link_mostrar_mas").addClass("d-none")
-      $(".progress").removeClass("d-none")
-      url = $(".pagination .next_page").attr('href');
+  e.preventDefault();
 
-      $.getScript(url);  
-  };
+  if ($(".pagination").length) {
+    $("#link_mostrar_mas").addClass("d-none");
+    $(".progress").removeClass("d-none");
+    url = $(".pagination .next_page").attr("href");
+
+    $.getScript(url);
+  }
 }
 //VALIDACIONES
