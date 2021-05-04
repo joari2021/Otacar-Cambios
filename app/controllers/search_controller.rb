@@ -3,9 +3,11 @@ class SearchController < ApplicationController
     def results
         limit_items_for_page = 20
         if params[:termino].present?
-            @users = User.paginate(page: params[:page],per_page:limit_items_for_page).where.not(id:1).buscador(params[:termino])
+            @users = User.where.not(id:1).buscador(params[:termino])
+                         .paginate(page: params[:page],per_page:limit_items_for_page)
         else
-            @users = User.paginate(page: params[:page],per_page:limit_items_for_page).where.not(id:1)
+            @users = User.where.not(id:1)
+                         .paginate(page: params[:page],per_page:limit_items_for_page)
         end
     end
 end

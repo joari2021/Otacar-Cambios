@@ -23,13 +23,13 @@ class User < ApplicationRecord
         id = termino.to_i / 4
       end
   
-      User.where(id: id)
+      return User.where(id: id)
 
     elsif termino.downcase === "completo" || termino.downcase === "incompleto"
       if termino.downcase === "completo"
-        User.where.not(status_referencia: "indefinido")
+        return User.where.not(status_referencia: "indefinido")
       else
-        User.where(status_referencia: "indefinido")
+        return User.where(status_referencia: "indefinido")
       end
     else
       users = User.all
@@ -40,10 +40,10 @@ class User < ApplicationRecord
         nombres.downcase!
         
         array_termino = termino.split(" ")
-        find_termino = true
+        find_termino = false
         array_termino.each do |sub_termino|
-          unless nombres.include?(sub_termino.downcase)  
-            find_termino = false
+          if nombres.include?(sub_termino.downcase)  
+            find_termino = true
           end
         end
 
@@ -52,9 +52,8 @@ class User < ApplicationRecord
         end
       end
 
-      User.where(id: array_ids_users)
+      return User.where(id: array_ids_users)
     end
-
   end
   
   validates :name, :last_name, length: { maximum: 15, message: " El contenido es muy largo (caracteres minimos 15)" }
