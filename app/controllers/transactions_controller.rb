@@ -208,7 +208,7 @@ class TransactionsController < ApplicationController
 
       rates = Rate.all
       rates.each do |rate|
-        if rate.country.downcase === current_user.country.downcase
+        if rate.country === current_user.country
           @rate = rate
         end
       end
