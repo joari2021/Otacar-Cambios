@@ -181,7 +181,6 @@ class TransactionsController < ApplicationController
     end
     
     @user_admin = User.find_by(permission_level:3)
-      
   end
 
   # GET /transactions/new
@@ -209,7 +208,7 @@ class TransactionsController < ApplicationController
 
       rates = Rate.all
       rates.each do |rate|
-        if rate.country === current_user.country
+        if rate.country.downcase === current_user.country.downcase
           @rate = rate
         end
       end
