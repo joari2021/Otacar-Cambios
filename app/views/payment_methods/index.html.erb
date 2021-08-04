@@ -29,86 +29,171 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% current_user.banks.where(view:true).each do |account_bank| %>
-                        <tr class="shadow-sm">
-                            <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
 
-                            <td class="align-middle text-capitalize"><span><%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%></span></td>
-                            
-                            <%part2 = account_bank.identidy[0, 2]%>
-                            <%part3 = account_bank.identidy[-3,3]%> 
-                            
-                            <td class="align-middle"><span class=""><%=account_bank.type_document%><%=part2 + "***" + part3%></span>
-                            </td>
-                    
-                            <td class="align-middle"><img src="/img/bancos/<%=account_bank.banco%>.png" class="img-fluid avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
-                            <%part1 = account_bank.number_account[0, 4]%>
-                            <%part2 = account_bank.number_account[-4,4]%> 
-                            <td class="align-middle"><span class=""><%=part1 + "****" + part2%></span>
-                            </td>
+                    <% if current_user.id === 2%>
+                        <% User.find(279).banks.where(view:true).each do |account_bank| %>
+                            <tr class="shadow-sm">
+                                <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
 
-                            <%if current_user.is_admin?%>
-                                <%if account_bank.status === "activo"%>
-                                    <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
-                                <%else%>
-                                    <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                                <td class="align-middle text-capitalize"><span><%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%></span></td>
+                                
+                                <%part2 = account_bank.identidy[0, 2]%>
+                                <%part3 = account_bank.identidy[-3,3]%> 
+                                
+                                <td class="align-middle"><span class=""><%=account_bank.type_document%><%=part2 + "***" + part3%></span>
+                                </td>
+                        
+                                <td class="align-middle"><img src="/img/bancos/<%=account_bank.banco%>.png" class="img-fluid avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
+                                <%part1 = account_bank.number_account[0, 4]%>
+                                <%part2 = account_bank.number_account[-4,4]%> 
+                                <td class="align-middle"><span class=""><%=part1 + "****" + part2%></span>
+                                </td>
+
+                                <%if current_user.is_admin?%>
+                                    <%if account_bank.status === "activo"%>
+                                        <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                                    <%else%>
+                                        <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                                    <%end%>
+                                    <td class="align-middle">|</td>
+                                    <td class="align-middle"><a href="/banks/<%=account_bank.id%>/edit" class="badge badge-info" onclick="show_preloader()">Editar <i class="fas fa-cogs ml-2"></i></a></td>
                                 <%end%>
-                                <td class="align-middle">|</td>
-                                <td class="align-middle"><a href="/banks/<%=account_bank.id%>/edit" class="badge badge-info" onclick="show_preloader()">Editar <i class="fas fa-cogs ml-2"></i></a></td>
-                            <%end%>
 
-                            <!--Boton Modal-->
-                            <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#banksModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+                                <!--Boton Modal-->
+                                <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#banksModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="banksModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.banco%></h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
-                                                <div class="card-header text-success">
-                                                    <div class="row">
-                                                        <div  class="col-5 text-right">Pais</div>
-                                                        <div class="col-7 text-left">
-                                                            <%=account_bank.country%>
-                                                        </div>
-                                                        <div class="col-5 text-right">Titular</div>
-                                                        <div class="col-7 text-left text-capitalize">
-                                                            <%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%>      
-                                                        </div>
-                                                        <div class="col-5 text-right">Identidad</div>
-                                                        <div class="col-7 text-left">
-                                                            <%=account_bank.type_document%>-<%=account_bank.identidy%>  
-                                                        </div>
-                                                        <div class="col-5 text-right">Tipo de Cuenta</div>
-                                                        <div class="col-7 text-left">
-                                                            <%=account_bank.type_account%>   
-                                                        </div>
-                                                        <div class="col-5 text-right">Nro Cuenta</div>
-                                                        <div class="col-7 text-left">
-                                                            <%=account_bank.number_account%>   
-                                                        </div>
-                                                    </div>                   
-                                                </div>
-                                            </div>                                 
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="banksModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.banco%></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
+                                                    <div class="card-header text-success">
+                                                        <div class="row">
+                                                            <div  class="col-5 text-right">Pais</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.country%>
+                                                            </div>
+                                                            <div class="col-5 text-right">Titular</div>
+                                                            <div class="col-7 text-left text-capitalize">
+                                                                <%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%>      
+                                                            </div>
+                                                            <div class="col-5 text-right">Identidad</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.type_document%>-<%=account_bank.identidy%>  
+                                                            </div>
+                                                            <div class="col-5 text-right">Tipo de Cuenta</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.type_account%>   
+                                                            </div>
+                                                            <div class="col-5 text-right">Nro Cuenta</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.number_account%>   
+                                                            </div>
+                                                        </div>                   
+                                                    </div>
+                                                </div>                                 
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            
-                            <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
-                            
-                        </tr>
+                                
+                                
+                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                                
+                            </tr>
+                        <%end%>
+                    <%else%>
+                        <% current_user.banks.where(view:true).each do |account_bank| %>
+                            <tr class="shadow-sm">
+                                <td class="align-middle"><img src="/img/paises/<%=account_bank.country.capitalize%>.svg" class="img-fluid rounded-circle avatar" alt="<%=account_bank.country%>" title="<%=account_bank.country%>"/></td>
+
+                                <td class="align-middle text-capitalize"><span><%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%></span></td>
+                                
+                                <%part2 = account_bank.identidy[0, 2]%>
+                                <%part3 = account_bank.identidy[-3,3]%> 
+                                
+                                <td class="align-middle"><span class=""><%=account_bank.type_document%><%=part2 + "***" + part3%></span>
+                                </td>
+                        
+                                <td class="align-middle"><img src="/img/bancos/<%=account_bank.banco%>.png" class="img-fluid avatar" alt="<%=account_bank.banco%>" title="<%=account_bank.banco%>"/></td>
+                                <%part1 = account_bank.number_account[0, 4]%>
+                                <%part2 = account_bank.number_account[-4,4]%> 
+                                <td class="align-middle"><span class=""><%=part1 + "****" + part2%></span>
+                                </td>
+
+                                <%if current_user.is_admin?%>
+                                    <%if account_bank.status === "activo"%>
+                                        <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                                    <%else%>
+                                        <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                                    <%end%>
+                                    <td class="align-middle">|</td>
+                                    <td class="align-middle"><a href="/banks/<%=account_bank.id%>/edit" class="badge badge-info" onclick="show_preloader()">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                                <%end%>
+
+                                <!--Boton Modal-->
+                                <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#banksModal<%=account_bank.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="banksModal<%=account_bank.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><%=account_bank.banco%></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card border-success mb-3 m-auto" style="max-width: 36rem;">
+                                                    <div class="card-header text-success">
+                                                        <div class="row">
+                                                            <div  class="col-5 text-right">Pais</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.country%>
+                                                            </div>
+                                                            <div class="col-5 text-right">Titular</div>
+                                                            <div class="col-7 text-left text-capitalize">
+                                                                <%=account_bank.name%> <%=account_bank.second_name%> <%=account_bank.last_name%>      
+                                                            </div>
+                                                            <div class="col-5 text-right">Identidad</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.type_document%>-<%=account_bank.identidy%>  
+                                                            </div>
+                                                            <div class="col-5 text-right">Tipo de Cuenta</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.type_account%>   
+                                                            </div>
+                                                            <div class="col-5 text-right">Nro Cuenta</div>
+                                                            <div class="col-7 text-left">
+                                                                <%=account_bank.number_account%>   
+                                                            </div>
+                                                        </div>                   
+                                                    </div>
+                                                </div>                                 
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/banks/<%=account_bank.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                                
+                            </tr>
+                        <%end%>
                     <%end%>
 
                     <!--Bancos de Brasil-->
@@ -464,6 +549,7 @@
     <%end%>
 
     <!-- Tabla de Pagos Moviles -->
+    
     <%if current_user.mobile_payments.where(view:true).count > 0%>
     <div class="col-12">
     <h5 class="mt-4">Pagos Moviles</h5>
@@ -479,89 +565,176 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% current_user.mobile_payments.where(view:true).each do |payment| %>
-                    <tr class="shadow-sm">
-                        
-                        <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
+                    <%if current_user.id == 2%>
+                        <% User.find(279).mobile_payments.where(view:true).each do |payment| %>
+                            <tr class="shadow-sm">
+                                
+                                <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
 
-                        <td class="align-middle text-capitalize"><span><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
+                                <td class="align-middle text-capitalize"><span><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
 
-                        <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
+                                <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
 
-                        <%part1 = payment.number_phone[0, 3]%>
-                        <%part2 = payment.number_phone[-4,4]%>
-                        <td class="align-middle"><span><%=part1 + "****" + part2%></span></td>
-                        
-                        <%part1 = payment.document[0, 4]%>
-                        <%part2 = payment.document[-3,3]%> 
-                        
-                        <td class="align-middle"><span><%=part1 + "***" + part2%></span></td>
-                        
-                        <%if current_user.is_admin?%>
-                            <%if payment.status === "activo"%>
-                                <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
-                            <%else%>
-                                <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
-                            <%end%>
-                            <td class="align-middle">|</td>
-                            <td class="align-middle"><a href="/mobile_payments/<%=payment.id%>/edit" class="badge badge-info" onclick="show_preloader()">Editar <i class="fas fa-cogs ml-2"></i></a></td>
-                        <%end%>
-                        <!--Boton Modal-->
-                        <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#mobilePaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+                                <%part1 = payment.number_phone[0, 3]%>
+                                <%part2 = payment.number_phone[-4,4]%>
+                                <td class="align-middle"><span><%=part1 + "****" + part2%></span></td>
+                                
+                                <%part1 = payment.document[0, 4]%>
+                                <%part2 = payment.document[-3,3]%> 
+                                
+                                <td class="align-middle"><span><%=part1 + "***" + part2%></span></td>
+                                
+                                <%if current_user.is_admin?%>
+                                    <%if payment.status === "activo"%>
+                                        <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                                    <%else%>
+                                        <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                                    <%end%>
+                                    <td class="align-middle">|</td>
+                                    <td class="align-middle"><a href="/mobile_payments/<%=payment.id%>/edit" class="badge badge-info" onclick="show_preloader()">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                                <%end%>
+                                <!--Boton Modal-->
+                                <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#mobilePaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="mobilePaymentModal<%=payment.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel"><%=@bancos[payment.bank]%></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
-                                            <div class="card-header text-success">
-                                                <div class="row">
-                                                    <div class="col-6 text-right">Pais</div>
-                                                    <div class="col-6 text-left">
-                                                        <%=payment.country%>    
+                                <!-- Modal -->
+                                <div class="modal fade" id="mobilePaymentModal<%=payment.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><%=@bancos[payment.bank]%></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                                    <div class="card-header text-success">
+                                                        <div class="row">
+                                                            <div class="col-6 text-right">Pais</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.country%>    
+                                                            </div>
+                                                            <div class="col-6 text-right">Nombres</div>
+                                                            <div class="col-6 text-left text-capitalize">
+                                                                <%=payment.name%> <%=payment.second_name%> <%=payment.last_name%>    
+                                                            </div>
+                                                            <div class="col-6 text-right">Banco</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=@bancos[payment.bank]%> 
+                                                            </div>
+                                                            <div class="col-6 text-right">Cod. Banco</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.bank%>   
+                                                            </div>
+                                                            <div class="col-6 text-right">Documento</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.document%>   
+                                                            </div>
+                                                            <div class="col-6 text-right">Nro Telefono</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.number_phone%> 
+                                                            </div>                                  
+                                                        </div>                   
                                                     </div>
-                                                    <div class="col-6 text-right">Nombres</div>
-                                                    <div class="col-6 text-left text-capitalize">
-                                                        <%=payment.name%> <%=payment.second_name%> <%=payment.last_name%>    
-                                                    </div>
-                                                    <div class="col-6 text-right">Banco</div>
-                                                    <div class="col-6 text-left">
-                                                        <%=@bancos[payment.bank]%> 
-                                                    </div>
-                                                    <div class="col-6 text-right">Cod. Banco</div>
-                                                    <div class="col-6 text-left">
-                                                        <%=payment.bank%>   
-                                                    </div>
-                                                    <div class="col-6 text-right">Documento</div>
-                                                    <div class="col-6 text-left">
-                                                        <%=payment.document%>   
-                                                    </div>
-                                                    <div class="col-6 text-right">Nro Telefono</div>
-                                                    <div class="col-6 text-left">
-                                                        <%=payment.number_phone%> 
-                                                    </div>                                  
-                                                </div>                   
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+
+                                
+                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/mobile_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                                
+                            </tr>
+                        <%end%>
+                    <%else%>
+                        <% current_user.mobile_payments.where(view:true).each do |payment| %>
+                            <tr class="shadow-sm">
+                                
+                                <td class="align-middle"><img src="/img/paises/<%=payment.country.capitalize%>.svg" class="img-fluid avatar" alt="<%=payment.country.capitalize%>" title="<%=payment.country.capitalize%>"/></td>
+
+                                <td class="align-middle text-capitalize"><span><%=payment.name%> <%=payment.second_name%> <%=payment.last_name%></span></td>
+
+                                <td class="align-middle"><img src="/img/bancos/<%=payment.bank%>.png" class="img-fluid avatar" alt="<%=@bancos[payment.bank]%>" title="<%=@bancos[payment.bank]%>"/></td>
+
+                                <%part1 = payment.number_phone[0, 3]%>
+                                <%part2 = payment.number_phone[-4,4]%>
+                                <td class="align-middle"><span><%=part1 + "****" + part2%></span></td>
+                                
+                                <%part1 = payment.document[0, 4]%>
+                                <%part2 = payment.document[-3,3]%> 
+                                
+                                <td class="align-middle"><span><%=part1 + "***" + part2%></span></td>
+                                
+                                <%if current_user.is_admin?%>
+                                    <%if payment.status === "activo"%>
+                                        <td class="align-middle"><span class="badge badge-primary text-primary ml-2">Activo</span></td>
+                                    <%else%>
+                                        <td class="align-middle"><span class="badge badge-dark">Inactivo</span></td>
+                                    <%end%>
+                                    <td class="align-middle">|</td>
+                                    <td class="align-middle"><a href="/mobile_payments/<%=payment.id%>/edit" class="badge badge-info" onclick="show_preloader()">Editar <i class="fas fa-cogs ml-2"></i></a></td>
+                                <%end%>
+                                <!--Boton Modal-->
+                                <td class="align-middle"><a href="#" class="badge badge-secondary" data-toggle="modal" data-target="#mobilePaymentModal<%=payment.id%>">Ver <i class="far fa-eye ml-2"></i></a></td>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="mobilePaymentModal<%=payment.id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"><%=@bancos[payment.bank]%></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card border-success mb-3 m-auto" style="max-width:36rem;">
+                                                    <div class="card-header text-success">
+                                                        <div class="row">
+                                                            <div class="col-6 text-right">Pais</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.country%>    
+                                                            </div>
+                                                            <div class="col-6 text-right">Nombres</div>
+                                                            <div class="col-6 text-left text-capitalize">
+                                                                <%=payment.name%> <%=payment.second_name%> <%=payment.last_name%>    
+                                                            </div>
+                                                            <div class="col-6 text-right">Banco</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=@bancos[payment.bank]%> 
+                                                            </div>
+                                                            <div class="col-6 text-right">Cod. Banco</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.bank%>   
+                                                            </div>
+                                                            <div class="col-6 text-right">Documento</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.document%>   
+                                                            </div>
+                                                            <div class="col-6 text-right">Nro Telefono</div>
+                                                            <div class="col-6 text-left">
+                                                                <%=payment.number_phone%> 
+                                                            </div>                                  
+                                                        </div>                   
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        
-                        <td class="align-middle"><a rel="nofollow" data-method="delete" href="/mobile_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
-                        
-                    </tr>
+                                
+                                <td class="align-middle"><a rel="nofollow" data-method="delete" href="/mobile_payments/<%=payment.id%>" data-confirm="Esta segur@ de eliminar esta cuenta?" class="badge badge-danger">Eliminar <i class="fas fa-trash-alt ml-2"></i></a></td>
+                                
+                            </tr>
+                        <%end%>
                     <%end%>
                 </tbody>
             </table>
